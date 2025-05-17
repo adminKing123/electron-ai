@@ -7,13 +7,7 @@ import { MdDelete } from "react-icons/md";
 import { motion } from "framer-motion";
 
 const useMessageStore = create((set) => ({
-  messages: [
-    {
-      id: "1",
-      prompt: "What is that?",
-      answer: "This is nothing.",
-    },
-  ],
+  messages: [],
   addMessage: (message) => {
     const id = uuidv4();
     set((state) => ({
@@ -311,7 +305,7 @@ const Prompt = () => {
       <div className="px-5 py-[15px] bg-[#0f0f0f] rounded-3xl border-[2px] border-[#1c1e21]">
         <textarea
           ref={textareaRef}
-          className="w-full bg-[#0f0f0f] resize-none outline-none text-white text-[15px] min-h-[102px] max-h-[240px] overflow-y-auto"
+          className="w-full bg-[#0f0f0f] resize-none outline-none text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto"
           autoFocus
           placeholder="Ask anything"
           value={prompt}
