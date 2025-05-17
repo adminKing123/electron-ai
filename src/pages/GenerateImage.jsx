@@ -2,15 +2,29 @@ import { useEffect, useRef, useState } from "react";
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import MarkdownRenderer from "../components/MarkdownRenderer";
+import { IoCopy } from "react-icons/io5";
+import { MdDelete } from "react-icons/md";
+import { motion } from "framer-motion";
 
 const useMessageStore = create((set) => ({
-  messages: [],
+  messages: [
+    {
+      id: "1",
+      prompt: "What is that?",
+      answer: "This is nothing.",
+    },
+  ],
   addMessage: (message) => {
     const id = uuidv4();
     set((state) => ({
       messages: [...state.messages, { id, ...message }],
     }));
     return id;
+  },
+  deleteMessage: (message_id) => {
+    set((state) => ({
+      messages: state.messages.filter((message) => message.id !== message_id),
+    }));
   },
   addChunkInMessageAnswer: (id, chunk) => {
     set((state) => ({
@@ -100,19 +114,47 @@ const scrollToMessage = (id, duration = 100) => {
   }, duration);
 };
 
+const MessageActions = ({ id }) => {
+  const { process, deleteMessage } = useMessageStore();
+
+  const handleClickDelete = () => {
+    deleteMessage(id);
+  };
+
+  if (process?.id === id) return null;
+
+  return (
+    <div className="mt-2 mb-[30px] text-white overflow-hidden opacity-0 group-hover:opacity-100">
+      <button className="p-[6px] hover:bg-[#1d1d1d] rounded-md">
+        <IoCopy />
+      </button>
+      <button
+        onClick={handleClickDelete}
+        className="p-[6px] hover:bg-[#1d1d1d] rounded-md"
+      >
+        <MdDelete />
+      </button>
+    </div>
+  );
+};
+
 const Message = ({ message }) => {
   return (
-    <div id={message.id} className="last:min-h-full max-w-[768px] mx-auto">
+    <div
+      id={message.id}
+      className="last:min-h-full max-w-[768px] mx-auto group"
+    >
       <div className="flex justify-end">
-        <pre className="font-sans text-[15px] text-white px-5 py-[15px] bg-[#303030] rounded-3xl w-fit">
+        <pre className="font-sans text-[15px] text-white px-5 py-[15px] bg-[#060606] rounded-3xl w-fit border-[2px] border-[#1c1e21]">
           {message.prompt}
         </pre>
       </div>
       {message?.answer ? (
-        <div className="text-white mt-2 mb-[30px]">
+        <div className="text-white mt-2">
           <MarkdownRenderer content={message.answer} />
         </div>
       ) : null}
+      <MessageActions id={message.id} />
     </div>
   );
 };
@@ -149,6 +191,7 @@ const Prompt = () => {
     useMessageStore();
   const [prompt, setPrompt] = useState("");
   const textareaRef = useRef(null);
+  const isDisabled = process ? true : false;
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
@@ -193,7 +236,7 @@ const Prompt = () => {
   };
 
   const handleSend = () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim() || isDisabled) return;
 
     const id = addMessage({
       prompt,
@@ -213,12 +256,11 @@ const Prompt = () => {
   return (
     <div className="w-full relative">
       <Indicator />
-      <div className="px-5 py-[15px] bg-[#303030] rounded-3xl">
+      <div className="px-5 py-[15px] bg-[#0f0f0f] rounded-3xl border-[2px] border-[#1c1e21]">
         <textarea
           ref={textareaRef}
-          className="w-full bg-[#303030] resize-none outline-none text-white text-[15px] min-h-[102px] max-h-[240px] overflow-y-auto"
+          className="w-full bg-[#0f0f0f] resize-none outline-none text-white text-[15px] min-h-[102px] max-h-[240px] overflow-y-auto"
           autoFocus
-          disabled={process}
           placeholder="Enter your prompt..."
           value={prompt}
           onChange={handleChange}
@@ -232,7 +274,7 @@ const Prompt = () => {
 
 function GenerateImage() {
   return (
-    <div className="bg-[#212121] w-screen h-[100dvh] py-2">
+    <div className="bg-[#0d1117] w-screen h-[100dvh] py-2">
       <div className="flex flex-col h-full w-full">
         <Messages />
         <div className="max-w-[768px] mx-auto w-full">
