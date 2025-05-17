@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import MarkdownRenderer from "../components/MarkdownRenderer";
-import { IoCopy } from "react-icons/io5";
+import { IoArrowUp, IoCopy, IoStop } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { motion } from "framer-motion";
 
@@ -175,15 +175,38 @@ const Messages = () => {
   );
 };
 
-const Indicator = () => {
-  const { process } = useMessageStore();
-  if (process)
+const SendButton = ({ onClick, disabled, isGeneratingPrompt }) => {
+  if (isGeneratingPrompt)
     return (
-      <div className="text-[#ffffff] text-xs text-right italic mt-2 absolute -top-7 right-0">
-        {process?.process_name}
-      </div>
+      <button className="bg-[#ffffff] hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full">
+        <IoStop />
+      </button>
     );
-  return null;
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="bg-[#ffffff] hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
+    >
+      <IoArrowUp />
+    </button>
+  );
+};
+
+const PromptActions = ({
+  handleSend,
+  isSendButtonDisabled,
+  isGeneratingPrompt,
+}) => {
+  return (
+    <div className="flex justify-end">
+      <SendButton
+        onClick={handleSend}
+        disabled={isSendButtonDisabled}
+        isGeneratingPrompt={isGeneratingPrompt}
+      />
+    </div>
+  );
 };
 
 const Prompt = () => {
@@ -191,7 +214,9 @@ const Prompt = () => {
     useMessageStore();
   const [prompt, setPrompt] = useState("");
   const textareaRef = useRef(null);
-  const isDisabled = process ? true : false;
+  const isPromptSendDisabled = process || !prompt.trim() ? true : false;
+  const isSendButtonDisabled = !prompt.trim() ? true : false;
+  const isGeneratingPrompt = process ? true : false;
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
@@ -236,7 +261,7 @@ const Prompt = () => {
   };
 
   const handleSend = () => {
-    if (!prompt.trim() || isDisabled) return;
+    if (isPromptSendDisabled) return;
 
     const id = addMessage({
       prompt,
@@ -255,17 +280,21 @@ const Prompt = () => {
 
   return (
     <div className="w-full relative">
-      <Indicator />
       <div className="px-5 py-[15px] bg-[#0f0f0f] rounded-3xl border-[2px] border-[#1c1e21]">
         <textarea
           ref={textareaRef}
           className="w-full bg-[#0f0f0f] resize-none outline-none text-white text-[15px] min-h-[102px] max-h-[240px] overflow-y-auto"
           autoFocus
-          placeholder="Enter your prompt..."
+          placeholder="Ask anything"
           value={prompt}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           rows={1}
+        />
+        <PromptActions
+          isSendButtonDisabled={isSendButtonDisabled}
+          isGeneratingPrompt={isGeneratingPrompt}
+          handleSend={handleSend}
         />
       </div>
     </div>
