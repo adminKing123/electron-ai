@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { IoArrowUp, IoCopy, IoStop } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
+import { MdDone } from "react-icons/md";
 import { motion } from "framer-motion";
 
 const useMessageStore = create((set) => ({
@@ -136,31 +137,66 @@ const scrollToMessage = (id, duration = 100) => {
   }, duration);
 };
 
-const MessageActions = ({ id }) => {
-  const { process, deleteMessage } = useMessageStore();
+const CopyButton = ({ handleCopy }) => {
+  const [copied, setCopied] = useState(false);
 
+  const handleClickCopy = () => {
+    if (copied) return;
+    handleCopy?.(() => {
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 300);
+    });
+  };
+
+  return (
+    <button
+      onClick={handleClickCopy}
+      className="p-[6px] hover:bg-[#1d1d1d] rounded-md"
+    >
+      {copied ? <MdDone /> : <IoCopy />}
+    </button>
+  );
+};
+
+const DeleteMessageButton = ({ id }) => {
+  const { deleteMessage } = useMessageStore();
   const handleClickDelete = () => {
     deleteMessage(id);
   };
+
+  return (
+    <button
+      onClick={handleClickDelete}
+      className="p-[6px] hover:bg-[#1d1d1d] rounded-md"
+    >
+      <MdDelete />
+    </button>
+  );
+};
+
+const MessageActions = ({ id, handleCopy }) => {
+  const { process } = useMessageStore();
 
   if (process?.id === id) return null;
 
   return (
     <div className="mt-2 mb-[30px] text-white overflow-hidden opacity-0 group-hover:opacity-100">
-      <button className="p-[6px] hover:bg-[#1d1d1d] rounded-md">
-        <IoCopy />
-      </button>
-      <button
-        onClick={handleClickDelete}
-        className="p-[6px] hover:bg-[#1d1d1d] rounded-md"
-      >
-        <MdDelete />
-      </button>
+      <CopyButton handleCopy={handleCopy} />
+      <DeleteMessageButton id={id} />
     </div>
   );
 };
 
 const Message = ({ message }) => {
+  const handleCopy = (callback) => {
+    if (message?.answer) {
+      navigator.clipboard.writeText(message.answer);
+      callback?.(message?.id);
+    }
+  };
+
   return (
     <div
       id={message.id}
@@ -176,7 +212,7 @@ const Message = ({ message }) => {
           <MarkdownRenderer content={message.answer} />
         </div>
       ) : null}
-      <MessageActions id={message.id} />
+      <MessageActions id={message.id} handleCopy={handleCopy} />
     </div>
   );
 };
