@@ -146,7 +146,7 @@ const CopyButton = ({ handleCopy }) => {
       setCopied(true);
       setTimeout(() => {
         setCopied(false);
-      }, 300);
+      }, 800);
     });
   };
 
@@ -203,7 +203,7 @@ const Message = ({ message }) => {
       className="last:min-h-full max-w-[768px] mx-auto group"
     >
       <div className="flex justify-end">
-        <pre className="font-sans text-[15px] text-white px-5 py-[15px] bg-[#060606] rounded-3xl w-fit border-[2px] border-[#1c1e21]">
+        <pre className="font-sans text-[15px] text-white px-5 py-[15px] bg-[#060606] rounded-3xl w-fit border-[2px] border-[#1c1e21] break-words whitespace-pre-wrap">
           {message.prompt}
         </pre>
       </div>
@@ -222,7 +222,7 @@ const Messages = () => {
   return (
     <div
       className={`overflow-y-auto transition-all duration-500 ${
-        messages.length ? "flex-grow min-h-[35%]" : "h-[35%]"
+        messages.length ? "flex-grow min-h-[40%]" : "h-[40%]"
       }`}
       id="messages-container"
     >
@@ -288,6 +288,7 @@ const Prompt = () => {
 
   const stopGeneration = () => {
     setProcess(null);
+    textareaRef?.current?.focus();
   };
 
   const handleChange = (e) => {
