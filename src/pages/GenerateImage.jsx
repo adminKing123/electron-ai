@@ -39,7 +39,14 @@ const useMessageStore = create((set) => ({
   },
 
   process: null,
-  setProcess: (process) => set({ process }),
+  controller: null,
+  setProcess: (process = null, controller = null) => {
+    set((state) => {
+      console.log(controller);
+      state.controller?.abort();
+      return { process, controller };
+    });
+  },
 }));
 
 const handleStream = async (
@@ -50,7 +57,14 @@ const handleStream = async (
   onEnd,
   onError
 ) => {
+  const setProcess = useMessageStore.getState().setProcess;
   try {
+    const controller = new AbortController();
+    setProcess({
+      type: "GENERATION",
+      process_name: "Getting Started...",
+      id: id,
+    });
     onStart?.({ id });
     const response = await fetch(
       "https://pa-dev-api.thesynapses.com/generate",
@@ -77,12 +91,23 @@ const handleStream = async (
           new_prompt: "",
           by: "un2xqHu71cd6WWycTr1P6UE4PiJ2",
         }),
+        signal: controller.signal,
       }
     );
 
     if (!response.ok || !response.body) {
+      setProcess(null);
       throw new Error("Stream error");
     }
+
+    setProcess(
+      {
+        type: "GENERATION",
+        process_name: "Generating...",
+        id: id,
+      },
+      controller
+    );
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
@@ -94,8 +119,11 @@ const handleStream = async (
         onProgress?.({ id, chunk });
       }
     }
+
+    setProcess(null);
     onEnd?.();
   } catch (err) {
+    setProcess(null);
     onError?.();
   }
 };
@@ -175,10 +203,18 @@ const Messages = () => {
   );
 };
 
-const SendButton = ({ onClick, disabled, isGeneratingPrompt }) => {
+const SendButton = ({
+  onClick,
+  stopGeneration,
+  disabled,
+  isGeneratingPrompt,
+}) => {
   if (isGeneratingPrompt)
     return (
-      <button className="bg-[#ffffff] hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full">
+      <button
+        onClick={stopGeneration}
+        className="bg-[#ffffff] hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
+      >
         <IoStop />
       </button>
     );
@@ -197,11 +233,13 @@ const PromptActions = ({
   handleSend,
   isSendButtonDisabled,
   isGeneratingPrompt,
+  stopGeneration,
 }) => {
   return (
     <div className="flex justify-end">
       <SendButton
         onClick={handleSend}
+        stopGeneration={stopGeneration}
         disabled={isSendButtonDisabled}
         isGeneratingPrompt={isGeneratingPrompt}
       />
@@ -217,6 +255,10 @@ const Prompt = () => {
   const isPromptSendDisabled = process || !prompt.trim() ? true : false;
   const isSendButtonDisabled = !prompt.trim() ? true : false;
   const isGeneratingPrompt = process ? true : false;
+
+  const stopGeneration = () => {
+    setProcess(null);
+  };
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
@@ -235,30 +277,16 @@ const Prompt = () => {
   }, [prompt]);
 
   const onProgress = (data) => {
-    setProcess({
-      type: "GENERATION",
-      process_name: "Generating...",
-      id: data.id,
-    });
     addChunkInMessageAnswer(data.id, data.chunk);
   };
 
   const onStart = (data) => {
-    setProcess({
-      type: "GENERATION",
-      process_name: "Getting Started...",
-      id: data.id,
-    });
     scrollToMessage(data.id);
   };
 
-  const onEnd = () => {
-    setProcess(null);
-  };
+  const onEnd = () => {};
 
-  const onError = () => {
-    setProcess(null);
-  };
+  const onError = () => {};
 
   const handleSend = () => {
     if (isPromptSendDisabled) return;
@@ -294,6 +322,7 @@ const Prompt = () => {
         <PromptActions
           isSendButtonDisabled={isSendButtonDisabled}
           isGeneratingPrompt={isGeneratingPrompt}
+          stopGeneration={stopGeneration}
           handleSend={handleSend}
         />
       </div>
