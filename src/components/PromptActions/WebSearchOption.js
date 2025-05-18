@@ -6,7 +6,7 @@ const WebSearchOption = ({ disabled, active, onClick }) => {
       onClick={onClick}
       disabled={disabled}
       className={`border ${
-        active ? "bg-[#ffffff] border-blue-400" : "hover:bg-[#C1C1C1]"
+        active ? "bg-blue-100 border-blue-400" : "hover:bg-[#C1C1C1]"
       } disabled:opacity-50 p-2 rounded-full group`}
     >
       {disabled ? (

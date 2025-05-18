@@ -8,6 +8,7 @@ const Prompt = () => {
   const { process, setProcess, addMessage, addChunkInMessageAnswer } =
     useMessageStore();
   const [prompt, setPrompt] = useState("");
+  const [model, setModel] = useState(null);
   const [isWebSearchOn, setIsWebSearchOn] = useState(false);
   const textareaRef = useRef(null);
   const isPromptSendDisabled = process || !prompt.trim() ? true : false;
@@ -33,6 +34,10 @@ const Prompt = () => {
 
   const handleClickWebSearch = () => {
     setIsWebSearchOn((prev) => !prev);
+  };
+
+  const handleModelSelect = (model_selected) => {
+    setModel(model_selected);
   };
 
   useEffect(() => {
@@ -63,6 +68,7 @@ const Prompt = () => {
       {
         prompt,
         google_search: isWebSearchOn,
+        model_id: model?.id,
       },
       onProgress,
       onStart,
