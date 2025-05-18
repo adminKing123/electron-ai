@@ -1,48 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { create } from "zustand";
-import { v4 as uuidv4 } from "uuid";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { IoArrowUp, IoCopy, IoStop } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { MdDone } from "react-icons/md";
-import { motion } from "framer-motion";
-
-const useMessageStore = create((set) => ({
-  messages: [],
-  addMessage: (message) => {
-    const id = uuidv4();
-    set((state) => ({
-      messages: [...state.messages, { id, ...message }],
-    }));
-    return id;
-  },
-  deleteMessage: (message_id) => {
-    set((state) => ({
-      messages: state.messages.filter((message) => message.id !== message_id),
-    }));
-  },
-  addChunkInMessageAnswer: (id, chunk) => {
-    set((state) => ({
-      messages: state.messages.map((msg) => {
-        if (msg.id === id && chunk) {
-          const answer = (msg.answer || "") + chunk;
-          return { ...msg, answer };
-        }
-        return msg;
-      }),
-    }));
-  },
-
-  process: null,
-  controller: null,
-  setProcess: (process = null, controller = null) => {
-    set((state) => {
-      console.log(controller);
-      state.controller?.abort();
-      return { process, controller };
-    });
-  },
-}));
+import useMessageStore from "../store/useMessagesStore";
 
 const handleStream = async (
   id,
