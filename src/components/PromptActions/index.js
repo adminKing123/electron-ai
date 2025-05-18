@@ -1,13 +1,19 @@
+import SelectAIModel from "./SelectAIModel";
 import SendButton from "./SendButton";
+import WebSearchOption from "./WebSearchOption";
 
 const PromptActions = ({
   handleSend,
   isSendButtonDisabled,
   isGeneratingPrompt,
   stopGeneration,
+  handleClickWebSearch,
+  isWebSearchOn,
 }) => {
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end items-center gap-2">
+      <WebSearchOption onClick={handleClickWebSearch} active={isWebSearchOn} />
+      <SelectAIModel />
       <SendButton
         onClick={handleSend}
         stopGeneration={stopGeneration}

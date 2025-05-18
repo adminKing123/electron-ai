@@ -8,6 +8,7 @@ const Prompt = () => {
   const { process, setProcess, addMessage, addChunkInMessageAnswer } =
     useMessageStore();
   const [prompt, setPrompt] = useState("");
+  const [isWebSearchOn, setIsWebSearchOn] = useState(false);
   const textareaRef = useRef(null);
   const isPromptSendDisabled = process || !prompt.trim() ? true : false;
   const isSendButtonDisabled = !prompt.trim() ? true : false;
@@ -28,6 +29,10 @@ const Prompt = () => {
       textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 240)}px`;
     }
+  };
+
+  const handleClickWebSearch = () => {
+    setIsWebSearchOn((prev) => !prev);
   };
 
   useEffect(() => {
@@ -53,7 +58,17 @@ const Prompt = () => {
       prompt,
       answer: "",
     });
-    handleStream(id, prompt, onProgress, onStart, onEnd, onError);
+    handleStream(
+      id,
+      {
+        prompt,
+        google_search: isWebSearchOn,
+      },
+      onProgress,
+      onStart,
+      onEnd,
+      onError
+    );
     setPrompt("");
   };
 
@@ -82,6 +97,8 @@ const Prompt = () => {
           isGeneratingPrompt={isGeneratingPrompt}
           stopGeneration={stopGeneration}
           handleSend={handleSend}
+          handleClickWebSearch={handleClickWebSearch}
+          isWebSearchOn={isWebSearchOn}
         />
       </div>
     </div>

@@ -1,13 +1,6 @@
 import useMessageStore from "../../store/useMessagesStore";
 
-const handleStream = async (
-  id,
-  prompt,
-  onProgress,
-  onStart,
-  onEnd,
-  onError
-) => {
+const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
   const setProcess = useMessageStore.getState().setProcess;
   try {
     const controller = new AbortController();
@@ -26,21 +19,21 @@ const handleStream = async (
         },
         body: JSON.stringify({
           type: "global",
-          prompt: prompt,
+          prompt: data.prompt,
           chat_uid: "f7bce2c1-37bd-4f79-8fca-86fc9a851b6e",
           file_url: [],
           org_id: "synapses",
-          uid: "un2xqHu71cd6WWycTr1P6UE4PiJ2",
-          regenerate: false,
-          style: "Standard",
-          model_id: "gemini-2.0-flash-001",
+          uid: data?.uid ? data.uid : "un2xqHu71cd6WWycTr1P6UE4PiJ2",
+          regenerate: data?.regenerate ? true : false,
+          style: data?.response_style ? data.response_style : "Standard",
+          model_id: data?.model_id ? data.model_id : null,
           recaching: false,
-          google_search: false,
+          google_search: data?.google_search ? true : false,
           cache_id: null,
           file_data: "",
           prompt_id: id,
           new_prompt: "",
-          by: "un2xqHu71cd6WWycTr1P6UE4PiJ2",
+          by: data?.by ? data.by : "un2xqHu71cd6WWycTr1P6UE4PiJ2",
         }),
         signal: controller.signal,
       }
