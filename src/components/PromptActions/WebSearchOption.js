@@ -1,9 +1,14 @@
 import { PiGlobe, PiGlobeX } from "react-icons/pi";
 
-const WebSearchOption = ({ disabled, active, onClick }) => {
+const WebSearchOption = ({ disabled, active, onClick, selectedModel }) => {
   return (
     <button
       onClick={onClick}
+      title={
+        selectedModel?.name && disabled
+          ? `Web Search not available for ${selectedModel?.name}`
+          : ""
+      }
       disabled={disabled}
       className={`border ${
         active && !disabled

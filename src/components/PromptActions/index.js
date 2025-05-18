@@ -12,7 +12,7 @@ const PromptActions = ({
   handleModelSelect,
   selectedModel,
   isWebSearchDisabled,
-  toggleWebSearchDisabled
+  toggleWebSearchDisabled,
 }) => {
   return (
     <div className="flex justify-between items-center gap-2">
@@ -23,6 +23,7 @@ const PromptActions = ({
           toggleWebSearchDisabled={toggleWebSearchDisabled}
         />
         <WebSearchOption
+          selectedModel={selectedModel}
           disabled={isWebSearchDisabled}
           onClick={handleClickWebSearch}
           active={isWebSearchOn}
