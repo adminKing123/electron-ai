@@ -14,6 +14,11 @@ const Prompt = () => {
   const isPromptSendDisabled = process || !prompt.trim() ? true : false;
   const isSendButtonDisabled = !prompt.trim() ? true : false;
   const isGeneratingPrompt = process ? true : false;
+  const [isWebSearchDisabled, setIsWebSearchDisabled] = useState(true);
+
+  const toggleWebSearchDisabled = (value) => {
+    setIsWebSearchDisabled(value);
+  };
 
   const stopGeneration = () => {
     setProcess(null);
@@ -38,6 +43,7 @@ const Prompt = () => {
 
   const handleModelSelect = (model_selected) => {
     setModel(model_selected);
+    toggleWebSearchDisabled(model_selected.google_search === false);
   };
 
   useEffect(() => {
@@ -67,7 +73,7 @@ const Prompt = () => {
       id,
       {
         prompt,
-        google_search: isWebSearchOn,
+        google_search: isWebSearchDisabled ? false : isWebSearchOn,
         model_id: model?.id,
       },
       onProgress,
@@ -105,6 +111,10 @@ const Prompt = () => {
           handleSend={handleSend}
           handleClickWebSearch={handleClickWebSearch}
           isWebSearchOn={isWebSearchOn}
+          handleModelSelect={handleModelSelect}
+          selectedModel={model}
+          isWebSearchDisabled={isWebSearchDisabled}
+          toggleWebSearchDisabled={toggleWebSearchDisabled}
         />
       </div>
     </div>

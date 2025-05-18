@@ -9,15 +9,24 @@ const PromptActions = ({
   stopGeneration,
   handleClickWebSearch,
   isWebSearchOn,
+  handleModelSelect,
+  selectedModel,
+  isWebSearchDisabled,
+  toggleWebSearchDisabled
 }) => {
   return (
     <div className="flex justify-between items-center gap-2">
       <div className="flex items-center gap-2">
+        <SelectAIModel
+          onSelect={handleModelSelect}
+          selectedModel={selectedModel}
+          toggleWebSearchDisabled={toggleWebSearchDisabled}
+        />
         <WebSearchOption
+          disabled={isWebSearchDisabled}
           onClick={handleClickWebSearch}
           active={isWebSearchOn}
         />
-        <SelectAIModel />
       </div>
       <div>
         <SendButton
