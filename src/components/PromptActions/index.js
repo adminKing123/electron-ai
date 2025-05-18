@@ -11,15 +11,22 @@ const PromptActions = ({
   isWebSearchOn,
 }) => {
   return (
-    <div className="flex justify-end items-center gap-2">
-      <WebSearchOption onClick={handleClickWebSearch} active={isWebSearchOn} />
-      <SelectAIModel />
-      <SendButton
-        onClick={handleSend}
-        stopGeneration={stopGeneration}
-        disabled={isSendButtonDisabled}
-        isGeneratingPrompt={isGeneratingPrompt}
-      />
+    <div className="flex justify-between items-center gap-2">
+      <div className="flex items-center gap-2">
+        <WebSearchOption
+          onClick={handleClickWebSearch}
+          active={isWebSearchOn}
+        />
+        <SelectAIModel />
+      </div>
+      <div>
+        <SendButton
+          onClick={handleSend}
+          stopGeneration={stopGeneration}
+          disabled={isSendButtonDisabled}
+          isGeneratingPrompt={isGeneratingPrompt}
+        />
+      </div>
     </div>
   );
 };
