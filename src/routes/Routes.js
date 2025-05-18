@@ -1,11 +1,11 @@
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import GenerateImage from "../pages/GenerateImage";
+import GenerationPage from "../pages/GenerationPage";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<GenerateImage />} />
+        <Route path="/" element={<GenerationPage />} />
       </Routes>
     </BrowserRouter>
   );
