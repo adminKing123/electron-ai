@@ -12,8 +12,8 @@ const WebSearchOption = ({ disabled, active, onClick, selectedModel }) => {
       disabled={disabled}
       className={`border ${
         active && !disabled
-          ? "bg-blue-100 border-blue-400"
-          : "hover:bg-[#C1C1C1]"
+          ? "border-green-400"
+          : ""
       } disabled:opacity-50 p-2 rounded-full group`}
     >
       {disabled ? (
@@ -21,7 +21,7 @@ const WebSearchOption = ({ disabled, active, onClick, selectedModel }) => {
       ) : (
         <PiGlobe
           className={`${
-            active ? "fill-blue-400" : "fill-white group-hover:fill-black"
+            active ? "fill-green-400" : "fill-white"
           }`}
         />
       )}
