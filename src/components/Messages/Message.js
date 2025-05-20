@@ -1,7 +1,7 @@
 import MarkdownRenderer from "../MarkdownRenderer";
 import MessageActions from "./MessageActions";
 
-const Message = ({ message }) => {
+const Message = ({ message, chat_id }) => {
   const handleCopy = (callback) => {
     if (message?.answer) {
       navigator.clipboard.writeText(message.answer);
@@ -24,7 +24,7 @@ const Message = ({ message }) => {
           <MarkdownRenderer content={message.answer} />
         </div>
       ) : null}
-      <MessageActions id={message.id} handleCopy={handleCopy} />
+      <MessageActions id={message.id} handleCopy={handleCopy} chat_id={chat_id} />
     </div>
   );
 };

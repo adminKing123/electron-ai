@@ -2,7 +2,7 @@ import useMessageStore from "../../../store/useMessagesStore";
 import CopyButton from "./CopyMessageButton";
 import DeleteMessageButton from "./DeleteMessageButton";
 
-const MessageActions = ({ id, handleCopy }) => {
+const MessageActions = ({ id, handleCopy, chat_id }) => {
   const { process } = useMessageStore();
 
   if (process?.id === id) return null;
@@ -10,7 +10,7 @@ const MessageActions = ({ id, handleCopy }) => {
   return (
     <div className="mt-2 mb-[30px] text-white overflow-hidden opacity-0 group-hover:opacity-100">
       <CopyButton handleCopy={handleCopy} />
-      <DeleteMessageButton id={id} />
+      <DeleteMessageButton id={id} chat_id={chat_id} />
     </div>
   );
 };

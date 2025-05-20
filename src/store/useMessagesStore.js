@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
+import { deleteMessageAPI } from "../apis/messages/queryFunctions";
 
 const useMessageStore = create((set) => ({
   messages: [],
@@ -10,10 +11,16 @@ const useMessageStore = create((set) => ({
     }));
     return id;
   },
-  deleteMessage: (message_id) => {
+  deleteMessage: (message_id, chat_id) => {
+    console.log(chat_id, message_id)
     set((state) => ({
       messages: state.messages.filter((message) => message.id !== message_id),
     }));
+    console.log(chat_id);
+    deleteMessageAPI({
+      message_id,
+      chat_id,
+    });
   },
   addChunkInMessageAnswer: (id, chunk) => {
     set((state) => ({

@@ -1,7 +1,7 @@
 import useMessageStore from "../../store/useMessagesStore";
 import Message from "./Message";
 
-const Messages = () => {
+const Messages = ({ chat_id }) => {
   const { messages } = useMessageStore();
   return (
     <div
@@ -11,7 +11,7 @@ const Messages = () => {
       id="messages-container"
     >
       {messages.map((message) => (
-        <Message key={message.id} message={message} />
+        <Message key={message.id} message={message} chat_id={chat_id} />
       ))}
     </div>
   );

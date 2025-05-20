@@ -1,6 +1,9 @@
+import CONFIG from "../../config";
 import useMessageStore from "../../store/useMessagesStore";
+import useUserStore from "../../store/useUserStore";
 
 const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
+  const user = useUserStore.getState().user;
   const setProcess = useMessageStore.getState().setProcess;
   try {
     const controller = new AbortController();
@@ -10,34 +13,31 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
       id: id,
     });
     onStart?.({ id });
-    const response = await fetch(
-      "https://pa-dev-api.thesynapses.com/generate",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "global",
-          prompt: data.prompt,
-          chat_uid: data.chat_id,
-          file_url: [],
-          org_id: "synapses",
-          uid: data?.uid ? data.uid : "un2xqHu71cd6WWycTr1P6UE4PiJ2",
-          regenerate: data?.regenerate ? true : false,
-          style: data?.response_style ? data.response_style : "Standard",
-          model_id: data?.model_id ? data.model_id : null,
-          recaching: false,
-          google_search: data?.google_search ? true : false,
-          cache_id: null,
-          file_data: "",
-          prompt_id: id,
-          new_prompt: "",
-          by: data?.by ? data.by : "un2xqHu71cd6WWycTr1P6UE4PiJ2",
-        }),
-        signal: controller.signal,
-      }
-    );
+    const response = await fetch(CONFIG.GET_GENERATE_URL(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "global",
+        prompt: data.prompt,
+        chat_uid: data.chat_id,
+        file_url: [],
+        org_id: user.org_id ? user.org_id : "",
+        uid: user.uid ? user.uid : "",
+        regenerate: data?.regenerate ? true : false,
+        style: data?.response_style ? data.response_style : "Standard",
+        model_id: data?.model_id ? data.model_id : null,
+        recaching: false,
+        google_search: data?.google_search ? true : false,
+        cache_id: null,
+        file_data: "",
+        prompt_id: id,
+        new_prompt: "",
+        by: user.uid ? user.uid : "",
+      }),
+      signal: controller.signal,
+    });
 
     if (!response.ok || !response.body) {
       setProcess(null);

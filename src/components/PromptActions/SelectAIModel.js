@@ -1,5 +1,5 @@
 import { FaBrain } from "react-icons/fa";
-import { useGetAIModels } from "../../apis/ai_models/queryHooks";
+import { useGetAIModelsAPI } from "../../apis/ai_models/queryHooks";
 import { useState, useRef, useEffect } from "react";
 import { SiTicktick } from "react-icons/si";
 
@@ -9,7 +9,7 @@ const SelectAIModel = ({
   selectedModel,
   toggleWebSearchDisabled,
 }) => {
-  const { data, isLoading, isError } = useGetAIModels({
+  const { data, isLoading, isError } = useGetAIModelsAPI({
     onSuccess: (response) => {
       if (!selectedModel) {
         toggleWebSearchDisabled(
