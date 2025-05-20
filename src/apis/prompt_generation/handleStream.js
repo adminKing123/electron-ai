@@ -20,7 +20,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
         body: JSON.stringify({
           type: "global",
           prompt: data.prompt,
-          chat_uid: "f7bce2c1-37bd-4f79-8fca-86fc9a851b6e",
+          chat_uid: data.chat_id,
           file_url: [],
           org_id: "synapses",
           uid: data?.uid ? data.uid : "un2xqHu71cd6WWycTr1P6UE4PiJ2",

@@ -4,7 +4,7 @@ import { scrollToMessage } from "../utils/helpers";
 import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
 
-const Prompt = () => {
+const Prompt = ({ chat_id }) => {
   const { process, setProcess, addMessage, addChunkInMessageAnswer } =
     useMessageStore();
   const [prompt, setPrompt] = useState("");
@@ -72,6 +72,7 @@ const Prompt = () => {
     handleStream(
       id,
       {
+        chat_id,
         prompt,
         google_search: isWebSearchDisabled ? false : isWebSearchOn,
         model_id: model?.id,
