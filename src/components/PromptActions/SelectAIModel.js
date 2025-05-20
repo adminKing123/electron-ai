@@ -15,6 +15,7 @@ const SelectAIModel = ({
         toggleWebSearchDisabled(
           response?.default_model.google_search === false
         );
+        onSelect(response?.default_model)
       }
     },
   });

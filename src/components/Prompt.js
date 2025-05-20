@@ -12,9 +12,10 @@ const Prompt = ({ chat_id }) => {
   const [isWebSearchOn, setIsWebSearchOn] = useState(false);
   const textareaRef = useRef(null);
   const isPromptSendDisabled = process || !prompt.trim() ? true : false;
-  const isSendButtonDisabled = !prompt.trim() ? true : false;
+  const isSendButtonDisabled = !prompt.trim() || model === null ? true : false;
   const isGeneratingPrompt = process ? true : false;
   const [isWebSearchDisabled, setIsWebSearchDisabled] = useState(true);
+  const google_search = isWebSearchDisabled ? false : isWebSearchOn;
 
   const toggleWebSearchDisabled = (value) => {
     setIsWebSearchDisabled(value);
@@ -68,13 +69,15 @@ const Prompt = ({ chat_id }) => {
     const id = addMessage({
       prompt,
       answer: "",
+      model: model,
+      google_search,
     });
     handleStream(
       id,
       {
         chat_id,
         prompt,
-        google_search: isWebSearchDisabled ? false : isWebSearchOn,
+        google_search,
         model_id: model?.id,
       },
       onProgress,

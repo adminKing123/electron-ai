@@ -24,7 +24,12 @@ const Message = ({ message, chat_id }) => {
           <MarkdownRenderer content={message.answer} />
         </div>
       ) : null}
-      <MessageActions id={message.id} handleCopy={handleCopy} chat_id={chat_id} />
+      <MessageActions
+        id={message.id}
+        message={message}
+        handleCopy={handleCopy}
+        chat_id={chat_id}
+      />
     </div>
   );
 };
