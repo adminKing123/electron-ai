@@ -58,7 +58,7 @@ const SelectAIModel = ({
   return (
     <div className="relative" ref={dropdownRef}>
       {isOpen && !isDisabled && (
-        <div className="absolute p-2 bottom-full mb-1 max-h-[240px] w-fit max-w-[180px] rounded-3xl border border-[#1c1e21] bg-[#151515] cursor-pointer z-10">
+        <div className="absolute p-2 bottom-full mb-1 max-h-[240px] w-fit max-w-[180px] rounded-3xl border border-[#1c1e21] bg-[#262626] cursor-pointer z-10">
           {data.models.map((model) => {
             const isSelected = model_selected?.id === model.id;
             return (
@@ -68,7 +68,7 @@ const SelectAIModel = ({
                 className={`px-4 py-2 text-xs truncate rounded-3xl flex items-center justify-between gap-2 ${
                   isSelected
                     ? "text-green-500"
-                    : "text-[#828282] hover:bg-[#1c1e21]"
+                    : "text-[#828282] hover:bg-[#2f3237]"
                 }`}
               >
                 <div className="truncate">{model.name}</div>
