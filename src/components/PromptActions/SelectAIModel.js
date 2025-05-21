@@ -68,7 +68,7 @@ const SelectAIModel = ({
                 className={`px-4 py-2 text-xs truncate rounded-3xl flex items-center justify-between gap-2 ${
                   isSelected
                     ? "text-green-500"
-                    : "text-[#828282] hover:bg-[#2f3237]"
+                    : "text-[#ffffff] hover:bg-[#2f3237]"
                 }`}
               >
                 <div className="truncate">{model.name}</div>
