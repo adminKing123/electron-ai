@@ -2,11 +2,12 @@ import { FaBrain } from "react-icons/fa";
 import { useGetAIModelsAPI } from "../../apis/ai_models/queryHooks";
 import { useState, useRef, useEffect } from "react";
 import { SiTicktick } from "react-icons/si";
-import usePromptStore from "../../store/usePromptStore";
+import { useModelStore, useWebSearchStore } from "../../store/usePromptStores";
 
 const SelectAIModel = ({ disabled }) => {
-  const { model: selectedModel, setModel, setIsWebSearchDisabled } = usePromptStore();
-
+  const { model: selectedModel, setModel } = useModelStore();
+  const { setIsWebSearchDisabled } = useWebSearchStore();
+  
   const onSelect = (model_selected) => {
     setModel(model_selected);
     setIsWebSearchDisabled(model_selected.google_search === false);

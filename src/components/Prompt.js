@@ -3,7 +3,10 @@ import useMessageStore from "../store/useMessagesStore";
 import { scrollToMessage } from "../utils/helpers";
 import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
-import usePromptStore from "../store/usePromptStore";
+import usePromptStore, {
+  useModelStore,
+  useWebSearchStore,
+} from "../store/usePromptStores";
 
 const TextArea = ({ textareaRef, handleSend }) => {
   const { prompt, setPrompt } = usePromptStore();
@@ -62,14 +65,15 @@ const Prompt = ({ chat_id }) => {
   const onError = () => {};
 
   const handleSend = () => {
-    const { prompt, model, setPrompt } = usePromptStore.getState();
+    const { prompt, setPrompt } = usePromptStore.getState();
+    const { model } = useModelStore.getState();
     const { process } = useMessageStore.getState();
     const isPromptSendDisabled =
       process || !prompt.trim() || model === null ? true : false;
 
     if (isPromptSendDisabled) return;
 
-    const { isWebSearchDisabled, isWebSearchOn } = usePromptStore.getState();
+    const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
     const google_search = isWebSearchDisabled ? false : isWebSearchOn;
 
     const id = addMessage({

@@ -1,13 +1,13 @@
 import { PiGlobe, PiGlobeX } from "react-icons/pi";
-import usePromptStore from "../../store/usePromptStore";
+import { useModelStore, useWebSearchStore } from "../../store/usePromptStores";
 
 const WebSearchOption = () => {
+  const { model: selectedModel } = useModelStore();
   const {
-    model: selectedModel,
     isWebSearchDisabled: disabled,
     isWebSearchOn: active,
     setIsWebSearchOn,
-  } = usePromptStore();
+  } = useWebSearchStore();
 
   const handleClickWebSearch = () => {
     setIsWebSearchOn(!active);
