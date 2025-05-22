@@ -15,7 +15,6 @@ const useMessageStore = create((set) => ({
     set((state) => ({
       messages: state.messages.filter((message) => message.id !== message_id),
     }));
-    console.log(chat_id);
     deleteMessageAPI({
       message_id,
       chat_id,
