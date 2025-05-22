@@ -1,9 +1,21 @@
 import { PiGlobe, PiGlobeX } from "react-icons/pi";
+import usePromptStore from "../../store/usePromptStore";
 
-const WebSearchOption = ({ disabled, active, onClick, selectedModel }) => {
+const WebSearchOption = () => {
+  const {
+    model: selectedModel,
+    isWebSearchDisabled: disabled,
+    isWebSearchOn: active,
+    setIsWebSearchOn,
+  } = usePromptStore();
+
+  const handleClickWebSearch = () => {
+    setIsWebSearchOn(!active);
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClickWebSearch}
       title={
         selectedModel?.name && disabled
           ? `Web Search not available for ${selectedModel?.name}`
@@ -11,19 +23,13 @@ const WebSearchOption = ({ disabled, active, onClick, selectedModel }) => {
       }
       disabled={disabled}
       className={`border ${
-        active && !disabled
-          ? "border-green-400"
-          : ""
+        active && !disabled ? "border-green-400" : ""
       } disabled:opacity-50 p-2 rounded-full group`}
     >
       {disabled ? (
         <PiGlobeX className="fill-white" />
       ) : (
-        <PiGlobe
-          className={`${
-            active ? "fill-green-400" : "fill-white"
-          }`}
-        />
+        <PiGlobe className={`${active ? "fill-green-400" : "fill-white"}`} />
       )}
     </button>
   );

@@ -12,11 +12,8 @@ const Prompt = ({ chat_id }) => {
     prompt,
     setPrompt,
     model,
-    setModel,
     isWebSearchOn,
-    setIsWebSearchOn,
     isWebSearchDisabled,
-    setIsWebSearchDisabled,
   } = usePromptStore();
   const textareaRef = useRef(null);
 
@@ -25,15 +22,6 @@ const Prompt = ({ chat_id }) => {
   const isSendButtonDisabled = !prompt.trim() || model === null ? true : false;
   const isGeneratingPrompt = process ? true : false;
   const google_search = isWebSearchDisabled ? false : isWebSearchOn;
-
-  const toggleWebSearchDisabled = (value) => {
-    setIsWebSearchDisabled(value);
-  };
-
-  const stopGeneration = () => {
-    setProcess(null);
-    textareaRef?.current?.focus();
-  };
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
@@ -45,15 +33,6 @@ const Prompt = ({ chat_id }) => {
       textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 240)}px`;
     }
-  };
-
-  const handleClickWebSearch = () => {
-    setIsWebSearchOn(!isWebSearchOn);
-  };
-
-  const handleModelSelect = (model_selected) => {
-    setModel(model_selected);
-    toggleWebSearchDisabled(model_selected.google_search === false);
   };
 
   useEffect(() => {
@@ -99,7 +78,7 @@ const Prompt = ({ chat_id }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // Prevent newline
+      e.preventDefault();
       handleSend();
     }
   };
@@ -120,14 +99,7 @@ const Prompt = ({ chat_id }) => {
         <PromptActions
           isSendButtonDisabled={isSendButtonDisabled}
           isGeneratingPrompt={isGeneratingPrompt}
-          stopGeneration={stopGeneration}
           handleSend={handleSend}
-          handleClickWebSearch={handleClickWebSearch}
-          isWebSearchOn={isWebSearchOn}
-          handleModelSelect={handleModelSelect}
-          selectedModel={model}
-          isWebSearchDisabled={isWebSearchDisabled}
-          toggleWebSearchDisabled={toggleWebSearchDisabled}
         />
       </div>
     </div>
