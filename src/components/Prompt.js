@@ -3,18 +3,27 @@ import useMessageStore from "../store/useMessagesStore";
 import { scrollToMessage } from "../utils/helpers";
 import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
+import usePromptStore from "../store/usePromptStore";
 
 const Prompt = ({ chat_id }) => {
   const { process, setProcess, addMessage, addChunkInMessageAnswer } =
     useMessageStore();
-  const [prompt, setPrompt] = useState("");
-  const [model, setModel] = useState(null);
-  const [isWebSearchOn, setIsWebSearchOn] = useState(false);
+  const {
+    prompt,
+    setPrompt,
+    model,
+    setModel,
+    isWebSearchOn,
+    setIsWebSearchOn,
+    isWebSearchDisabled,
+    setIsWebSearchDisabled,
+  } = usePromptStore();
   const textareaRef = useRef(null);
-  const isPromptSendDisabled = process || !prompt.trim() || model === null ? true : false;
+
+  const isPromptSendDisabled =
+    process || !prompt.trim() || model === null ? true : false;
   const isSendButtonDisabled = !prompt.trim() || model === null ? true : false;
   const isGeneratingPrompt = process ? true : false;
-  const [isWebSearchDisabled, setIsWebSearchDisabled] = useState(true);
   const google_search = isWebSearchDisabled ? false : isWebSearchOn;
 
   const toggleWebSearchDisabled = (value) => {
@@ -39,7 +48,7 @@ const Prompt = ({ chat_id }) => {
   };
 
   const handleClickWebSearch = () => {
-    setIsWebSearchOn((prev) => !prev);
+    setIsWebSearchOn(!isWebSearchOn);
   };
 
   const handleModelSelect = (model_selected) => {
