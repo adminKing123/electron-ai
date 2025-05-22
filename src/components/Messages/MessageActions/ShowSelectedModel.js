@@ -1,10 +1,21 @@
 import { FaBrain } from "react-icons/fa";
 import { PiGlobe } from "react-icons/pi";
+import { RiImageCircleAiLine } from "react-icons/ri";
+
+const IdentifySearch = ({ message }) => {
+  return message.generate_image ? (
+    <RiImageCircleAiLine />
+  ) : message.google_search ? (
+    <PiGlobe />
+  ) : (
+    <FaBrain />
+  );
+};
 
 const ShowSelectedModel = ({ message }) => {
   return (
     <div className="text-[#b8b8b8] flex items-center gap-1 text-xs">
-      {message.google_search ? <PiGlobe /> : <FaBrain />}
+      <IdentifySearch message={message} />
       <span>{message.model.name}</span>
     </div>
   );

@@ -7,7 +7,7 @@ import { useModelStore, useWebSearchStore } from "../../store/usePromptStores";
 const SelectAIModel = ({ disabled }) => {
   const { model: selectedModel, setModel } = useModelStore();
   const { setIsWebSearchDisabled } = useWebSearchStore();
-  
+
   const onSelect = (model_selected) => {
     setModel(model_selected);
     setIsWebSearchDisabled(model_selected.google_search === false);
@@ -86,7 +86,7 @@ const SelectAIModel = ({ disabled }) => {
         title={selectedModel?.name}
         disabled={isDisabled}
         onClick={handleToggle}
-        className="bg-[#ffffff] hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
+        className="bg-[#ffffff] disabled:opacity-50 p-2 rounded-full flex items-center group"
       >
         <FaBrain />
       </button>

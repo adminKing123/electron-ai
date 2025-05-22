@@ -6,6 +6,7 @@ import { scrollToMessage } from "../utils/helpers";
 import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
 import usePromptStore, {
+  useImageGenerateStore,
   useModelStore,
   useWebSearchStore,
 } from "../store/usePromptStores";
@@ -31,19 +32,23 @@ const Prompt = ({ chat_id }) => {
     const { prompt, setPrompt } = usePromptStore.getState();
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
+    const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
+    const { isImageGenerateOn } = useImageGenerateStore.getState();
+
     const isPromptSendDisabled =
       process || !prompt.trim() || model === null ? true : false;
 
     if (isPromptSendDisabled) return;
 
-    const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
     const google_search = isWebSearchDisabled ? false : isWebSearchOn;
+    const generate_image = isImageGenerateOn;
 
     const id = addMessage({
       prompt,
       answer: "",
       model: model,
       google_search,
+      generate_image,
     });
     handleStream(
       id,
