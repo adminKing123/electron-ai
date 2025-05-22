@@ -12,7 +12,6 @@ const useMessageStore = create((set) => ({
     return id;
   },
   deleteMessage: (message_id, chat_id) => {
-    console.log(chat_id, message_id)
     set((state) => ({
       messages: state.messages.filter((message) => message.id !== message_id),
     }));
