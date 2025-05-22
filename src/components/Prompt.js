@@ -11,7 +11,7 @@ const Prompt = ({ chat_id }) => {
   const [model, setModel] = useState(null);
   const [isWebSearchOn, setIsWebSearchOn] = useState(false);
   const textareaRef = useRef(null);
-  const isPromptSendDisabled = process || !prompt.trim() ? true : false;
+  const isPromptSendDisabled = process || !prompt.trim() || model === null ? true : false;
   const isSendButtonDisabled = !prompt.trim() || model === null ? true : false;
   const isGeneratingPrompt = process ? true : false;
   const [isWebSearchDisabled, setIsWebSearchDisabled] = useState(true);
