@@ -1,8 +1,13 @@
 import { IoArrowUp, IoStop } from "react-icons/io5";
 import useMessageStore from "../../store/useMessagesStore";
+import usePromptStore from "../../store/usePromptStore";
 
-const SendButton = ({ onClick, disabled, isGeneratingPrompt }) => {
-  const { setProcess } = useMessageStore();
+const SendButton = ({ onClick }) => {
+  const { process, setProcess } = useMessageStore();
+  const { prompt, model } = usePromptStore();
+  const isGeneratingPrompt = process ? true : false;
+  const disabled = !prompt.trim() || model === null ? true : false;
+
   const stopGeneration = () => {
     setProcess(null);
   };

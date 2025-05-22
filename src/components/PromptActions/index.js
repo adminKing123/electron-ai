@@ -4,7 +4,6 @@ import WebSearchOption from "./WebSearchOption";
 
 const PromptActions = ({
   handleSend,
-  isSendButtonDisabled,
   isGeneratingPrompt,
 }) => {
   return (
@@ -16,7 +15,6 @@ const PromptActions = ({
       <div>
         <SendButton
           onClick={handleSend}
-          disabled={isSendButtonDisabled}
           isGeneratingPrompt={isGeneratingPrompt}
         />
       </div>

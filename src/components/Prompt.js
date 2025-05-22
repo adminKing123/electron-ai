@@ -8,19 +8,13 @@ import usePromptStore from "../store/usePromptStore";
 const Prompt = ({ chat_id }) => {
   const { process, setProcess, addMessage, addChunkInMessageAnswer } =
     useMessageStore();
-  const {
-    prompt,
-    setPrompt,
-    model,
-    isWebSearchOn,
-    isWebSearchDisabled,
-  } = usePromptStore();
+  const { prompt, setPrompt, model, isWebSearchOn, isWebSearchDisabled } =
+    usePromptStore();
   const textareaRef = useRef(null);
 
   const isPromptSendDisabled =
     process || !prompt.trim() || model === null ? true : false;
-  const isSendButtonDisabled = !prompt.trim() || model === null ? true : false;
-  const isGeneratingPrompt = process ? true : false;
+
   const google_search = isWebSearchDisabled ? false : isWebSearchOn;
 
   const handleChange = (e) => {
@@ -96,11 +90,7 @@ const Prompt = ({ chat_id }) => {
           onKeyDown={handleKeyDown}
           rows={1}
         />
-        <PromptActions
-          isSendButtonDisabled={isSendButtonDisabled}
-          isGeneratingPrompt={isGeneratingPrompt}
-          handleSend={handleSend}
-        />
+        <PromptActions handleSend={handleSend} />
       </div>
     </div>
   );
