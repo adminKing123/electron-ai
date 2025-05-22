@@ -31,7 +31,9 @@ const useMessageStore = create((set) => ({
       }),
     }));
   },
+}));
 
+export const useProcessController = create((set) => ({
   process: null,
   controller: null,
   setProcess: (process = null, controller = null) => {

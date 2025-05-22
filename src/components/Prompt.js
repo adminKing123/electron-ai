@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import useMessageStore from "../store/useMessagesStore";
+import { useEffect, useRef } from "react";
+import useMessageStore, { useProcessController } from "../store/useMessagesStore";
 import { scrollToMessage } from "../utils/helpers";
 import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
@@ -67,7 +67,7 @@ const Prompt = ({ chat_id }) => {
   const handleSend = () => {
     const { prompt, setPrompt } = usePromptStore.getState();
     const { model } = useModelStore.getState();
-    const { process } = useMessageStore.getState();
+    const { process } = useProcessController.getState();
     const isPromptSendDisabled =
       process || !prompt.trim() || model === null ? true : false;
 

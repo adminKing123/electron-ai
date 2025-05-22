@@ -1,10 +1,10 @@
-import useMessageStore from "../../../store/useMessagesStore";
+import { useProcessController } from "../../../store/useMessagesStore";
 import CopyButton from "./CopyMessageButton";
 import DeleteMessageButton from "./DeleteMessageButton";
 import ShowSelectedModel from "./ShowSelectedModel";
 
 const MessageActions = ({ id, message, handleCopy, chat_id }) => {
-  const { process } = useMessageStore();
+  const { process } = useProcessController();
 
   if (process?.id === id) return null;
 

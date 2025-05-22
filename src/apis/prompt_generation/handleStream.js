@@ -1,10 +1,10 @@
 import CONFIG from "../../config";
-import useMessageStore from "../../store/useMessagesStore";
+import { useProcessController } from "../../store/useMessagesStore";
 import useUserStore from "../../store/useUserStore";
 
 const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
   const user = useUserStore.getState().user;
-  const setProcess = useMessageStore.getState().setProcess;
+  const setProcess = useProcessController.getState().setProcess;
   try {
     const controller = new AbortController();
     setProcess({
