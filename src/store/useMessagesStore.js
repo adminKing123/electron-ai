@@ -38,7 +38,6 @@ const useMessageStore = create((set) => ({
   controller: null,
   setProcess: (process = null, controller = null) => {
     set((state) => {
-      console.log(controller);
       state.controller?.abort();
       return { process, controller };
     });
