@@ -5,20 +5,18 @@ import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
 import usePromptStore from "../store/usePromptStore";
 
-const Prompt = ({ chat_id }) => {
-  const { process, setProcess, addMessage, addChunkInMessageAnswer } =
-    useMessageStore();
-  const { prompt, setPrompt, model, isWebSearchOn, isWebSearchDisabled } =
-    usePromptStore();
-  const textareaRef = useRef(null);
-
-  const isPromptSendDisabled =
-    process || !prompt.trim() || model === null ? true : false;
-
-  const google_search = isWebSearchDisabled ? false : isWebSearchOn;
+const TextArea = ({ textareaRef, handleSend }) => {
+  const { prompt, setPrompt } = usePromptStore();
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   const autoResize = () => {
@@ -33,6 +31,24 @@ const Prompt = ({ chat_id }) => {
     autoResize();
   }, [prompt]);
 
+  return (
+    <textarea
+      ref={textareaRef}
+      className="w-full bg-[#0f0f0f] resize-none outline-none text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto"
+      autoFocus
+      placeholder="Ask anything"
+      value={prompt}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      rows={1}
+    />
+  );
+};
+
+const Prompt = ({ chat_id }) => {
+  const { addMessage, addChunkInMessageAnswer } = useMessageStore();
+  const textareaRef = useRef(null);
+
   const onProgress = (data) => {
     addChunkInMessageAnswer(data.id, data.chunk);
   };
@@ -46,7 +62,15 @@ const Prompt = ({ chat_id }) => {
   const onError = () => {};
 
   const handleSend = () => {
+    const { prompt, model, setPrompt } = usePromptStore.getState();
+    const { process } = useMessageStore.getState();
+    const isPromptSendDisabled =
+      process || !prompt.trim() || model === null ? true : false;
+
     if (isPromptSendDisabled) return;
+
+    const { isWebSearchDisabled, isWebSearchOn } = usePromptStore.getState();
+    const google_search = isWebSearchDisabled ? false : isWebSearchOn;
 
     const id = addMessage({
       prompt,
@@ -70,26 +94,10 @@ const Prompt = ({ chat_id }) => {
     setPrompt("");
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
   return (
     <div className="w-full relative">
       <div className="px-5 py-[15px] bg-[#0f0f0f] rounded-3xl border-[2px] border-[#1c1e21]">
-        <textarea
-          ref={textareaRef}
-          className="w-full bg-[#0f0f0f] resize-none outline-none text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto"
-          autoFocus
-          placeholder="Ask anything"
-          value={prompt}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          rows={1}
-        />
+        <TextArea textareaRef={textareaRef} handleSend={handleSend} />
         <PromptActions handleSend={handleSend} />
       </div>
     </div>
