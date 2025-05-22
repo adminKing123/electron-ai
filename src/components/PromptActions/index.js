@@ -1,3 +1,4 @@
+import GenerateImageButton from "./GenerateImageButton";
 import SelectAIModel from "./SelectAIModel";
 import SendButton from "./SendButton";
 import WebSearchOption from "./WebSearchOption";
@@ -8,6 +9,7 @@ const PromptActions = ({ handleSend }) => {
       <div className="flex items-center gap-2">
         <SelectAIModel />
         <WebSearchOption />
+        <GenerateImageButton />
       </div>
       <div>
         <SendButton onClick={handleSend} />

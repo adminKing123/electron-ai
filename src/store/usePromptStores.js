@@ -17,4 +17,9 @@ export const useWebSearchStore = create((set) => ({
   setIsWebSearchDisabled: (value) => set({ isWebSearchDisabled: value }),
 }));
 
+export const useImageGenerateStore = create((set) => ({
+  isImageGenerateOn: false,
+  setIsImageGenerateOn: (value) => set({ isImageGenerateOn: value }),
+}));
+
 export default usePromptStore;
