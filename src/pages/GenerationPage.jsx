@@ -11,7 +11,7 @@ function GenerationPage() {
         <Messages chat_id={chat_id} />
         <div
           id="prompt-container"
-          className="w-full transition-all duration-300 absolute bottom-0 screen-center"
+          className="w-full transition-all duration-500 absolute bottom-0 screen-center"
         >
           <div className="max-w-[780px] px-5 md:px-0 md:mx-auto">
             <Prompt chat_id={chat_id} />
