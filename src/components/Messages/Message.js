@@ -1,4 +1,4 @@
-import MarkdownRenderer from "../MarkdownRenderer";
+import Answer from "./Answer";
 import MessageActions from "./MessageActions";
 
 const Message = ({ message, chat_id }) => {
@@ -19,11 +19,7 @@ const Message = ({ message, chat_id }) => {
           {message.prompt}
         </pre>
       </div>
-      {message?.answer ? (
-        <div className="text-white mt-2">
-          <MarkdownRenderer content={message.answer} />
-        </div>
-      ) : null}
+      <Answer message={message} />
       <MessageActions
         id={message.id}
         message={message}

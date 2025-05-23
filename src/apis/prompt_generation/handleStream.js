@@ -11,7 +11,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
     const controller = new AbortController();
     setProcess({
       type: "GENERATION",
-      process_name: "Getting Started...",
+      process_name: "GETTING_STARTED",
       id: id,
     });
     onStart?.({ id });
@@ -54,7 +54,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
     setProcess(
       {
         type: "GENERATION",
-        process_name: "Generating...",
+        process_name: "GENERATING",
         id: id,
       },
       controller

@@ -1,0 +1,19 @@
+import { useProcessController } from "../../store/useMessagesStore";
+import { GettingStartedLoader } from "../Loaders";
+import MarkdownRenderer from "../MarkdownRenderer";
+
+const Answer = ({ message }) => {
+  const { process } = useProcessController();
+  if (
+    process?.id === message?.id &&
+    process?.process_name === "GETTING_STARTED"
+  )
+    return <GettingStartedLoader />;
+  return (
+    <div className="text-white mt-2">
+      <MarkdownRenderer content={message.answer} />
+    </div>
+  );
+};
+
+export default Answer;
