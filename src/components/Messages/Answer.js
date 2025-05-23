@@ -8,7 +8,11 @@ const Answer = ({ message }) => {
     process?.id === message?.id &&
     process?.process_name === "GETTING_STARTED"
   )
-    return <GettingStartedLoader />;
+    return (
+      <div className="min-h-[200px]">
+        <GettingStartedLoader />
+      </div>
+    );
   return (
     <div className="text-white mt-2">
       <MarkdownRenderer content={message.answer} />
