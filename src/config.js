@@ -9,6 +9,7 @@ const CONFIG = {
     uid: "un2xqHu71cd6WWycTr1P6UE4PiJ2",
     org_id: "synapses",
   },
+  CALL_GET_AI_MODELS_API: false,
 };
 
 export default CONFIG;
