@@ -9,8 +9,13 @@ function GenerationPage() {
     <div className="bg-[#0d1117] w-screen h-[100dvh] py-2">
       <div className="flex flex-col h-full w-full">
         <Messages chat_id={chat_id} />
-        <div className="max-w-[768px] px-5 md:px-0 md:mx-auto w-full">
-          <Prompt chat_id={chat_id} />
+        <div
+          id="prompt-container"
+          className="w-full transition-all duration-300 absolute bottom-0 screen-center"
+        >
+          <div className="max-w-[780px] px-5 md:px-0 md:mx-auto">
+            <Prompt chat_id={chat_id} />
+          </div>
         </div>
       </div>
     </div>

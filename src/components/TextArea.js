@@ -17,9 +17,17 @@ const TextArea = ({ textareaRef, handleSend }) => {
 
   const autoResize = () => {
     const textarea = textareaRef.current;
+    const messagesContainer = document.getElementById("messages-container");
+    const promptContainer = document.getElementById("prompt-container");
+
     if (textarea) {
       textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 240)}px`;
+    }
+
+    if (messagesContainer && promptContainer) {
+      const promptHeight = promptContainer.offsetHeight;
+      messagesContainer.style.paddingBottom = `${promptHeight}px`;
     }
   };
 

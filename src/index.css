@@ -6,6 +6,8 @@ body {
   margin: 0px;
   padding: 0px;
   overflow: hidden;
+  width: 100vw;
+  height: 100dvh;
 }
 
 /* Works on Chrome, Edge, Safari */
@@ -32,4 +34,10 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
+}
+
+.screen-center {
+  position: absolute;
+  bottom: 50%;
+  transform: translateY(50%);
 }

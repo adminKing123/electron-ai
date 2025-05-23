@@ -1,13 +1,19 @@
+import { useEffect } from "react";
 import useMessageStore from "../../store/useMessagesStore";
 import Message from "./Message";
 
 const Messages = ({ chat_id }) => {
   const { messages } = useMessageStore();
+
+  useEffect(() => {
+    const promptEle = document.getElementById("prompt-container");
+    if (messages.length) promptEle.classList.remove("screen-center");
+    else promptEle.classList.add("screen-center");
+  }, [messages.length]);
+
   return (
     <div
-      className={`overflow-y-auto transition-all duration-500 ${
-        messages.length ? "flex-grow min-h-[40%]" : "h-[40%]"
-      }`}
+      className={`overflow-y-auto transition-all duration-500 flex-grow`}
       id="messages-container"
     >
       {messages.map((message) => (
