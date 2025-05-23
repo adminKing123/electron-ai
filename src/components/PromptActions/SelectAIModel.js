@@ -60,23 +60,26 @@ const SelectAIModel = ({ disabled }) => {
   return (
     <div className="relative" ref={dropdownRef}>
       {isOpen && !isDisabled && (
-        <div className="absolute p-2 bottom-full mb-1 max-h-[240px] w-fit max-w-[180px] rounded-3xl border border-[#1c1e21] bg-[#262626] cursor-pointer z-10">
+        <div className="absolute p-2 bottom-full mb-1 max-h-[240px] overflow-auto min-w-[240px] w-fit rounded-xl border border-[#444444] bg-[#2F2F2F] cursor-pointer z-10">
           {data.models.map((model) => {
             const isSelected = model_selected?.id === model.id;
             return (
               <div
                 key={model.id}
                 onClick={() => handleSelect(model)}
-                className={`px-4 py-2 text-xs truncate rounded-3xl flex items-center justify-between gap-2 ${
+                className={`px-3 py-2 text-sm rounded-xl truncate ${
                   isSelected
                     ? "text-green-500"
-                    : "text-[#ffffff] hover:bg-[#2f3237]"
+                    : "text-[#ffffff] hover:bg-[#444444]"
                 }`}
               >
-                <div className="truncate">{model.name}</div>
-                <div className="w-3 h-3">
-                  {isSelected && <SiTicktick className="fill-green-500" />}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="truncate">{model.name}</div>
+                  <div className="w-3 h-3">
+                    {isSelected && <SiTicktick className="fill-green-500" />}
+                  </div>
                 </div>
+                <p className="text-[#ccc] text-[12px]">{model.description}</p>
               </div>
             );
           })}

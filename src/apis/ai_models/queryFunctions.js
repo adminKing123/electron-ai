@@ -32,40 +32,35 @@ export const getAIModelsAPI = async () => {
           name: "Gemini-2.5-Pro",
           google_search: true,
           active: "True",
-          description:
-            "Best for complex reasoning, coding, and creative writing with top-tier performance",
+          description: "Best for complex tasks.",
         },
         {
           id: "gemini-2.5-flash-preview-04-17",
           name: "Gemini-2.5-Flash",
           google_search: true,
           active: "True",
-          description:
-            "Fastest Gemini model for quick, cost-effective responses to everyday tasks.",
+          description: "Fast and efficient.",
         },
         {
           id: "gemini-2.0-flash-001",
           name: "Gemini-2.0-Flash",
           google_search: true,
           active: "True",
-          description:
-            "Lightweight and speedy for basic queries and less intensive tasks.",
+          description: "Light and quick.",
         },
         {
           id: "claude-3-5-sonnet-v2@20241022",
           name: "Claude-3.5-Sonnet",
           google_search: false,
           active: "True",
-          description:
-            "Strong balance of creativity, logic, and conversation great for general use.",
+          description: "Great all-rounder.",
         },
         {
           id: "gemini-1.5-pro-002",
           name: "Gemini-1.5-Pro",
           google_search: true,
           active: "True",
-          description:
-            "Advanced model for research and nuanced problem-solving, with good coding skills.",
+          description: "Strong problem-solver.",
         },
       ],
       default_model: {
@@ -73,8 +68,7 @@ export const getAIModelsAPI = async () => {
         name: "Gemini-2.0-Flash",
         google_search: true,
         active: "True",
-        description:
-          "Lightweight and speedy for basic queries and less intensive tasks.",
+        description: "Light and quick.",
       },
     };
   }
