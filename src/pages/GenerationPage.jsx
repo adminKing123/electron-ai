@@ -7,7 +7,7 @@ function GenerationPage() {
 
   return (
     <div className="bg-[#212121] w-screen h-[100dvh] py-2">
-      <div className="flex flex-col h-full w-full">
+      <div className="flex flex-col h-[calc(100%-30px)] w-full">
         <Messages chat_id={chat_id} />
         <div
           id="prompt-container"
