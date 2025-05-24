@@ -47,7 +47,7 @@ const Header = () => {
   return (
     <header
       id="header"
-      className="h-[56px] w-full flex items-center justify-between gap-2 px-3"
+      className="h-[56px] w-full flex items-center justify-between gap-2 px-3 mb-[1px]"
     >
       <div className="flex items-center">
         <SidebarOpenButton />
