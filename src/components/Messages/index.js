@@ -13,7 +13,7 @@ const Messages = ({ chat_id }) => {
 
   return (
     <div
-      className={`overflow-y-auto transition-all duration-500 flex-grow`}
+      className={`overflow-y-auto py-2 transition-all duration-500 flex-grow`}
       id="messages-container"
     >
       {messages.map((message) => (
