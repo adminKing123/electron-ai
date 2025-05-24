@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useSidebarOpenState } from "../store/useSidebarStores";
+import { HiMenuAlt2 } from "react-icons/hi";
 
 const SidebarOpenButton = () => {
   const { open, setOpen } = useSidebarOpenState();
@@ -9,13 +10,14 @@ const SidebarOpenButton = () => {
     setOpen(!open);
   };
 
-  if (open) return null;
+  if (open && window.innerWidth > 768) return null;
   return (
     <button
       onClick={toggleSidebar}
       className="w-10 h-10 px-2 hover:bg-[#3A3A3A] rounded-lg"
     >
-      <TbLayoutSidebarFilled className="text-white w-[22px] h-[22px]" />
+      <TbLayoutSidebarFilled className="text-white w-[22px] h-[22px] hidden md:block" />
+      <HiMenuAlt2 className="text-white w-[22px] h-[22px] block md:hidden" />
     </button>
   );
 };
