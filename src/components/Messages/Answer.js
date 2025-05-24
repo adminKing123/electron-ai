@@ -9,7 +9,7 @@ const Answer = ({ message }) => {
     process?.process_name === "GETTING_STARTED"
   )
     return (
-      <div className="min-h-[200px]">
+      <div className="min-h-[200px] mt-2">
         <GettingStartedLoader />
       </div>
     );

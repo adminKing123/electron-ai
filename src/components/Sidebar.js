@@ -3,6 +3,26 @@ import { SiElectron } from "react-icons/si";
 import { useSidebarOpenState } from "../store/useSidebarStores";
 import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
+import { motion, AnimatePresence } from "framer-motion";
+
+const SidebarOverlay = ({ open, toggleSidebar }) => {
+  const shouldShow = window.innerWidth <= 768 && open;
+
+  return (
+    <AnimatePresence>
+      {shouldShow && (
+        <motion.div
+          className="absolute top-0 left-0 w-screen h-[100dvh] inset-0 bg-black/50 z-10"
+          onClick={toggleSidebar}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        />
+      )}
+    </AnimatePresence>
+  );
+};
 
 const SidebarHeader = ({ toggleSidebar }) => {
   return (
@@ -39,15 +59,18 @@ const Sidebar = () => {
   }, [setOpen]);
 
   return (
-    <div
-      className={`bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-500 absolute top-0 left-0 z-10 md:static ${
-        open ? "w-[260px]" : "w-0"
-      }`}
-    >
-      <div className="w-[260px]">
-        <SidebarHeader toggleSidebar={toggleSidebar} />
+    <>
+      <SidebarOverlay open={open} toggleSidebar={toggleSidebar} />
+      <div
+        className={`bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-500 absolute top-0 left-0 z-10 md:static ${
+          open ? "w-[260px]" : "w-0"
+        }`}
+      >
+        <div className="w-[260px]">
+          <SidebarHeader toggleSidebar={toggleSidebar} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
