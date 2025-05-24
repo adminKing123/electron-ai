@@ -4,7 +4,6 @@ import { useSidebarOpenState } from "../store/useSidebarStores";
 import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 
-
 const SidebarHeader = ({ toggleSidebar }) => {
   return (
     <div className="bg-[#181818] w-full h-[56px] flex items-center justify-between px-3">
@@ -41,7 +40,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-all duration-500 absolute top-0 left-0 z-10 md:static ${
+      className={`bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-500 absolute top-0 left-0 z-10 md:static ${
         open ? "w-[260px]" : "w-0"
       }`}
     >
