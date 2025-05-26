@@ -12,7 +12,7 @@ function GenerationPage() {
         id="prompt-container"
         className="w-full transition-all duration-500 absolute bottom-4 screen-center"
       >
-        <div className="max-w-[800px] px-5 md:px-0 md:mx-auto">
+        <div className="max-w-[800px] px-5 mx-auto">
           <Prompt chat_id={chat_id} />
         </div>
       </div>

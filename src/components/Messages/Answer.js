@@ -14,7 +14,7 @@ const Answer = ({ message }) => {
       </div>
     );
   return (
-    <div className="text-white mt-2">
+    <div className="text-white mt-2 max-w-full">
       <MarkdownRenderer content={message.answer} />
     </div>
   );
