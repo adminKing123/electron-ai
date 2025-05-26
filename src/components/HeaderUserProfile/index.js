@@ -89,7 +89,7 @@ const HeaderUserProfile = () => {
   }, [isOpen]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative w-7 h-7" ref={dropdownRef}>
       {isOpen ? <HeaderUserProfileOptions /> : null}
       <button
         onClick={toggleOptions}

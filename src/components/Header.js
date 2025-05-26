@@ -56,7 +56,7 @@ const Header = () => {
           ElectronAI
         </button>
       </div>
-      <div>
+      <div className="flex items-center">
         <HeaderUserProfile />
       </div>
     </header>
