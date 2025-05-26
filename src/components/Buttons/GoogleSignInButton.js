@@ -1,14 +1,18 @@
 import { FaGoogle } from "react-icons/fa";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import ROUTES from "../../router/routes";
 
 const GoogleSignInButton = () => {
+  const navigate = useNavigate();
+
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log("User Info:", user);
-      // You can now store user info in your state or DB
+      console.log(user);
+      navigate(ROUTES.INDEX);
     } catch (error) {
       console.error("Login Error:", error.message);
     }

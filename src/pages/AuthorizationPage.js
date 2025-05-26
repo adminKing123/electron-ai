@@ -1,8 +1,14 @@
 import AuthorizationHeader from "../components/AuthorizationHeader";
 import { SiElectron } from "react-icons/si";
 import GoogleSignInButton from "../components/Buttons/GoogleSignInButton";
+import useUserStore from "../store/useUserStore";
+import { Navigate } from "react-router-dom";
+import ROUTES from "../router/routes";
 
 const AuthorizationPage = () => {
+  const { user } = useUserStore();
+
+  if (user) return <Navigate to={ROUTES.INDEX} />;
   return (
     <div className="bg-[#212121] w-screen h-[100dvh] flex overflow-auto">
       <div className="h-full flex-grow relative">
