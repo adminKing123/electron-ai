@@ -4,7 +4,7 @@ import { useImageGenerateStore } from "../../store/usePromptStores";
 import useUserStore from "../../store/useUserStore";
 
 const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
-  const user = useUserStore.getState().user;
+  const user = useUserStore.getState().DEFAULT_USER;
   const setProcess = useProcessController.getState().setProcess;
   const isImageGenerateOn = useImageGenerateStore.getState().isImageGenerateOn;
   try {

@@ -1,8 +1,24 @@
 import { FaGoogle } from "react-icons/fa";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../../firebase";
 
 const GoogleSignInButton = () => {
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("User Info:", user);
+      // You can now store user info in your state or DB
+    } catch (error) {
+      console.error("Login Error:", error.message);
+    }
+  };
+
   return (
-    <button className="flex items-center justify-between gap-2 border py-1.5 px-3 rounded-3xl text-[#aaa] border-[#aaa] hover:text-[#cdcdcd] hover:border-[#cdcdcd]">
+    <button
+      onClick={handleGoogleLogin}
+      className="flex items-center justify-between gap-2 border py-1.5 px-3 rounded-3xl text-[#aaa] border-[#aaa] hover:text-[#cdcdcd] hover:border-[#cdcdcd]"
+    >
       <div>
         <FaGoogle />
       </div>

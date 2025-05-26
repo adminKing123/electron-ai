@@ -10,6 +10,15 @@ const CONFIG = {
     org_id: "synapses",
   },
   CALL_GET_AI_MODELS_API: false,
+  FIREBASE_CONFIG: {
+    apiKey: process.env.APIKEY,
+    authDomain: process.env.AUTHDOMAIN,
+    projectId: process.env.PROJECTID,
+    storageBucket: process.env.STORAGEBUCKET,
+    messagingSenderId: process.env.MESSAGINGSENDERID,
+    appId: process.env.APPID,
+    measurementId: process.env.MEASUREMENTID,
+  },
 };
 
 export default CONFIG;

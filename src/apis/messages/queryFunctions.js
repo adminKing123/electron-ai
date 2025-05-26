@@ -3,7 +3,7 @@ import useUserStore from "../../store/useUserStore";
 import ENDPOINTS from "../endpoints";
 
 export const deleteMessageAPI = async (data) => {
-  const user = useUserStore.getState().user;
+  const user = useUserStore.getState().DEFAULT_USER;
   const response = await api({
     method: "POST",
     url: ENDPOINTS.DELETE_MESSAGE,
