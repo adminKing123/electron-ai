@@ -4,6 +4,7 @@ import { useSidebarOpenState } from "../store/useSidebarStores";
 import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
+import SidebarOptions from "./SidebarOptions";
 
 const SidebarOverlay = ({ open, toggleSidebar }) => {
   const shouldShow = window.innerWidth <= 768 && open;
@@ -68,6 +69,7 @@ const Sidebar = () => {
       >
         <div className="w-[260px]">
           <SidebarHeader toggleSidebar={toggleSidebar} />
+          <SidebarOptions />
         </div>
       </div>
     </>
