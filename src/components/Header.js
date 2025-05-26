@@ -2,21 +2,7 @@ import { useEffect } from "react";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useSidebarOpenState } from "../store/useSidebarStores";
 import { HiMenuAlt2 } from "react-icons/hi";
-import useUserStore from "../store/useUserStore";
-
-const HeaderUserProfile = () => {
-  const { user } = useUserStore();
-
-  return (
-    <div className="w-7 h-7 rounded-full overflow-hidden">
-      <img
-        alt={user.displayName}
-        src={user.photoURL}
-        className="w-full h-full object-cover"
-      />
-    </div>
-  );
-};
+import HeaderUserProfile from "./HeaderUserProfile";
 
 const SidebarOpenButton = () => {
   const { open, setOpen } = useSidebarOpenState();
