@@ -2,6 +2,21 @@ import { useEffect } from "react";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useSidebarOpenState } from "../store/useSidebarStores";
 import { HiMenuAlt2 } from "react-icons/hi";
+import useUserStore from "../store/useUserStore";
+
+const HeaderUserProfile = () => {
+  const { user } = useUserStore();
+
+  return (
+    <div className="w-7 h-7 rounded-full overflow-hidden">
+      <img
+        alt={user.displayName}
+        src={user.photoURL}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  );
+};
 
 const SidebarOpenButton = () => {
   const { open, setOpen } = useSidebarOpenState();
@@ -54,6 +69,9 @@ const Header = () => {
         <button className="text-xl text-white font-semibold py-1.5 px-3 hover:bg-[#3A3A3A] rounded-lg">
           ElectronAI
         </button>
+      </div>
+      <div>
+        <HeaderUserProfile />
       </div>
     </header>
   );
