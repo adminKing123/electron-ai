@@ -7,7 +7,7 @@ import ROUTES from "../../router/routes";
 const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
   return (
     <NavLink
-      className="px-[10px] py-[7px] text-[#E9E9E9] text-[13px] flex items-center gap-2 hover:bg-[#2F2F2F] rounded-lg w-full"
+      className="px-[10px] py-[7px] text-[#E9E9E9] text-[13px] flex items-center gap-2 hover:bg-[#2F2F2F] active:bg-[#232323] rounded-lg w-full"
       {...props}
     >
       <span>

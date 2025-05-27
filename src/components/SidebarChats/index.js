@@ -7,13 +7,12 @@ const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
   return (
     <NavLink
       to={`/${chat.id}`}
-      className="group pl-[10px] text-[#E9E9E9] text-[13px] flex items-center hover:bg-[#2F2F2F] rounded-lg w-full"
+      className="group pl-[10px] text-[#E9E9E9] text-[13px] flex items-center hover:bg-[#2F2F2F] active:bg-[#232323] focus:bg-[#2F2F2F] focus:outline-none rounded-lg w-full"
     >
       <span className="truncate max-w-[200px] py-[7px]">{chat.title}</span>
       <button
-        type="button"
         onClick={handleMenuButtonClick}
-        className="flex-shrink-0 py-[7px] px-[10px] hidden group-hover:block"
+        className="flex-shrink-0 py-[7px] px-[10px] hidden group-hover:block group-focus:block"
       >
         <SlOptions />
       </button>
