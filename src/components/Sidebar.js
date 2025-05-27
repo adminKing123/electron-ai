@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
 import SidebarOptions from "./SidebarOptions";
+import SidebarChats from "./SidebarChats";
 
 const SidebarOverlay = ({ open, toggleSidebar }) => {
   const shouldShow = window.innerWidth <= 768 && open;
@@ -27,7 +28,7 @@ const SidebarOverlay = ({ open, toggleSidebar }) => {
 
 const SidebarHeader = ({ toggleSidebar }) => {
   return (
-    <div className="bg-[#181818] w-full h-[56px] flex items-center justify-between px-3">
+    <div className="bg-[#181818] w-full h-[56px] flex items-center justify-between px-3 flex-shrink-0">
       <button className="w-10 h-10 px-2 hover:bg-[#3A3A3A] rounded-lg">
         <SiElectron className="text-white w-[22px] h-[22px]" />
       </button>
@@ -67,9 +68,12 @@ const Sidebar = () => {
           open ? "w-[260px]" : "w-0"
         }`}
       >
-        <div className="w-[260px]">
+        <div className="w-[260px] h-[100dvh] flex flex-col">
           <SidebarHeader toggleSidebar={toggleSidebar} />
-          <SidebarOptions />
+          <div className="flex-grow overflow-y-auto">
+            <SidebarOptions />
+            <SidebarChats />
+          </div>
         </div>
       </div>
     </>
