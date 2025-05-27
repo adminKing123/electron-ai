@@ -1,16 +1,17 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import GenerationPage from "./GenerationPage";
 
 function ChatPage() {
   const state = useLocation().state;
+  const { id } = useParams();
+  
   if (state && state.chat) {
     return <GenerationPage chat={state.chat} />;
   }
-
   const chat = {
-    id: "old-chat-id",
+    id: id,
     title: "New Chat",
-    is_new: true,
+    is_new: false,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
