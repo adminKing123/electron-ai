@@ -11,7 +11,6 @@ const GoogleSignInButton = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log(user);
       navigate(ROUTES.INDEX);
     } catch (error) {
       console.error("Login Error:", error.message);

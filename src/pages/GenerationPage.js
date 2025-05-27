@@ -1,18 +1,16 @@
 import Prompt from "../components/Prompt";
 import Messages from "../components/Messages";
-import { v4 as uuidv4 } from "uuid";
 
-function GenerationPage() {
-  const chat_id = `temp-${uuidv4()}`;
+function GenerationPage({ chat }) {
   return (
     <div className="flex flex-col h-full w-full">
-      <Messages chat_id={chat_id} />
+      <Messages chat={chat} />
       <div
         id="prompt-container"
         className="w-full transition-all duration-500 absolute bottom-4 screen-center"
       >
         <div className="max-w-[800px] px-5 mx-auto">
-          <Prompt chat_id={chat_id} />
+          <Prompt chat={chat} />
         </div>
       </div>
     </div>

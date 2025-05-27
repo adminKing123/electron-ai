@@ -11,13 +11,13 @@ const useMessageStore = create((set) => ({
     }));
     return id;
   },
-  deleteMessage: (message_id, chat_id) => {
+  deleteMessage: (message_id, id) => {
     set((state) => ({
       messages: state.messages.filter((message) => message.id !== message_id),
     }));
     deleteMessageAPI({
       message_id,
-      chat_id,
+      chat_id: id,
     });
   },
   addChunkInMessageAnswer: (id, chunk) => {
@@ -30,6 +30,10 @@ const useMessageStore = create((set) => ({
         return msg;
       }),
     }));
+  },
+  resetMessages: () => {
+    set(() => ({ messages: [] }));
+    useProcessController.getState().setProcess(null, null);
   },
 }));
 

@@ -1,7 +1,7 @@
 import Answer from "./Answer";
 import MessageActions from "./MessageActions";
 
-const Message = ({ message, chat_id }) => {
+const Message = ({ message, chat }) => {
   const handleCopy = (callback) => {
     if (message?.answer) {
       navigator.clipboard.writeText(message.answer);
@@ -24,7 +24,7 @@ const Message = ({ message, chat_id }) => {
         id={message.id}
         message={message}
         handleCopy={handleCopy}
-        chat_id={chat_id}
+        chat={chat}
       />
     </div>
   );

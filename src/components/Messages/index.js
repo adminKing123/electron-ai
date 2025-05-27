@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import useMessageStore from "../../store/useMessagesStore";
 import Message from "./Message";
 
-const Messages = ({ chat_id }) => {
+const Messages = ({ chat }) => {
   const { messages } = useMessageStore();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Messages = ({ chat_id }) => {
       id="messages-container"
     >
       {messages.map((message) => (
-        <Message key={message.id} message={message} chat_id={chat_id} />
+        <Message key={message.id} message={message} chat={chat} />
       ))}
     </div>
   );

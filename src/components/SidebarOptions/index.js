@@ -3,6 +3,7 @@ import { BsSearch } from "react-icons/bs";
 import { BiLibrary } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 import ROUTES from "../../router/routes";
+import useMessageStore from "../../store/useMessagesStore";
 
 const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
   return (
@@ -19,8 +20,17 @@ const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
 };
 
 const CreateNewChatButton = () => {
+  const handleClick = () => {
+    useMessageStore.getState().resetMessages();
+  };
+
   return (
-    <SidebarOptionButton icon={FaPlus} label="New chat" to={ROUTES.INDEX} />
+    <SidebarOptionButton
+      icon={FaPlus}
+      label="New chat"
+      to={ROUTES.INDEX}
+      onClick={handleClick}
+    />
   );
 };
 

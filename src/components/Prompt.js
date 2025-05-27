@@ -11,8 +11,11 @@ import usePromptStore, {
   useWebSearchStore,
 } from "../store/usePromptStores";
 import TextArea from "./TextArea";
+import { useNavigate } from "react-router-dom";
+import useChatsStore from "../store/useChatsStore";
 
-const Prompt = ({ chat_id }) => {
+const Prompt = ({ chat }) => {
+  const navigate = useNavigate();
   const { addMessage, addChunkInMessageAnswer } = useMessageStore();
   const textareaRef = useRef(null);
 
@@ -28,8 +31,21 @@ const Prompt = ({ chat_id }) => {
 
   const onError = () => {};
 
+  const handleNewChatEntered = (chat, prompt_to_summerize_title) => {
+    useChatsStore.getState().addChat({
+      ...chat,
+      prompt_to_summerize_title,
+    });
+    navigate(`/c/${chat.id}`, {
+      state: { chat: { ...chat, is_new: false } },
+    });
+  };
+
   const handleSend = () => {
     const { prompt, setPrompt } = usePromptStore.getState();
+    if (chat.is_new) {
+      handleNewChatEntered(chat, prompt);
+    }
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
@@ -53,7 +69,7 @@ const Prompt = ({ chat_id }) => {
     handleStream(
       id,
       {
-        chat_id,
+        chat_id: chat.id,
         prompt,
         google_search,
         model_id: model?.id,

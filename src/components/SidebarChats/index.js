@@ -2,14 +2,30 @@ import { NavLink } from "react-router-dom";
 import { SlOptions } from "react-icons/sl";
 import useChatsStore from "../../store/useChatsStore";
 import { formatDateTimeV1, groupByDate } from "../../utils/helpers";
+import { useEffect } from "react";
+import ROUTES from "../../router/routes";
 
 const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
+  useEffect(() => {
+    if (chat.is_new && chat.prompt_to_summerize_title) {
+      console.log(chat, "Summerizing title for new chat");
+    }
+  }, [chat]);
+
   return (
     <NavLink
-      to={`/${chat.id}`}
-      className="group pl-[10px] text-[#E9E9E9] text-[13px] flex items-center hover:bg-[#2F2F2F] active:bg-[#232323] focus:bg-[#2F2F2F] focus:outline-none rounded-lg w-full"
+      to={ROUTES.GET_CHAT_PAGE_URL(chat.id)}
+      className={({ isActive }) =>
+        `${
+          isActive
+            ? "bg-[#232323]"
+            : "hover:bg-[#2F2F2F] active:bg-[#232323] focus:bg-[#2F2F2F]"
+        } group pl-[10px] text-[#E9E9E9] text-[13px] flex items-center focus:outline-none rounded-lg w-full`
+      }
     >
-      <span className="truncate max-w-[200px] py-[7px]">{chat.title}</span>
+      <span className="truncate max-w-[200px] py-[7px] flex-grow">
+        {chat.title}
+      </span>
       <button
         onClick={handleMenuButtonClick}
         className="flex-shrink-0 py-[7px] px-[10px] hidden group-hover:block group-focus:block"
@@ -27,7 +43,6 @@ const SidebarChats = () => {
   const handleMenuButtonClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log("Menu button clicked for chat:", e.currentTarget);
   };
 
   return (
