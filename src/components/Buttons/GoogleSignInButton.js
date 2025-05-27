@@ -9,8 +9,7 @@ const GoogleSignInButton = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      await signInWithPopup(auth, provider);
       navigate(ROUTES.INDEX);
     } catch (error) {
       console.error("Login Error:", error.message);
