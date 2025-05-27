@@ -8,6 +8,7 @@ import ROUTES from "../../router/routes";
 const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
   useEffect(() => {
     if (chat.is_new && chat.prompt_to_summerize_title) {
+      useChatsStore.getState().summerizeChatTitle(chat);
       console.log(chat, "Summerizing title for new chat");
     }
   }, [chat]);

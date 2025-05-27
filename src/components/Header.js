@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useSidebarOpenState } from "../store/useSidebarStores";
 import { HiMenuAlt2 } from "react-icons/hi";
@@ -24,27 +23,6 @@ const SidebarOpenButton = () => {
 };
 
 const Header = () => {
-  useEffect(() => {
-    const container = document.getElementById("messages-container");
-    const header = document.getElementById("header");
-    const handleScroll = () => {
-      if (container.scrollTop > 0) {
-        header.classList.add("header-shadow");
-      } else {
-        header.classList.remove("header-shadow");
-      }
-    };
-
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
   return (
     <header
       id="header"

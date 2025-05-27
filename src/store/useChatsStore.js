@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useChatsStore = create((set) => ({
+const useChatsStore = create((set, get) => ({
   chats: [],
 
   addChat: (newChat) =>
@@ -18,6 +18,13 @@ const useChatsStore = create((set) => ({
         chat.id === id ? { ...chat, ...updatedData } : chat
       ),
     })),
+  summerizeChatTitle: (chatToSummarize) => {
+    get().updateChat(chatToSummarize.id, {
+      title: chatToSummarize.prompt_to_summerize_title || "New Chat",
+      is_new: false,
+      prompt_to_summerize_title: null,
+    });
+  },
 }));
 
 export default useChatsStore;
