@@ -45,3 +45,7 @@ body {
 .header-shadow {
   box-shadow: 0 1px 0 0 #2c2c2c;
 }
+
+.revert-list-style {
+  list-style: revert;
+}
