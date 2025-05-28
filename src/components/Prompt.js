@@ -13,6 +13,7 @@ import usePromptStore, {
 import TextArea from "./TextArea";
 import { useNavigate } from "react-router-dom";
 import useChatsStore from "../store/useChatsStore";
+import ROUTES from "../router/routes";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
@@ -31,21 +32,18 @@ const Prompt = ({ chat }) => {
 
   const onError = () => {};
 
-  const handleNewChatEntered = (chat, prompt_to_summerize_title) => {
+  const handleNewChatEntered = (chat, summarization_data) => {
     useChatsStore.getState().addChat({
       ...chat,
-      prompt_to_summerize_title,
+      summarization_data,
     });
-    navigate(`/c/${chat.id}`, {
+    navigate(ROUTES.GET_CHAT_PAGE_URL(chat.id), {
       state: { chat: { ...chat, is_new: false } },
     });
   };
 
   const handleSend = () => {
     const { prompt, setPrompt } = usePromptStore.getState();
-    if (chat.is_new) {
-      handleNewChatEntered(chat, prompt);
-    }
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
@@ -66,6 +64,15 @@ const Prompt = ({ chat }) => {
       google_search,
       generate_image,
     });
+
+    if (chat.is_new) {
+      handleNewChatEntered(chat, {
+        prompt_to_summerize_title: prompt,
+        message_id: id,
+        id,
+      });
+    }
+
     handleStream(
       id,
       {
