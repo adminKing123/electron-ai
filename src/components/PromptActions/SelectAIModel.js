@@ -79,7 +79,7 @@ const SelectAIModel = ({ disabled }) => {
                     {isSelected && <SiTicktick className="fill-green-500" />}
                   </div>
                 </div>
-                <p className="text-[#ccc] text-[12px]">{model.description}</p>
+                <p className="text-[#ccc] text-[12px]">{model?.description}</p>
               </div>
             );
           })}
