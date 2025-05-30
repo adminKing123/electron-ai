@@ -28,16 +28,16 @@ const SidebarOverlay = ({ open, toggleSidebar }) => {
 
 const SidebarHeader = ({ toggleSidebar }) => {
   return (
-    <div className="bg-[#181818] w-full h-[56px] flex items-center justify-between px-3 flex-shrink-0">
-      <button className="w-10 h-10 px-2 hover:bg-[#3A3A3A] rounded-lg">
-        <SiElectron className="text-white w-[22px] h-[22px]" />
+    <div className="bg-[#F9F9F9] dark:bg-[#181818] w-full h-[56px] flex items-center justify-between px-3 flex-shrink-0">
+      <button className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg">
+        <SiElectron className="text-[#000000] dark:text-white w-[22px] h-[22px]" />
       </button>
       <button
         onClick={toggleSidebar}
-        className="w-10 h-10 px-2 hover:bg-[#3A3A3A] rounded-lg"
+        className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
       >
-        <TbLayoutSidebar className="text-white w-[22px] h-[22px] hidden md:block" />
-        <IoClose className="text-white w-[22px] h-[22px] block md:hidden" />
+        <TbLayoutSidebar className="text-[#8F8F8F] dark:text-white w-[22px] h-[22px] hidden md:block" />
+        <IoClose className="text-[#8F8F8F] dark:text-white w-[22px] h-[22px] block md:hidden" />
       </button>
     </div>
   );
@@ -64,7 +64,7 @@ const Sidebar = () => {
     <>
       <SidebarOverlay open={open} toggleSidebar={toggleSidebar} />
       <div
-        className={`bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-500 absolute top-0 left-0 z-10 md:static ${
+        className={`bg-[#F9F9F9] dark:bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-500 absolute top-0 left-0 z-10 md:static ${
           open ? "w-[260px]" : "w-0"
         }`}
       >
