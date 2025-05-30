@@ -30,7 +30,7 @@ const Header = () => {
     >
       <div className="flex items-center">
         <SidebarOpenButton />
-        <button className="text-xl text-white font-semibold py-1.5 px-3 hover:bg-[#3A3A3A] rounded-lg">
+        <button className="text-xl text-black dark:text-white font-semibold py-1.5 px-3 hover:bg-[#F9F9F9] dark:hover:bg-[#3A3A3A] rounded-lg">
           ElectronAI
         </button>
       </div>

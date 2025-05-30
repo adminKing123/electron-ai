@@ -8,7 +8,7 @@ const MainLayout = () => {
   const { user } = useUserStore();
   if (user)
     return (
-      <div className="bg-[#212121] w-screen h-[100dvh] flex">
+      <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex">
         <Sidebar />
         <div className="w-full min-w-0 h-full flex-grow relative">
           <Header />
