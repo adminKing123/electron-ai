@@ -2,13 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --body-bg-color: #ffffff;
+  --header-shadow-color: #f2f2f2;
+}
+
+.dark {
+  --body-bg-color: #212121;
+  --header-shadow-color: #2c2c2c;
+}
+
 body {
   margin: 0px;
   padding: 0px;
   overflow: hidden;
   width: 100vw;
   height: 100dvh;
-  background-color: #212121;
+  background-color: var(--body-bg-color);
 }
 
 /* Works on Chrome, Edge, Safari */
@@ -43,7 +53,7 @@ body {
 }
 
 .header-shadow {
-  box-shadow: 0 1px 0 0 #2c2c2c;
+  box-shadow: 0 1px 0 0 var(--header-shadow-color);
 }
 
 .revert-list-style {

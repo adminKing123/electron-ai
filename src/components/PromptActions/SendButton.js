@@ -17,18 +17,18 @@ const SendButton = ({ onClick }) => {
     return (
       <button
         onClick={stopGeneration}
-        className="bg-[#ffffff] hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
+        className="bg-black dark:bg-[#ffffff] hover:bg-[#4C4C4C] dark:hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
       >
-        <IoStop />
+        <IoStop className="text-white dark:text-black" />
       </button>
     );
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className="bg-[#ffffff] hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
+      className="bg-black dark:bg-[#ffffff] hover:bg-[#4C4C4C] dark:hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
     >
-      <IoArrowUp />
+      <IoArrowUp className="text-white dark:text-black" />
     </button>
   );
 };

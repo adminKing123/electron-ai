@@ -91,7 +91,7 @@ const Prompt = ({ chat }) => {
 
   return (
     <div className="w-full relative">
-      <div className="px-5 py-[15px] bg-[#303030] rounded-3xl border-[2px] border-[#1c1e21]">
+      <div className="px-5 py-[15px] bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
         <TextArea textareaRef={textareaRef} handleSend={handleSend} />
         <PromptActions handleSend={handleSend} />
       </div>

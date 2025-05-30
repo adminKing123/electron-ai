@@ -37,7 +37,7 @@ const TextArea = ({ textareaRef, handleSend }) => {
   return (
     <textarea
       ref={textareaRef}
-      className="w-full bg-[#303030] resize-none outline-none text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto"
+      className="w-full bg-[#FFFFFF] dark:bg-[#303030] resize-none outline-none text-black dark:text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto"
       autoFocus
       placeholder="Ask anything"
       value={prompt}
