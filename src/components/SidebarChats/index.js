@@ -20,7 +20,7 @@ const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
           isActive
             ? "bg-[#EAEAEA] dark:bg-[#232323]"
             : "hover:bg-[#EFEFEF] dark:hover:bg-[#2F2F2F] active:bg-[#dbdbdb] dark:active:bg-[#232323] focus:bg-[#EAEAEA] dark:focus:bg-[#2F2F2F]"
-        } group pl-[10px] dark:text-[#E9E9E9] text-[13px] flex items-center focus:outline-none rounded-lg w-full`
+        } group pl-[10px] dark:text-[#E9E9E9] text-[14px] flex items-center focus:outline-none rounded-lg w-full`
       }
     >
       <span className="truncate max-w-[200px] py-[7px] flex-grow">
@@ -49,7 +49,7 @@ const SidebarChats = () => {
     <div className="mx-[8px] my-8">
       {Object.keys(groupedData).map((date) => (
         <div key={date} className="mt-[30px] first:mt-0">
-          <h3 className="text-[13px] text-[#8F8F8F] dark:text-[#AFAFAF] px-[10px] mb-1">
+          <h3 className="text-[14px] text-[#8F8F8F] dark:text-[#AFAFAF] px-[10px] mb-1">
             {formatDateTimeV1(date)}
           </h3>
           <div>

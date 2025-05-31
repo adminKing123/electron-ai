@@ -12,7 +12,7 @@ const HeaderUserProfileOptionsEmail = () => {
   const { user } = useUserStore();
 
   return (
-    <div className="text-[#838383] dark:text-[#C8C8C8] text-[13px] px-4 pt-1 pb-2">
+    <div className="text-[#838383] dark:text-[#C8C8C8] text-[14px] px-4 pt-1 pb-2">
       {user.email}
     </div>
   );
@@ -22,7 +22,7 @@ const OptionButton = ({ icon: Icon, label, ...props }) => {
   return (
     <li>
       <button
-        className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[13px] h-8"
+        className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8"
         {...props}
       >
         <div>
