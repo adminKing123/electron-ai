@@ -10,7 +10,7 @@ const MessageActions = ({ id, message, handleCopy, chat }) => {
 
   return (
     <div className="mt-2 mb-[30px] flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div className="text-white overflow-hidden">
+      <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
         <CopyButton handleCopy={handleCopy} />
         <DeleteMessageButton id={id} chat={chat} />
       </div>

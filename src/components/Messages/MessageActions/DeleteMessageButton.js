@@ -10,7 +10,7 @@ const DeleteMessageButton = ({ id, chat }) => {
   return (
     <button
       onClick={handleClickDelete}
-      className="p-[6px] hover:bg-[#1d1d1d] rounded-md"
+      className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md"
     >
       <MdDelete />
     </button>

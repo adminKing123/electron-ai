@@ -12,7 +12,7 @@ const HeaderUserProfileOptionsEmail = () => {
   const { user } = useUserStore();
 
   return (
-    <div className="text-[#C8C8C8] text-[13px] px-4 pt-1 pb-2">
+    <div className="text-[#838383] dark:text-[#C8C8C8] text-[13px] px-4 pt-1 pb-2">
       {user.email}
     </div>
   );
@@ -22,7 +22,7 @@ const OptionButton = ({ icon: Icon, label, ...props }) => {
   return (
     <li>
       <button
-        className="flex text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[13px] h-8"
+        className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[13px] h-8"
         {...props}
       >
         <div>
@@ -47,15 +47,15 @@ const LogoutOption = () => {
 
 const HeaderUserProfileOptions = () => {
   return (
-    <div className="absolute w-[280px] shadow-xl right-0 top-8 rounded-xl z-10 bg-[#2F2F2F] py-2">
+    <div className="absolute w-[280px] shadow-xl right-0 top-8 rounded-xl z-10 border border-[#E1E1E1] dark:border-[#2F2F2F] bg-[#ffffff] dark:bg-[#2F2F2F] py-2">
       <HeaderUserProfileOptionsEmail />
-      <hr className="border-[#ffffff26] mx-4 my-1" />
+      <hr className="border-[#E6E6E6] dark:border-[#ffffff26] mx-4 my-1" />
       <div className="px-2">
         <ul className="max-h-[360px] overflow-y-auto">
           <OptionButton icon={SiInfluxdb} label="Upgrade Plan" />
           <OptionButton icon={LuSettings2} label="Customize ElectronAI" />
           <OptionButton icon={MdSettings} label="Settings" />
-          <hr className="border-[#ffffff26] mx-2 my-2" />
+          <hr className="border-[#E6E6E6] dark:border-[#ffffff26] mx-2 my-2" />
           <LogoutOption />
         </ul>
       </div>

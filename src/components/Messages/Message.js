@@ -15,7 +15,7 @@ const Message = ({ message, chat }) => {
       className="last:min-h-full max-w-[788px] px-5 mx-auto group"
     >
       <div className="flex justify-end">
-        <div className="max-w-full font-sans text-[15px] text-white px-5 py-[15px] bg-[#303030] rounded-3xl w-fit border-[2px] border-[#1c1e21] break-words whitespace-pre-wrap">
+        <div className="max-w-full font-sans text-[15px] text-black dark:text-white px-5 py-[10px] bg-[#F4F4F4] dark:bg-[#303030] rounded-3xl w-fit break-words whitespace-pre-wrap">
           {message.prompt}
         </div>
       </div>
