@@ -10,15 +10,15 @@ const AuthorizationPage = () => {
 
   if (user) return <Navigate to={ROUTES.INDEX} />;
   return (
-    <div className="bg-[#212121] w-screen h-[100dvh] flex overflow-auto">
+    <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex overflow-auto">
       <div className="h-full flex-grow relative">
         <AuthorizationHeader />
         <div className="max-w-[800px] pt-24 px-5 md:px-0 md:mx-auto">
           <div className="flex justify-center mb-8">
-            <SiElectron className="text-white w-[72px] h-[72px]" />
+            <SiElectron className="text-[#000000] dark:text-white w-[72px] h-[72px]" />
           </div>
           <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl text-white font-semibold mb-1">
+            <h2 className="text-2xl sm:text-3xl text-[#000000] dark:text-white font-semibold mb-1">
               Authorization Required
             </h2>
             <p className="text-[#aaa] text-sm">
