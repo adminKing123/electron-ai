@@ -14,6 +14,7 @@ import TextArea from "./TextArea";
 import { useNavigate } from "react-router-dom";
 import useChatsStore from "../store/useChatsStore";
 import ROUTES from "../router/routes";
+import ChatGreetings from "./ChatGreetings";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
@@ -91,6 +92,7 @@ const Prompt = ({ chat }) => {
 
   return (
     <div className="w-full relative">
+      <ChatGreetings chat={chat} />
       <div className="px-5 py-[15px] bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
         <TextArea textareaRef={textareaRef} handleSend={handleSend} />
         <PromptActions handleSend={handleSend} />
