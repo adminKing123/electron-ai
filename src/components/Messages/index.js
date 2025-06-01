@@ -17,7 +17,7 @@ const Messages = ({ chat }) => {
       id="messages-container"
     >
       {messages.map((message) => (
-        <Message key={message.id} message={message} chat={chat} />
+        <Message key={message} message_id={message} chat={chat} />
       ))}
     </div>
   );

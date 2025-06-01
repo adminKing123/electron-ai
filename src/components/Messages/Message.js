@@ -1,7 +1,10 @@
+import useMessageStore from "../../store/useMessagesStore";
 import Answer from "./Answer";
 import MessageActions from "./MessageActions";
 
-const Message = ({ message, chat }) => {
+const Message = ({ message_id, chat }) => {
+  const message = useMessageStore((state) => state.data[message_id]);
+
   const handleCopy = (callback) => {
     if (message?.answer) {
       navigator.clipboard.writeText(message.answer);
