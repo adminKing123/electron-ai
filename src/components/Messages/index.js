@@ -3,7 +3,7 @@ import useMessageStore from "../../store/useMessagesStore";
 import Message from "./Message";
 
 const Messages = ({ chat }) => {
-  const { messages } = useMessageStore();
+  const messages = useMessageStore(state => state.messages);
 
   useEffect(() => {
     const promptEle = document.getElementById("prompt-container");

@@ -4,7 +4,7 @@ import DeleteMessageButton from "./DeleteMessageButton";
 import ShowSelectedModel from "./ShowSelectedModel";
 
 const MessageActions = ({ id, message, handleCopy, chat }) => {
-  const { process } = useProcessController();
+  const process = useProcessController((state) => state.process);
 
   if (process?.id === id) return null;
 

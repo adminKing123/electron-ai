@@ -5,8 +5,9 @@ import { SiTicktick } from "react-icons/si";
 import { useModelStore, useWebSearchStore } from "../../store/usePromptStores";
 
 const SelectAIModel = ({ disabled }) => {
-  const { model: selectedModel, setModel } = useModelStore();
-  const { setIsWebSearchDisabled } = useWebSearchStore();
+  const selectedModel = useModelStore((state) => state.model);
+  const setModel = useModelStore((state) => state.setModel);
+  const setIsWebSearchDisabled = useWebSearchStore(state => state.setIsWebSearchDisabled);
 
   const onSelect = (model_selected) => {
     setModel(model_selected);

@@ -6,7 +6,7 @@ import useThemeStore, {
 } from "../store/useThemeStore";
 
 function ThemeHandler() {
-  const { theme } = useThemeStore();
+  const theme = useThemeStore((state) => state.theme);
 
   useEffect(() => {
     if (theme === THEME_OPTIONS.SYSTEM) {

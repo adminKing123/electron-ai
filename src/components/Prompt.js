@@ -18,7 +18,11 @@ import ChatGreetings from "./ChatGreetings";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
-  const { addMessage, addChunkInMessageAnswer } = useMessageStore();
+  const addMessage = useMessageStore((state) => state.addMessage);
+  const addChunkInMessageAnswer = useMessageStore(
+    (state) => state.addChunkInMessageAnswer
+  );
+
   const textareaRef = useRef(null);
 
   const onProgress = (data) => {

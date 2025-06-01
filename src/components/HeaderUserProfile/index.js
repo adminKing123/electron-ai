@@ -9,7 +9,7 @@ import { auth } from "../../firebase";
 import ROUTES from "../../router/routes";
 
 const HeaderUserProfileOptionsEmail = () => {
-  const { user } = useUserStore();
+  const user = useUserStore(state => state.user);
 
   return (
     <div className="text-[#838383] dark:text-[#C8C8C8] text-[14px] px-4 pt-1 pb-2">
@@ -65,7 +65,7 @@ const HeaderUserProfileOptions = () => {
 
 const HeaderUserProfile = () => {
   const dropdownRef = useRef(null);
-  const { user } = useUserStore();
+  const user = useUserStore(state => state.user);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOptions = () => {

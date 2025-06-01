@@ -3,9 +3,10 @@ import { useProcessController } from "../../store/useMessagesStore";
 import usePromptStore, { useModelStore } from "../../store/usePromptStores";
 
 const SendButton = ({ onClick }) => {
-  const { process, setProcess } = useProcessController();
-  const { prompt } = usePromptStore();
-  const { model } = useModelStore();
+  const process = useProcessController((state) => state.process);
+  const setProcess = useProcessController((state) => state.setProcess);
+  const prompt = usePromptStore((state) => state.prompt);
+  const model = useModelStore((state) => state.model);
   const isGeneratingPrompt = process ? true : false;
   const disabled = !prompt.trim() || model === null ? true : false;
 

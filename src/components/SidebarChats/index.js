@@ -37,7 +37,7 @@ const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
 };
 
 const SidebarChats = () => {
-  const { chats } = useChatsStore();
+  const chats = useChatsStore(state => state.chats);
   const groupedData = groupByDate(chats, "updated_at");
 
   const handleMenuButtonClick = (e) => {

@@ -2,8 +2,10 @@ import { RiImageCircleAiLine } from "react-icons/ri";
 import { useImageGenerateStore } from "../../store/usePromptStores";
 
 const GenerateImageButton = () => {
-  const { isImageGenerateOn: active, setIsImageGenerateOn } =
-    useImageGenerateStore();
+  const active = useImageGenerateStore((state) => state.isImageGenerateOn);
+  const setIsImageGenerateOn = useImageGenerateStore(
+    (state) => state.setIsImageGenerateOn
+  );
 
   const handleClick = () => {
     setIsImageGenerateOn(!active);

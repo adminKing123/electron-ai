@@ -3,7 +3,7 @@ import { GettingStartedLoader } from "../Loaders";
 import MarkdownRenderer from "../MarkdownRenderer";
 
 const Answer = ({ message }) => {
-  const { process } = useProcessController();
+  const process = useProcessController((state) => state.process);
   if (
     process?.id === message?.id &&
     process?.process_name === "GETTING_STARTED"

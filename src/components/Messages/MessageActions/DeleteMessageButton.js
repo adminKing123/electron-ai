@@ -2,7 +2,8 @@ import { MdDelete } from "react-icons/md";
 import useMessageStore from "../../../store/useMessagesStore";
 
 const DeleteMessageButton = ({ id, chat }) => {
-  const { deleteMessage } = useMessageStore();
+  const deleteMessage = useMessageStore(state => state.deleteMessage);
+  
   const handleClickDelete = () => {
     deleteMessage(id, chat.id);
   };

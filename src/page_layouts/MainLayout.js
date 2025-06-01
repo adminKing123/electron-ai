@@ -5,7 +5,7 @@ import useUserStore from "../store/useUserStore";
 import ROUTES from "../router/routes";
 
 const MainLayout = () => {
-  const { user } = useUserStore();
+  const user = useUserStore(state => state.user);
   if (user)
     return (
       <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex">

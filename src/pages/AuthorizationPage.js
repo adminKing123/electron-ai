@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 import ROUTES from "../router/routes";
 
 const AuthorizationPage = () => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
 
   if (user) return <Navigate to={ROUTES.INDEX} />;
   return (
