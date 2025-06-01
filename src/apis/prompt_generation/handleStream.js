@@ -13,7 +13,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
       type: "GENERATION",
       process_name: "GETTING_STARTED",
       id: id,
-    }, controller);
+    });
     onStart?.({ id });
     const response = await fetch(
       CONFIG.GET_GENERATE_URL({
