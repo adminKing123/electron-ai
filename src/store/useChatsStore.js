@@ -23,12 +23,10 @@ const useChatsStore = create((set, get) => ({
     summariseChatTitleAPI({
       prompt_to_summerize_title:
         chatToSummarize.summarization_data.prompt_to_summerize_title,
-      message_id: chatToSummarize.summarization_data.message_id,
-      chat_id: chatToSummarize.id,
     })
       .then((response) => {
         get().updateChat(chatToSummarize.id, {
-          title: response.title,
+          title: response.summary_title,
           is_new: false,
           summarization_data: null,
         });

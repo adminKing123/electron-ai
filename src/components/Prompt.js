@@ -73,8 +73,6 @@ const Prompt = ({ chat }) => {
     if (chat.is_new) {
       handleNewChatEntered(chat, {
         prompt_to_summerize_title: prompt,
-        message_id: id,
-        id,
       });
     }
 

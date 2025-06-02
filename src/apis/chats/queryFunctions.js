@@ -4,15 +4,21 @@ import ENDPOINTS from "../endpoints";
 
 export const summariseChatTitleAPI = async (data) => {
   const user = useUserStore.getState().DEFAULT_USER;
+
+  const STATIC_DATA = {
+    prompt_id: "e74d7cdf-fa32-459e-bd7c-8712d0ac63f8",
+    chat_id: "6b3f0f40-ee89-4320-b787-1a00f623e8b5",
+  };
+
   const response = await api({
     method: "POST",
     url: ENDPOINTS.SUMMARISE_CHAT_TITLE,
     data: {
       prompt: data.prompt_to_summerize_title,
-      prompt_id: data.message_id,
-      org_id: user.org_id ? user.org_id : "",
-      chat_id: data.chat_id,
-      user_id: user.uid ? user.uid : "",
+      prompt_id: STATIC_DATA.prompt_id,
+      chat_id: STATIC_DATA.chat_id,
+      org_id: user.org_id,
+      user_id: user.uid,
     },
   });
   return response.data;
