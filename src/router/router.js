@@ -13,8 +13,8 @@ const AppRoutes = () => {
         <Route element={<CheckLogin />}>
           <Route path={ROUTES.AUTH} element={<AuthorizationPage />} />
           <Route element={<MainLayout />}>
-            {/* <Route path={ROUTES.INDEX} element={<NewChatPage />} /> */}
-            <Route path={ROUTES.CHAT_PAGE} element={<ChatPage />} />
+            <Route path={ROUTES.INDEX} element={<NewChatPage />} />
+            {/* <Route path={ROUTES.CHAT_PAGE} element={<ChatPage />} /> */}
           </Route>
         </Route>
       </Routes>
