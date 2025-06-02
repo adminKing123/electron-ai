@@ -10,13 +10,13 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route element={<CheckLogin />}>
+        <Route element={<CheckLogin />}>
           <Route path={ROUTES.AUTH} element={<AuthorizationPage />} />
           <Route element={<MainLayout />}>
-            <Route path={ROUTES.INDEX} element={<NewChatPage />} />
+            {/* <Route path={ROUTES.INDEX} element={<NewChatPage />} /> */}
             <Route path={ROUTES.CHAT_PAGE} element={<ChatPage />} />
           </Route>
-        </Route> */}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
