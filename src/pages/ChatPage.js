@@ -41,6 +41,7 @@ function ChatPage() {
   const { id } = useParams();
 
   if (state && state.chat) {
+    window.history.replaceState({}, "");
     return <GenerationPage chat={state.chat} />;
   }
 
