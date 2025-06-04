@@ -8,7 +8,7 @@ import ROUTES from "../../router/routes";
 const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
   useEffect(() => {
     if (chat.is_new && chat.summarization_data) {
-      useChatsStore.getState().summerizeChatTitle(chat);
+      useChatsStore.getState().summerizeChatTitle(chat, true);
     }
   }, [chat]);
 

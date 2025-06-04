@@ -12,8 +12,8 @@ function ChatPage() {
     id: id,
     title: "New Chat",
     is_new: false,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: new Date(),
+    updated_at: new Date(),
   };
   return <GenerationPage chat={chat} />;
 }

@@ -1,4 +1,6 @@
+import { setDoc, doc } from "firebase/firestore";
 import api from "..";
+import { db } from "../../firebase";
 import useUserStore from "../../store/useUserStore";
 import ENDPOINTS from "../endpoints";
 
@@ -22,4 +24,21 @@ export const summariseChatTitleAPI = async (data) => {
     },
   });
   return response.data;
+};
+
+export const createChatAPI = async (data) => {
+  const user = useUserStore.getState().user;
+  const payload = {
+    title: data.title,
+    created_at: data.created_at,
+    updated_at: data.updated_at,
+  };
+
+  const docRef = doc(db, "users", user.uid, "chats", data.id);
+  await setDoc(docRef, payload);
+
+  return {
+    id: data.id,
+    ...payload,
+  };
 };

@@ -1,5 +1,8 @@
 import { create } from "zustand";
-import { summariseChatTitleAPI } from "../apis/chats/queryFunctions";
+import {
+  createChatAPI,
+  summariseChatTitleAPI,
+} from "../apis/chats/queryFunctions";
 
 const useChatsStore = create((set, get) => ({
   chats: [],
@@ -19,24 +22,34 @@ const useChatsStore = create((set, get) => ({
         chat.id === id ? { ...chat, ...updatedData } : chat
       ),
     })),
-  summerizeChatTitle: (chatToSummarize) => {
+  summerizeChatTitle: (chatToSummarize, shouldCreateChat = false) => {
+    let summerizedTitle =
+      chatToSummarize.summarization_data.prompt_to_summerize_title;
     summariseChatTitleAPI({
       prompt_to_summerize_title:
         chatToSummarize.summarization_data.prompt_to_summerize_title,
     })
       .then((response) => {
+        summerizedTitle = response.summary_title;
         get().updateChat(chatToSummarize.id, {
-          title: response.summary_title,
+          title: summerizedTitle,
           is_new: false,
           summarization_data: null,
         });
       })
       .catch((error) => {
         get().updateChat(chatToSummarize.id, {
-          title: chatToSummarize.summarization_data.prompt_to_summerize_title,
+          title: summerizedTitle,
           is_new: false,
           summarization_data: null,
         });
+      })
+      .finally(() => {
+        if (shouldCreateChat)
+          createChatAPI({
+            ...chatToSummarize,
+            title: summerizedTitle,
+          });
       });
   },
 }));
