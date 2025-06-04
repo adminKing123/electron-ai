@@ -38,6 +38,7 @@ export const summariseChatTitleAPI = async (data) => {
 export const createChatAPI = async (data) => {
   const user = useUserStore.getState().user;
   const payload = {
+    id: data.id,
     title: data.title,
     created_at: data.created_at,
     updated_at: data.updated_at,
@@ -47,7 +48,6 @@ export const createChatAPI = async (data) => {
   await setDoc(docRef, payload);
 
   return {
-    id: data.id,
     ...payload,
     docRef,
   };

@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import useChatsStore from "../store/useChatsStore";
 import ROUTES from "../router/routes";
 import ChatGreetings from "./ChatGreetings";
+import { createMessageAPI } from "../apis/messages/queryFunctions";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
@@ -33,9 +34,15 @@ const Prompt = ({ chat }) => {
     scrollToMessage(data.id);
   };
 
-  const onEnd = () => {};
+  const onEnd = (data) => {
+    const messageAdded = useMessageStore.getState().data[data.id];
+    createMessageAPI(chat, messageAdded);
+  };
 
-  const onError = () => {};
+  const onError = (data) => {
+    const messageAdded = useMessageStore.getState().data[data.id];
+    createMessageAPI(chat, messageAdded);
+  };
 
   const handleNewChatEntered = (chat, summarization_data) => {
     useChatsStore.getState().addChat({
@@ -68,6 +75,8 @@ const Prompt = ({ chat }) => {
       model: model,
       google_search,
       generate_image,
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
     if (chat.is_new) {

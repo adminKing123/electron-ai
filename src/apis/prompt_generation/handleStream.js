@@ -72,10 +72,10 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
     }
 
     setProcess(null);
-    onEnd?.();
+    onEnd?.({ id });
   } catch (err) {
     setProcess(null);
-    onError?.();
+    onError?.({ id });
   }
 };
 
