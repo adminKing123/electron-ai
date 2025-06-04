@@ -1,4 +1,13 @@
-import { setDoc, doc } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  getDocs,
+  collection,
+  orderBy,
+  query,
+  limit,
+  startAfter,
+} from "firebase/firestore";
 import api from "..";
 import { db } from "../../firebase";
 import useUserStore from "../../store/useUserStore";
@@ -40,5 +49,38 @@ export const createChatAPI = async (data) => {
   return {
     id: data.id,
     ...payload,
+    docRef,
   };
+};
+
+export const getChatsAPI = async (pageParam = null) => {
+  const user = useUserStore.getState().user;
+  const chatsRef = collection(db, "users", user.uid, "chats");
+  const pageSize = 30;
+
+  let q = query(chatsRef, orderBy("updated_at", "desc"), limit(pageSize));
+
+  if (pageParam) {
+    q = query(
+      chatsRef,
+      orderBy("updated_at", "desc"),
+      startAfter(pageParam),
+      limit(pageSize)
+    );
+  }
+
+  const snapshot = await getDocs(q);
+
+  const chats = snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      docRef: doc,
+      updated_at: data.updated_at?.toDate(),
+      created_at: data.created_at?.toDate(),
+    };
+  });
+
+  return chats;
 };

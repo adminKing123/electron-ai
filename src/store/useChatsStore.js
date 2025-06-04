@@ -7,6 +7,9 @@ import {
 const useChatsStore = create((set, get) => ({
   chats: [],
 
+  appendChats: (newChats) =>
+    set((state) => ({ chats: [...state.chats, ...newChats] })),
+
   addChat: (newChat) =>
     set((state) => ({
       chats: [newChat, ...state.chats],

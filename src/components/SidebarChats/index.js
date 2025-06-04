@@ -4,6 +4,7 @@ import useChatsStore from "../../store/useChatsStore";
 import { formatDateTimeV1, groupByDate } from "../../utils/helpers";
 import { useEffect } from "react";
 import ROUTES from "../../router/routes";
+import { getChatsAPI } from "../../apis/chats/queryFunctions";
 
 const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
   useEffect(() => {
@@ -38,12 +39,22 @@ const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
 
 const SidebarChats = () => {
   const chats = useChatsStore((state) => state.chats);
+  const appendChats = useChatsStore((state) => state.appendChats);
   const groupedData = groupByDate(chats, "updated_at");
 
   const handleMenuButtonClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
   };
+
+  useEffect(() => {
+    const getInitialData = async () => {
+      const fetchedChats = await getChatsAPI();
+      appendChats(fetchedChats);
+    };
+
+    getInitialData();
+  }, [appendChats]);
 
   return (
     <div className="mx-[8px] my-8">
