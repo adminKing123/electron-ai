@@ -21,7 +21,9 @@ const LoadPage = ({ id }) => {
       setStatus(STATUS.LOADING);
       const response = await getMessagesForChatAPI({ id });
       if (response?.chat?.id) {
-        setChat(response?.chat);
+        const lastMessage =
+          response?.messages?.[response?.messages.length - 1]?.id;
+        setChat({ ...response?.chat, scroll_to_message: lastMessage });
         setMessages(response?.messages || []);
         setStatus(STATUS.LOADED);
       } else {
@@ -33,7 +35,7 @@ const LoadPage = ({ id }) => {
 
   if (status === STATUS.LOADING) return null;
   else if (status === STATUS.FAILED) return <Navigate to={ROUTES.INDEX} />;
-  return <GenerationPage chat={{ ...chat, scroll_to_bottom: true }} />;
+  return <GenerationPage chat={chat} />;
 };
 
 function ChatPage() {

@@ -26,12 +26,12 @@ function GenerationPage({ chat }) {
   }, []);
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div id="gen-container" className="flex flex-col h-full w-full opacity-0">
       <Messages chat={chat} />
       <div
         id="prompt-container"
         className={`w-full transition-all duration-500 absolute bottom-4 ${
-          chat?.scroll_to_bottom ? "" : "screen-center"
+          chat?.scroll_to_message ? "" : "screen-center"
         }`}
       >
         <div className="max-w-[800px] px-5 mx-auto">

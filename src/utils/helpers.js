@@ -1,6 +1,6 @@
 import { format, isToday, isYesterday, differenceInDays } from "date-fns";
 
-export const scrollToMessage = (id, duration = 100) => {
+export const scrollToMessage = (id, duration = 100, behavior = "smooth") => {
   setTimeout(() => {
     const messageEle = document.getElementById(id);
     const container = document.getElementById("messages-container");
@@ -8,10 +8,23 @@ export const scrollToMessage = (id, duration = 100) => {
       const topPos = messageEle.offsetTop + messageEle.offsetHeight;
       container.scrollTo({
         top: topPos,
-        behavior: "smooth",
+        behavior: behavior,
       });
     }
   }, duration);
+};
+
+export const scrollToBottom = (chat, duration = 50) => {
+  const genContainer = document.getElementById("gen-container");
+  const container = document.getElementById("messages-container");
+  if (chat?.scroll_to_message) {
+    setTimeout(() => {
+      container.scrollTop = container.scrollHeight + 200;
+      genContainer.classList.remove("opacity-0");
+    }, duration);
+  } else {
+    genContainer.classList.remove("opacity-0");
+  }
 };
 
 export const groupByDate = (data, key = "updated_at") => {
