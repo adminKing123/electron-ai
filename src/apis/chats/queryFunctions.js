@@ -17,9 +17,14 @@ import ENDPOINTS from "../endpoints";
 export const summariseChatTitleAPI = async (data) => {
   const user = useUserStore.getState().DEFAULT_USER;
 
+  // const STATIC_DATA = {
+  //   prompt_id: "e74d7cdf-fa32-459e-bd7c-8712d0ac63f8",
+  //   chat_id: "6b3f0f40-ee89-4320-b787-1a00f623e8b5",
+  // };
+
   const STATIC_DATA = {
-    prompt_id: "e74d7cdf-fa32-459e-bd7c-8712d0ac63f8",
-    chat_id: "6b3f0f40-ee89-4320-b787-1a00f623e8b5",
+    prompt_id: "c1bdbbb1-5592-4fe8-9cb7-9a420996ba9e",
+    chat_id: "McrPzeLh3Hg10bsbfffdeGAHxS53",
   };
 
   const response = await api({
