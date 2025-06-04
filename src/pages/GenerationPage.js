@@ -30,7 +30,9 @@ function GenerationPage({ chat }) {
       <Messages chat={chat} />
       <div
         id="prompt-container"
-        className="w-full transition-all duration-500 absolute bottom-4 screen-center"
+        className={`w-full transition-all duration-500 absolute bottom-4 ${
+          chat?.scroll_to_bottom ? "" : "screen-center"
+        }`}
       >
         <div className="max-w-[800px] px-5 mx-auto">
           <Prompt chat={chat} />

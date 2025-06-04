@@ -20,7 +20,7 @@ const LoadPage = ({ id }) => {
     const getInitialData = async () => {
       setStatus(STATUS.LOADING);
       const response = await getMessagesForChatAPI({ id });
-      if (response?.chat) {
+      if (response?.chat?.id) {
         setChat(response?.chat);
         setMessages(response?.messages || []);
         setStatus(STATUS.LOADED);
@@ -33,7 +33,7 @@ const LoadPage = ({ id }) => {
 
   if (status === STATUS.LOADING) return null;
   else if (status === STATUS.FAILED) return <Navigate to={ROUTES.INDEX} />;
-  return <GenerationPage chat={chat} />;
+  return <GenerationPage chat={{ ...chat, scroll_to_bottom: true }} />;
 };
 
 function ChatPage() {
