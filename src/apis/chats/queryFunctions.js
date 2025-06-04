@@ -7,6 +7,7 @@ import {
   query,
   limit,
   startAfter,
+  getDoc,
 } from "firebase/firestore";
 import api from "..";
 import { db } from "../../firebase";
@@ -83,4 +84,23 @@ export const getChatsAPI = async (pageParam = null) => {
   });
 
   return chats;
+};
+
+export const getChatAPI = async (chat) => {
+  const user = useUserStore.getState().user;
+
+  const chatDocRef = doc(db, "users", user.uid, "chats", chat.id);
+  const chatDoc = await getDoc(chatDocRef);
+
+  if (!chatDoc.exists()) return {};
+
+  const data = chatDoc.data();
+
+  return {
+    id: chatDoc.id,
+    ...data,
+    docRef: chatDoc,
+    updated_at: data.updated_at?.toDate?.(),
+    created_at: data.created_at?.toDate?.(),
+  };
 };

@@ -7,6 +7,14 @@ const useMessageStore = create(
   immer((set) => ({
     messages: [],
     data: {},
+    setMessages: (newMessages) =>
+      set((state) => {
+        state.data = {};
+        state.messages = newMessages.map((message) => {
+          state.data[message.id] = message;
+          return message.id;
+        });
+      }),
     addMessage: (message) => {
       const id = uuidv4();
       set((state) => {
