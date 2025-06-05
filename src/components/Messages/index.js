@@ -18,7 +18,7 @@ const Messages = ({ chat }) => {
 
   return (
     <div
-      className={`overflow-y-auto py-2 transition-[height] duration-500 flex-grow`}
+      className={`overflow-y-auto [scrollbar-gutter:stable_both-edges] py-2 transition-[height] duration-500 flex-grow`}
       id="messages-container"
     >
       {messages.map((message) => (

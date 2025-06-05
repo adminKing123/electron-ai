@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import usePromptStore from "../store/usePromptStores";
 
 const TextArea = ({ textareaRef, handleSend }) => {
-  const prompt = usePromptStore(state => state.prompt);
-  const setPrompt = usePromptStore(state => state.setPrompt);
+  const prompt = usePromptStore((state) => state.prompt);
+  const setPrompt = usePromptStore((state) => state.setPrompt);
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
@@ -29,7 +29,7 @@ const TextArea = ({ textareaRef, handleSend }) => {
 
       if (messagesContainer && promptContainer) {
         const promptHeight = promptContainer.offsetHeight;
-        messagesContainer.style.paddingBottom = `${promptHeight}px`;
+        messagesContainer.style.paddingBottom = `${promptHeight - 80}px`;
       }
     };
     autoResize();

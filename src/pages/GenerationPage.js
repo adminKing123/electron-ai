@@ -26,7 +26,7 @@ function GenerationPage({ chat }) {
   }, []);
 
   return (
-    <div id="gen-container" className="flex flex-col h-full w-full opacity-0">
+    <div id="gen-container" className="flex flex-col h-[calc(100%-80px)] w-full opacity-0">
       <Messages chat={chat} />
       <div
         id="prompt-container"
