@@ -51,15 +51,24 @@ const useMessageStore = create(
   }))
 );
 
-export const useProcessController = create((set) => ({
-  process: null,
-  controller: null,
-  setProcess: (process = null, controller = null) => {
-    set((state) => {
-      state.controller?.abort();
-      return { process, controller };
-    });
-  },
-}));
+export const useProcessController = create(
+  immer((set) => ({
+    process: null,
+    message_process: {},
+    controller: null,
+    setProcess: (process = null, controller = null) => {
+      set((state) => {
+        if (process?.id) {
+          state.message_process[process?.id] = process;
+        } else {
+          state.message_process = {};
+        }
+        state.controller?.abort();
+        state.process = process;
+        state.controller = controller;
+      });
+    },
+  }))
+);
 
 export default useMessageStore;
