@@ -7,9 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import ROUTES from "../../router/routes";
+import ThemeChangeOption from "../ThemeChangeOption";
 
 const HeaderUserProfileOptionsEmail = () => {
-  const user = useUserStore(state => state.user);
+  const user = useUserStore((state) => state.user);
 
   return (
     <div className="text-[#838383] dark:text-[#C8C8C8] text-[14px] px-4 pt-1 pb-2">
@@ -54,6 +55,7 @@ const HeaderUserProfileOptions = () => {
         <ul className="max-h-[360px] overflow-y-auto">
           <OptionButton icon={SiInfluxdb} label="Upgrade Plan" />
           <OptionButton icon={LuSettings2} label="Customize ElectronAI" />
+          <ThemeChangeOption />
           <OptionButton icon={MdSettings} label="Settings" />
           <hr className="border-[#E6E6E6] dark:border-[#ffffff26] mx-2 my-2" />
           <LogoutOption />
@@ -65,7 +67,7 @@ const HeaderUserProfileOptions = () => {
 
 const HeaderUserProfile = () => {
   const dropdownRef = useRef(null);
-  const user = useUserStore(state => state.user);
+  const user = useUserStore((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOptions = () => {
@@ -97,7 +99,7 @@ const HeaderUserProfile = () => {
       >
         <img
           alt={user.displayName}
-            src={user.photoURL}
+          src={user.photoURL}
           className="w-full h-full object-cover"
         />
       </button>
