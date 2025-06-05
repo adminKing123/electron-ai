@@ -33,7 +33,7 @@
   --md-alert-warning-text-color: #9a6700;
   --md-alert-tip-border-color: #1a7f37;
   --md-alert-tip-text-color: #1a7f37;
-  --md-alert-caution-border-color:  #cf222e;
+  --md-alert-caution-border-color: #cf222e;
 }
 
 .dark {
@@ -815,13 +815,13 @@
 
 .markdown-body .highlight pre,
 .markdown-body pre {
-  padding: 1rem;
+  /* padding: 1rem; */
   overflow: auto;
   font-size: 85%;
-  line-height: 1.45;
-  color: var(--md-text-color);
-  background-color: var(--md-kbd-bg-color);
-  border-radius: 6px;
+  /* line-height: 1.45; */
+  /* color: var(--md-text-color); */
+  /* background-color: var(--md-kbd-bg-color); */
+  /* border-radius: 6px; */
 }
 
 .markdown-body pre code,
