@@ -17,7 +17,7 @@ const MdCodeCopyButton = ({ handleCopy }) => {
   };
 
   return (
-    <button onClick={handleClick} className="flex items-center gap-[5px] text-white">
+    <button onClick={handleClick} className="flex items-center gap-[5px]">
       {copied ? (
         <>
           <MdOutlineDone />
