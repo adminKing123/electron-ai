@@ -1,8 +1,9 @@
+import React from "react";
 import useMessageStore from "../../store/useMessagesStore";
 import Answer from "./Answer";
 import MessageActions from "./MessageActions";
 
-const Message = ({ message_id, chat }) => {
+const Message = React.memo(({ message_id, chat }) => {
   const message = useMessageStore((state) => state.data[message_id]);
 
   const handleCopy = (callback) => {
@@ -31,6 +32,6 @@ const Message = ({ message_id, chat }) => {
       />
     </div>
   );
-};
+});
 
 export default Message;
