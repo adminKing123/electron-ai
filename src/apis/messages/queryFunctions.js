@@ -1,32 +1,34 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   orderBy,
   query,
   setDoc,
 } from "firebase/firestore";
-import api from "..";
 import useUserStore from "../../store/useUserStore";
-import ENDPOINTS from "../endpoints";
 import { db } from "../../firebase";
 import { getChatAPI } from "../chats/queryFunctions";
 
 export const deleteMessageAPI = async (data) => {
-  const user = useUserStore.getState().DEFAULT_USER;
-  const response = await api({
-    method: "POST",
-    url: ENDPOINTS.DELETE_MESSAGE,
-    data: {
-      prompt_id: data.message_id,
-      org_id: user.org_id ? user.org_id : "",
-      chat_id: data.chat_id,
-      user_id: user.uid ? user.uid : "",
-      by: user.uid ? user.uid : "",
-    },
-  });
+  const user = useUserStore.getState().user;
 
-  return response.data;
+  const docRef = doc(
+    db,
+    "users",
+    user.uid,
+    "chats",
+    data.chat_id,
+    "messages",
+    data.message_id
+  );
+
+  await deleteDoc(docRef);
+
+  return {
+    success: true,
+  };
 };
 
 export const createMessageAPI = async (chat, message) => {
