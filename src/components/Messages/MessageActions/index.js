@@ -1,6 +1,7 @@
 import { useProcessController } from "../../../store/useMessagesStore";
 import CopyButton from "./CopyMessageButton";
 import DeleteMessageButton from "./DeleteMessageButton";
+import GoToMessageTop from "./GoToMessageTop";
 import ShowSelectedModel from "./ShowSelectedModel";
 
 const MessageActions = ({ id, message, handleCopy, chat }) => {
@@ -13,6 +14,7 @@ const MessageActions = ({ id, message, handleCopy, chat }) => {
       <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
         <CopyButton handleCopy={handleCopy} />
         <DeleteMessageButton id={id} chat={chat} />
+        <GoToMessageTop id={id} />
       </div>
       <ShowSelectedModel message={message} />
     </div>

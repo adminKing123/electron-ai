@@ -14,6 +14,20 @@ export const scrollToMessage = (id, duration = 100, behavior = "smooth") => {
   }, duration);
 };
 
+export const scrollToMessageTop = (id, duration = 100, behavior = "smooth") => {
+  setTimeout(() => {
+    const messageEle = document.getElementById(id);
+    const container = document.getElementById("messages-container");
+    if (messageEle && container) {
+      const topPos = messageEle.offsetTop - 100;
+      container.scrollTo({
+        top: topPos,
+        behavior: behavior,
+      });
+    }
+  }, duration);
+};
+
 export const scrollToBottom = (chat, duration = 50) => {
   const genContainer = document.getElementById("gen-container");
   const container = document.getElementById("messages-container");
