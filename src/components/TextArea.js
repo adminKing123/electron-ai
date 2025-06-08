@@ -10,7 +10,7 @@ const TextArea = ({ textareaRef, handleSend }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (window.innerWidth > 768 && e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
