@@ -16,7 +16,7 @@ const NewChatPage = () => {
 
   useEffect(() => {
     resetMessages();
-  }, []);
+  }, [resetMessages]);
 
   return <GenerationPage chat={newChat} />;
 };

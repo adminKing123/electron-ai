@@ -33,7 +33,7 @@ const LoadPage = ({ id }) => {
       }
     };
     getInitialData();
-  }, [id, setMessages]);
+  }, [id, setMessages, resetMessages]);
 
   if (status === STATUS.LOADING) return null;
   else if (status === STATUS.FAILED) return <Navigate to={ROUTES.INDEX} />;
