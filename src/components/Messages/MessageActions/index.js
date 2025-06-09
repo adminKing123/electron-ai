@@ -5,7 +5,9 @@ import GoToMessageTop from "./GoToMessageTop";
 import ShowSelectedModel from "./ShowSelectedModel";
 
 const MessageActions = ({ id, message, handleCopy, chat }) => {
-  const process = useProcessController((state) => state.process);
+  const process = useProcessController(
+    (state) => state.message_process?.[message.id]
+  );
 
   if (process?.id === id) return null;
 
