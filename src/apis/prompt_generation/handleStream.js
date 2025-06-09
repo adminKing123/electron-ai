@@ -9,11 +9,14 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
   const isImageGenerateOn = useImageGenerateStore.getState().isImageGenerateOn;
   try {
     const controller = new AbortController();
-    setProcess({
-      type: "GENERATION",
-      process_name: "GETTING_STARTED",
-      id: id,
-    });
+    setProcess(
+      {
+        type: "GENERATION",
+        process_name: "GETTING_STARTED",
+        id: id,
+      },
+      controller
+    );
     onStart?.({ id });
     const response = await fetch(
       CONFIG.GET_GENERATE_URL({

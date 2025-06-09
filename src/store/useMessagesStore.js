@@ -56,14 +56,14 @@ export const useProcessController = create(
     process: null,
     message_process: {},
     controller: null,
-    setProcess: (process = null, controller = null) => {
+    setProcess: (process = null, controller = null, shouldStop = false) => {
       set((state) => {
         if (process?.id) {
           state.message_process[process?.id] = process;
         } else {
           state.message_process = {};
         }
-        state.controller?.abort();
+        if (shouldStop) state.controller?.abort();
         state.process = process;
         state.controller = controller;
       });

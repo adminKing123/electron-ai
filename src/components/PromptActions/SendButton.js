@@ -11,7 +11,7 @@ const SendButton = ({ onClick }) => {
   const disabled = !prompt.trim() || model === null ? true : false;
 
   const stopGeneration = () => {
-    setProcess(null);
+    setProcess(null, null, true);
   };
 
   if (isGeneratingPrompt)
