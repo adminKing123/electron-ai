@@ -1,4 +1,4 @@
-import { FaBrain } from "react-icons/fa";
+import { LuBrainCircuit } from "react-icons/lu";
 import { useGetAIModelsAPI } from "../../apis/ai_models/queryHooks";
 import { useState, useRef, useEffect } from "react";
 import { SiTicktick } from "react-icons/si";
@@ -94,7 +94,7 @@ const SelectAIModel = ({ disabled }) => {
         onClick={handleToggle}
         className="border dark:border-[#FAFAFA] bg-[#ffffff] disabled:opacity-50 p-2 rounded-full flex items-center group"
       >
-        <FaBrain />
+        <LuBrainCircuit />
       </button>
     </div>
   );

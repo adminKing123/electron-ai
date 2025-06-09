@@ -1,4 +1,4 @@
-import { FaBrain } from "react-icons/fa";
+import { LuBrainCircuit } from "react-icons/lu";
 import { PiGlobe } from "react-icons/pi";
 import { RiImageCircleAiLine } from "react-icons/ri";
 
@@ -8,7 +8,7 @@ const IdentifySearch = ({ message }) => {
   ) : message.google_search ? (
     <PiGlobe />
   ) : (
-    <FaBrain />
+    <LuBrainCircuit />
   );
 };
 
