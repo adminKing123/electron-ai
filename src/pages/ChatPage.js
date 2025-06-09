@@ -15,9 +15,11 @@ const LoadPage = ({ id }) => {
   const [chat, setChat] = useState(null);
   const [status, setStatus] = useState(STATUS.LOADING);
   const setMessages = useMessageStore((state) => state.setMessages);
+  const resetMessages = useMessageStore((state) => state.resetMessages);
 
   useEffect(() => {
     const getInitialData = async () => {
+      resetMessages();
       setStatus(STATUS.LOADING);
       const response = await getMessagesForChatAPI({ id });
       if (response?.chat?.id) {
