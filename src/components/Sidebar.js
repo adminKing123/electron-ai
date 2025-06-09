@@ -44,7 +44,8 @@ const SidebarHeader = ({ toggleSidebar }) => {
 };
 
 const Sidebar = () => {
-  const { open, setOpen } = useSidebarOpenState();
+  const open = useSidebarOpenState((state) => state.open);
+  const setOpen = useSidebarOpenState((state) => state.setOpen);
 
   const toggleSidebar = () => {
     setOpen(!open);

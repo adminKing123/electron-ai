@@ -5,8 +5,9 @@ import { formatDateTimeV1, groupByDate } from "../../utils/helpers";
 import { useEffect } from "react";
 import ROUTES from "../../router/routes";
 import { getChatsAPI } from "../../apis/chats/queryFunctions";
+import { useSidebarOpenState } from "../../store/useSidebarStores";
 
-const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
+const SidebarChatButton = ({ chat, handleMenuButtonClick, ...props }) => {
   useEffect(() => {
     if (chat.is_new && chat.summarization_data) {
       useChatsStore.getState().summerizeChatTitle(chat, true);
@@ -23,6 +24,7 @@ const SidebarChatButton = ({ chat, handleMenuButtonClick }) => {
             : "hover:bg-[#EFEFEF] dark:hover:bg-[#2F2F2F] active:bg-[#dbdbdb] dark:active:bg-[#232323] focus:bg-[#EAEAEA] dark:focus:bg-[#2F2F2F]"
         } group pl-[10px] dark:text-[#E9E9E9] text-[14px] flex items-center focus:outline-none rounded-lg w-full`
       }
+      {...props}
     >
       <span className="truncate max-w-[200px] py-[7px] flex-grow">
         {chat.title}
@@ -41,10 +43,17 @@ const SidebarChats = () => {
   const chats = useChatsStore((state) => state.chats);
   const appendChats = useChatsStore((state) => state.appendChats);
   const groupedData = groupByDate(chats, "updated_at");
+  const setOpen = useSidebarOpenState((state) => state.setOpen);
 
   const handleMenuButtonClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
+  };
+
+  const handleChatClick = () => {
+    if (window.innerWidth <= 768) {
+      setOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -69,6 +78,7 @@ const SidebarChats = () => {
                 key={chat.id}
                 chat={chat}
                 handleMenuButtonClick={handleMenuButtonClick}
+                onClick={handleChatClick}
               />
             ))}
           </div>

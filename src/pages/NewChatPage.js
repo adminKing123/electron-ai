@@ -10,6 +10,7 @@ const NewChatPage = () => {
     is_new: true,
     created_at: new Date(),
     updated_at: new Date(),
+    shouldAutoFocus: true,
   };
 
   const resetMessages = useMessageStore((state) => state.resetMessages);

@@ -3,6 +3,7 @@ import { BsSearch } from "react-icons/bs";
 import { BiLibrary } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 import ROUTES from "../../router/routes";
+import { useSidebarOpenState } from "../../store/useSidebarStores";
 
 const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
   return (
@@ -19,8 +20,21 @@ const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
 };
 
 const CreateNewChatButton = () => {
+  const setOpen = useSidebarOpenState((state) => state.setOpen);
+
+  const handleClick = () => {
+    if (window.innerWidth <= 768) {
+      setOpen(false);
+    }
+  };
+
   return (
-    <SidebarOptionButton icon={FaPlus} label="New chat" to={ROUTES.INDEX} />
+    <SidebarOptionButton
+      icon={FaPlus}
+      label="New chat"
+      to={ROUTES.INDEX}
+      onClick={handleClick}
+    />
   );
 };
 

@@ -4,7 +4,8 @@ import { HiMenuAlt2 } from "react-icons/hi";
 import HeaderUserProfile from "./HeaderUserProfile";
 
 const SidebarOpenButton = () => {
-  const { open, setOpen } = useSidebarOpenState();
+  const open = useSidebarOpenState((state) => state.open);
+  const setOpen = useSidebarOpenState((state) => state.setOpen);
 
   const toggleSidebar = () => {
     setOpen(!open);

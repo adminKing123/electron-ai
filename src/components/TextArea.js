@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import usePromptStore from "../store/usePromptStores";
 
-const TextArea = ({ textareaRef, handleSend }) => {
+const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
 
@@ -39,7 +39,7 @@ const TextArea = ({ textareaRef, handleSend }) => {
     <textarea
       ref={textareaRef}
       className="w-full bg-[#FFFFFF] dark:bg-[#303030] resize-none outline-none text-black dark:text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto"
-      autoFocus
+      autoFocus={shouldAutoFocus}
       placeholder="Ask anything"
       value={prompt}
       onChange={handleChange}

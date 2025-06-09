@@ -50,7 +50,7 @@ const Prompt = ({ chat }) => {
       summarization_data,
     });
     navigate(ROUTES.GET_CHAT_PAGE_URL(chat.id), {
-      state: { chat: { ...chat, is_new: false } },
+      state: { chat: { ...chat, is_new: false, shouldAutoFocus: false } },
     });
   };
 
@@ -105,7 +105,11 @@ const Prompt = ({ chat }) => {
     <div className="w-full relative">
       <ChatGreetings chat={chat} />
       <div className="px-5 py-[15px] bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
-        <TextArea textareaRef={textareaRef} handleSend={handleSend} />
+        <TextArea
+          textareaRef={textareaRef}
+          handleSend={handleSend}
+          shouldAutoFocus={chat.shouldAutoFocus ? true : false}
+        />
         <PromptActions handleSend={handleSend} />
       </div>
     </div>
