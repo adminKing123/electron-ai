@@ -1,4 +1,4 @@
-import { MdDelete } from "react-icons/md";
+import { AiOutlineDelete } from "react-icons/ai";
 import useMessageStore from "../../../store/useMessagesStore";
 
 const DeleteMessageButton = ({ id, chat }) => {
@@ -13,7 +13,7 @@ const DeleteMessageButton = ({ id, chat }) => {
       onClick={handleClickDelete}
       className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md"
     >
-      <MdDelete />
+      <AiOutlineDelete />
     </button>
   );
 };
