@@ -16,9 +16,9 @@ import ENDPOINTS from "../endpoints";
 
 export const summariseChatTitleAPI = async (data) => {
   const STATIC_DATA = {
-    chat_id: "6b3f0f40-ee89-4320-b787-1a00f623e8b5",
+    chat_id: "35b02731-17b2-408a-8a4e-8525a39482e3",
     org_id: "synapses",
-    prompt_id: "e74d7cdf-fa32-459e-bd7c-8712d0ac63f8",
+    prompt_id: "23078800-e6ae-4176-8eb6-29db28344d4f",
     user_id: "un2xqHu71cd6WWycTr1P6UE4PiJ2",
     url: `${process.env.REACT_APP_API_URL_2}${ENDPOINTS.SUMMARISE_CHAT_TITLE}`,
   };

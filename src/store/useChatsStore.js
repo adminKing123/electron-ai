@@ -27,7 +27,7 @@ const useChatsStore = create((set, get) => ({
     })),
   summerizeChatTitle: (chatToSummarize, shouldCreateChat = false) => {
     let summerizedTitle =
-      chatToSummarize.summarization_data.prompt_to_summerize_title;
+      chatToSummarize.summarization_data.prompt_to_summerize_title.slice(0, 34);
     summariseChatTitleAPI({
       prompt_to_summerize_title:
         chatToSummarize.summarization_data.prompt_to_summerize_title,
