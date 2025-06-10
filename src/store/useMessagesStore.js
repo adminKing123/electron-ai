@@ -46,7 +46,7 @@ const useMessageStore = create(
         messages: [],
         data: {},
       }));
-      useProcessController.getState().setProcess(null, null);
+      useProcessController.getState().setProcess(null, null, true);
     },
   }))
 );
