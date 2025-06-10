@@ -65,7 +65,7 @@ const Sidebar = () => {
     <>
       <SidebarOverlay open={open} toggleSidebar={toggleSidebar} />
       <div
-        className={`bg-[#F9F9F9] dark:bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-500 absolute top-0 left-0 z-10 md:static ${
+        className={`bg-[#F9F9F9] dark:bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-300 absolute top-0 left-0 z-10 md:static ${
           open ? "w-[260px]" : "w-0"
         }`}
       >
