@@ -6,6 +6,7 @@ const ScrollToBottomButton = () => {
     if (container) {
       container.scrollTo({
         top: container.scrollHeight,
+        behavior: "smooth",
       });
     }
   };
@@ -14,7 +15,7 @@ const ScrollToBottomButton = () => {
     <button
       id="scroll-to-top"
       onClick={handleClick}
-      className="border dark:text-white dark:border-[#424242] dark:bg-[#212121] p-2 rounded-full absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden"
+      className="border text-black dark:text-white border-[#E1E1E1] dark:border-[#424242] bg-[#ffffff] dark:bg-[#212121] p-2 rounded-full absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden"
     >
       <HiArrowDown />
     </button>
