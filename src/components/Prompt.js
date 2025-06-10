@@ -16,6 +16,7 @@ import useChatsStore from "../store/useChatsStore";
 import ROUTES from "../router/routes";
 import ChatGreetings from "./ChatGreetings";
 import { createMessageAPI } from "../apis/messages/queryFunctions";
+import ScrollToBottomButton from "./PromptActions/ScrollToBottomButton";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
@@ -103,6 +104,7 @@ const Prompt = ({ chat }) => {
 
   return (
     <div className="w-full relative">
+      <ScrollToBottomButton />
       <ChatGreetings chat={chat} />
       <div className="px-5 py-[15px] bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
         <TextArea

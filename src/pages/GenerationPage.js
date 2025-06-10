@@ -6,12 +6,22 @@ function GenerationPage({ chat }) {
   useEffect(() => {
     const container = document.getElementById("messages-container");
     const header = document.getElementById("header");
+    const scrollToBottomEle = document.getElementById("scroll-to-top");
+
     const handleScroll = () => {
       if (container.scrollTop > 0) {
         header.classList.add("header-shadow");
       } else {
         header.classList.remove("header-shadow");
       }
+
+      const threshold = 100;
+      const isNearBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight <
+        threshold;
+
+      if (isNearBottom) scrollToBottomEle.classList.add("hidden");
+      else scrollToBottomEle.classList.remove("hidden");
     };
 
     if (container) {
