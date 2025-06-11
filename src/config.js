@@ -9,7 +9,7 @@ const CONFIG = {
     uid: process.env.REACT_APP_DEFAULT_USER_UID,
     org_id: process.env.REACT_APP_DEFAULT_USER_ORG_ID,
   },
-  CALL_GET_AI_MODELS_API: true,
+  CALL_GET_AI_MODELS_API: false,
   FIREBASE_CONFIG: {
     apiKey: process.env.REACT_APP_APIKEY,
     authDomain: process.env.REACT_APP_AUTHDOMAIN,

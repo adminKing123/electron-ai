@@ -28,47 +28,35 @@ export const getAIModelsAPI = async () => {
     data = {
       models: [
         {
+          id: "gemini-2.5-flash-preview-05-20",
+          name: "Gemini 2.5 Flash",
+          google_search: true,
+          active: "True",
+        },
+        {
           id: "gemini-2.5-pro-preview-05-06",
-          name: "Gemini-2.5-Pro",
+          name: "Gemini 2.5 Pro",
           google_search: true,
           active: "True",
-          description: "Best for complex tasks.",
         },
         {
-          id: "gemini-2.5-flash-preview-04-17",
-          name: "Gemini-2.5-Flash",
-          google_search: true,
-          active: "True",
-          description: "Fast and efficient.",
-        },
-        {
-          id: "gemini-2.0-flash-001",
-          name: "Gemini-2.0-Flash",
-          google_search: true,
-          active: "True",
-          description: "Light and quick.",
-        },
-        {
-          id: "claude-3-5-sonnet-v2@20241022",
-          name: "Claude-3.5-Sonnet",
+          id: "claude-sonnet-4@20250514",
+          name: "Claude Sonnet 4",
           google_search: false,
           active: "True",
-          description: "Great all-rounder.",
         },
         {
-          id: "gemini-1.5-pro-002",
-          name: "Gemini-1.5-Pro",
-          google_search: true,
+          id: "claude-opus-4@20250514",
+          name: "Claude Opus 4",
+          google_search: false,
           active: "True",
-          description: "Strong problem-solver.",
         },
       ],
       default_model: {
-        id: "gemini-2.0-flash-001",
-        name: "Gemini-2.0-Flash",
+        id: "gemini-2.5-flash-preview-05-20",
+        name: "Gemini 2.5 Flash",
         google_search: true,
         active: "True",
-        description: "Light and quick.",
       },
     };
   }
