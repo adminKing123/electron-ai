@@ -1,8 +1,9 @@
-import { LuBrainCircuit } from "react-icons/lu";
 import { useGetAIModelsAPI } from "../../apis/ai_models/queryHooks";
 import { useState, useRef, useEffect } from "react";
 import { SiTicktick } from "react-icons/si";
 import { useModelStore, useWebSearchStore } from "../../store/usePromptStores";
+import { BsCpu } from "react-icons/bs";
+
 
 import { RiGeminiFill } from "react-icons/ri";
 import { RiClaudeFill } from "react-icons/ri";
@@ -121,7 +122,7 @@ const SelectAIModel = ({ disabled }) => {
         onClick={handleToggle}
         className="border dark:border-[#FAFAFA] bg-[#ffffff] disabled:opacity-50 p-2 rounded-full flex items-center group"
       >
-        <LuBrainCircuit />
+        <BsCpu />
       </button>
     </div>
   );
