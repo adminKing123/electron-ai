@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getMessagesForChatAPI } from "../apis/messages/queryFunctions";
 import useMessageStore from "../store/useMessagesStore";
 import ROUTES from "../router/routes";
+import { LoadingMessages } from "../components/Loaders";
 
 const STATUS = {
   LOADING: "LOADING",
@@ -35,7 +36,7 @@ const LoadPage = ({ id }) => {
     getInitialData();
   }, [id, setMessages, resetMessages]);
 
-  if (status === STATUS.LOADING) return null;
+  if (status === STATUS.LOADING) return <LoadingMessages />;
   else if (status === STATUS.FAILED) return <Navigate to={ROUTES.INDEX} />;
   return <GenerationPage chat={chat} />;
 };
