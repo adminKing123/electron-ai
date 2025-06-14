@@ -1,8 +1,12 @@
-import { useProcessController } from "../../store/useMessagesStore";
+import useMessageStore, {
+  useProcessController,
+} from "../../store/useMessagesStore";
 import { GettingStartedLoader } from "../Loaders";
 import MarkdownRenderer from "../MarkdownRenderer";
 
-const Answer = ({ message }) => {
+const Answer = ({ message_id }) => {
+  const message = useMessageStore((state) => state.data[message_id]);
+
   const process = useProcessController(
     (state) => state.message_process?.[message.id]
   );
