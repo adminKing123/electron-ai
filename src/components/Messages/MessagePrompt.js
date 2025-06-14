@@ -33,7 +33,7 @@ const PromptBox = ({ prompt }) => {
         {shouldShowButton && (
           <button
             onClick={handleClick}
-            className="w-8 h-8 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg absolute top-[10px] right-[20px] z-10"
+            className="w-8 h-8 px-2 transparent rounded-lg absolute top-[10px] right-[20px] z-10"
           >
             <FaAngleDown
               className={`text-[#666666] dark:text-white w-[16px] h-[16px] ${
