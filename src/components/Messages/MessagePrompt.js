@@ -3,7 +3,7 @@ import MessagePromptActions from "./MessagePromptActions";
 import { useEffect, useRef, useState } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 
-const COLLAPSED_HEIGHT = 220;
+const COLLAPSED_HEIGHT = 160;
 
 const PromptBox = ({ prompt }) => {
   const [collapsed, setCollapsed] = useState(true);
@@ -25,8 +25,8 @@ const PromptBox = ({ prompt }) => {
     <div className="flex justify-end">
       <div
         ref={contentRef}
-        className={`relative max-w-full font-sans text-[15px] text-black dark:text-white px-5 py-[10px] bg-[#F4F4F4] dark:bg-[#303030] rounded-3xl w-fit break-words whitespace-pre-wrap ${
-          collapsed && shouldShowButton ? "max-h-[220px] overflow-hidden" : ""
+        className={`relative max-w-full font-sans text-[15px] text-black dark:text-white px-5 py-[10px] bg-[#F4F4F4] dark:bg-[#303030] rounded-3xl rounded-tr-lg w-fit break-words whitespace-pre-wrap ${
+          collapsed && shouldShowButton ? "max-h-[160px] overflow-hidden" : ""
         }`}
       >
         {prompt}
