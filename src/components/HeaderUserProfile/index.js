@@ -54,7 +54,7 @@ const HeaderUserProfileOptions = () => {
       <div className="px-2">
         <ul className="max-h-[360px] overflow-y-auto">
           <OptionButton icon={SiInfluxdb} label="Upgrade Plan" />
-          <OptionButton icon={LuSettings2} label="Customize Electron AI" />
+          <OptionButton icon={LuSettings2} label="Customize Noney" />
           <ThemeChangeOption />
           <OptionButton icon={MdSettings} label="Settings" />
           <hr className="border-[#E6E6E6] dark:border-[#ffffff26] mx-2 my-2" />

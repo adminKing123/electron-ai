@@ -16,6 +16,8 @@ const NewChatPage = () => {
   const resetMessages = useMessageStore((state) => state.resetMessages);
 
   useEffect(() => {
+    const header = document.getElementById("header");
+    header.classList.remove("header-shadow");
     resetMessages();
   }, [resetMessages]);
 

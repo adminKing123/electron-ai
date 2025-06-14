@@ -1,5 +1,5 @@
 import { TbLayoutSidebar } from "react-icons/tb";
-import { SiElectron } from "react-icons/si";
+import { TbGalaxy } from "react-icons/tb";
 import { useSidebarOpenState } from "../store/useSidebarStores";
 import { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
@@ -30,7 +30,7 @@ const SidebarHeader = ({ toggleSidebar }) => {
   return (
     <div className="bg-[#F9F9F9] dark:bg-[#181818] w-full h-[56px] flex items-center justify-between px-3 flex-shrink-0">
       <button className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg">
-        <SiElectron className="text-[#000000] dark:text-white w-[22px] h-[22px]" />
+        <TbGalaxy className="text-[#000000] dark:text-white w-[22px] h-[22px]" />
       </button>
       <button
         onClick={toggleSidebar}
