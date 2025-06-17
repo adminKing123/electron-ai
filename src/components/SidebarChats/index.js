@@ -7,7 +7,15 @@ import ROUTES from "../../router/routes";
 import { getChatsAPI } from "../../apis/chats/queryFunctions";
 import { useSidebarOpenState } from "../../store/useSidebarStores";
 
-const SidebarChatButton = ({ chat, handleMenuButtonClick, ...props }) => {
+const SidebarChatMenu = () => {
+  return (
+    <button className="flex-shrink-0 py-[7px] px-[10px] hidden hover:block group-hover:block group-focus:block">
+      <SlOptions />
+    </button>
+  );
+};
+
+const SidebarChatButton = ({ chat, ...props }) => {
   useEffect(() => {
     if (chat.is_new && chat.summarization_data) {
       useChatsStore.getState().summerizeChatTitle(chat, true);
@@ -29,26 +37,16 @@ const SidebarChatButton = ({ chat, handleMenuButtonClick, ...props }) => {
       <span className="truncate max-w-[200px] py-[7px] flex-grow">
         {chat.title}
       </span>
-      <button
-        onClick={handleMenuButtonClick}
-        className="flex-shrink-0 py-[7px] px-[10px] hidden group-hover:block group-focus:block"
-      >
-        <SlOptions />
-      </button>
+      <SidebarChatMenu />
     </NavLink>
   );
 };
 
 const SidebarChats = () => {
   const chats = useChatsStore((state) => state.chats);
-  const appendChats = useChatsStore((state) => state.appendChats);
+  const setChats = useChatsStore((state) => state.setChats);
   const groupedData = groupByDate(chats, "updated_at");
   const setOpen = useSidebarOpenState((state) => state.setOpen);
-
-  const handleMenuButtonClick = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-  };
 
   const handleChatClick = () => {
     if (window.innerWidth <= 768) {
@@ -59,11 +57,11 @@ const SidebarChats = () => {
   useEffect(() => {
     const getInitialData = async () => {
       const fetchedChats = await getChatsAPI();
-      appendChats(fetchedChats);
+      setChats(fetchedChats);
     };
 
     getInitialData();
-  }, [appendChats]);
+  }, [setChats]);
 
   return (
     <div className="mx-[8px] my-8">
@@ -77,7 +75,6 @@ const SidebarChats = () => {
               <SidebarChatButton
                 key={chat.id}
                 chat={chat}
-                handleMenuButtonClick={handleMenuButtonClick}
                 onClick={handleChatClick}
               />
             ))}
