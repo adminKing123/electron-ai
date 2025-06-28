@@ -28,7 +28,7 @@ const Prompt = ({ chat }) => {
   const textareaRef = useRef(null);
 
   const onProgress = (data) => {
-    addChunkInMessageAnswer(data.id, data.chunk);
+    addChunkInMessageAnswer(data.id, data.event);
   };
 
   const onStart = (data) => {

@@ -1,10 +1,24 @@
 import { useProcessController } from "../../store/useMessagesStore";
 import ENDPOINTS from "../endpoints";
 
+const chunkParser = (id, eventType, dataString, onProgress) => {
+  if (eventType === "error" || eventType === "end") return;
+  const parsedData = JSON.parse(dataString);
+  onProgress?.({
+    id,
+    event: {
+      type: eventType,
+      data: parsedData,
+    },
+  });
+};
+
 const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
   const setProcess = useProcessController.getState().setProcess;
+
   try {
     const controller = new AbortController();
+
     setProcess(
       {
         type: "GENERATION",
@@ -14,6 +28,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
       controller
     );
     onStart?.({ id });
+
     const response = await fetch(ENDPOINTS.GET_GENERATE_URL(), {
       method: "POST",
       headers: {
@@ -21,8 +36,8 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
       },
       body: JSON.stringify({
         prompt: data.prompt,
-        model_id: data?.model_id ? data.model_id : null,
-        google_search: data?.google_search ? true : false,
+        model_id: data?.model_id ?? null,
+        google_search: data?.google_search ?? false,
       }),
       signal: controller.signal,
     });
@@ -43,12 +58,36 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
+    let buffer = "";
+
     for (let done = false; !done; ) {
       const { value, done: readerDone } = await reader.read();
       done = readerDone;
+
       if (value) {
-        const chunk = decoder.decode(value, { stream: true });
-        onProgress?.({ id, chunk });
+        buffer += decoder.decode(value, { stream: true });
+        let sseChunks = buffer.split("\n\n");
+        buffer = sseChunks.pop();
+
+        for (const chunk of sseChunks) {
+          const lines = chunk.trim().split("\n");
+          let eventType = "message";
+          let dataString = "";
+
+          for (const line of lines) {
+            if (line.startsWith("event:")) {
+              eventType = line.replace("event:", "").trim();
+            } else if (line.startsWith("data:")) {
+              dataString += line.replace("data:", "").trim();
+            }
+          }
+
+          try {
+            chunkParser(id, eventType, dataString, onProgress);
+          } catch (e) {
+            console.error("Failed to parse SSE data:", dataString, e);
+          }
+        }
       }
     }
 
@@ -56,7 +95,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
     onEnd?.({ id });
   } catch (err) {
     setProcess(null);
-    onError?.({ id });
+    onError?.({ id, error: err.message });
   }
 };
 

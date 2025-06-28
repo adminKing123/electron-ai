@@ -36,9 +36,10 @@ const useMessageStore = create(
         chat_id: id,
       });
     },
-    addChunkInMessageAnswer: (id, chunk) => {
+    addChunkInMessageAnswer: (id, event) => {
       set((state) => {
-        state.data[id].answer = (state.data[id].answer || "") + chunk;
+        state.data[id].answer =
+          (state.data[id].answer || "") + event?.data?.content || "";
       });
     },
     resetMessages: () => {
