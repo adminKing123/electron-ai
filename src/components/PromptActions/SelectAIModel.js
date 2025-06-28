@@ -4,13 +4,14 @@ import { SiTicktick } from "react-icons/si";
 import { useModelStore, useWebSearchStore } from "../../store/usePromptStores";
 import { BsCpu } from "react-icons/bs";
 
-
 import { RiGeminiFill } from "react-icons/ri";
 import { RiClaudeFill } from "react-icons/ri";
+import { TbGalaxy } from "react-icons/tb";
 
 const AI_ICONS = {
   GEMINI: RiGeminiFill,
   CLAUDE: RiClaudeFill,
+  NONEY: TbGalaxy,
 };
 
 const AIModel = ({ model, handleSelect, isSelected }) => {
