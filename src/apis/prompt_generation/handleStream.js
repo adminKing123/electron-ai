@@ -38,6 +38,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
         prompt: data.prompt,
         model_id: data?.model_id ?? null,
         google_search: data?.google_search ?? false,
+        chat_uid: data?.chat_id ?? null,
       }),
       signal: controller.signal,
     });
