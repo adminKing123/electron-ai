@@ -1,12 +1,8 @@
-import CONFIG from "../../config";
 import { useProcessController } from "../../store/useMessagesStore";
-import { useImageGenerateStore } from "../../store/usePromptStores";
-import useUserStore from "../../store/useUserStore";
+import ENDPOINTS from "../endpoints";
 
 const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
-  const user = useUserStore.getState().DEFAULT_USER;
   const setProcess = useProcessController.getState().setProcess;
-  const isImageGenerateOn = useImageGenerateStore.getState().isImageGenerateOn;
   try {
     const controller = new AbortController();
     setProcess(
@@ -18,36 +14,18 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
       controller
     );
     onStart?.({ id });
-    const response = await fetch(
-      CONFIG.GET_GENERATE_URL({
-        generate_image: isImageGenerateOn,
+    const response = await fetch(ENDPOINTS.GET_GENERATE_URL(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: data.prompt,
+        model_id: data?.model_id ? data.model_id : null,
+        google_search: data?.google_search ? true : false,
       }),
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "global",
-          prompt: data.prompt,
-          chat_uid: data.chat_id,
-          file_url: [],
-          org_id: user.org_id ? user.org_id : "",
-          uid: user.uid ? user.uid : "",
-          regenerate: data?.regenerate ? true : false,
-          style: data?.response_style ? data.response_style : "Standard",
-          model_id: data?.model_id ? data.model_id : null,
-          recaching: false,
-          google_search: data?.google_search ? true : false,
-          cache_id: null,
-          file_data: "",
-          prompt_id: id,
-          new_prompt: "",
-          by: user.uid ? user.uid : "",
-        }),
-        signal: controller.signal,
-      }
-    );
+      signal: controller.signal,
+    });
 
     if (!response.ok || !response.body) {
       setProcess(null);

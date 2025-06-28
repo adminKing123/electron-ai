@@ -15,23 +15,11 @@ import useUserStore from "../../store/useUserStore";
 import ENDPOINTS from "../endpoints";
 
 export const summariseChatTitleAPI = async (data) => {
-  const STATIC_DATA = {
-    chat_id: "35b02731-17b2-408a-8a4e-8525a39482e3",
-    org_id: "synapses",
-    prompt_id: "23078800-e6ae-4176-8eb6-29db28344d4f",
-    user_id: "un2xqHu71cd6WWycTr1P6UE4PiJ2",
-    url: `${process.env.REACT_APP_API_URL_2}${ENDPOINTS.SUMMARISE_CHAT_TITLE}`,
-  };
-
   const response = await api({
     method: "POST",
-    url: STATIC_DATA.url,
+    url: ENDPOINTS.SUMMARISE_CHAT_TITLE,
     data: {
       prompt: data.prompt_to_summerize_title,
-      prompt_id: STATIC_DATA.prompt_id,
-      chat_id: STATIC_DATA.chat_id,
-      org_id: STATIC_DATA.org_id,
-      user_id: STATIC_DATA.user_id,
     },
   });
   return response.data;
