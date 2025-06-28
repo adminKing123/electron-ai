@@ -7,7 +7,7 @@ const COLLAPSED_HEIGHT = 160;
 
 const PromptBox = ({ prompt }) => {
   const [collapsed, setCollapsed] = useState(true);
-  const [shouldShowButton, setShouldShowButton] = useState(false);
+  const [shouldShowButton, setShouldShowButton] = useState(true);
   const contentRef = useRef(null);
 
   useEffect(() => {
