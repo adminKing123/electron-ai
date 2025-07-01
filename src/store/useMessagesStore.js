@@ -50,6 +50,10 @@ const useMessageStore = create(
               data: eventdata || "",
             };
           }
+        } else if (eventtype === "step") {
+          state.data[id].steps = state.data[id].steps.concat(eventdata);
+        } else if (eventtype === "source") {
+          state.data[id].sources = state.data[id].sources.concat(eventdata);
         } else {
           state.data[id].answer[index] = {
             id: eventid,
