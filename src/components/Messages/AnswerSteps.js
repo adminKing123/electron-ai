@@ -15,10 +15,10 @@ function AnswerSteps({ steps, message_id }) {
             process?.id === message_id ? "spin-animation" : ""
           }`}
         />
-        <button className="text-[11px] rounded-2xl flex items-center gap-1">
+        <button className="text-[11px] text-[#000000] dark:text-white rounded-2xl flex items-center gap-1">
           <span>{lastStep.title}</span>
           <span>
-            <FaAngleDown />
+            <FaAngleDown className="text-[#000000] dark:text-white text-[11px]" />
           </span>
         </button>
       </div>
