@@ -1,25 +1,27 @@
-import { RiImageCircleAiLine } from "react-icons/ri";
-import { useImageGenerateStore } from "../../store/usePromptStores";
+import { SiMediafire } from "react-icons/si";
+import { useMutliModelGeneration } from "../../store/usePromptStores";
 
-const GenerateImageButton = () => {
-  const active = useImageGenerateStore((state) => state.isImageGenerateOn);
-  const setIsImageGenerateOn = useImageGenerateStore(
-    (state) => state.setIsImageGenerateOn
+const TryMultiModelButton = () => {
+  const active = useMutliModelGeneration(
+    (state) => state.isMultiModelGeneration
+  );
+  const setIsMultiModelGeneration = useMutliModelGeneration(
+    (state) => state.setIsMultiModelGeneration
   );
 
   const handleClick = () => {
-    setIsImageGenerateOn(!active);
+    setIsMultiModelGeneration(!active);
   };
 
   return (
     <button
-      title="Generate Image"
+      title="Multi-Model"
       className={`border ${
         active ? "border-blue-400 dark:border-green-400" : ""
       } disabled:opacity-50 p-2 rounded-full group flex items-center`}
       onClick={handleClick}
     >
-      <RiImageCircleAiLine
+      <SiMediafire
         className={`${
           active
             ? "fill-blue-400 dark:fill-green-400"
@@ -33,10 +35,10 @@ const GenerateImageButton = () => {
             : "text-black dark:text-white"
         } text-xs max-w-0 text-nowrap opacity-0 group-hover:max-w-[100px] group-hover:pl-2 group-hover:opacity-100 transition-[max-width,opacity,padding] duration-300 overflow-hidden`}
       >
-        Create an image
+        Multi-Model
       </span>
     </button>
   );
 };
 
-export default GenerateImageButton;
+export default TryMultiModelButton;

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import useMessageStore, {
   useProcessController,
 } from "../../store/useMessagesStore";
@@ -22,16 +23,11 @@ const Answer = ({ message_id }) => {
 
   return (
     <div className="text-white max-w-full">
-      {message?.answer.map((part, index) => {
+      {message?.answer.map((part) => {
         if (part.type === "text") {
-          return (
-            <MarkdownRenderer
-              // key={part.id}
-              key={index}
-              content={part.data}
-            />
-          );
+          return <MarkdownRenderer key={part.id} content={part.data} />;
         }
+        return <Fragment key={part?.id} />;
       })}
     </div>
   );
