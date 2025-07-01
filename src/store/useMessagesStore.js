@@ -38,8 +38,25 @@ const useMessageStore = create(
     },
     addChunkInMessageAnswer: (id, event) => {
       set((state) => {
-        state.data[id].answer =
-          (state.data[id].answer || "") + event?.data?.content || "";
+        const eventtype = event.type;
+        const { data: eventdata, id: eventid, index } = event.data;
+        if (eventtype === "text") {
+          if (state.data[id].answer[index]) {
+            state.data[id].answer[index].data += eventdata || "";
+          } else {
+            state.data[id].answer[index] = {
+              id: eventid,
+              type: "text",
+              data: eventdata || "",
+            };
+          }
+        } else {
+          state.data[id].answer[index] = {
+            id: eventid,
+            type: eventtype,
+            data: eventdata,
+          };
+        }
       });
     },
     resetMessages: () => {

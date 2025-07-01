@@ -19,9 +19,20 @@ const Answer = ({ message_id }) => {
         <GettingStartedLoader />
       </div>
     );
+
   return (
     <div className="text-white max-w-full">
-      <MarkdownRenderer content={message.answer} />
+      {message?.answer.map((part, index) => {
+        if (part.type === "text") {
+          return (
+            <MarkdownRenderer
+              // key={part.id}
+              key={index}
+              content={part.data}
+            />
+          );
+        }
+      })}
     </div>
   );
 };

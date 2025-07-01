@@ -72,7 +72,7 @@ const Prompt = ({ chat }) => {
 
     const id = addMessage({
       prompt,
-      answer: "",
+      answer: [],
       model: model,
       google_search,
       generate_image,
