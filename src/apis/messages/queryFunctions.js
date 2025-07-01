@@ -43,6 +43,7 @@ export const createMessageAPI = async (chat, message) => {
     "messages",
     message.id
   );
+
   await setDoc(docRef, message);
 
   return {
