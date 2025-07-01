@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { useRef } from "react";
 import useMessageStore, {
   useProcessController,
@@ -27,6 +28,7 @@ const Prompt = ({ chat }) => {
   const textareaRef = useRef(null);
 
   const onProgress = (data) => {
+    console.log(data.event);
     addChunkInMessageAnswer(data.id, data.event);
   };
 
@@ -40,6 +42,18 @@ const Prompt = ({ chat }) => {
   };
 
   const onError = (data) => {
+    addChunkInMessageAnswer(data.id, {
+      type: "step",
+      data: {
+        id: uuidv4(),
+        data: [
+          {
+            type: "stop",
+            title: "Stopped",
+          },
+        ],
+      },
+    });
     const messageAdded = useMessageStore.getState().data[data.id];
     createMessageAPI(chat, messageAdded);
   };
