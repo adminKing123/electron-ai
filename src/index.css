@@ -56,4 +56,12 @@ body {
   -webkit-backdrop-filter: blur(5px);
 }
 
+.spin-animation {
+  animation: spin-animation 2s linear infinite;
+}
 
+@keyframes spin-animation {
+  to {
+    transform: rotate(360deg);
+  }
+}

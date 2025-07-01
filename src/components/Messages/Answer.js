@@ -3,6 +3,7 @@ import useMessageStore, {
 } from "../../store/useMessagesStore";
 import { GettingStartedLoader } from "../Loaders";
 import MarkdownRenderer from "../MarkdownRenderer";
+import AnswerSteps from "./AnswerSteps";
 
 const Answer = ({ message_id }) => {
   const message = useMessageStore((state) => state.data[message_id]);
@@ -22,6 +23,7 @@ const Answer = ({ message_id }) => {
 
   return (
     <div className="text-white max-w-full">
+      {message?.steps?.length ? <AnswerSteps steps={message?.steps} /> : null}
       {message?.answer?.map((part) => {
         if (part.type === "text") {
           return <MarkdownRenderer key={part.id} content={part.data} />;
