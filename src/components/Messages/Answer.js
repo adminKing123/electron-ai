@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import useMessageStore, {
   useProcessController,
 } from "../../store/useMessagesStore";
@@ -27,7 +26,25 @@ const Answer = ({ message_id }) => {
         if (part.type === "text") {
           return <MarkdownRenderer key={part.id} content={part.data} />;
         }
-        return <Fragment key={part?.id} />;
+        return (
+          <div
+            key={part?.id}
+            className="my-4 bg-[#F9F9F9] dark:bg-[#171717] border border-[#E4E4E4] dark:border-[#454545] rounded-2xl overflow-hidden"
+          >
+            <div class="px-[18px] py-2 bg-[#f1f1f1] dark:bg-[#2F2F2F] rounded-t-2xl flex justify-between items-center">
+              <div class="font-bold text-black dark:text-white text-[11px]">
+                {part.type}
+              </div>
+            </div>
+            <div class="p-4 overflow-auto">
+              <pre class="!m-0">
+                <code class="text-nowrap text-[11px]">
+                  {JSON.stringify(part.data, null, 2)}
+                </code>
+              </pre>
+            </div>
+          </div>
+        );
       })}
     </div>
   );
