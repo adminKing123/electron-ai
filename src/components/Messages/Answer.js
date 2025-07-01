@@ -23,7 +23,9 @@ const Answer = ({ message_id }) => {
 
   return (
     <div className="text-white max-w-full">
-      {message?.steps?.length ? <AnswerSteps steps={message?.steps} /> : null}
+      {message?.steps?.length ? (
+        <AnswerSteps steps={message?.steps} message_id={message?.id} />
+      ) : null}
       {message?.answer?.map((part) => {
         if (part.type === "text") {
           return <MarkdownRenderer key={part.id} content={part.data} />;
