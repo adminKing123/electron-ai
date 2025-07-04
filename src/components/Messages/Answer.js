@@ -3,7 +3,7 @@ import useMessageStore, {
 } from "../../store/useMessagesStore";
 import { GettingStartedLoader } from "../Loaders";
 import MarkdownRenderer from "../MarkdownRenderer";
-import AnswerSteps from "./AnswerSteps";
+import AnswerSteps from "./AnswerComponents/AnswerSteps";
 
 const Answer = ({ message_id }) => {
   const message = useMessageStore((state) => state.data[message_id]);

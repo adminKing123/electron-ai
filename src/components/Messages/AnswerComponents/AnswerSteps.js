@@ -1,6 +1,6 @@
 import { FaAngleDown } from "react-icons/fa6";
 import { TbGalaxy } from "react-icons/tb";
-import { useProcessController } from "../../store/useMessagesStore";
+import { useProcessController } from "../../../store/useMessagesStore";
 
 function AnswerSteps({ steps, message_id }) {
   const process = useProcessController(
