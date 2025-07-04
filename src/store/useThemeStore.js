@@ -25,6 +25,21 @@ export const getInitialTheme = () => {
   return THEME_OPTIONS.SYSTEM;
 };
 
+export const changeMetaTheme = (theme) => {
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  themeColorMeta?.setAttribute(
+    "content",
+    theme === THEME_OPTIONS.DARK ? "#212121" : "#ffffff"
+  );
+  const msthemeColorMeta = document.querySelector(
+    'meta[name="msapplication-navbutton-color"]'
+  );
+  msthemeColorMeta?.setAttribute(
+    "content",
+    theme === THEME_OPTIONS.DARK ? "#212121" : "#ffffff"
+  );
+};
+
 export const applyTheme = (theme) => {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
@@ -33,6 +48,7 @@ export const applyTheme = (theme) => {
   } else {
     root.classList.remove("dark");
   }
+  changeMetaTheme(theme);
 };
 
 const useThemeStore = create((set) => ({
