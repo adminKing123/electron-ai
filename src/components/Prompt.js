@@ -116,7 +116,7 @@ const Prompt = ({ chat }) => {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative" id="prompt-box">
       <ScrollToBottomButton />
       <ChatGreetings chat={chat} />
       <div className="px-5 py-[15px] bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">

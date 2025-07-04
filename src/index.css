@@ -65,3 +65,17 @@ body {
     transform: rotate(360deg);
   }
 }
+
+@media print {
+  #messages-container {
+    overflow: visible !important;
+    min-height: 0;
+    height: auto !important;
+    max-height: auto !important;
+  }
+
+  #sidebar,
+  #prompt-box {
+    display: none !important;
+  }
+}
