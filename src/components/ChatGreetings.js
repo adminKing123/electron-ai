@@ -1,4 +1,4 @@
-function ChatGreetings({ chat }) {
+function ChatGreetings() {
   const greets = [
     "What can I help with?",
     "How may I assist you?",
@@ -46,11 +46,11 @@ function ChatGreetings({ chat }) {
 
   const randomGreeting = greets[Math.floor(Math.random() * greets.length)];
 
-  return chat.is_new ? (
+  return (
     <h2 className="text-black dark:text-white w-full text-center text-[28px] absolute bottom-full h-[70px]">
       {randomGreeting}
     </h2>
-  ) : null;
+  );
 }
 
 export default ChatGreetings;

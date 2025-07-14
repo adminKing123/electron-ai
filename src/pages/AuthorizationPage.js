@@ -1,5 +1,5 @@
 import AuthorizationHeader from "../components/AuthorizationHeader";
-import { SiElectron } from "react-icons/si";
+import { TbGalaxy } from "react-icons/tb";
 import GoogleSignInButton from "../components/Buttons/GoogleSignInButton";
 import useUserStore from "../store/useUserStore";
 import { Navigate } from "react-router-dom";
@@ -15,7 +15,7 @@ const AuthorizationPage = () => {
         <AuthorizationHeader />
         <div className="max-w-[800px] pt-24 px-5 md:px-0 md:mx-auto">
           <div className="flex justify-center mb-8">
-            <SiElectron className="text-[#000000] dark:text-white w-[72px] h-[72px]" />
+            <TbGalaxy className="text-[#000000] dark:text-white w-[72px] h-[72px]" />
           </div>
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl text-[#000000] dark:text-white font-semibold mb-1">
