@@ -1,19 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { SlOptions } from "react-icons/sl";
 import useChatsStore from "../../store/useChatsStore";
 import { formatDateTimeV1, groupByDate } from "../../utils/helpers";
 import { useEffect } from "react";
 import ROUTES from "../../router/routes";
 import { getChatsAPI } from "../../apis/chats/queryFunctions";
 import { useSidebarOpenState } from "../../store/useSidebarStores";
+import SidebarChatMenu from "./SidebarChatMenu";
 
-const SidebarChatMenu = () => {
-  return (
-    <button className="flex-shrink-0 py-[7px] px-[10px] hidden hover:block group-hover:block group-focus:block">
-      <SlOptions />
-    </button>
-  );
-};
 
 const SidebarChatButton = ({ chat, ...props }) => {
   useEffect(() => {
