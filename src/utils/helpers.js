@@ -28,7 +28,7 @@ export const scrollToMessageTop = (id, duration = 100, behavior = "smooth") => {
   }, duration);
 };
 
-export const focusPromptTextArea = (moveCursor) => {
+export const focusPromptTextArea = (moveCursor, duration = 10) => {
   const textarea = document.getElementById("prompt-textarea");
   textarea?.focus();
 
@@ -37,7 +37,7 @@ export const focusPromptTextArea = (moveCursor) => {
       const textLength = textarea.value.length;
       textarea.setSelectionRange(textLength, textLength);
       textarea.scrollTop = textarea?.scrollHeight;
-    }, 10);
+    }, duration);
   }
 };
 
