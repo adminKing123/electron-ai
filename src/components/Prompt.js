@@ -77,7 +77,7 @@ const Prompt = ({ chat }) => {
   };
 
   const handleSend = () => {
-    const { prompt, setPrompt, action, setAction } = usePromptStore.getState();
+    const { prompt, setPrompt, action } = usePromptStore.getState();
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
