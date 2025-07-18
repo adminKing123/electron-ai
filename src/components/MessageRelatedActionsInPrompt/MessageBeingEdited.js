@@ -19,7 +19,7 @@ const MessageBeingEdited = ({ action }) => {
   return (
     <div
       onClick={handleClick}
-      className="flex items-center gap-2 font-sans p-2 mb-2 text-black dark:text-white bg-[#444444] rounded-xl cursor-pointer"
+      className="flex items-center gap-2 font-sans p-2 mb-2 text-black dark:text-white bg-[#f0f0f0] dark:bg-[#444444] rounded-xl cursor-pointer"
     >
       <div className="line-clamp-2 text-[11px] flex-grow">
         {action.data.prompt}
