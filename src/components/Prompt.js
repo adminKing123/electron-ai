@@ -3,7 +3,7 @@ import { useRef } from "react";
 import useMessageStore, {
   useProcessController,
 } from "../store/useMessagesStore";
-import { scrollToMessage } from "../utils/helpers";
+import { scrollToMessage, scrollToMessageTop } from "../utils/helpers";
 import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
 import usePromptStore, {
@@ -17,10 +17,13 @@ import ROUTES from "../router/routes";
 import ChatGreetings from "./ChatGreetings";
 import { createMessageAPI } from "../apis/messages/queryFunctions";
 import ScrollToBottomButton from "./PromptActions/ScrollToBottomButton";
+import MessageRelatedActionsInPrompt from "./MessageRelatedActionsInPrompt";
+import CONFIG from "../config";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
   const addMessage = useMessageStore((state) => state.addMessage);
+  const setMessage = useMessageStore((state) => state.setMessage);
   const addChunkInMessageAnswer = useMessageStore(
     (state) => state.addChunkInMessageAnswer
   );
@@ -32,7 +35,13 @@ const Prompt = ({ chat }) => {
   };
 
   const onStart = (data) => {
-    scrollToMessage(data.id);
+    const { action, setAction } = usePromptStore.getState();
+    if (action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT) {
+      scrollToMessageTop(action.data.message_id);
+      setAction({});
+    } else {
+      scrollToMessage(data.id);
+    }
   };
 
   const onEnd = (data) => {
@@ -68,7 +77,7 @@ const Prompt = ({ chat }) => {
   };
 
   const handleSend = () => {
-    const { prompt, setPrompt } = usePromptStore.getState();
+    const { prompt, setPrompt, action, setAction } = usePromptStore.getState();
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
@@ -81,17 +90,31 @@ const Prompt = ({ chat }) => {
     const google_search = isWebSearchDisabled ? false : isWebSearchOn;
     const generate_image = false;
 
-    const id = addMessage({
-      prompt,
-      answer: [],
-      sources: [],
-      steps: [],
-      model: model,
-      google_search,
-      generate_image,
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
+    let id = null;
+
+    if (action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT) {
+      id = setMessage(action.data.message_id, {
+        prompt,
+        answer: [],
+        sources: [],
+        steps: [],
+        model: model,
+        google_search,
+        generate_image,
+      });
+    } else {
+      id = addMessage({
+        prompt,
+        answer: [],
+        sources: [],
+        steps: [],
+        model: model,
+        google_search,
+        generate_image,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+    }
 
     if (chat.is_new) {
       handleNewChatEntered(chat, {
@@ -120,6 +143,7 @@ const Prompt = ({ chat }) => {
       <ScrollToBottomButton />
       {chat.is_new ? <ChatGreetings /> : null}
       <div className="px-5 py-[15px] bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
+        <MessageRelatedActionsInPrompt />
         <TextArea
           textareaRef={textareaRef}
           handleSend={handleSend}

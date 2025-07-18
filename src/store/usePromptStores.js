@@ -3,6 +3,9 @@ import { create } from "zustand";
 const usePromptStore = create((set) => ({
   prompt: "",
   setPrompt: (value) => set({ prompt: value }),
+
+  action: {},
+  setAction: (value) => set({ action: value }),
 }));
 
 export const useModelStore = create((set) => ({

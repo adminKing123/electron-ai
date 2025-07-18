@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 import { deleteMessageAPI } from "../apis/messages/queryFunctions";
 import { immer } from "zustand/middleware/immer";
+import usePromptStore from "./usePromptStores";
 
 const useMessageStore = create(
   immer((set) => ({
@@ -19,6 +20,15 @@ const useMessageStore = create(
       const id = uuidv4();
       set((state) => {
         state.messages.push(id);
+        state.data[id] = {
+          id,
+          ...message,
+        };
+      });
+      return id;
+    },
+    setMessage: (id, message) => {
+      set((state) => {
         state.data[id] = {
           id,
           ...message,
@@ -69,6 +79,7 @@ const useMessageStore = create(
         data: {},
       }));
       useProcessController.getState().setProcess(null, null, true);
+      usePromptStore.getState().setAction({});
     },
   }))
 );

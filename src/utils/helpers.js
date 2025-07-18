@@ -28,6 +28,19 @@ export const scrollToMessageTop = (id, duration = 100, behavior = "smooth") => {
   }, duration);
 };
 
+export const focusPromptTextArea = (moveCursor) => {
+  const textarea = document.getElementById("prompt-textarea");
+  textarea?.focus();
+
+  if (textarea && moveCursor === "last") {
+    setTimeout(() => {
+      const textLength = textarea.value.length;
+      textarea.setSelectionRange(textLength, textLength);
+      textarea.scrollTop = textarea?.scrollHeight;
+    }, 10);
+  }
+};
+
 export const scrollToBottom = (chat, duration = 50) => {
   const genContainer = document.getElementById("gen-container");
   const container = document.getElementById("messages-container");

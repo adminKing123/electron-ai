@@ -1,7 +1,10 @@
+import CONFIG from "../../config";
 import useMessageStore from "../../store/useMessagesStore";
+import usePromptStore from "../../store/usePromptStores";
 import MessagePromptActions from "./MessagePromptActions";
 import { useEffect, useRef, useState } from "react";
 import { FaAngleDown } from "react-icons/fa6";
+import { focusPromptTextArea } from "../../utils/helpers";
 
 const COLLAPSED_HEIGHT = 160;
 
@@ -52,6 +55,9 @@ const PromptBox = ({ prompt }) => {
 
 const MessagePrompt = ({ message_id }) => {
   const prompt = useMessageStore((state) => state.data[message_id]?.prompt);
+  const setAction = usePromptStore((state) => state.setAction);
+  const setPrompt = usePromptStore((state) => state.setPrompt);
+
   const handleMessagePromptCopy = (callback) => {
     if (prompt) {
       navigator.clipboard.writeText(prompt);
@@ -59,10 +65,25 @@ const MessagePrompt = ({ message_id }) => {
     }
   };
 
+  const handlePromptEdit = () => {
+    setPrompt(prompt);
+    setAction({
+      type: CONFIG.PROMPT_ACTION_TYPES.EDIT,
+      data: {
+        message_id,
+        prompt,
+      },
+    });
+    focusPromptTextArea("last");
+  };
+
   return (
     <div className="group">
       <PromptBox prompt={prompt} />
-      <MessagePromptActions handleCopy={handleMessagePromptCopy} />
+      <MessagePromptActions
+        handleCopy={handleMessagePromptCopy}
+        handleEdit={handlePromptEdit}
+      />
     </div>
   );
 };

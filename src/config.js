@@ -9,6 +9,10 @@ const CONFIG = {
     appId: process.env.REACT_APP_APPID,
     measurementId: process.env.REACT_APP_MEASUREMENTID,
   },
+
+  PROMPT_ACTION_TYPES: {
+    EDIT: "EDIT",
+  },
 };
 
 export default CONFIG;
