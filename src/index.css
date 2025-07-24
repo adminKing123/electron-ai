@@ -5,11 +5,17 @@
 :root {
   --body-bg-color: #ffffff;
   --header-shadow-color: #f2f2f2;
+
+  --selection-bg: #eafcff;
+  --selection-text: #31b8c6;
 }
 
 .dark {
   --body-bg-color: #212121;
   --header-shadow-color: #2c2c2c;
+
+  --selection-bg: #1b292b;
+  --selection-text: #31b8c6;
 }
 
 body {
@@ -58,6 +64,21 @@ body {
 
 .spin-animation {
   animation: spin-animation 2s linear infinite;
+}
+
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+::-moz-selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+::-webkit-selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
 }
 
 @keyframes spin-animation {
