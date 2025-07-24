@@ -66,17 +66,17 @@ body {
   animation: spin-animation 2s linear infinite;
 }
 
-::selection {
+#messages-container::selection {
   background-color: var(--selection-bg);
   color: var(--selection-text);
 }
 
-::-moz-selection {
+#messages-container::-moz-selection {
   background-color: var(--selection-bg);
   color: var(--selection-text);
 }
 
-::-webkit-selection {
+#messages-container::-webkit-selection {
   background-color: var(--selection-bg);
   color: var(--selection-text);
 }
