@@ -1,4 +1,6 @@
+import { marked } from "marked";
 import { format, isToday, isYesterday, differenceInDays } from "date-fns";
+import { getCopiableAnswer } from "./getCopiableAnswer";
 
 export const scrollToMessage = (id, duration = 100, behavior = "smooth") => {
   setTimeout(() => {
@@ -84,3 +86,24 @@ export function formatDateTimeV1(dateTime) {
 
   return format(date, "yyyy, MMM d");
 }
+
+export const copyAnswer = async (message, callback) => {
+  if (message?.answer) {
+    const plainText = getCopiableAnswer(message.answer);
+
+    try {
+      const html = marked.parse(plainText);
+
+      const clipboardItem = new ClipboardItem({
+        "text/plain": new Blob([plainText], { type: "text/plain" }),
+        "text/html": new Blob([html], { type: "text/html" }),
+      });
+
+      await navigator.clipboard.write([clipboardItem]);
+      callback?.(message?.id);
+    } catch (error) {
+      navigator.clipboard.writeText(plainText);
+      callback?.(message?.id);
+    }
+  }
+};

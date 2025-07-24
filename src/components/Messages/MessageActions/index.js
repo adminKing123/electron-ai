@@ -1,4 +1,7 @@
-import useMessageStore, { useProcessController } from "../../../store/useMessagesStore";
+import useMessageStore, {
+  useProcessController,
+} from "../../../store/useMessagesStore";
+import { copyAnswer } from "../../../utils/helpers";
 import CopyButton from "./CopyMessageButton";
 import DeleteMessageButton from "./DeleteMessageButton";
 import GoToMessageTop from "./GoToMessageTop";
@@ -12,10 +15,7 @@ const MessageActions = ({ message_id, chat }) => {
   );
 
   const handleAnswerCopy = (callback) => {
-    if (message?.answer) {
-      navigator.clipboard.writeText(message.answer);
-      callback?.(message?.id);
-    }
+    copyAnswer(message, callback);
   };
 
   if (process?.id === message_id) return null;
