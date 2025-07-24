@@ -11,7 +11,7 @@ function AnswerSteps({ steps, message_id }) {
     <div className="mb-2">
       <div className="flex items-center gap-2">
         <TbGalaxy
-          className={`text-[#000000] dark:text-white w-[22px] h-[22px] ${
+          className={`text-[#000000] dark:text-white w-[24px] h-[24px] ${
             process?.id === message_id ? "spin-animation" : ""
           }`}
         />

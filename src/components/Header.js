@@ -17,8 +17,8 @@ const SidebarOpenButton = () => {
       onClick={toggleSidebar}
       className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
     >
-      <TbLayoutSidebarFilled className="text-[#666666] dark:text-white w-[22px] h-[22px] hidden md:block" />
-      <HiMenuAlt2 className="text-[#666666] dark:text-white w-[22px] h-[22px] block md:hidden" />
+      <TbLayoutSidebarFilled className="text-[#666666] dark:text-white w-[24px] h-[24px] hidden md:block" />
+      <HiMenuAlt2 className="text-[#666666] dark:text-white w-[24px] h-[24px] block md:hidden" />
     </button>
   );
 };

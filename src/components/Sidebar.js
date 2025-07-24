@@ -30,14 +30,14 @@ const SidebarHeader = ({ toggleSidebar }) => {
   return (
     <div className="bg-[#F9F9F9] dark:bg-[#181818] w-full h-[56px] flex items-center justify-between px-3 flex-shrink-0">
       <button className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg">
-        <TbGalaxy className="text-[#000000] dark:text-white w-[22px] h-[22px]" />
+        <TbGalaxy className="text-[#000000] dark:text-white w-[24px] h-[24px]" />
       </button>
       <button
         onClick={toggleSidebar}
         className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
       >
-        <TbLayoutSidebar className="text-[#8F8F8F] dark:text-white w-[22px] h-[22px] hidden md:block" />
-        <IoClose className="text-[#8F8F8F] dark:text-white w-[22px] h-[22px] block md:hidden" />
+        <TbLayoutSidebar className="text-[#8F8F8F] dark:text-white w-[24px] h-[24px] hidden md:block" />
+        <IoClose className="text-[#8F8F8F] dark:text-white w-[24px] h-[24px] block md:hidden" />
       </button>
     </div>
   );
