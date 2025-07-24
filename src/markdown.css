@@ -36,30 +36,30 @@
   --md-alert-caution-border-color: #cf222e;
 
   /* syntax token colors */
-  --syntax-bg: #f9f9f9;
-  --syntax-text: #24292e;
+  --syntax-bg: #ffffff;
+  --syntax-text: #1e1e1e;
   --syntax-comment: #6a737d;
-  --syntax-punctuation: #24292e;
-  --syntax-property: #e36209;
-  --syntax-string: #032f62;
+  --syntax-punctuation: #24292f;
+  --syntax-property: #005cc5;
+  --syntax-string: #22863a;
   --syntax-keyword: #d73a49;
   --syntax-function: #6f42c1;
-  --syntax-number: #005cc5;
+  --syntax-number: #116329;
   --syntax-operator: #d73a49;
-  --syntax-class: #6f42c1;
-  --syntax-tag: #22863a;
+  --syntax-class: #005cc5;
+  --syntax-tag: #032f62;
   --syntax-attribute: #6f42c1;
-  --syntax-namespace: #6f42c1;
-  --syntax-builtin: #005cc5;
-  --syntax-regex: #e36209;
-  --syntax-important: #e90;
+  --syntax-namespace: #005cc5;
+  --syntax-builtin: #e36209;
+  --syntax-regex: #0366d6;
+  --syntax-important: #d73a49;
   --syntax-parameter: #24292e;
   --syntax-decorator: #6f42c1;
   --syntax-constant: #005cc5;
-  --syntax-boolean: #005cc5;
+  --syntax-boolean: #d73a49;
   --syntax-variable: #e36209;
-  --syntax-selection-bg: #e3e8ee;
-  --syntax-selection-text: #24292e;
+  --syntax-selection-bg: #cceeff;
+  --syntax-selection-text: #1e1e1e;
 }
 
 .dark {
@@ -100,30 +100,30 @@
   --md-alert-caution-border-color: #da3633;
 
   /* syntax token colors */
-  --syntax-bg: #171717;
-  --syntax-text: #e1e4e8;
-  --syntax-comment: #8b949e;
-  --syntax-punctuation: #e1e4e8;
-  --syntax-property: #ffa657;
-  --syntax-string: #a5d6ff;
-  --syntax-keyword: #ff7b72;
-  --syntax-function: #d2a8ff;
-  --syntax-number: #79c0ff;
-  --syntax-operator: #ff7b72;
-  --syntax-class: #d2a8ff;
-  --syntax-tag: #7ee787;
-  --syntax-attribute: #d2a8ff;
-  --syntax-namespace: #d2a8ff;
-  --syntax-builtin: #79c0ff;
-  --syntax-regex: #ffa657;
-  --syntax-important: #ffa657;
-  --syntax-parameter: #e1e4e8;
-  --syntax-decorator: #d2a8ff;
-  --syntax-constant: #79c0ff;
-  --syntax-boolean: #79c0ff;
-  --syntax-variable: #ffa657;
-  --syntax-selection-bg: #3392ff44;
-  --syntax-selection-text: #e1e4e8;
+  --syntax-bg: #1e1e1e;
+  --syntax-text: #dcdcdc;
+  --syntax-comment: #6a9955;
+  --syntax-punctuation: #dcdcdc;
+  --syntax-property: #9cdcfe;
+  --syntax-string: #ce9178;
+  --syntax-keyword: #c586c0;
+  --syntax-function: #dcdcaa;
+  --syntax-number: #b5cea8;
+  --syntax-operator: #d4d4d4;
+  --syntax-class: #4ec9b0;
+  --syntax-tag: #569cd6;
+  --syntax-attribute: #9cdcfe;
+  --syntax-namespace: #4ec9b0;
+  --syntax-builtin: #dcdcaa;
+  --syntax-regex: #d16969;
+  --syntax-important: #c586c0;
+  --syntax-parameter: #9cdcfe;
+  --syntax-decorator: #c586c0;
+  --syntax-constant: #4fc1ff;
+  --syntax-boolean: #569cd6;
+  --syntax-variable: #9cdcfe;
+  --syntax-selection-bg: #264f78;
+  --syntax-selection-text: #ffffff;
 }
 
 .markdown-body {
