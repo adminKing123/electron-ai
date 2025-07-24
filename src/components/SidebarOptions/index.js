@@ -4,6 +4,7 @@ import { BiLibrary } from "react-icons/bi";
 import { NavLink } from "react-router-dom";
 import ROUTES from "../../router/routes";
 import { useSidebarOpenState } from "../../store/useSidebarStores";
+import useMessageStore from "../../store/useMessagesStore";
 
 const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
   return (
@@ -21,8 +22,10 @@ const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
 
 const CreateNewChatButton = () => {
   const setOpen = useSidebarOpenState((state) => state.setOpen);
+  const resetMessages = useMessageStore((state) => state.resetMessages);
 
   const handleClick = () => {
+    resetMessages();
     if (window.innerWidth <= 768) {
       setOpen(false);
     }
