@@ -1,4 +1,4 @@
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+// import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import MdCodeCopyButton from "./MdCodeCopyButton";
 
 const MdCode = ({ lang = "", children, ...props }) => {
@@ -18,14 +18,17 @@ const MdCode = ({ lang = "", children, ...props }) => {
         <MdCodeCopyButton handleCopy={handleCopy} />
       </div>
       <div className="p-4">
-        <SyntaxHighlighter
+        {/* <SyntaxHighlighter
           language={lang}
           useInlineStyles={false}
           style={{}}
           customStyle={{ margin: 0 }}
         >
           {String(children).replace(/\n$/, "")}
-        </SyntaxHighlighter>
+        </SyntaxHighlighter> */}
+        <pre className="!m-0">
+          <code className="text-nowrap">{children}</code>
+        </pre>
       </div>
     </div>
   );
