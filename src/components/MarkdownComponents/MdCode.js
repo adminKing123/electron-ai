@@ -1,6 +1,7 @@
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import MdCodeCopyButton from "./MdCodeCopyButton";
 
-const MdCode = ({ lang, children, ...props }) => {
+const MdCode = ({ lang = "", children, ...props }) => {
   const handleCopy = async (callback) => {
     try {
       await navigator.clipboard.writeText(children);
@@ -17,9 +18,14 @@ const MdCode = ({ lang, children, ...props }) => {
         <MdCodeCopyButton handleCopy={handleCopy} />
       </div>
       <div className="p-4">
-        <pre className="!m-0">
-          <code className="text-nowrap">{children}</code>
-        </pre>
+        <SyntaxHighlighter
+          language={lang}
+          useInlineStyles={false}
+          style={{}}
+          customStyle={{ margin: 0 }}
+        >
+          {String(children).replace(/\n$/, "")}
+        </SyntaxHighlighter>
       </div>
     </div>
   );
