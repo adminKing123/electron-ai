@@ -844,7 +844,7 @@
 }
 
 .markdown-body pre code {
-  font-size: 100%;
+  font-size: 0.85rem;
 }
 
 .markdown-body pre > code {
