@@ -4,12 +4,14 @@ const Source = ({ data }) => {
   return (
     <a
       href={data.url}
+      rel="noreferrer"
       target="_blank"
       className="p-2 bg-[#f8f8f8] dark:bg-[#202020] rounded-lg border dark:border-[#303030]"
     >
       <div className="text-xs text-[#454545] dark:text-[#929292] flex items-center gap-2 mb-2">
         <span className="w-[14px] h-[14px]">
           <img
+            alt={data.domain}
             src={CONFIG.GOOGLE_ICON_IMAGE_LOAD_API_64(data.domain)}
             loading="lazy"
           />
