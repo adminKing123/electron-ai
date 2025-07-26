@@ -13,6 +13,9 @@ const CONFIG = {
   PROMPT_ACTION_TYPES: {
     EDIT: "EDIT",
   },
+
+  GOOGLE_ICON_IMAGE_LOAD_API_64: (domain) =>
+    `https://www.google.com/s2/favicons?sz=64&domain=${domain}`,
 };
 
 export default CONFIG;

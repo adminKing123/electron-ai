@@ -3,6 +3,7 @@ import useMessageStore, {
 } from "../../store/useMessagesStore";
 import { GettingStartedLoader } from "../Loaders";
 import MarkdownRenderer from "../MarkdownRenderer";
+import AnswerSources from "./AnswerComponents/AnswerSources";
 import AnswerSteps from "./AnswerComponents/AnswerSteps";
 
 const Answer = ({ message_id }) => {
@@ -50,6 +51,9 @@ const Answer = ({ message_id }) => {
           </div>
         );
       })}
+      {message?.sources?.length ? (
+        <AnswerSources sources={message?.sources} message_id={message?.id} />
+      ) : null}
     </div>
   );
 };
