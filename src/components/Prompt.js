@@ -24,6 +24,7 @@ const Prompt = ({ chat }) => {
   const navigate = useNavigate();
   const addMessage = useMessageStore((state) => state.addMessage);
   const setMessage = useMessageStore((state) => state.setMessage);
+  const getMessage = useMessageStore((state) => state.getMessage);
   const addChunkInMessageAnswer = useMessageStore(
     (state) => state.addChunkInMessageAnswer
   );
@@ -93,6 +94,7 @@ const Prompt = ({ chat }) => {
     let id = null;
 
     if (action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT) {
+      const oldMessge = getMessage(action.data.message_id);
       id = setMessage(action.data.message_id, {
         prompt,
         answer: [],
@@ -101,6 +103,8 @@ const Prompt = ({ chat }) => {
         model: model,
         google_search,
         generate_image,
+        created_at: oldMessge.created_at,
+        updated_at: new Date(),
       });
     } else {
       id = addMessage({

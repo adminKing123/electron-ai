@@ -5,7 +5,7 @@ import { immer } from "zustand/middleware/immer";
 import usePromptStore from "./usePromptStores";
 
 const useMessageStore = create(
-  immer((set) => ({
+  immer((set, get) => ({
     messages: [],
     data: {},
     setMessages: (newMessages) =>
@@ -35,6 +35,9 @@ const useMessageStore = create(
         };
       });
       return id;
+    },
+    getMessage: (id) => {
+      return get().data[id];
     },
     deleteMessage: (message_id, id) => {
       set((state) => {
