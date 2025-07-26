@@ -24,7 +24,6 @@ const Source = ({ data }) => {
 };
 
 const AnswerSources = ({ sources }) => {
-  console.log(sources);
   return (
     <div className="mt-6">
       <div className="grid grid-cols-4 gap-2">
