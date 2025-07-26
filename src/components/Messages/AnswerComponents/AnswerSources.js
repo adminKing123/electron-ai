@@ -16,7 +16,7 @@ const Source = ({ data }) => {
             loading="lazy"
           />
         </span>
-        <span>{data.from}</span>
+        <span className="truncate">{data.from}</span>
       </div>
       <h2 className="text-xs line-clamp-2 font-semibold text-[#000000] dark:text-[#ffffff]">
         {data.headline}
@@ -28,7 +28,7 @@ const Source = ({ data }) => {
 const AnswerSources = ({ sources }) => {
   return (
     <div className="mt-6">
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
         {sources.map((source, index) => (
           <Source key={index} data={source} />
         ))}
