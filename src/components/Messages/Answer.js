@@ -3,6 +3,7 @@ import useMessageStore, {
 } from "../../store/useMessagesStore";
 import { GettingStartedLoader } from "../Loaders";
 import MarkdownRenderer from "../MarkdownRenderer";
+import AnswerProcess from "./AnswerComponents/AnswerProcess";
 import AnswerSources from "./AnswerComponents/AnswerSources";
 import AnswerSteps from "./AnswerComponents/AnswerSteps";
 
@@ -53,6 +54,9 @@ const Answer = ({ message_id }) => {
       })}
       {message?.sources?.length ? (
         <AnswerSources sources={message?.sources} message_id={message?.id} />
+      ) : null}
+      {message?.steps?.length ? (
+        <AnswerProcess message_id={message_id} steps={message?.steps} />
       ) : null}
     </div>
   );
