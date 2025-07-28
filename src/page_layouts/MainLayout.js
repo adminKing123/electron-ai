@@ -3,9 +3,10 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import useUserStore from "../store/useUserStore";
 import ROUTES from "../router/routes";
+import MainSideLayout from "../components/MainSideLayout";
 
 const MainLayout = () => {
-  const user = useUserStore(state => state.user);
+  const user = useUserStore((state) => state.user);
   if (user)
     return (
       <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex">
@@ -16,6 +17,7 @@ const MainLayout = () => {
             <Outlet />
           </div>
         </div>
+        <MainSideLayout />
       </div>
     );
   return <Navigate to={ROUTES.AUTH} />;

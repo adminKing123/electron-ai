@@ -1,34 +1,23 @@
 import CONFIG from "../../../config";
+import useMainSideLayoutStore from "../../../store/useMainSideLayoutStore";
 
-// const Source = ({ data }) => {
-//   return (
-//     <a
-//       href={data.url}
-//       rel="noreferrer"
-//       target="_blank"
-//       className="p-2 bg-[#f8f8f8] dark:bg-[#202020] rounded-lg border dark:border-[#303030]"
-//     >
-//       <div className="text-xs text-[#454545] dark:text-[#929292] flex items-center gap-2 mb-2">
-//         <span className="w-[14px] h-[14px]">
-// <img
-//   alt={data.domain}
-//   src={CONFIG.GOOGLE_ICON_IMAGE_LOAD_API_64(data.domain)}
-//   loading="lazy"
-// />
-//         </span>
-//         <span className="truncate">{data.from}</span>
-//       </div>
-//       <h2 className="text-xs line-clamp-2 font-semibold text-[#000000] dark:text-[#ffffff]">
-//         {data.headline}
-//       </h2>
-//     </a>
-//   );
-// };
+const AnswerSources = ({ sources, message_id }) => {
+  const setData = useMainSideLayoutStore((state) => state.setData);
 
-const AnswerSources = ({ sources }) => {
+  const handleClick = () => {
+    setData({
+      type: "sources",
+      message_id,
+      sources,
+    });
+  };
+
   return (
     <div className="mt-3">
-      <button className="px-3 py-2 border border-[#c4c4c4] dark:border-[#616161] w-fit rounded-full flex items-center gap-1">
+      <button
+        onClick={handleClick}
+        className="px-3 py-2 border border-[#c4c4c4] dark:border-[#616161] w-fit rounded-full flex items-center gap-1"
+      >
         <div className="flex flex-row-reverse">
           {Array.from(new Map(sources.map((s) => [s.domain, s])).values())
             .slice(0, 3)
