@@ -4,14 +4,24 @@
   }
 }
 
-.skeleton {
-  --base-color: #252525;
-  --highlight-color: #383838;
-  --animation-duration: 1.5s;
-  --animation-direction: normal;
-  --pseudo-element-display: block; /* Enable animation */
+:root {
+  --skeleton-bg-color: #f8f8f8;
+  --skeleton-highlight-color: #e4e4e4;
+  --skeleton-animation-duration: 1.5s;
+  --skeleton-animation-direction: normal;
+  --skeleton-pseudo-element-display: block;
+}
 
-  background-color: var(--base-color);
+.dark {
+  --skeleton-bg-color: #252525;
+  --skeleton-highlight-color: #383838;
+  --skeleton-animation-duration: 1.5s;
+  --skeleton-animation-direction: normal;
+  --skeleton-pseudo-element-display: block;
+}
+
+.skeleton {
+  background-color: var(--skeleton-bg-color);
 
   display: inline-flex;
   line-height: 1;
@@ -23,7 +33,7 @@
 
 .skeleton::after {
   content: " ";
-  display: var(--pseudo-element-display);
+  display: var(--skeleton-pseudo-element-display);
   position: absolute;
   top: 0;
   left: 0;
@@ -34,22 +44,22 @@
     --custom-highlight-background,
     linear-gradient(
       90deg,
-      var(--base-color) 0%,
-      var(--highlight-color) 50%,
-      var(--base-color) 100%
+      var(--skeleton-bg-color) 0%,
+      var(--skeleton-highlight-color) 50%,
+      var(--skeleton-bg-color) 100%
     )
   );
   transform: translateX(-100%);
 
   animation-name: skeleton;
-  animation-direction: var(--animation-direction);
-  animation-duration: var(--animation-duration);
+  animation-direction: var(--skeleton-animation-direction);
+  animation-duration: var(--skeleton-animation-duration);
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 @media (prefers-reduced-motion) {
   .skeleton {
-    --pseudo-element-display: none; /* Disable animation */
+    --skeleton-pseudo-element-display: none; /* Disable animation */
   }
 }

@@ -34,7 +34,10 @@ const AnswerSources = ({ sources }) => {
             .slice(0, 3)
             .slice(0, 3)
             .map((source, index) => (
-              <div className="w-4 h-4 overflow-hidden rounded-full border-2 border-[#ffffff] dark:border-[#212121] -ml-1">
+              <div
+                key={index}
+                className="w-4 h-4 overflow-hidden rounded-full border-2 border-[#ffffff] dark:border-[#212121] -ml-1"
+              >
                 <img
                   alt={source.domain}
                   src={CONFIG.GOOGLE_ICON_IMAGE_LOAD_API_64(source.domain)}

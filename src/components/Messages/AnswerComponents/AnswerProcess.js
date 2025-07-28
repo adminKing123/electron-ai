@@ -10,7 +10,7 @@ const AnswerProcess = ({ message_id, steps }) => {
   if (lastStep?.type === "fetch_source_information")
     return (
       <div className="mt-3">
-        <button className="skeleton w-[96px] h-[34px] rounded-full"></button>
+        <button className="skeleton w-[108px] h-[34px] rounded-full"></button>
       </div>
     );
 };
