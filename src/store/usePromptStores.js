@@ -20,9 +20,9 @@ export const useWebSearchStore = create((set) => ({
   setIsWebSearchDisabled: (value) => set({ isWebSearchDisabled: value }),
 }));
 
-export const useMutliModelGeneration = create((set) => ({
-  isMultiModelGeneration: false,
-  setIsMultiModelGeneration: (value) => set({ isMultiModelGeneration: value }),
+export const useDeepResearchStore = create((set) => ({
+  isDeepResearch: false,
+  setIsDeepResearch: (value) => set({ isDeepResearch: value }),
 }));
 
 export default usePromptStore;

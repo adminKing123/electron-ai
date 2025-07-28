@@ -7,6 +7,7 @@ import { scrollToMessage, scrollToMessageTop } from "../utils/helpers";
 import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
 import usePromptStore, {
+  useDeepResearchStore,
   useModelStore,
   useWebSearchStore,
 } from "../store/usePromptStores";
@@ -133,6 +134,7 @@ const Prompt = ({ chat }) => {
         prompt,
         google_search,
         model_id: model?.id,
+        deep_research: useDeepResearchStore.getState().isDeepResearch,
       },
       onProgress,
       onStart,

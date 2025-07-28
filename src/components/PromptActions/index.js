@@ -1,4 +1,4 @@
-import TryMultiModelButton from "./TryMultiModelButton";
+import DeepResearchButton from "./DeepResearchButton";
 import SelectAIModel from "./SelectAIModel";
 import SendButton from "./SendButton";
 import WebSearchOption from "./WebSearchOption";
@@ -9,7 +9,7 @@ const PromptActions = ({ handleSend }) => {
       <div className="flex items-center gap-2">
         <SelectAIModel />
         <WebSearchOption />
-        <TryMultiModelButton />
+        <DeepResearchButton />
       </div>
       <div>
         <SendButton onClick={handleSend} />

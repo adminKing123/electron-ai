@@ -39,6 +39,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
         model_id: data?.model_id ?? null,
         google_search: data?.google_search ?? false,
         chat_uid: data?.chat_id ?? null,
+        deep_research: data?.deep_research ?? false,
       }),
       signal: controller.signal,
     });
