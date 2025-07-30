@@ -40,7 +40,7 @@ function SourcesSideLayout() {
 
   return (
     <div className="fixed lg:static top-0 left-0 w-screen lg:w-[380px] lg:flex-shrink-0 h-screen z-[100] lg:z-auto p-5 lg:p-0 flex justify-center lg:justify-normal items-center lg:items-stretch bg-[#2f2f2fa3] dark:bg-[#00000076] lg:bg-transparent">
-      <div className="rounded-xl lg:rounded-none min-w-[280px] lg:min-w-0 max-w-[640px] lg:max-w-none w-full h-auto lg:h-full bg-[#ffffff] dark:bg-[#212121] shadow-xl lg:shadow-none border border-[#f2f2f2] dark:border-[#303030] flex flex-col">
+      <div className="rounded-xl lg:rounded-none min-w-[280px] lg:min-w-0 max-w-[640px] lg:max-w-none w-full h-auto lg:h-full bg-[#ffffff] dark:bg-[#212121] shadow-xl lg:shadow-none border lg:border-0 lg:border-l border-[#f2f2f2] dark:border-[#303030] flex flex-col">
         <div className="px-4 header-shadow mb-[1px] flex items-center justify-between h-14">
           <h2 className="text-lg font-semibold text-[#000000] dark:text-[#ffffff]">
             Sources
