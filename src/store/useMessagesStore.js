@@ -71,11 +71,12 @@ const useMessageStore = create(
           state.data[id].steps = state.data[id].steps.concat(eventdata);
         } else if (eventtype === "source") {
           state.data[id].sources = state.data[id].sources.concat(eventdata);
-          useMainSideLayoutStore.getState().setData({
-            type: "sources",
-            message_id: id,
-            sources: state.data[id].sources,
-          });
+          if (window.innerWidth >= 1024)
+            useMainSideLayoutStore.getState().setData({
+              type: "sources",
+              message_id: id,
+              sources: state.data[id].sources,
+            });
         } else {
           state.data[id].answer[index] = {
             id: eventid,
