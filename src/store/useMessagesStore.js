@@ -45,6 +45,9 @@ const useMessageStore = create(
         state.messages = state.messages.filter((msg) => msg !== message_id);
         delete state.data[message_id];
       });
+      const mainSideLayoutStoreData = useMainSideLayoutStore.getState().data;
+      if (mainSideLayoutStoreData?.message_id === message_id)
+        useMainSideLayoutStore.getState().setData(null);
       deleteMessageAPI({
         message_id,
         chat_id: id,
@@ -68,6 +71,11 @@ const useMessageStore = create(
           state.data[id].steps = state.data[id].steps.concat(eventdata);
         } else if (eventtype === "source") {
           state.data[id].sources = state.data[id].sources.concat(eventdata);
+          useMainSideLayoutStore.getState().setData({
+            type: "sources",
+            message_id: id,
+            sources: state.data[id].sources,
+          });
         } else {
           state.data[id].answer[index] = {
             id: eventid,
