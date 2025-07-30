@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { deleteMessageAPI } from "../apis/messages/queryFunctions";
 import { immer } from "zustand/middleware/immer";
 import usePromptStore from "./usePromptStores";
+import useMainSideLayoutStore from "./useMainSideLayoutStore";
 
 const useMessageStore = create(
   immer((set, get) => ({
@@ -83,6 +84,7 @@ const useMessageStore = create(
       }));
       useProcessController.getState().setProcess(null, null, true);
       usePromptStore.getState().setAction({});
+      useMainSideLayoutStore.getState().setData(null);
     },
   }))
 );
