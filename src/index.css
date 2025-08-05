@@ -8,6 +8,10 @@
 
   --selection-bg: #eafcff;
   --selection-text: #31b8c6;
+
+  /* framer motion variables */
+  --fm-ssl-width-from: 100vw;
+  --fm-ssl-width-to: 100vw;
 }
 
 .dark {
@@ -98,5 +102,13 @@ body {
   #sidebar,
   #prompt-box {
     display: none !important;
+  }
+}
+
+/* framer motion variables */
+@media (min-width: 1024px) {
+  :root {
+    --fm-ssl-width-from: 0;
+    --fm-ssl-width-to: 380px;
   }
 }
