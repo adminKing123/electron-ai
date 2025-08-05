@@ -11,11 +11,13 @@ const MainSideLayout = () => {
 
   const Component = COMPONENTS?.[data?.type];
 
-  return (
-    <AnimatePresence>
-      {Component ? <Component data={data} /> : null}
-    </AnimatePresence>
-  );
+  // return (
+  //   <AnimatePresence>
+  //     {Component ? <Component data={data} /> : null}
+  //   </AnimatePresence>
+  // );
+
+  return Component ? <Component data={data} /> : null;
 };
 
 export default MainSideLayout;

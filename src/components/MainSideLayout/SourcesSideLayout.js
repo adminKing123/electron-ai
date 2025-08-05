@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from "framer-motion";
 import CONFIG from "../../config";
 import useMainSideLayoutStore from "../../store/useMainSideLayoutStore";
 import { IoClose } from "react-icons/io5";
@@ -38,9 +39,32 @@ function SourcesSideLayout() {
     setData(null);
   };
 
+  const sidebarVariants = {
+    hidden: { width: 0, opacity: 0 },
+    visible: { width: 380, opacity: 1 },
+  };
+
+  const popupVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
   return (
-    <div className="fixed lg:static top-0 left-0 w-screen h-[100dvh] lg:w-[380px] lg:flex-shrink-0 z-[100] lg:z-auto p-5 lg:p-0 flex justify-center lg:justify-normal items-center lg:items-stretch bg-[#2f2f2fa3] dark:bg-[#00000076] lg:bg-transparent">
-      <div className="rounded-xl lg:rounded-none min-w-[280px] lg:min-w-0 max-w-[640px] lg:max-w-none w-full h-auto lg:h-full bg-[#ffffff] dark:bg-[#212121] shadow-xl lg:shadow-none border lg:border-0 lg:border-l border-[#f2f2f2] dark:border-[#303030] flex flex-col">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      variants={window.innerWidth >= 1024 ? sidebarVariants : popupVariants}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="fixed lg:static top-0 left-0 w-screen h-[100dvh] lg:w-[380px] lg:flex-shrink-0 z-[100] lg:z-auto p-5 lg:p-0 flex justify-center lg:justify-normal items-center lg:items-stretch bg-[#2f2f2fa3] dark:bg-[#00000076] lg:bg-transparent"
+    >
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="rounded-xl lg:rounded-none min-w-[280px] lg:min-w-[380px] max-w-[640px] lg:max-w-none w-full h-auto lg:h-full bg-[#ffffff] dark:bg-[#212121] shadow-xl lg:shadow-none border lg:border-0 lg:border-l border-[#f2f2f2] dark:border-[#303030] flex flex-col"
+      >
         <div className="px-4 header-shadow mb-[1px] flex items-center justify-between h-14">
           <h2 className="text-lg font-semibold text-[#000000] dark:text-[#ffffff]">
             Sources
@@ -57,8 +81,8 @@ function SourcesSideLayout() {
             <Source key={index} data={source} />
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
