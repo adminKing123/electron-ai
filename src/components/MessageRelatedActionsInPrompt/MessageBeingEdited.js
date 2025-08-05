@@ -19,12 +19,12 @@ const MessageBeingEdited = ({ action }) => {
   return (
     <div
       onClick={handleClick}
-      className="flex items-center gap-2 font-sans p-2 mb-2 text-black dark:text-white bg-[#f0f0f0] dark:bg-[#444444] rounded-xl cursor-pointer"
+      className="flex items-center gap-2 font-sans px-5 py-2 mx-1 mt-1 text-black dark:text-white bg-[#f0f0f0] dark:bg-[#444444] rounded-t-[18px] rounded-b-lg cursor-pointer"
     >
       <div className="line-clamp-2 text-[11px] flex-grow">
         {action.data.prompt}
       </div>
-      <button onClick={handleCancel} className="p-[6px] rounded-md">
+      <button onClick={handleCancel} className="p-[6px] hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg">
         <IoClose />
       </button>
     </div>
