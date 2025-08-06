@@ -65,8 +65,8 @@ function SourcesSideLayout() {
             <IoClose className="text-[#8F8F8F] dark:text-white w-[24px] h-[24px]" />
           </button>
         </div>
-        <div className="flex flex-col gap-2 p-2 h-[80dvh] lg:max-h-none lg:h-[calc(100%-57px)] overflow-y-auto">
-          {data?.sources.map((source, index) => (
+        <div className="flex flex-col gap-2 p-2 max-h-[80dvh] lg:max-h-none lg:h-[calc(100%-57px)] overflow-y-auto">
+          {data?.payload?.sources.map((source, index) => (
             <Source key={index} data={source} />
           ))}
         </div>

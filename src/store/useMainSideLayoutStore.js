@@ -1,8 +1,13 @@
 import { create } from "zustand";
 
 const useMainSideLayoutStore = create((set, get) => ({
-  data: null,
-  setData: (data) => set({ data }),
+  data: {
+    type: null,
+  },
+  setData: (payload) => {
+    if (payload) set({ data: payload });
+    else set({ data: { ...get().data, type: null } });
+  },
 }));
 
 export default useMainSideLayoutStore;

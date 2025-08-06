@@ -7,8 +7,7 @@ const AnswerSources = ({ sources, message_id }) => {
   const handleClick = () => {
     setData({
       type: "sources",
-      message_id,
-      sources,
+      payload: { message_id, sources },
     });
   };
 
