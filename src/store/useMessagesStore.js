@@ -74,8 +74,10 @@ const useMessageStore = create(
           if (window.innerWidth >= 1024)
             useMainSideLayoutStore.getState().setData({
               type: "sources",
-              message_id: id,
-              sources: state.data[id].sources,
+              payload: {
+                message_id: id,
+                sources: state.data[id].sources,
+              },
             });
         } else {
           state.data[id].answer[index] = {
