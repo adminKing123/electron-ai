@@ -14,15 +14,6 @@ const MarkdownRenderer = ({ content }) => {
         rehypePlugins={[rehypeKatex]}
         components={{
           img: ({ node, ...props }) => <MdImage {...props} />,
-          ul: ({ children }) => (
-            <ul className="revert-list-style">{children}</ul>
-          ),
-          ol: ({ children }) => (
-            <ol className="revert-list-style">{children}</ol>
-          ),
-          li: ({ children }) => (
-            <li className="revert-list-style">{children}</li>
-          ),
           code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "");
             const lang = match?.[1];

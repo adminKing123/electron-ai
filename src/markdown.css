@@ -1238,6 +1238,12 @@
   overflow: auto;
 }
 
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body li {
+  list-style: revert;
+}
+
 /* Token styles using CSS variables */
 .token.comment,
 .token.prolog,
