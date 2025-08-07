@@ -34,7 +34,7 @@ const useChatsStore = create((set, get) => ({
         chatToSummarize.summarization_data.prompt_to_summerize_title,
     })
       .then((response) => {
-        summerizedTitle = response.summary_title;
+        summerizedTitle = response.summarized_title;
         get().updateChat(chatToSummarize.id, {
           title: summerizedTitle,
           is_new: false,
