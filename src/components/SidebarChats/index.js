@@ -30,7 +30,7 @@ const SidebarChatButton = ({ chat, ...props }) => {
       <span className="truncate max-w-[200px] py-[7px] flex-grow">
         {chat.title}
       </span>
-      <SidebarChatMenu />
+      <SidebarChatMenu chat={chat} />
     </NavLink>
   );
 };
