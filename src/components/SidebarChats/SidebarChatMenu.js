@@ -5,7 +5,12 @@ import { FiEdit2 } from "react-icons/fi";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import DropdownMenuButton from "../Dropdown/DropdownMenuButton";
 
-const SidebarChatMenu = () => {
+const SidebarChatMenu = ({ chat }) => {
+  const handleClick = (e) => {
+    e.stopPropagation();
+    console.log("Menu item clicked", chat);
+  };
+
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
@@ -22,10 +27,19 @@ const SidebarChatMenu = () => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content className="text-white min-w-[120px] bg-[#353535] rounded-2xl p-[6px] shadow-lg z-50">
-          <DropdownMenuButton icon={PiShareBold} label="Share" />
-          <DropdownMenuButton icon={FiEdit2} label="Rename" />
+          <DropdownMenuButton
+            onClick={handleClick}
+            icon={PiShareBold}
+            label="Share"
+          />
+          <DropdownMenuButton
+            onClick={handleClick}
+            icon={FiEdit2}
+            label="Rename"
+          />
           <DropdownMenu.Separator className="h-px mx-2 bg-[#535353] my-1" />
           <DropdownMenuButton
+            onClick={handleClick}
             icon={AiOutlineDelete}
             label="Delete"
             className="text-red-400"
