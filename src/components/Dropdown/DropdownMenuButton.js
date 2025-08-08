@@ -7,7 +7,7 @@ export const DropdownMenuButton = ({
   ...props
 }) => (
   <DropdownMenu.Item
-    className={`px-[10px] py-2 text-sm cursor-pointer flex items-center gap-2 outline-none hover:bg-[#454545] rounded-[12px] ${className}`}
+    className={`px-[10px] py-2 text-sm cursor-pointer flex items-center gap-2 outline-none hover:bg-[#F5F5F5] dark:hover:bg-[#454545] rounded-[12px] ${className}`}
     {...props}
   >
     <Icon />

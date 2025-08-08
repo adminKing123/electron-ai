@@ -26,7 +26,7 @@ const SidebarChatMenu = ({ chat }) => {
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="text-white min-w-[120px] bg-[#353535] rounded-2xl p-[6px] shadow-lg z-50">
+        <DropdownMenu.Content className="text-black dark:text-white min-w-[120px] bg-[#ffffff] dark:bg-[#353535] border border-[#E1E1E1] dark:border-[#2F2F2F] rounded-2xl p-[6px] shadow-lg z-50">
           <DropdownMenuButton
             onClick={handleClick}
             icon={PiShareBold}
@@ -37,7 +37,7 @@ const SidebarChatMenu = ({ chat }) => {
             icon={FiEdit2}
             label="Rename"
           />
-          <DropdownMenu.Separator className="h-px mx-2 bg-[#535353] my-1" />
+          <DropdownMenu.Separator className="h-px mx-2 bg-[#E6E6E6] dark:bg-[#ffffff26] my-1" />
           <DropdownMenuButton
             onClick={handleClick}
             icon={AiOutlineDelete}

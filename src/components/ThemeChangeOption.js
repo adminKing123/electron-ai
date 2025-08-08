@@ -34,27 +34,25 @@ const ThemeChangeOption = () => {
   };
 
   return (
-    <li>
-      <div className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8">
-        <div className="flex-shrink-0">{Icon}</div>
-        <div className="flex-grow flex items-center justify-between">
-          <div>Theme</div>
-          <div className="flex items-center gap-2">
-            <div className="w-[14px] h-[14px]">
-              <button onClick={handlePrev}>
-                <FaAngleLeft />
-              </button>
-            </div>
-            <div className="capitalize">{theme}</div>
-            <div className="w-[14px] h-[14px]">
-              <button onClick={handleNext}>
-                <FaAngleRight />
-              </button>
-            </div>
+    <div className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8">
+      <div className="flex-shrink-0">{Icon}</div>
+      <div className="flex-grow flex items-center justify-between">
+        <div>Theme</div>
+        <div className="flex items-center gap-2">
+          <div className="w-[14px] h-[14px]">
+            <button onClick={handlePrev}>
+              <FaAngleLeft />
+            </button>
+          </div>
+          <div className="capitalize">{theme}</div>
+          <div className="w-[14px] h-[14px]">
+            <button onClick={handleNext}>
+              <FaAngleRight />
+            </button>
           </div>
         </div>
       </div>
-    </li>
+    </div>
   );
 };
 
