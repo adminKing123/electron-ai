@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   createChatAPI,
+  deleteChatAPI,
   summariseChatTitleAPI,
 } from "../apis/chats/queryFunctions";
 
@@ -16,10 +17,12 @@ const useChatsStore = create((set, get) => ({
       chats: [newChat, ...state.chats],
     })),
 
-  deleteChat: (id) =>
+  deleteChat: (id) => {
     set((state) => ({
       chats: state.chats.filter((chat) => chat.id !== id),
-    })),
+    }));
+    deleteChatAPI(id);
+  },
   updateChat: (id, updatedData) =>
     set((state) => ({
       chats: state.chats.map((chat) =>

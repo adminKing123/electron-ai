@@ -8,6 +8,7 @@ import {
   limit,
   startAfter,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import api from "..";
 import { db } from "../../firebase";
@@ -92,4 +93,13 @@ export const getChatAPI = async (chat) => {
     updated_at: data.updated_at?.toDate?.(),
     created_at: data.created_at?.toDate?.(),
   };
+};
+
+export const deleteChatAPI = async (chatId) => {
+  const user = useUserStore.getState().user;
+
+  const chatDocRef = doc(db, "users", user.uid, "chats", chatId);
+  await deleteDoc(chatDocRef);
+
+  return { id: chatId, deleted: true };
 };
