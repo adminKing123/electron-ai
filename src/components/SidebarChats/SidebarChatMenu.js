@@ -4,11 +4,22 @@ import { PiShareBold } from "react-icons/pi";
 import { FiEdit2 } from "react-icons/fi";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import DropdownMenuButton from "../Dropdown/DropdownMenuButton";
+import useMainModalStore from "../../store/useMainModalStore";
 
 const SidebarChatMenu = ({ chat }) => {
+  const setData = useMainModalStore((state) => state.setData);
+
   const handleClick = (e) => {
     e.stopPropagation();
     console.log("Menu item clicked", chat);
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    setData({
+      type: "delete_chat",
+      payload: { chat },
+    });
   };
 
   return (
@@ -39,7 +50,7 @@ const SidebarChatMenu = ({ chat }) => {
           />
           <DropdownMenu.Separator className="h-px mx-2 bg-[#E6E6E6] dark:bg-[#ffffff26] my-1" />
           <DropdownMenuButton
-            onClick={handleClick}
+            onClick={handleDelete}
             icon={AiOutlineDelete}
             label="Delete"
             className="text-red-400"

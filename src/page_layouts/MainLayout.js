@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import useUserStore from "../store/useUserStore";
 import ROUTES from "../router/routes";
 import MainSideLayout from "../components/MainSideLayout";
+import MainModalLayout from "../components/MainModalLayout";
 
 const MainLayout = () => {
   const user = useUserStore((state) => state.user);
@@ -18,6 +19,7 @@ const MainLayout = () => {
           </div>
         </div>
         <MainSideLayout />
+        <MainModalLayout />
       </div>
     );
   return <Navigate to={ROUTES.AUTH} />;
