@@ -8,7 +8,6 @@ import {
   limit,
   startAfter,
   getDoc,
-  deleteDoc,
 } from "firebase/firestore";
 import api from "..";
 import { db } from "../../firebase";
