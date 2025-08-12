@@ -97,9 +97,10 @@ export const getChatAPI = async (chat) => {
 
 export const deleteChatAPI = async (chatId) => {
   const user = useUserStore.getState().user;
-
-  const chatDocRef = doc(db, "users", user.uid, "chats", chatId);
-  await deleteDoc(chatDocRef);
-
-  return { id: chatId, deleted: true };
+  const response = await api({
+    method: "DELETE",
+    url: ENDPOINTS.DELETE_CHAT(user.uid, chatId),
+    data: {},
+  });
+  return response.data;
 };

@@ -7,6 +7,7 @@ const ENDPOINTS = {
   GET_GENERATE_URL: function () {
     return `${CONFIG.API_BASE_URL}/generate`;
   },
+  DELETE_CHAT: (userId, chatId) => `/delete_chat/${userId}/${chatId}`,
 };
 
 export default ENDPOINTS;
