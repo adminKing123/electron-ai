@@ -4,17 +4,22 @@ import useMainModalStore from "../../store/useMainModalStore";
 import { useNavigate, useParams } from "react-router-dom";
 import useChatsStore from "../../store/useChatsStore";
 import ROUTES from "../../router/routes";
+import useMessageStore from "../../store/useMessagesStore";
 
 const DeleteChatModal = ({ data }) => {
   const chat_id = useParams()?.id;
   const deleteChat = useChatsStore((state) => state.deleteChat);
   const setData = useMainModalStore((state) => state.setData);
+  const resetMessages = useMessageStore((state) => state.resetMessages);
   const navigate = useNavigate();
 
   const handleDeleteChat = () => {
     toggleSideLayout();
     deleteChat(data?.payload?.chat?.id);
-    if (chat_id === data?.payload?.chat?.id) navigate(ROUTES.INDEX);
+    if (chat_id === data?.payload?.chat?.id) {
+      resetMessages();
+      navigate(ROUTES.INDEX);
+    }
   };
 
   const toggleSideLayout = () => {
