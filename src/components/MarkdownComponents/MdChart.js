@@ -8,19 +8,21 @@ const MdChart = ({ children }) => {
   const chartData = validate_chart_data(children);
   if (chartData)
     return (
-      <Chart
-        type={chartData.meta_data.type}
-        data={chartData.data}
-        options={{
-          responsive: true,
-          plugins: {
-            title: {
-              display: true,
-              text: chartData.meta_data.title,
+      <div>
+        <Chart
+          type={chartData.meta_data.type}
+          data={chartData.data}
+          options={{
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: chartData.meta_data.title,
+              },
             },
-          },
-        }}
-      />
+          }}
+        />
+      </div>
     );
   return <pre>{children}</pre>;
 };

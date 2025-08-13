@@ -110,10 +110,16 @@ export const copyAnswer = async (message, callback) => {
 
 export const validate_chart_data = (data) => {
   if (typeof data !== "string") return null;
-  const trimmedData = data?.trim();
-  return typeof trimmedData === "string" &&
-    trimmedData.startsWith(":{") &&
-    trimmedData.endsWith("}:")
-    ? JSON.parse(trimmedData.slice(1, trimmedData.length - 1))
-    : null;
+  let trimmedData = data.trim();
+  const fenceMatch = trimmedData.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fenceMatch) {
+    trimmedData = fenceMatch[1].trim();
+  }
+  try {
+    const parsed = JSON.parse(trimmedData);
+    return parsed && parsed.meta_data && parsed.data ? parsed : null;
+  } catch (err) {
+    console.error("Invalid chart JSON:", err);
+    return null;
+  }
 };

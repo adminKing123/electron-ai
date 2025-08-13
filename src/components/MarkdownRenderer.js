@@ -34,8 +34,8 @@ const MarkdownRenderer = ({ content }) => {
   return (
     <div className="markdown-body">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[remarkRaw, rehypeKatex]}
+        remarkPlugins={[remarkGfm, remarkMath]}
         components={components}
       >
         {content}
