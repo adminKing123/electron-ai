@@ -9,10 +9,10 @@ import MdCode from "./MarkdownComponents/MdCode";
 import MdImage from "./MarkdownComponents/MdImage";
 import MdChart from "./MarkdownComponents/MdChart";
 
-const MarkdownRenderer = ({ content }) => {
+const MarkdownRenderer = ({ message_id, content }) => {
   const components = useMemo(
     () => ({
-      chartdata: ({ node, ...props }) => <MdChart {...props} />,
+      chartdata: ({ node, ...props }) => <MdChart message_id={message_id} {...props} />,
       img: ({ node, ...props }) => <MdImage {...props} />,
       code({ node, inline, className, children, ...props }) {
         const match = /language-(\w+)/.exec(className || "");
@@ -29,7 +29,7 @@ const MarkdownRenderer = ({ content }) => {
         );
       },
     }),
-    []
+    [message_id]
   );
   return (
     <div className="markdown-body">

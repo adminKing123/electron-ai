@@ -30,7 +30,7 @@ const Answer = ({ message_id }) => {
       ) : null}
       {message?.answer?.map((part) => {
         if (part.type === "text") {
-          return <MarkdownRenderer key={part.id} content={part.data} />;
+          return <MarkdownRenderer key={part.id} message_id={message?.id} content={part.data} />;
         }
         return (
           <div

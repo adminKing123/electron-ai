@@ -117,9 +117,19 @@ export const validate_chart_data = (data) => {
   }
   try {
     const parsed = JSON.parse(trimmedData);
-    return parsed && parsed.meta_data && parsed.data ? parsed : null;
+    return parsed && parsed.meta_data && parsed.data
+      ? {
+          valid: true,
+          chart_data: parsed,
+        }
+      : {
+          valid: false,
+          chart_data: data,
+        };
   } catch (err) {
-    console.error("Invalid chart JSON:", err);
-    return null;
+    return {
+      valid: false,
+      chart_data: data,
+    };
   }
 };
