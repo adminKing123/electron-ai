@@ -1,29 +1,8 @@
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import { Chart } from "react-chartjs-2";
+import { Chart as ChartJS, registerables } from "chart.js";
 import { validate_chart_data } from "../../utils/helpers";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(...registerables);
 
 const MdChart = ({ children }) => {
   const chartData = validate_chart_data(children);
