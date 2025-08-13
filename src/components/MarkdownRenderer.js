@@ -1,15 +1,18 @@
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkRaw from "rehype-raw";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import MdCode from "./MarkdownComponents/MdCode";
 import MdImage from "./MarkdownComponents/MdImage";
+import MdChart from "./MarkdownComponents/MdChart";
 
 const MarkdownRenderer = ({ content }) => {
   const components = useMemo(
     () => ({
+      chartdata: ({ node, ...props }) => <MdChart {...props} />,
       img: ({ node, ...props }) => <MdImage {...props} />,
       code({ node, inline, className, children, ...props }) {
         const match = /language-(\w+)/.exec(className || "");
@@ -32,7 +35,7 @@ const MarkdownRenderer = ({ content }) => {
     <div className="markdown-body">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={[remarkRaw, rehypeKatex]}
         components={components}
       >
         {content}

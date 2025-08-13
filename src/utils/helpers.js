@@ -107,3 +107,14 @@ export const copyAnswer = async (message, callback) => {
     }
   }
 };
+
+export const validate_chart_data = (data) => {
+  if (typeof data !== "string") return null;
+  const trimmedData = data?.trim();
+  console.log(trimmedData.slice(1, trimmedData.length - 1));
+  return typeof trimmedData === "string" &&
+    trimmedData.startsWith(":{") &&
+    trimmedData.endsWith("}:")
+    ? JSON.parse(trimmedData.slice(1, trimmedData.length - 1))
+    : null;
+};
