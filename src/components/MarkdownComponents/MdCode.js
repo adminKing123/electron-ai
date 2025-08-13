@@ -26,9 +26,6 @@ const MdCode = ({ lang = "", children, ...props }) => {
         >
           {String(children).replace(/\n$/, "")}
         </SyntaxHighlighter>
-        {/* <pre className="!m-0">
-          <code className="text-nowrap">{children}</code>
-        </pre> */}
       </div>
     </div>
   );

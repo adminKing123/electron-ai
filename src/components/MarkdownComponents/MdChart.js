@@ -31,7 +31,7 @@ const ChartContainer = ({
    }`;
 
   return (
-    <div className="border border-[#E4E4E4] dark:border-[#454545] rounded-2xl overflow-hidden">
+    <div className="border border-[#E4E4E4] dark:border-[#454545] rounded-2xl overflow-hidden my-2">
       <div className="px-[18px] py-2 bg-[#f1f1f1] dark:bg-[#292929] rounded-t-2xl flex justify-between items-center">
         <div className="font-bold text-black dark:text-white text-sm truncate">
           {isValid ? chartData.meta_data.title : "Chart Data"}
@@ -63,7 +63,7 @@ const ChartContainer = ({
           />
         </div>
       ) : state === STATES.DATA ? (
-        <div className="p-3">
+        <div className="p-3 max-h-[400px] overflow-y-auto">
           {isValid ? (
             <pre>{JSON.stringify(chartData.data, null, 2)}</pre>
           ) : (
