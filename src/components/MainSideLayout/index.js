@@ -1,4 +1,5 @@
 import useMainSideLayoutStore from "../../store/useMainSideLayoutStore";
+import EditorSideLayout from "./EditorSideLayout";
 import SourcesSideLayout from "./SourcesSideLayout";
 import { AnimatePresence } from "framer-motion";
 
@@ -7,6 +8,7 @@ const MainSideLayout = () => {
 
   const COMPONENTS = {
     sources: SourcesSideLayout,
+    editor: EditorSideLayout,
   };
 
   const Component = COMPONENTS?.[data?.type];

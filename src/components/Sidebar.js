@@ -6,9 +6,14 @@ import { IoClose } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
 import SidebarOptions from "./SidebarOptions";
 import SidebarChats from "./SidebarChats";
+import useMainSideLayoutStore from "../store/useMainSideLayoutStore";
 
 const SidebarOverlay = ({ open, toggleSidebar }) => {
-  const shouldShow = window.innerWidth <= 768 && open;
+  const mainSidebarLayoutType = useMainSideLayoutStore(
+    (state) => state.data?.type
+  );
+  const shouldShow =
+    (window.innerWidth <= 768 || mainSidebarLayoutType === "editor") && open;
 
   return (
     <AnimatePresence>
@@ -44,6 +49,9 @@ const SidebarHeader = ({ toggleSidebar }) => {
 };
 
 const Sidebar = () => {
+  const mainSidebarLayoutType = useMainSideLayoutStore(
+    (state) => state.data?.type
+  );
   const open = useSidebarOpenState((state) => state.open);
   const setOpen = useSidebarOpenState((state) => state.setOpen);
 
@@ -53,21 +61,22 @@ const Sidebar = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setOpen(window.innerWidth > 768);
+      setOpen(window.innerWidth > 768 && !mainSidebarLayoutType === "editor");
     };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [setOpen]);
+  }, [setOpen, mainSidebarLayoutType]);
 
   return (
     <>
       <SidebarOverlay open={open} toggleSidebar={toggleSidebar} />
       <div
-        className={`bg-[#F9F9F9] dark:bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-300 absolute top-0 left-0 z-10 md:static ${
-          open ? "w-[260px]" : "w-0"
-        }`}
+        className={`bg-[#F9F9F9] dark:bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-300 top-0 left-0 z-10
+        ${
+          mainSidebarLayoutType === "editor" ? "absolute" : "absolute md:static"
+        } ${open ? "w-[260px]" : "w-0"}`}
         id="sidebar"
       >
         <div className="w-[260px] h-[100dvh] flex flex-col">
