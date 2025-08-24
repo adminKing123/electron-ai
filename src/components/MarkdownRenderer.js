@@ -36,8 +36,8 @@ const MarkdownRenderer = ({ message_id, content }) => {
   return (
     <div className="markdown-body">
       <ReactMarkdown
-        // rehypePlugins={[remarkRaw, rehypeKatex]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={[remarkRaw, rehypeKatex]}
+        // rehypePlugins={[rehypeKatex]}
         remarkPlugins={[remarkGfm, remarkMath]}
         components={components}
       >
