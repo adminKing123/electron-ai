@@ -14,6 +14,8 @@ const CONFIG = {
     EDIT: "EDIT",
   },
 
+  MAX_PROMPT_LENGTH: 10000,
+
   GOOGLE_ICON_IMAGE_LOAD_API_64: (domain) =>
     `https://www.google.com/s2/favicons?sz=64&domain=${domain}`,
 };

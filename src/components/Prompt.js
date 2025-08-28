@@ -20,6 +20,7 @@ import { createMessageAPI } from "../apis/messages/queryFunctions";
 import ScrollToBottomButton from "./PromptActions/ScrollToBottomButton";
 import MessageRelatedActionsInPrompt from "./MessageRelatedActionsInPrompt";
 import CONFIG from "../config";
+import { notifyTextAreaLimitReached } from "../utils/notifier";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
@@ -87,6 +88,10 @@ const Prompt = ({ chat }) => {
     const isPromptSendDisabled =
       process || !prompt.trim() || model === null ? true : false;
 
+    if (prompt.length > CONFIG.MAX_PROMPT_LENGTH) {
+      notifyTextAreaLimitReached();
+      return;
+    }
     if (isPromptSendDisabled) return;
 
     const google_search = isWebSearchDisabled ? false : isWebSearchOn;
