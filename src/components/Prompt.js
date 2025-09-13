@@ -21,6 +21,7 @@ import ScrollToBottomButton from "./PromptActions/ScrollToBottomButton";
 import MessageRelatedActionsInPrompt from "./MessageRelatedActionsInPrompt";
 import CONFIG from "../config";
 import { notifyTextAreaLimitReached } from "../utils/notifier";
+import PromptDraftMaintainer from "./PromptActions/PromptDraftMaintainer";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
@@ -152,6 +153,7 @@ const Prompt = ({ chat }) => {
   return (
     <div className="w-full relative" id="prompt-box">
       <ScrollToBottomButton />
+      <PromptDraftMaintainer chat={chat} />
       {chat.is_new ? <ChatGreetings /> : null}
       <div className="bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
         <MessageRelatedActionsInPrompt />

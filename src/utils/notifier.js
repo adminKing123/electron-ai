@@ -1,6 +1,5 @@
 import { toast } from "react-toastify";
 import { IoClose } from "react-icons/io5";
-import { IoWarningOutline } from "react-icons/io5";
 
 const notifyTextAreaLimitReached = () => {
   toast.error(

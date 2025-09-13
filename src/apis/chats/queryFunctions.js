@@ -43,6 +43,23 @@ export const createChatAPI = async (data) => {
   };
 };
 
+export const saveDraftAPI = async (chat, draftData) => {
+  const user = useUserStore.getState().user;
+
+  const payload = {
+    ...draftData,
+    updated_at: new Date().toISOString(),
+  };
+
+  const docRef = doc(db, "users", user.uid, "drafts", chat.id);
+  await setDoc(docRef, payload);
+
+  return {
+    ...payload,
+    docRef,
+  };
+};
+
 export const getChatsAPI = async (pageParam = null) => {
   const user = useUserStore.getState().user;
   const chatsRef = collection(db, "users", user.uid, "chats");
