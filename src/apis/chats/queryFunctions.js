@@ -8,6 +8,7 @@ import {
   limit,
   startAfter,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import api from "..";
 import { db } from "../../firebase";
@@ -58,6 +59,32 @@ export const saveDraftAPI = async (chat, draftData) => {
     ...payload,
     docRef,
   };
+};
+
+export const removeDraftAPI = async (chat) => {
+  const user = useUserStore.getState().user;
+
+  const docRef = doc(db, "users", user.uid, "drafts", chat.id);
+  await deleteDoc(docRef);
+
+  return { success: true, deletedId: chat.id };
+};
+
+export const getDraftAPI = async (chatId) => {
+  const user = useUserStore.getState().user;
+
+  const docRef = doc(db, "users", user.uid, "drafts", chatId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return {
+      id: docSnap.id,
+      ...docSnap.data(),
+      docRef,
+    };
+  }
+
+  return null;
 };
 
 export const getChatsAPI = async (pageParam = null) => {

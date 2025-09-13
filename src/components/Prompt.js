@@ -22,6 +22,7 @@ import MessageRelatedActionsInPrompt from "./MessageRelatedActionsInPrompt";
 import CONFIG from "../config";
 import { notifyTextAreaLimitReached } from "../utils/notifier";
 import PromptDraftMaintainer from "./PromptActions/PromptDraftMaintainer";
+import { removeDraftAPI } from "../apis/chats/queryFunctions";
 
 const Prompt = ({ chat }) => {
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ const Prompt = ({ chat }) => {
       ...chat,
       summarization_data,
     });
+    removeDraftAPI({ id: CONFIG.NEW_CHAT_DRAFT_ID });
     navigate(ROUTES.GET_CHAT_PAGE_URL(chat.id), {
       state: { chat: { ...chat, is_new: false, shouldAutoFocus: false } },
     });

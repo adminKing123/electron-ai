@@ -5,27 +5,56 @@ import usePromptStore, {
   useWebSearchStore,
 } from "../../store/usePromptStores";
 import debounce from "lodash.debounce";
-import { saveDraftAPI } from "../../apis/chats/queryFunctions";
+import { getDraftAPI, saveDraftAPI } from "../../apis/chats/queryFunctions";
+import CONFIG from "../../config";
+
+let last_fetch_chat_draft = null;
 
 const handlePromptChange = debounce((chat, data) => {
-    if (chat?.is_new) return;
-    else saveDraftAPI(chat, data);
-}, 300);
+  saveDraftAPI(
+    {
+      ...chat,
+      id: chat?.is_new ? CONFIG.NEW_CHAT_DRAFT_ID : chat.id,
+    },
+    data
+  );
+}, CONFIG.DRAFT_SAVE_DEBOUNCE_MS);
 
 function PromptDraftMaintainer({ chat }) {
-  const { prompt } = usePromptStore();
-  const { model } = useModelStore();
-  const { isWebSearchOn } = useWebSearchStore();
-  const { isDeepResearch } = useDeepResearchStore();
+  const { prompt, setPrompt } = usePromptStore();
+  const { model, setModel } = useModelStore();
+  const { isWebSearchOn, setIsWebSearchOn } = useWebSearchStore();
+  const { isDeepResearch, setIsDeepResearch } = useDeepResearchStore();
 
   useEffect(() => {
-    handlePromptChange(chat, {
-      prompt: prompt,
-      model: model,
-      isWebSearchOn: isWebSearchOn,
-      isDeepResearch: isDeepResearch,
-    });
+    if (chat?.id && last_fetch_chat_draft?.id === chat.id) {
+      handlePromptChange(chat, {
+        prompt: prompt,
+        model: model,
+        isWebSearchOn: isWebSearchOn,
+        isDeepResearch: isDeepResearch,
+      });
+    }
   }, [chat, prompt, model, isWebSearchOn, isDeepResearch]);
+
+  useEffect(() => {
+    const getDraft = async () => {
+      const data = await getDraftAPI(
+        chat?.is_new ? CONFIG.NEW_CHAT_DRAFT_ID : chat.id
+      );
+      if (data) {
+        setPrompt(data?.prompt || "");
+        setModel(data?.model || null);
+        setIsWebSearchOn(data?.isWebSearchOn || false);
+        setIsDeepResearch(data?.isDeepResearch || false);
+      }
+      last_fetch_chat_draft = chat;
+    };
+
+    if (chat?.id && last_fetch_chat_draft?.id !== chat.id) {
+      getDraft();
+    }
+  }, [chat, setPrompt, setModel, setIsWebSearchOn, setIsDeepResearch]);
 
   return null;
 }

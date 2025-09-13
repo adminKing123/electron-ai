@@ -11,7 +11,6 @@ const SidebarChatMenu = ({ chat }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    console.log("Menu item clicked", chat);
   };
 
   const handleDelete = (e) => {
