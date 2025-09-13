@@ -38,7 +38,9 @@ function PromptDraftMaintainer({ chat }) {
   }, [chat, prompt, model, isWebSearchOn, isDeepResearch]);
 
   useEffect(() => {
+    const promptInnerBoxEle = document.getElementById("inner-prompt-box");
     const getDraft = async () => {
+      promptInnerBoxEle.classList.add("fd-state");
       const data = await getDraftAPI(
         chat?.is_new ? CONFIG.NEW_CHAT_DRAFT_ID : chat.id
       );
@@ -48,6 +50,7 @@ function PromptDraftMaintainer({ chat }) {
         setIsWebSearchOn(data?.isWebSearchOn || false);
         setIsDeepResearch(data?.isDeepResearch || false);
       }
+      promptInnerBoxEle.classList.remove("fd-state");
       last_fetch_chat_draft = chat;
     };
 

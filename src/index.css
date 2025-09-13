@@ -108,3 +108,10 @@ body {
     --fm-ssl-width-to: 380px;
   }
 }
+
+/* loader for fd state */
+.fd-state {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.6;
+}

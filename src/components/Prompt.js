@@ -157,7 +157,7 @@ const Prompt = ({ chat }) => {
       <ScrollToBottomButton />
       <PromptDraftMaintainer chat={chat} />
       {chat.is_new ? <ChatGreetings /> : null}
-      <div className="bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
+      <div id="inner-prompt-box" className="bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
         <MessageRelatedActionsInPrompt />
         <div className="px-5 py-[15px]">
           <TextArea
