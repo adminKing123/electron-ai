@@ -16,7 +16,11 @@ const AI_ICONS = {
 function AITypeSelector() {
   const setModel = useModelStore((state) => state.setModel);
   const selectedType = useModelStore((state) => state.type);
-  const setIsWebSearchDisabled = useWebSearchStore((state) => state.setIsWebSearchDisabled);
+  const defaultAIType = useModelStore((state) => state.defaultAIType);
+  const setDefaultAIType = useModelStore((state) => state.setDefaultAIType);
+  const setIsWebSearchDisabled = useWebSearchStore(
+    (state) => state.setIsWebSearchDisabled
+  );
   const setType = useModelStore((state) => state.setType);
 
   const SelectedIcon = AI_ICONS[selectedType.id];
@@ -28,10 +32,19 @@ function AITypeSelector() {
     setIsWebSearchDisabled(model_selected.google_search === false);
   };
 
+  const setAsDefault = (e, type) => {
+    e.stopPropagation();
+    setDefaultAIType(type);
+    localStorage.setItem("AI_DEFAULT_TYPE", JSON.stringify(type));
+  };
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button id="ai-type-toggler" className="flex items-center gap-2 px-3 rounded-xl py-2 text-[#4d4d4d] dark:text-[#c0c0c0] text-xs">
+        <button
+          id="ai-type-toggler"
+          className="flex items-center gap-2 px-3 rounded-xl py-2 text-[#4d4d4d] dark:text-[#c0c0c0] text-xs"
+        >
           <span>
             <SelectedIcon />
           </span>
@@ -59,9 +72,18 @@ function AITypeSelector() {
                   <p className="text-[10px] text-nowrap">{type.description}</p>
                 </div>
               </div>
-              {isSelected && (
-                <SiTicktick className="w-3 h-3 fill-[#000000] dark:fill-[#C8C8C8]" />
-              )}
+              {isSelected ? (
+                defaultAIType.id === type.id ? (
+                  <SiTicktick className="w-3 h-3 fill-[#000000] dark:fill-[#C8C8C8]" />
+                ) : (
+                  <button
+                    onClick={(e) => setAsDefault(e, type)}
+                    className="text-[10px]"
+                  >
+                    Make Default
+                  </button>
+                )
+              ) : null}
             </DropdownMenu.Item>
           );
         })}

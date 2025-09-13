@@ -15,6 +15,9 @@ export const useModelStore = create((set) => ({
 
   type: CONFIG.AI_DEFAULT_TYPE,
   setType: (value) => set({ type: value }),
+
+  defaultAIType: CONFIG.AI_DEFAULT_TYPE,
+  setDefaultAIType: (value) => set({ defaultAIType: value }),
 }));
 
 export const useWebSearchStore = create((set) => ({

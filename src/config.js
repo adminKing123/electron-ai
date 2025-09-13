@@ -1,3 +1,5 @@
+import { convertToJson } from "./utils/helpers";
+
 const CONFIG = {
   API_BASE_URL: process.env.REACT_APP_API_URL,
   FIREBASE_CONFIG: {
@@ -108,6 +110,7 @@ const CONFIG = {
 
 CONFIG.AI_MODELS.TEXT.default_model = CONFIG.AI_MODELS.TEXT.models[0];
 CONFIG.AI_MODELS.CODE.default_model = CONFIG.AI_MODELS.CODE.models[0];
-CONFIG.AI_DEFAULT_TYPE = CONFIG.AI_TYPES[0];
+CONFIG.AI_DEFAULT_TYPE =
+  convertToJson(localStorage.getItem("AI_DEFAULT_TYPE")) || CONFIG.AI_TYPES[0];
 
 export default CONFIG;

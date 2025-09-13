@@ -133,3 +133,11 @@ export const validate_chart_data = (data) => {
     };
   }
 };
+
+export function convertToJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return null;
+  }
+}
