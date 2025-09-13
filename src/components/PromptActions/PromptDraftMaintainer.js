@@ -23,7 +23,8 @@ const handlePromptChange = debounce((chat, data) => {
 function PromptDraftMaintainer({ chat }) {
   const { prompt, setPrompt } = usePromptStore();
   const { model, setModel } = useModelStore();
-  const { isWebSearchOn, setIsWebSearchOn } = useWebSearchStore();
+  const { isWebSearchOn, setIsWebSearchOn, setIsWebSearchDisabled } =
+    useWebSearchStore();
   const { isDeepResearch, setIsDeepResearch } = useDeepResearchStore();
 
   useEffect(() => {
@@ -49,6 +50,7 @@ function PromptDraftMaintainer({ chat }) {
         setModel(data?.model || null);
         setIsWebSearchOn(data?.isWebSearchOn || false);
         setIsDeepResearch(data?.isDeepResearch || false);
+        setIsWebSearchDisabled(data?.model?.google_search ? false : true);
       }
       promptInnerBoxEle.classList.remove("fd-state");
       last_fetch_chat_draft = chat;
@@ -57,7 +59,14 @@ function PromptDraftMaintainer({ chat }) {
     if (chat?.id && last_fetch_chat_draft?.id !== chat.id) {
       getDraft();
     }
-  }, [chat, setPrompt, setModel, setIsWebSearchOn, setIsDeepResearch]);
+  }, [
+    chat,
+    setPrompt,
+    setModel,
+    setIsWebSearchOn,
+    setIsDeepResearch,
+    setIsWebSearchDisabled,
+  ]);
 
   return null;
 }
