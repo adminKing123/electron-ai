@@ -1,10 +1,10 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useGetAIModelsAPI } from "../../apis/ai_models/queryHooks";
 import { SiTicktick } from "react-icons/si";
 import { useModelStore, useWebSearchStore } from "../../store/usePromptStores";
 import { BsCpu } from "react-icons/bs";
 import { RiGeminiFill, RiClaudeFill } from "react-icons/ri";
 import { TbGalaxy } from "react-icons/tb";
+import CONFIG from "../../config";
 
 const AI_ICONS = {
   GEMINI: RiGeminiFill,
@@ -24,17 +24,12 @@ const SelectAIModel = ({ disabled }) => {
     setIsWebSearchDisabled(model_selected.google_search === false);
   };
 
-  const { data, isLoading, isError } = useGetAIModelsAPI({
-    onSuccess: (response) => {
-      if (!selectedModel) {
-        setIsWebSearchDisabled(response?.default_model.google_search === false);
-        onSelect(response?.default_model);
-      }
-    },
-  });
+  const type = useModelStore((state) => state.type);
 
+  const data = CONFIG.AI_MODELS[type.id];
+  
   const model_selected = selectedModel || data?.default_model;
-  const isDisabled = disabled || isLoading || isError || !data?.models?.length;
+  const isDisabled = disabled || !data?.models?.length;
 
   return (
     <DropdownMenu.Root modal={false}>

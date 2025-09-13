@@ -2,6 +2,7 @@ import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { useSidebarOpenState } from "../store/useSidebarStores";
 import { HiMenuAlt2 } from "react-icons/hi";
 import HeaderUserProfile from "./HeaderUserProfile";
+import AITypeSelector from "./AITypeSelector";
 
 const SidebarOpenButton = () => {
   const open = useSidebarOpenState((state) => state.open);
@@ -35,7 +36,8 @@ const Header = () => {
           Noney
         </button>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-5">
+        <AITypeSelector />
         <HeaderUserProfile />
       </div>
     </header>

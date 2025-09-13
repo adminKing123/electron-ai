@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import CONFIG from "../config";
 
 const usePromptStore = create((set) => ({
   prompt: "",
@@ -11,6 +12,9 @@ const usePromptStore = create((set) => ({
 export const useModelStore = create((set) => ({
   model: null,
   setModel: (value) => set({ model: value }),
+
+  type: CONFIG.AI_DEFAULT_TYPE,
+  setType: (value) => set({ type: value }),
 }));
 
 export const useWebSearchStore = create((set) => ({
