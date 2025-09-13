@@ -1,5 +1,5 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useModelStore } from "../store/usePromptStores";
+import { useModelStore, useWebSearchStore } from "../store/usePromptStores";
 import { GoDependabot } from "react-icons/go";
 
 import { IoCodeSlash } from "react-icons/io5";
@@ -16,13 +16,16 @@ const AI_ICONS = {
 function AITypeSelector() {
   const setModel = useModelStore((state) => state.setModel);
   const selectedType = useModelStore((state) => state.type);
+  const setIsWebSearchDisabled = useWebSearchStore((state) => state.setIsWebSearchDisabled);
   const setType = useModelStore((state) => state.setType);
 
   const SelectedIcon = AI_ICONS[selectedType.id];
 
   const handleSelect = (type) => {
+    const model_selected = CONFIG.AI_MODELS[type.id].default_model;
     setType(type);
-    setModel(CONFIG.AI_MODELS[type.id].default_model);
+    setModel(model_selected);
+    setIsWebSearchDisabled(model_selected.google_search === false);
   };
 
   return (
