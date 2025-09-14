@@ -48,14 +48,12 @@ function PromptDraftMaintainer({ chat }) {
       const data = await getDraftAPI(
         chat?.is_new ? CONFIG.NEW_CHAT_DRAFT_ID : chat.id
       );
-      if (data) {
-        setPrompt(data?.prompt || "");
-        setModel(data?.model || null);
-        setIsWebSearchOn(data?.isWebSearchOn || false);
-        setIsDeepResearch(data?.isDeepResearch || false);
-        setIsWebSearchDisabled(data?.model?.google_search ? false : true);
-        useModelStore.getState().setType(data?.type || CONFIG.AI_DEFAULT_TYPE);
-      }
+      setPrompt(data?.prompt || "");
+      setModel(data?.model || CONFIG.AI_MODELS[CONFIG.AI_DEFAULT_TYPE.id].default_model);
+      setIsWebSearchOn(data?.isWebSearchOn || false);
+      setIsDeepResearch(data?.isDeepResearch || false);
+      setIsWebSearchDisabled(data?.model?.google_search ? false : true);
+      useModelStore.getState().setType(data?.type || CONFIG.AI_DEFAULT_TYPE);
       promptInnerBoxEle.classList.remove("fd-state");
       aiTypeTogglerEle.classList.remove("hidden");
       last_fetch_chat_draft = chat;
