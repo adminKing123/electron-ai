@@ -2,6 +2,7 @@ import { convertToJson } from "./utils/helpers";
 
 const CONFIG = {
   API_BASE_URL: process.env.REACT_APP_API_URL,
+  ARSONGS_AI_API_URL: process.env.REACT_APP_ARSONGS_AI_API_URL,
   FIREBASE_CONFIG: {
     apiKey: process.env.REACT_APP_APIKEY,
     authDomain: process.env.REACT_APP_AUTHDOMAIN,
@@ -26,6 +27,11 @@ const CONFIG = {
       id: "CODE",
       name: "DevMind",
       description: "Best for coding and technical tasks",
+    },
+    {
+      id: "ARHYTHM_ASSISTANT",
+      name: "Arhythm",
+      description: "Best for music-related tasks",
     },
   ],
 
@@ -98,6 +104,19 @@ const CONFIG = {
       ],
       default_model: null,
     },
+    ARHYTHM_ASSISTANT: {
+      models: [
+        {
+          id: "noney-arhythm-1.0@20241001",
+          name: "Arhythm Assistant",
+          google_search: false,
+          active: "True",
+          from: "NONEY",
+          description: "Specialized in music-related tasks.",
+        },
+      ],
+      default_model: null,
+    },
   },
 
   NEW_CHAT_DRAFT_ID: "new_chat_draft",
@@ -110,6 +129,8 @@ const CONFIG = {
 
 CONFIG.AI_MODELS.TEXT.default_model = CONFIG.AI_MODELS.TEXT.models[0];
 CONFIG.AI_MODELS.CODE.default_model = CONFIG.AI_MODELS.CODE.models[0];
+CONFIG.AI_MODELS.ARHYTHM_ASSISTANT.default_model =
+  CONFIG.AI_MODELS.ARHYTHM_ASSISTANT.models[0];
 CONFIG.AI_DEFAULT_TYPE =
   convertToJson(localStorage.getItem("AI_DEFAULT_TYPE")) || CONFIG.AI_TYPES[0];
 

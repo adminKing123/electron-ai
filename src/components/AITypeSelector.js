@@ -1,6 +1,7 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useModelStore, useWebSearchStore } from "../store/usePromptStores";
 import { GoDependabot } from "react-icons/go";
+import { GiMusicalNotes } from "react-icons/gi";
 
 import { IoCodeSlash } from "react-icons/io5";
 import { IoInformationCircleOutline } from "react-icons/io5";
@@ -11,6 +12,7 @@ import { SiTicktick } from "react-icons/si";
 const AI_ICONS = {
   TEXT: GoDependabot,
   CODE: IoCodeSlash,
+  ARHYTHM_ASSISTANT: GiMusicalNotes,
 };
 
 function AITypeSelector() {
