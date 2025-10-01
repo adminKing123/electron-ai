@@ -31,7 +31,7 @@ const CONFIG = {
     {
       id: "ARHYTHM_ASSISTANT",
       name: "Arhythm",
-      description: "Best for music-related tasks",
+      description: "Connected to Arhythm Database",
     },
   ],
 
@@ -112,7 +112,7 @@ const CONFIG = {
           google_search: false,
           active: "True",
           from: "NONEY",
-          description: "Connected to Arhythm Database",
+          description: "For basic search and stats.",
         },
       ],
       default_model: null,
