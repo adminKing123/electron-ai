@@ -7,9 +7,8 @@ const ENDPOINTS = {
   SUMMARISE_CHAT_TITLE: "/summarise_title",
   GET_GENERATE_URL: function () {
     const ai_type = useModelStore.getState().type;
-    if (ai_type.id === "ARHYTHM_ASSISTANT") {
-      return `${CONFIG.ARSONGS_AI_API_URL}/generate`;
-    }
+    if (ai_type.id === "ARHYTHM_ASSISTANT") return `${CONFIG.ARSONGS_AI_API_URL}/generate`;
+    if (ai_type.id === "SYNAPSE_HRMS_ASSISTANT") return `${CONFIG.ARSONGS_AI_API_URL}/generate-hrms`;
     return `${CONFIG.API_BASE_URL}/generate`;
   },
   DELETE_CHAT: (userId, chatId) => `/delete_chat/${userId}/${chatId}`,

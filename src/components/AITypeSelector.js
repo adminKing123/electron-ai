@@ -7,12 +7,14 @@ import { IoCodeSlash } from "react-icons/io5";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
 import CONFIG from "../config";
+import { MdWorkOutline } from "react-icons/md";
 import { SiTicktick } from "react-icons/si";
 
 const AI_ICONS = {
   TEXT: GoDependabot,
   CODE: IoCodeSlash,
   ARHYTHM_ASSISTANT: GiMusicalNotes,
+  SYNAPSE_HRMS_ASSISTANT: MdWorkOutline,
 };
 
 function AITypeSelector() {

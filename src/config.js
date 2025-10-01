@@ -33,6 +33,11 @@ const CONFIG = {
       name: "Arhythm",
       description: "Connected to Arhythm Database",
     },
+    {
+      id: "SYNAPSE_HRMS_ASSISTANT",
+      name: "Synapse HRMS",
+      description: "Connected to Synapse HRMS Database",
+    },
   ],
 
   AI_DEFAULT_TYPE: null,
@@ -117,6 +122,19 @@ const CONFIG = {
       ],
       default_model: null,
     },
+    SYNAPSE_HRMS_ASSISTANT: {
+      models: [
+        {
+          id: "noney-synapses-1.0@20241001",
+          name: "Synapse HRMS Assistant",
+          google_search: false,
+          active: "True",
+          from: "NONEY",
+          description: "For HRMS related queries.",
+        },
+      ],
+      default_model: null,
+    },
   },
 
   NEW_CHAT_DRAFT_ID: "new_chat_draft",
@@ -131,6 +149,8 @@ CONFIG.AI_MODELS.TEXT.default_model = CONFIG.AI_MODELS.TEXT.models[0];
 CONFIG.AI_MODELS.CODE.default_model = CONFIG.AI_MODELS.CODE.models[0];
 CONFIG.AI_MODELS.ARHYTHM_ASSISTANT.default_model =
   CONFIG.AI_MODELS.ARHYTHM_ASSISTANT.models[0];
+CONFIG.AI_MODELS.SYNAPSE_HRMS_ASSISTANT.default_model =
+  CONFIG.AI_MODELS.SYNAPSE_HRMS_ASSISTANT.models[0];
 CONFIG.AI_DEFAULT_TYPE =
   convertToJson(localStorage.getItem("AI_DEFAULT_TYPE")) || CONFIG.AI_TYPES[0];
 
