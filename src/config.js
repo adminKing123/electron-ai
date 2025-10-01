@@ -112,7 +112,7 @@ const CONFIG = {
           google_search: false,
           active: "True",
           from: "NONEY",
-          description: "Specialized in music-related tasks.",
+          description: "Connected to Arhythm Database",
         },
       ],
       default_model: null,
