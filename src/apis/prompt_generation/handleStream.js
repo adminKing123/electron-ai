@@ -1,4 +1,5 @@
 import { useProcessController } from "../../store/useMessagesStore";
+import useUserStore from "../../store/useUserStore";
 import ENDPOINTS from "../endpoints";
 
 const chunkParser = (id, eventType, dataString, onProgress) => {
@@ -15,6 +16,8 @@ const chunkParser = (id, eventType, dataString, onProgress) => {
 
 const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
   const setProcess = useProcessController.getState().setProcess;
+  const user = useUserStore.getState().user;
+  const token = user?.getIdToken ? await user.getIdToken() : null;
 
   try {
     const controller = new AbortController();
@@ -33,6 +36,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
       },
       body: JSON.stringify({
         prompt: data.prompt,
