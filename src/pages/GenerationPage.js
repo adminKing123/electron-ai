@@ -44,7 +44,7 @@ function GenerationPage({ chat }) {
           chat?.scroll_to_message ? "" : "screen-center"
         }`}
       >
-        <div className="max-w-[800px] px-5 mx-auto">
+        <div className="max-w-[892px] px-5 mx-auto">
           <Prompt chat={chat} />
         </div>
       </div>
