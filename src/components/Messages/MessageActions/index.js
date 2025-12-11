@@ -2,6 +2,7 @@ import useMessageStore, {
   useProcessController,
 } from "../../../store/useMessagesStore";
 import { copyAnswer } from "../../../utils/helpers";
+import MessageInfo from "../MessageInfo";
 import CopyButton from "./CopyMessageButton";
 import DeleteMessageButton from "./DeleteMessageButton";
 import GoToMessageTop from "./GoToMessageTop";
@@ -21,13 +22,16 @@ const MessageActions = ({ message_id, chat }) => {
   if (process?.id === message_id) return null;
 
   return (
-    <div className="my-2 flex items-center justify-between">
-      <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
-        <CopyButton handleCopy={handleAnswerCopy} />
-        <DeleteMessageButton id={message_id} chat={chat} />
-        <GoToMessageTop id={message_id} />
+    <div className="my-2">
+      <div className="flex items-center justify-between">
+        <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
+          <CopyButton handleCopy={handleAnswerCopy} />
+          <DeleteMessageButton id={message_id} chat={chat} />
+          <GoToMessageTop id={message_id} />
+        </div>
+        <ShowSelectedModel message={message} />
       </div>
-      <ShowSelectedModel message={message} />
+      <MessageInfo message={message} />
     </div>
   );
 };
