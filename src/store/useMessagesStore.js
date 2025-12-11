@@ -79,6 +79,8 @@ const useMessageStore = create(
                 sources: state.data[id].sources,
               },
             });
+        } else if (eventtype === "duration") {
+          state.data[id].duration = eventdata.seconds;
         } else {
           state.data[id].answer[index] = {
             id: eventid,
