@@ -32,4 +32,16 @@ export const useDeepResearchStore = create((set) => ({
   setIsDeepResearch: (value) => set({ isDeepResearch: value }),
 }));
 
+export const useFileInputStore = create((set) => ({
+  attachedFiles: [],
+  addFiles: (files) =>
+    set((state) => ({ attachedFiles: [...state.attachedFiles, ...files] })),
+  removeFile: (id) => {
+    set((state) => ({
+      attachedFiles: state.attachedFiles.filter((file) => file.id !== id),
+    }));
+  },
+  clearFiles: () => set({ attachedFiles: [] }),
+}));
+
 export default usePromptStore;

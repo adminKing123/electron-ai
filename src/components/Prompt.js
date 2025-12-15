@@ -8,6 +8,7 @@ import PromptActions from "./PromptActions";
 import handleStream from "../apis/prompt_generation/handleStream";
 import usePromptStore, {
   useDeepResearchStore,
+  useFileInputStore,
   useModelStore,
   useWebSearchStore,
 } from "../store/usePromptStores";
@@ -34,6 +35,7 @@ const Prompt = ({ chat }) => {
   );
 
   const textareaRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const onProgress = (data) => {
     addChunkInMessageAnswer(data.id, data.event);
@@ -87,6 +89,7 @@ const Prompt = ({ chat }) => {
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
+    const { clearFiles: clearFilesFromInputBox } = useFileInputStore.getState();
 
     const isPromptSendDisabled =
       process || !prompt.trim() || model === null ? true : false;
@@ -150,6 +153,7 @@ const Prompt = ({ chat }) => {
       onError
     );
     setPrompt("");
+    clearFilesFromInputBox();
   };
 
   return (
@@ -158,14 +162,14 @@ const Prompt = ({ chat }) => {
       <PromptDraftMaintainer chat={chat} />
       {chat.is_new ? <ChatGreetings /> : null}
       <div id="inner-prompt-box" className="bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
-        <MessageRelatedActionsInPrompt />
+        <MessageRelatedActionsInPrompt fileInputRef={fileInputRef} />
         <div className="px-5 py-[15px]">
           <TextArea
             textareaRef={textareaRef}
             handleSend={handleSend}
             shouldAutoFocus={chat.shouldAutoFocus ? true : false}
           />
-          <PromptActions handleSend={handleSend} />
+          <PromptActions handleSend={handleSend} fileInputRef={fileInputRef} />
         </div>
       </div>
     </div>

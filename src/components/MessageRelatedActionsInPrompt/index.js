@@ -1,13 +1,18 @@
 import CONFIG from "../../config";
 import usePromptStore from "../../store/usePromptStores";
+import AttachFilesPreview from "./AttachFilesPreview";
 import MessageBeingEdited from "./MessageBeingEdited";
 
-function MessageRelatedActionsInPrompt() {
+function MessageRelatedActionsInPrompt({ fileInputRef }) {
   const action = usePromptStore((state) => state.action);
-
-  if (action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT)
-    return <MessageBeingEdited action={action} />;
-  return null;
+  return (
+    <>
+      {action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT ? (
+        <MessageBeingEdited action={action} />
+      ) : null}
+      <AttachFilesPreview fileInputRef={fileInputRef} />
+    </>
+  );
 }
 
 export default MessageRelatedActionsInPrompt;
