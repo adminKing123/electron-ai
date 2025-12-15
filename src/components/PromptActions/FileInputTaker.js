@@ -24,6 +24,7 @@ const FileInputTaker = ({ inputRef, disabled }) => {
         onChange={handleInputChange}
         className="hidden"
         ref={inputRef}
+        multiple
       />
       <label
         htmlFor="file-upload"
