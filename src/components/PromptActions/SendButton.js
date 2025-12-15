@@ -1,6 +1,6 @@
 import { IoArrowUp, IoStop } from "react-icons/io5";
 import { useProcessController } from "../../store/useMessagesStore";
-import usePromptStore, { useModelStore } from "../../store/usePromptStores";
+import usePromptStore, { useFileInputStore, useModelStore } from "../../store/usePromptStores";
 
 const SendButton = ({ onClick }) => {
   const process = useProcessController((state) => state.process);
@@ -9,6 +9,11 @@ const SendButton = ({ onClick }) => {
   const model = useModelStore((state) => state.model);
   const isGeneratingPrompt = process ? true : false;
   const disabled = !prompt.trim() || model === null ? true : false;
+
+  const { attachedFiles } = useFileInputStore();
+  
+  const files = Object.values(attachedFiles);
+  const any_file_uploading = files.some((file) => file?.in_progress ? true : false);
 
   const stopGeneration = () => {
     setProcess(null, null, true);
@@ -26,7 +31,7 @@ const SendButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || any_file_uploading}
       className="bg-black dark:bg-[#ffffff] hover:bg-[#4C4C4C] dark:hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
     >
       <IoArrowUp className="text-white dark:text-black" />

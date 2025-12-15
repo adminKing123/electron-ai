@@ -89,10 +89,13 @@ const Prompt = ({ chat }) => {
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
-    const { clearFiles: clearFilesFromInputBox } = useFileInputStore.getState();
+    const { clearFiles: clearFilesFromInputBox, attachedFiles } = useFileInputStore.getState();
+
+    const files = Object.values(attachedFiles);
+    const any_file_uploading = files.some((file) => file?.in_progress ? true : false);
 
     const isPromptSendDisabled =
-      process || !prompt.trim() || model === null ? true : false;
+      process || !prompt.trim() || model === null ? true : false || any_file_uploading;
 
     if (prompt.length > CONFIG.MAX_PROMPT_LENGTH) {
       notifyTextAreaLimitReached();
