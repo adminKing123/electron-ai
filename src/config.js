@@ -23,6 +23,11 @@ const CONFIG = {
       name: "Conversa",
       description: "Best for general-purpose use",
     },
+    {
+      id: "CODE",
+      name: "Coder",
+      description: "Best for code generation and understanding",
+    }
   ],
 
   AI_DEFAULT_TYPE: null,
@@ -41,6 +46,19 @@ const CONFIG = {
       ],
       default_model: null,
     },
+    CODE: {
+      models: [
+        {
+          id: "noney-code-gen-20241001",
+          name: "Noney Code Gen1.0",
+          google_search: false,
+          active: "True",
+          from: "NONEY",
+          description: "Powerful code generation model.",
+        }
+      ],
+      default_model: null,
+    }
   },
 
   NEW_CHAT_DRAFT_ID: "new_chat_draft",
@@ -52,7 +70,10 @@ const CONFIG = {
 };
 
 CONFIG.AI_MODELS.TEXT.default_model = CONFIG.AI_MODELS.TEXT.models[0];
+CONFIG.AI_MODELS.CODE.default_model = CONFIG.AI_MODELS.CODE.models[0];
+
 CONFIG.AI_DEFAULT_TYPE =
   convertToJson(localStorage.getItem("AI_DEFAULT_TYPE")) || CONFIG.AI_TYPES[0];
+
 
 export default CONFIG;
