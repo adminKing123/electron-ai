@@ -1,17 +1,61 @@
-import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { IoIosAttach } from "react-icons/io";
 import { useFileInputStore } from "../../store/usePromptStores";
+import { uploadFileAPI } from "../../apis/file_upload/queryFunctions";
 
-const FileInputTaker = ({ inputRef, disabled }) => {
-  const addFiles = useFileInputStore((state) => state.addFiles);
+const FileInputTaker = ({ inputRef, disabled, chat }) => {
+  const chat_id = chat.id;
+  const addFile = useFileInputStore((state) => state.addFile);
+  const updateFile = useFileInputStore((state) => state.updateFile);
+
+  const onProgress = (fileObj, progress) => {
+    updateFile(fileObj.id, { progress });
+  };
+
+  const onComplete = (fileObj, response) => {
+    updateFile(fileObj.id, {
+      in_progress: false,
+      uploaded: true,
+      progress: 100,
+      ...response,
+    });
+  };
+
+  const onError = (fileObj, error) => {
+    updateFile(fileObj.id, { in_progress: false, abort: null });
+  };
+
+  const onAbort = (fileObj) => {
+    updateFile(fileObj.id, { in_progress: false, abort: null });
+  };
+
+  const onStart = (fileObj, abortSignal) => {
+    updateFile(fileObj.id, { in_progress: true, abort: abortSignal });
+  };
 
   const handleInputChange = (e) => {
-    const files = Array.from(e.target.files).map((file) => ({
-      id: uuidv4(),
-      file,
-    }));
-    addFiles(files);
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    Array.from(files).forEach((file) => {
+      const fileObj = {
+        id: uuidv4(),
+        file: file,
+        progress: 0,
+        uploaded: false,
+        in_progress: true,
+        abort: null,
+      };
+      addFile(fileObj);
+      uploadFileAPI({
+        fileObj,
+        chatId: chat_id,
+        onProgress,
+        onComplete,
+        onError,
+        onAbort,
+        onStart,
+      });
+    });
     if (inputRef.current) inputRef.current.value = null;
   };
 

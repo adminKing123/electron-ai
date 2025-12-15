@@ -169,7 +169,7 @@ const Prompt = ({ chat }) => {
             handleSend={handleSend}
             shouldAutoFocus={chat.shouldAutoFocus ? true : false}
           />
-          <PromptActions handleSend={handleSend} fileInputRef={fileInputRef} />
+          <PromptActions handleSend={handleSend} fileInputRef={fileInputRef} chat={chat} />
         </div>
       </div>
     </div>

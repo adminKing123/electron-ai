@@ -33,15 +33,44 @@ export const useDeepResearchStore = create((set) => ({
 }));
 
 export const useFileInputStore = create((set) => ({
-  attachedFiles: [],
-  addFiles: (files) =>
-    set((state) => ({ attachedFiles: [...state.attachedFiles, ...files] })),
-  removeFile: (id) => {
-    set((state) => ({
-      attachedFiles: state.attachedFiles.filter((file) => file.id !== id),
-    }));
+  attachedFiles: {},
+  addFiles: (files) => {
+    set((state) => {
+      const attachedFiles = state.attachedFiles;
+      const newFiles = { ...attachedFiles };
+      files.forEach((fileObj) => {
+        newFiles[fileObj.id] = { ...fileObj };
+      });
+      return { attachedFiles: newFiles };
+    });
   },
-  clearFiles: () => set({ attachedFiles: [] }),
+  addFile: (fileObj) => {
+    set((state) => {
+      const attachedFiles = state.attachedFiles;
+      const newFiles = { ...attachedFiles };
+      newFiles[fileObj.id] = { ...fileObj };
+      return { attachedFiles: newFiles };
+    });
+  },
+  removeFile: (id) => {
+    set((state) => {
+      const attachedFiles = state.attachedFiles;
+      const newFiles = { ...attachedFiles };
+      delete newFiles[id];
+      return { attachedFiles: newFiles };
+    });
+  },
+  updateFile: (id, updatedProps) => {
+    set((state) => {
+      const attachedFiles = state.attachedFiles;
+      const newFiles = { ...attachedFiles };
+      if (newFiles[id]) {
+        newFiles[id] = { ...newFiles[id], ...updatedProps };
+      }
+      return { attachedFiles: newFiles };
+    });
+  },
+  clearFiles: () => set({ attachedFiles: {} }),
 }));
 
 export default usePromptStore;
