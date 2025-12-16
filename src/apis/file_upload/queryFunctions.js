@@ -24,6 +24,7 @@ export const uploadFileAPI = ({
       formData.append("file", fileObj.file);
       formData.append("chat_id", chatId);
       formData.append("file_id", fileObj.id);
+      formData.append("file_type", fileObj.file.type);
 
       onStart?.(fileObj, xhr.abort.bind(xhr));
       xhr.upload.onprogress = (e) => {

@@ -89,13 +89,18 @@ const Prompt = ({ chat }) => {
     const { model } = useModelStore.getState();
     const { process } = useProcessController.getState();
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
-    const { clearFiles: clearFilesFromInputBox, attachedFiles } = useFileInputStore.getState();
+    const { clearFiles: clearFilesFromInputBox, attachedFiles } =
+      useFileInputStore.getState();
 
     const files = Object.values(attachedFiles);
-    const any_file_uploading = files.some((file) => file?.in_progress ? true : false);
+    const any_file_uploading = files.some((file) =>
+      file?.in_progress ? true : false
+    );
 
     const isPromptSendDisabled =
-      process || !prompt.trim() || model === null ? true : false || any_file_uploading;
+      process || !prompt.trim() || model === null
+        ? true
+        : false || any_file_uploading;
 
     if (prompt.length > CONFIG.MAX_PROMPT_LENGTH) {
       notifyTextAreaLimitReached();
@@ -132,6 +137,15 @@ const Prompt = ({ chat }) => {
         generate_image,
         created_at: new Date(),
         updated_at: new Date(),
+        files: files.map((file) => ({
+          file_id: file.file_id,
+          user_id: file.user_id,
+          original_name: file.original_name,
+          filename: file.filename,
+          file_type: file.file_type,
+          download_url: file.download_url,
+          size: file.size,
+        })),
       });
     }
 
@@ -164,7 +178,10 @@ const Prompt = ({ chat }) => {
       <ScrollToBottomButton />
       <PromptDraftMaintainer chat={chat} />
       {chat.is_new ? <ChatGreetings /> : null}
-      <div id="inner-prompt-box" className="bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]">
+      <div
+        id="inner-prompt-box"
+        className="bg-[#FFFFFF] dark:bg-[#303030] rounded-3xl border-[2px] border-[#E2E2E2] dark:border-[#1c1e21]"
+      >
         <MessageRelatedActionsInPrompt fileInputRef={fileInputRef} />
         <div className="px-5 py-[15px]">
           <TextArea
@@ -172,7 +189,11 @@ const Prompt = ({ chat }) => {
             handleSend={handleSend}
             shouldAutoFocus={chat.shouldAutoFocus ? true : false}
           />
-          <PromptActions handleSend={handleSend} fileInputRef={fileInputRef} chat={chat} />
+          <PromptActions
+            handleSend={handleSend}
+            fileInputRef={fileInputRef}
+            chat={chat}
+          />
         </div>
       </div>
     </div>
