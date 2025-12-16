@@ -12,7 +12,7 @@ const ENDPOINTS = {
   GET_DELETE_FILE: (filename) =>
     `${CONFIG.API_BASE_URL}/delete_file/${filename}`,
 
-  GET_DOWNLOAD_URI: (download_path) => `${CONFIG.API_BASE_URL}${download_path}`,
+  GET_DOWNLOAD_URI: (download_path) => `${download_path}`,
 };
 
 export default ENDPOINTS;
