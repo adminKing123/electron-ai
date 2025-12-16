@@ -5,6 +5,7 @@ import MessagePromptActions from "./MessagePromptActions";
 import { useEffect, useRef, useState } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 import { focusPromptTextArea } from "../../utils/helpers";
+import MessageAttachedFiles from "./MessageAttachedFiles";
 
 const COLLAPSED_HEIGHT = 160;
 
@@ -80,6 +81,7 @@ const MessagePrompt = ({ message_id }) => {
   return (
     <div className="group">
       <PromptBox prompt={prompt} />
+      <MessageAttachedFiles message_id={message_id} />
       <MessagePromptActions
         handleCopy={handleMessagePromptCopy}
         handleEdit={handlePromptEdit}

@@ -4,7 +4,7 @@ import useMessageStore, {
 import { copyAnswer } from "../../../utils/helpers";
 import MessageInfo from "../MessageInfo";
 import CopyButton from "./CopyMessageButton";
-import DeleteMessageButton from "./DeleteMessageButton";
+// import DeleteMessageButton from "./DeleteMessageButton";
 import GoToMessageTop from "./GoToMessageTop";
 import ShowSelectedModel from "./ShowSelectedModel";
 
@@ -26,7 +26,7 @@ const MessageActions = ({ message_id, chat }) => {
       <div className="flex items-center justify-between">
         <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
           <CopyButton handleCopy={handleAnswerCopy} />
-          <DeleteMessageButton id={message_id} chat={chat} />
+          {/* <DeleteMessageButton id={message_id} chat={chat} /> */}
           <GoToMessageTop id={message_id} />
         </div>
         <ShowSelectedModel message={message} />
