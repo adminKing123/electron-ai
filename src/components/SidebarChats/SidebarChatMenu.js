@@ -44,7 +44,11 @@ const SidebarChatMenu = ({ chat }) => {
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="text-black dark:text-white min-w-[120px] bg-[#ffffff] dark:bg-[#353535] border border-[#E1E1E1] dark:border-[#2F2F2F] rounded-2xl p-[6px] shadow-lg z-50">
+        <DropdownMenu.Content
+          side="bottom"
+          align="start"
+          className="text-black dark:text-white min-w-[120px] bg-[#ffffff] dark:bg-[#353535] border border-[#E1E1E1] dark:border-[#2F2F2F] rounded-2xl p-[6px] shadow-lg z-50"
+        >
           <DropdownMenuButton
             onClick={handleClick}
             icon={PiShareBold}
