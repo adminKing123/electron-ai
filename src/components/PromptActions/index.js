@@ -1,8 +1,7 @@
-import DeepResearchButton from "./DeepResearchButton";
 import FileInputTaker from "./FileInputTaker";
 import SelectAIModel from "./SelectAIModel";
 import SendButton from "./SendButton";
-import WebSearchOption from "./WebSearchOption";
+import SearchOptionsPopover from "./SearchOptionsPopover";
 
 const PromptActions = ({ handleSend, fileInputRef, chat }) => {
   return (
@@ -10,8 +9,7 @@ const PromptActions = ({ handleSend, fileInputRef, chat }) => {
       <div className="flex items-center gap-2">
         <SelectAIModel />
         <FileInputTaker inputRef={fileInputRef} chat={chat} />
-        <WebSearchOption />
-        <DeepResearchButton />
+        <SearchOptionsPopover />
       </div>
       <div>
         <SendButton onClick={handleSend} />
