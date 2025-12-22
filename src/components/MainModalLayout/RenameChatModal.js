@@ -13,7 +13,7 @@ const RenameChatModal = ({ data }) => {
 
   const handleRenameChat = async () => {
     if (!title.trim()) {
-      notifyRenameChatError("Chat title cannot be empty");
+      toggleModal();
       return;
     }
 
@@ -67,17 +67,22 @@ const RenameChatModal = ({ data }) => {
         onClick={(e) => e.stopPropagation()}
         className="text-black dark:text-white bg-white dark:bg-[#2F2F2F] border border-[#eaeaea] dark:border-[#414141] rounded-2xl shadow-lg w-full max-w-md p-4"
       >
-        <h2 className="text-lg font-semibold mb-4">Rename Chat</h2>
+        <h2 className="text-lg">Rename Chat?</h2>
+        <div className="text-base my-4">
+          <p>
+            This will rename <b>{data?.payload.chat?.title}</b> to:
+          </p>
+        </div>
         <div className="mb-4">
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Enter chat title"
+            placeholder={data?.payload?.chat?.title || "Enter chat title"}
             autoFocus
             disabled={isLoading}
-            className="w-full px-4 py-2.5 rounded-xl bg-[#F7F7F7] dark:bg-[#1F1F1F] border border-[#E1E1E1] dark:border-[#404040] focus:outline-none focus:ring-2 focus:ring-[#000000] dark:focus:ring-[#ffffff] focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-2 text-sm rounded-xl bg-[#F7F7F7] dark:bg-[#2F2F2F] border border-[#E1E1E1] dark:border-[#4E4E4E] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
         <div className="flex justify-end gap-3 text-sm font-semibold">
