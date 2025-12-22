@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   createChatAPI,
   deleteChatAPI,
+  renameChatAPI,
   summariseChatTitleAPI,
 } from "../apis/chats/queryFunctions";
 
@@ -23,6 +24,21 @@ const useChatsStore = create((set, get) => ({
     }));
     deleteChatAPI(id);
   },
+  
+  renameChat: async (id, newTitle) => {
+    try {
+      await renameChatAPI(id, newTitle);
+      set((state) => ({
+        chats: state.chats.map((chat) =>
+          chat.id === id ? { ...chat, title: newTitle, updated_at: new Date() } : chat
+        ),
+      }));
+    } catch (error) {
+      console.error("Failed to rename chat:", error);
+      throw error;
+    }
+  },
+
   updateChat: (id, updatedData) =>
     set((state) => ({
       chats: state.chats.map((chat) =>

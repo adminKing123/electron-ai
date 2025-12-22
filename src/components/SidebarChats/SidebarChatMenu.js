@@ -13,6 +13,14 @@ const SidebarChatMenu = ({ chat }) => {
     e.stopPropagation();
   };
 
+  const handleRename = (e) => {
+    e.stopPropagation();
+    setData({
+      type: "rename_chat",
+      payload: { chat },
+    });
+  };
+
   const handleDelete = (e) => {
     e.stopPropagation();
     setData({
@@ -43,7 +51,7 @@ const SidebarChatMenu = ({ chat }) => {
             label="Share"
           />
           <DropdownMenuButton
-            onClick={handleClick}
+            onClick={handleRename}
             icon={FiEdit2}
             label="Rename"
           />

@@ -8,6 +8,7 @@ const ENDPOINTS = {
     return `${CONFIG.API_BASE_URL}/generate`;
   },
   DELETE_CHAT: (userId, chatId) => `/delete_chat/${userId}/${chatId}`,
+  RENAME_CHAT: (userId, chatId) => `/rename_chat/${userId}/${chatId}`,
   GET_UPLOAD_FILE: () => `${CONFIG.API_BASE_URL}/upload_file`,
   GET_DELETE_FILE: (filename) =>
     `${CONFIG.API_BASE_URL}/delete_file/${filename}`,

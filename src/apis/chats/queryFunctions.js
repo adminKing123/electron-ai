@@ -147,3 +147,13 @@ export const deleteChatAPI = async (chatId) => {
   });
   return response.data;
 };
+
+export const renameChatAPI = async (chatId, newTitle) => {
+  const user = useUserStore.getState().user;
+  const response = await api({
+    method: "PUT",
+    url: ENDPOINTS.RENAME_CHAT(user.uid, chatId),
+    data: { title: newTitle },
+  });
+  return response.data;
+};
