@@ -14,6 +14,7 @@ import api from "..";
 import { db } from "../../firebase";
 import useUserStore from "../../store/useUserStore";
 import ENDPOINTS from "../endpoints";
+import CONFIG from "../../config";
 
 export const summariseChatTitleAPI = async (data) => {
   const response = await api({
@@ -90,7 +91,7 @@ export const getDraftAPI = async (chatId) => {
 export const getChatsAPI = async (pageParam = null) => {
   const user = useUserStore.getState().user;
   const chatsRef = collection(db, "users", user.uid, "chats");
-  const pageSize = 30;
+  const pageSize = CONFIG.CHATS_PAGE_SIZE;
 
   let q = query(chatsRef, orderBy("updated_at", "desc"), limit(pageSize));
 

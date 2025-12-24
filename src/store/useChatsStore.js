@@ -8,10 +8,20 @@ import {
 
 const useChatsStore = create((set, get) => ({
   chats: [],
+  lastDoc: null,
+  hasMore: true,
+  isLoading: false,
+  
   setChats: (newChats) => set((state) => ({ chats: newChats })),
 
   appendChats: (newChats) =>
     set((state) => ({ chats: [...state.chats, ...newChats] })),
+  
+  setLastDoc: (doc) => set({ lastDoc: doc }),
+  
+  setHasMore: (hasMore) => set({ hasMore }),
+  
+  setIsLoading: (isLoading) => set({ isLoading }),
 
   addChat: (newChat) =>
     set((state) => ({

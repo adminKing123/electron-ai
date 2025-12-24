@@ -64,6 +64,8 @@ const CONFIG = {
   NEW_CHAT_DRAFT_ID: "new_chat_draft",
   DRAFT_SAVE_DEBOUNCE_MS: 300,
   MAX_PROMPT_LENGTH: 100000,
+  CHATS_PAGE_SIZE: 15,
+  CHATS_SCROLL_THRESHOLD: 10,
 
   GOOGLE_ICON_IMAGE_LOAD_API_64: (domain) =>
     `https://www.google.com/s2/favicons?sz=64&domain=${domain}`,

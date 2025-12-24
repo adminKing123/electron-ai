@@ -81,7 +81,7 @@ const Sidebar = () => {
       >
         <div className="w-[260px] h-[100dvh] flex flex-col">
           <SidebarHeader toggleSidebar={toggleSidebar} />
-          <div className="flex-grow overflow-y-auto">
+          <div className="flex-grow overflow-y-auto" id="sidebar-scroll-container">
             <SidebarOptions />
             <SidebarChats />
           </div>
