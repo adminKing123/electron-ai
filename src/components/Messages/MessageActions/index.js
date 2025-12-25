@@ -6,6 +6,7 @@ import MessageInfo from "../MessageInfo";
 import CopyButton from "./CopyMessageButton";
 // import DeleteMessageButton from "./DeleteMessageButton";
 import GoToMessageTop from "./GoToMessageTop";
+import PrintMessageButton from "./PrintMessageButton";
 import ShowSelectedModel from "./ShowSelectedModel";
 
 const MessageActions = ({ message_id, chat }) => {
@@ -27,6 +28,7 @@ const MessageActions = ({ message_id, chat }) => {
         <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
           <CopyButton handleCopy={handleAnswerCopy} />
           {/* <DeleteMessageButton id={message_id} chat={chat} /> */}
+          <PrintMessageButton message_id={message_id} />
           <GoToMessageTop id={message_id} />
         </div>
         <ShowSelectedModel message={message} />
