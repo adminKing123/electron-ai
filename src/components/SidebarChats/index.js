@@ -158,12 +158,6 @@ const SidebarChats = () => {
           <div className="w-3 h-3 border-2 border-t-transparent border-black dark:border-t-transparent dark:border-white rounded-full animate-spin"></div>
         </div>
       )}
-      
-      {!isLoading && chats.length === 0 && (
-        <div className="text-center py-4 text-sm text-gray-500 dark:text-gray-400">
-          No chats yet
-        </div>
-      )}
     </div>
   );
 };

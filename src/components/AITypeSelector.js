@@ -14,7 +14,7 @@ const AI_ICONS = {
   TEXT: GoDependabot,
   CODE: IoCodeSlash,
   ARHYTHM_ASSISTANT: GiMusicalNotes,
-  SYNAPSE_HRMS_ASSISTANT: MdWorkOutline,
+  SYNAPSES_HRMS_ASSISTANT: MdWorkOutline,
 };
 
 function AITypeSelector() {
