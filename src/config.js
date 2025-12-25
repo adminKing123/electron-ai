@@ -73,6 +73,14 @@ const CONFIG = {
           active: "True",
           from: "NONEY",
           description: "Specialized in HRMS related queries.",
+        },
+        {
+          id: "noney-hrms-assistant-pro-20241001",
+          name: "Noney HRMS Assistant Pro",
+          google_search: false,
+          active: "True",
+          from: "NONEY",
+          description: "Advanced capabilities for HRMS related queries.",
         }
       ],
       default_model: null,
