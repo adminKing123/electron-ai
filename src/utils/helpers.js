@@ -1,7 +1,17 @@
 import { marked } from "marked";
 import { format, isToday, isYesterday, differenceInDays } from "date-fns";
 import { getCopiableAnswer } from "./getCopiableAnswer";
-import { MdAudioFile, MdCode, MdDescription, MdFolderZip, MdInsertDriveFile, MdPictureAsPdf, MdTableChart, MdTextSnippet, MdVideoFile } from "react-icons/md";
+import {
+  MdAudioFile,
+  MdCode,
+  MdDescription,
+  MdFolderZip,
+  MdInsertDriveFile,
+  MdPictureAsPdf,
+  MdTableChart,
+  MdTextSnippet,
+  MdVideoFile,
+} from "react-icons/md";
 
 export const scrollToMessage = (id, duration = 100, behavior = "smooth") => {
   setTimeout(() => {
@@ -145,16 +155,39 @@ export function convertToJson(str) {
 
 export const getFileIcon = (file) => {
   const fileName = file.name.toLowerCase();
-  const extension = fileName.split('.').pop();
-  
-  if (extension === 'pdf') return MdPictureAsPdf;
-  if (['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac'].includes(extension)) return MdAudioFile;
-  if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm'].includes(extension)) return MdVideoFile;
-  if (['xlsx', 'xls', 'csv', 'ods'].includes(extension)) return MdTableChart;
-  if (['doc', 'docx', 'odt', 'rtf'].includes(extension)) return MdDescription;
-  if (['zip', 'rar', '7z', 'tar', 'gz', 'bz2'].includes(extension)) return MdFolderZip;
-  if (['js', 'jsx', 'ts', 'tsx', 'py', 'java', 'cpp', 'c', 'cs', 'php', 'rb', 'go', 'rs', 'swift', 'kt'].includes(extension)) return MdCode;
-  if (['txt', 'md', 'json', 'xml', 'yml', 'yaml', 'log'].includes(extension)) return MdTextSnippet;
+  const extension = fileName.split(".").pop();
+
+  if (extension === "pdf") return MdPictureAsPdf;
+  if (["mp3", "wav", "ogg", "m4a", "flac", "aac"].includes(extension))
+    return MdAudioFile;
+  if (["mp4", "avi", "mov", "wmv", "flv", "mkv", "webm"].includes(extension))
+    return MdVideoFile;
+  if (["xlsx", "xls", "csv", "ods"].includes(extension)) return MdTableChart;
+  if (["doc", "docx", "odt", "rtf"].includes(extension)) return MdDescription;
+  if (["zip", "rar", "7z", "tar", "gz", "bz2"].includes(extension))
+    return MdFolderZip;
+  if (
+    [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "py",
+      "java",
+      "cpp",
+      "c",
+      "cs",
+      "php",
+      "rb",
+      "go",
+      "rs",
+      "swift",
+      "kt",
+    ].includes(extension)
+  )
+    return MdCode;
+  if (["txt", "md", "json", "xml", "yml", "yaml", "log"].includes(extension))
+    return MdTextSnippet;
   return MdInsertDriveFile;
 };
 
@@ -165,4 +198,18 @@ export const convertByteToSize = (byte) => {
   if (mb < 1024) return `${mb.toFixed(1)} MB`;
   const gb = mb / 1024;
   return `${gb.toFixed(1)} GB`;
+};
+
+export const formartJSON = (value) => {
+  try {
+    return JSON.stringify(
+      typeof value === "string"
+        ? JSON.parse(value)
+        : value,
+      null,
+      2
+    );
+  } catch {
+    return value;
+  }
 };

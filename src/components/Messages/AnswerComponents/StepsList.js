@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { formartJSON } from "../../../utils/helpers";
 
 function ToolCall({ step }) {
   return (
@@ -9,15 +10,7 @@ function ToolCall({ step }) {
       </div>
       <div className="overflow-auto max-h-96 p-2 bg-[#F9F9F9] dark:bg-[#171717] border border-[#E4E4E4] dark:border-[#454545] rounded-2xl">
         <pre className="whitespace-pre text-[13px] text-[#333333] dark:text-[#CCCCCC] font-mono">
-          <code>
-            {JSON.stringify(
-              typeof step.tool_args === "string"
-                ? JSON.parse(step.tool_args)
-                : step.tool_args,
-              null,
-              2
-            )}
-          </code>
+          <code>{formartJSON(step.tool_args)}</code>
         </pre>
       </div>
     </div>
@@ -33,15 +26,7 @@ function ToolResult({ step }) {
       </div>
       <div className="overflow-auto max-h-96 p-2 bg-[#F9F9F9] dark:bg-[#171717] border border-[#E4E4E4] dark:border-[#454545] rounded-2xl">
         <pre className="whitespace-pre text-[13px] text-[#333333] dark:text-[#CCCCCC] font-mono">
-          <code>
-            {JSON.stringify(
-              typeof step.tool_result === "string"
-                ? JSON.parse(step.tool_result)
-                : step.tool_result,
-              null,
-              2
-            )}
-          </code>
+          <code>{formartJSON(step.tool_result)}</code>
         </pre>
       </div>
     </div>
@@ -70,7 +55,6 @@ function Step({ step }) {
 }
 
 function StepsList({ steps }) {
-  console.log(steps);
   return (
     <motion.div
       initial={{ opacity: 0, height: 0 }}
