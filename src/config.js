@@ -2,7 +2,11 @@ import { convertToJson } from "./utils/helpers";
 
 const CONFIG = {
   API_BASE_URL: process.env.REACT_APP_API_URL,
-  
+  CHECK_RUNNING_STATUS:
+    process.env.REACT_APP_CHECK_RUNNING_STATUS === undefined
+      ? true
+      : process.env.REACT_APP_CHECK_RUNNING_STATUS === "true",
+
   FIREBASE_CONFIG: {
     apiKey: process.env.REACT_APP_APIKEY,
     authDomain: process.env.REACT_APP_AUTHDOMAIN,
@@ -60,7 +64,7 @@ const CONFIG = {
           active: "True",
           from: "NONEY",
           description: "Powerful code generation model.",
-        }
+        },
       ],
       default_model: null,
     },
@@ -81,7 +85,7 @@ const CONFIG = {
           active: "True",
           from: "NONEY",
           description: "Advanced capabilities for HRMS related queries.",
-        }
+        },
       ],
       default_model: null,
     },
@@ -99,10 +103,10 @@ const CONFIG = {
 
 CONFIG.AI_MODELS.TEXT.default_model = CONFIG.AI_MODELS.TEXT.models[0];
 CONFIG.AI_MODELS.CODE.default_model = CONFIG.AI_MODELS.CODE.models[0];
-CONFIG.AI_MODELS.SYNAPSES_HRMS_ASSISTANT.default_model = CONFIG.AI_MODELS.SYNAPSES_HRMS_ASSISTANT.models[0];
+CONFIG.AI_MODELS.SYNAPSES_HRMS_ASSISTANT.default_model =
+  CONFIG.AI_MODELS.SYNAPSES_HRMS_ASSISTANT.models[0];
 
 CONFIG.AI_DEFAULT_TYPE =
   convertToJson(localStorage.getItem("AI_DEFAULT_TYPE")) || CONFIG.AI_TYPES[0];
-
 
 export default CONFIG;
