@@ -4,6 +4,7 @@ import usePromptStore, { useMicStore } from "../store/usePromptStores";
 const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
+  const recordedText = useMicStore((state) => state.recordedText);
 
   const handleChange = (e) => {
     const isRecording = useMicStore.getState().isRecording;
@@ -35,7 +36,28 @@ const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
       }
     };
     autoResize();
-  }, [prompt, textareaRef]);
+  }, [prompt, textareaRef, recordedText]);
+
+  useEffect(() => {
+    if (recordedText) {
+      const recordingTextArea = document.getElementById("recording-text-area");
+      if (recordingTextArea) {
+        recordingTextArea.scrollTop = recordingTextArea.scrollHeight;
+      }
+    }
+  }, [recordedText]);
+
+  if (recordedText)
+    return (
+      <div
+        id="recording-text-area"
+        className="w-full bg-[#FFFFFF] dark:bg-[#303030] resize-none outline-none text-black dark:text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto text-wrap break-words"
+      >
+        {prompt}
+        {prompt.length > 0 && !prompt.endsWith(" ") ? " " : ""}
+        <span className="opacity-75 italic">{recordedText}</span>
+      </div>
+    );
 
   return (
     <textarea
