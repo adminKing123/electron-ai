@@ -73,4 +73,11 @@ export const useFileInputStore = create((set) => ({
   clearFiles: () => set({ attachedFiles: {} }),
 }));
 
+export const useMicStore = create((set) => ({
+  isRecording: false,
+  setIsRecording: (value) => set({ isRecording: value }),
+  recordedText: "",
+  setRecordedText: (value) => set({ recordedText: value }),
+}));
+
 export default usePromptStore;

@@ -1,6 +1,6 @@
 import { IoArrowUp, IoStop } from "react-icons/io5";
 import { useProcessController } from "../../store/useMessagesStore";
-import usePromptStore, { useFileInputStore, useModelStore } from "../../store/usePromptStores";
+import usePromptStore, { useFileInputStore, useMicStore, useModelStore } from "../../store/usePromptStores";
 
 const SendButton = ({ onClick }) => {
   const process = useProcessController((state) => state.process);
@@ -8,6 +8,7 @@ const SendButton = ({ onClick }) => {
   const prompt = usePromptStore((state) => state.prompt);
   const model = useModelStore((state) => state.model);
   const isGeneratingPrompt = process ? true : false;
+  const isRecording = useMicStore((state) => state.isRecording);
   const disabled = !prompt.trim() || model === null ? true : false;
 
   const { attachedFiles } = useFileInputStore();
@@ -18,6 +19,8 @@ const SendButton = ({ onClick }) => {
   const stopGeneration = () => {
     setProcess(null, null, true);
   };
+
+  if (isRecording) return null;
 
   if (isGeneratingPrompt)
     return (

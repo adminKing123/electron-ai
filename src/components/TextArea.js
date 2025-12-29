@@ -1,11 +1,13 @@
 import { useEffect } from "react";
-import usePromptStore from "../store/usePromptStores";
+import usePromptStore, { useMicStore } from "../store/usePromptStores";
 
 const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
 
   const handleChange = (e) => {
+    const isRecording = useMicStore.getState().isRecording;
+    if (isRecording) return;
     setPrompt(e.target.value);
   };
 

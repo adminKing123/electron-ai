@@ -2,6 +2,7 @@ import FileInputTaker from "./FileInputTaker";
 import SelectAIModel from "./SelectAIModel";
 import SendButton from "./SendButton";
 import SearchOptionsPopover from "./SearchOptionsPopover";
+import MicButton from "./MicButton";
 
 const PromptActions = ({ handleSend, fileInputRef, chat }) => {
   return (
@@ -11,7 +12,8 @@ const PromptActions = ({ handleSend, fileInputRef, chat }) => {
         <FileInputTaker inputRef={fileInputRef} chat={chat} />
         <SearchOptionsPopover />
       </div>
-      <div>
+      <div className="flex items-center gap-2">
+        <MicButton />
         <SendButton onClick={handleSend} />
       </div>
     </div>

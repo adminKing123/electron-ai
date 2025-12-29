@@ -9,6 +9,7 @@ import handleStream from "../apis/prompt_generation/handleStream";
 import usePromptStore, {
   useDeepResearchStore,
   useFileInputStore,
+  useMicStore,
   useModelStore,
   useWebSearchStore,
 } from "../store/usePromptStores";
@@ -91,6 +92,7 @@ const Prompt = ({ chat }) => {
     const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
     const { clearFiles: clearFilesFromInputBox, attachedFiles } =
       useFileInputStore.getState();
+    const { isRecording } = useMicStore.getState();
 
     const files = Object.values(attachedFiles);
     const any_file_uploading = files.some((file) =>
@@ -100,7 +102,7 @@ const Prompt = ({ chat }) => {
     const isPromptSendDisabled =
       process || !prompt.trim() || model === null
         ? true
-        : false || any_file_uploading;
+        : false || any_file_uploading || isRecording;
 
     if (prompt.length > CONFIG.MAX_PROMPT_LENGTH) {
       notifyTextAreaLimitReached();
