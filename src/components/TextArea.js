@@ -51,7 +51,7 @@ const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
     return (
       <div
         id="recording-text-area"
-        className="w-full bg-[#FFFFFF] dark:bg-[#303030] resize-none outline-none text-black dark:text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto text-wrap break-words"
+        className="w-full bg-[#FFFFFF] dark:bg-[#303030] resize-none outline-none text-black dark:text-white text-[15px] min-h-[30px] max-h-[240px] overflow-y-auto text-wrap break-words pb-2"
       >
         {prompt}
         {prompt.length > 0 && !prompt.endsWith(" ") ? " " : ""}
