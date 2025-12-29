@@ -26,7 +26,7 @@ const messages = [
 ];
 
 const LoadingStateUI = () => {
-  const [index, setIndex] = useState(-1);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,11 +37,7 @@ const LoadingStateUI = () => {
   }, []);
 
   return (
-    <div
-      className={`bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex items-center justify-center flex-col ${
-        index === -1 ? "opacity-0" : "opacity-100"
-      } transition-opacity duration-500`}
-    >
+    <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex items-center justify-center flex-col">
       <TbGalaxy className="text-[#000000] dark:text-white w-[72px] h-[72px] animate-spin [animation-duration:5s] mb-8" />
       <AnimatePresence mode="wait">
         <motion.p
@@ -108,9 +104,21 @@ const ServerHealthCheck = ({ children }) => {
     if (!CONFIG.CHECK_RUNNING_STATUS) return;
 
     const checkHealth = async () => {
+      const startTime = Date.now();
+
       try {
         await checkServerHealth();
-        setServerState(SERVER_STATES.READY);
+
+        const elapsed = Date.now() - startTime;
+        const remaining = 3000 - elapsed; // 3000ms minimum delay
+
+        if (remaining > 0) {
+          setTimeout(() => {
+            setServerState(SERVER_STATES.READY);
+          }, remaining);
+        } else {
+          setServerState(SERVER_STATES.READY);
+        }
       } catch (error) {
         setServerState(SERVER_STATES.FAILED);
       }
@@ -123,9 +131,7 @@ const ServerHealthCheck = ({ children }) => {
 
   if (serverState === SERVER_STATES.CONNECTING) return <LoadingStateUI />;
 
-  if (serverState === SERVER_STATES.FAILED) {
-    return <ErrorStateUI />;
-  }
+  if (serverState === SERVER_STATES.FAILED) return <ErrorStateUI />;
 
   return children;
 };
