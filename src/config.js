@@ -30,12 +30,12 @@ const CONFIG = {
     {
       id: "CODE",
       name: "Coder",
-      description: "Best for code generation and understanding",
+      description: "Best for coding tasks",
     },
     {
-      id: "SYNAPSES_HRMS_ASSISTANT",
-      name: "Synapses HRMS Assistant",
-      description: "Best for HRMS related queries (Synapses)",
+      id: "HRMS_ASSISTANT_1_0",
+      name: "HRMS Assistant 1.0",
+      description: "@Synapses XTL",
     },
   ],
 
@@ -68,23 +68,23 @@ const CONFIG = {
       ],
       default_model: null,
     },
-    SYNAPSES_HRMS_ASSISTANT: {
+    HRMS_ASSISTANT_1_0: {
       models: [
         {
           id: "noney-hrms-assistant-20241001",
-          name: "Noney HRMS Assistant",
+          name: "HRMS Assistant 1.0",
           google_search: false,
           active: "True",
           from: "NONEY",
-          description: "Specialized in HRMS related queries.",
+          description: "Easy-going and quick.",
         },
         {
           id: "noney-hrms-assistant-pro-20241001",
-          name: "Noney HRMS Assistant Pro",
+          name: "HRMS Assistant Pro",
           google_search: false,
           active: "True",
           from: "NONEY",
-          description: "Advanced capabilities for HRMS related queries.",
+          description: "Heavy-duty but accurate.",
         },
       ],
       default_model: null,
@@ -103,8 +103,8 @@ const CONFIG = {
 
 CONFIG.AI_MODELS.TEXT.default_model = CONFIG.AI_MODELS.TEXT.models[0];
 CONFIG.AI_MODELS.CODE.default_model = CONFIG.AI_MODELS.CODE.models[0];
-CONFIG.AI_MODELS.SYNAPSES_HRMS_ASSISTANT.default_model =
-  CONFIG.AI_MODELS.SYNAPSES_HRMS_ASSISTANT.models[0];
+CONFIG.AI_MODELS.HRMS_ASSISTANT_1_0.default_model =
+  CONFIG.AI_MODELS.HRMS_ASSISTANT_1_0.models[0];
 
 CONFIG.AI_DEFAULT_TYPE =
   convertToJson(localStorage.getItem("AI_DEFAULT_TYPE")) || CONFIG.AI_TYPES[0];
