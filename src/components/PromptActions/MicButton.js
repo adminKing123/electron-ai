@@ -62,13 +62,13 @@ const MicButton = () => {
       <div className="flex items-center gap-1">
         <button
           onClick={handleCancel}
-          className="disabled:opacity-50 rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="disabled:opacity-50 rounded-full p-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A]"
         >
           <PiX className="text-black dark:text-white text-base" />
         </button>
         <button
           onClick={handlePass}
-          className="disabled:opacity-50 rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="disabled:opacity-50 rounded-full p-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A]"
         >
           <PiCheck className="text-black dark:text-white text-base" />
         </button>
@@ -79,7 +79,7 @@ const MicButton = () => {
   return (
     <button
       onClick={handleStart}
-      className="disabled:opacity-50 rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+      className="disabled:opacity-50 rounded-full p-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A]"
     >
       <BsMic className="text-black dark:text-white text-base" />
     </button>
