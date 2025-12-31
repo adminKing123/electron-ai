@@ -81,6 +81,8 @@ const useMessageStore = create(
             });
         } else if (eventtype === "duration") {
           state.data[id].duration = eventdata.seconds;
+        } else if (eventtype === "file") {
+          state.data[id].answer_files = state.data[id].answer_files.concat([eventdata]);
         } else {
           state.data[id].answer[index] = {
             id: eventid,
