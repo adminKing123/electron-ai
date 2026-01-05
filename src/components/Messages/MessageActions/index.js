@@ -20,7 +20,7 @@ const MessageActions = ({ message_id, chat }) => {
     copyAnswer(message, callback);
   };
 
-  if (process?.id === message_id) return null;
+  if (process?.id === message_id || message?.interrupt?.id) return null;
 
   return (
     <div className="my-2" id={`message-actions-${message_id}`}>

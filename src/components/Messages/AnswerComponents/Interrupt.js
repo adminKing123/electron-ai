@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CONFIG from "../../../config";
 import useMessageStore from "../../../store/useMessagesStore";
 import usePromptStore from "../../../store/usePromptStores";
@@ -63,7 +64,7 @@ const ActionRequest = ({
   descision,
   chat,
 }) => {
-  const { name, description, args } = action_request;
+  const { name, description } = action_request;
   const { allowed_decisions } = review_config || [];
   const setAction = usePromptStore((state) => state.setAction);
   const setActionRequestDecision = useMessageStore(
@@ -130,6 +131,18 @@ const Interrupt = ({ chat, message_id, interrupt }) => {
   const interrupt_id = interrupt?.id;
   const action_requests = interrupt?.value?.action_requests || [];
   const review_configs = interrupt?.value?.review_configs || [];
+
+  useEffect(() => {
+    const promptBox = document.getElementById("prompt-box");
+    if (action_requests.length > 0 && interrupt_id) {
+      promptBox.classList.add("hidden");
+    } else {
+      promptBox.classList.remove("hidden");
+    }
+    return () => {
+      promptBox.classList.remove("hidden");
+    };
+  }, [action_requests]);
 
   if (action_requests.length === 0 || !interrupt_id) return null;
 
