@@ -37,11 +37,15 @@ export const handleSend = (chat, navigate) => {
       ? true
       : false || any_file_uploading || isRecording;
 
-  if (prompt.length > CONFIG.MAX_PROMPT_LENGTH) {
+  if (
+    !action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT &&
+    prompt.length > CONFIG.MAX_PROMPT_LENGTH
+  ) {
     notifyTextAreaLimitReached();
     return;
   }
-  if (isPromptSendDisabled) return;
+  if (!action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT && isPromptSendDisabled)
+    return;
 
   const google_search = isWebSearchDisabled ? false : isWebSearchOn;
   const generate_image = false;
@@ -62,6 +66,8 @@ export const handleSend = (chat, navigate) => {
     const { action, setAction } = usePromptStore.getState();
     if (action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT) {
       scrollToMessageTop(action.data.message_id);
+      setAction({});
+    } else if (action?.type === CONFIG.PROMPT_ACTION_TYPES.INTERRUPT_CONTINUE) {
       setAction({});
     } else {
       scrollToMessage(data.id);
@@ -96,7 +102,7 @@ export const handleSend = (chat, navigate) => {
       summarization_data,
     });
     removeDraftAPI({ id: CONFIG.NEW_CHAT_DRAFT_ID });
-    navigate(ROUTES.GET_CHAT_PAGE_URL(chat.id), {
+    navigate?.(ROUTES.GET_CHAT_PAGE_URL(chat.id), {
       state: { chat: { ...chat, is_new: false, shouldAutoFocus: false } },
     });
   };
@@ -114,6 +120,12 @@ export const handleSend = (chat, navigate) => {
       generate_image,
       created_at: oldMessge.created_at,
       updated_at: new Date(),
+      interrupt: {},
+    });
+  } else if (action?.type === CONFIG.PROMPT_ACTION_TYPES.INTERRUPT_CONTINUE) {
+    const oldMessge = getMessage(action.data.message_id);
+    id = setMessage(action.data.message_id, {
+      ...oldMessge,
       interrupt: {},
     });
   } else {
@@ -155,6 +167,7 @@ export const handleSend = (chat, navigate) => {
       google_search,
       model_id: model?.id,
       deep_research: useDeepResearchStore.getState().isDeepResearch,
+      descisions: action?.data?.descisions || undefined,
     },
     onProgress,
     onStart,

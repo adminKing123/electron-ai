@@ -44,6 +44,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
         google_search: data?.google_search ?? false,
         chat_uid: data?.chat_id ?? null,
         deep_research: data?.deep_research ?? false,
+        descisions: data?.descisions ?? null,
       }),
       signal: controller.signal,
     });

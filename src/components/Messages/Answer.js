@@ -9,7 +9,7 @@ import AnswerSources from "./AnswerComponents/AnswerSources";
 import AnswerSteps from "./AnswerComponents/AnswerSteps";
 import Interrupt from "./AnswerComponents/Interrupt";
 
-const Answer = ({ message_id }) => {
+const Answer = ({ message_id, chat }) => {
   const message = useMessageStore((state) => state.data[message_id]);
 
   const process = useProcessController(
@@ -64,7 +64,7 @@ const Answer = ({ message_id }) => {
         <AnswerProcess message_id={message_id} steps={message?.steps} />
       ) : null}
       {
-        message?.interrupt?.id ? <Interrupt message_id={message_id} interrupt={message.interrupt} /> : null
+        message?.interrupt?.id ? <Interrupt message_id={message_id} interrupt={message.interrupt} chat={chat} /> : null
       }
     </div>
   );

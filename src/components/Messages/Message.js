@@ -11,7 +11,7 @@ const Message = React.memo(({ message_id, chat }) => {
     >
       <MessagePrompt message_id={message_id} />
       <div className="group">
-        <Answer message_id={message_id} />
+        <Answer message_id={message_id} chat={chat} />
         <MessageActions message_id={message_id} chat={chat} />
       </div>
     </div>

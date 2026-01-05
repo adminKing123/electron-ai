@@ -1,4 +1,7 @@
+import CONFIG from "../../../config";
 import useMessageStore from "../../../store/useMessagesStore";
+import usePromptStore from "../../../store/usePromptStores";
+import { handleSend } from "../../../utils/handleSend";
 
 const DecisionBadge = ({ decision }) => {
   let textColor = "text-gray-500";
@@ -58,19 +61,32 @@ const ActionRequest = ({
   action_request,
   review_config,
   descision,
+  chat,
 }) => {
   const { name, description, args } = action_request;
   const { allowed_decisions } = review_config || [];
+  const setAction = usePromptStore((state) => state.setAction);
   const setActionRequestDecision = useMessageStore(
     (state) => state.setActionRequestDecision
   );
 
-  const handleDecision = (decision) => {
-    setActionRequestDecision(
+  const handleDecision = async (decision) => {
+    const descisions = setActionRequestDecision(
       message_id,
       index,
       decision?.type ? decision.type : null
     );
+    const remainingCount = descisions.filter((d) => d.type === null).length;
+    if (remainingCount === 0) {
+      await setAction({
+        type: CONFIG.PROMPT_ACTION_TYPES.INTERRUPT_CONTINUE,
+        data: {
+          message_id: message_id,
+          descisions: descisions,
+        },
+      });
+      handleSend(chat);
+    }
   };
 
   return (
@@ -110,7 +126,7 @@ const ActionRequest = ({
   );
 };
 
-const Interrupt = ({ message_id, interrupt }) => {
+const Interrupt = ({ chat, message_id, interrupt }) => {
   const interrupt_id = interrupt?.id;
   const action_requests = interrupt?.value?.action_requests || [];
   const review_configs = interrupt?.value?.review_configs || [];
@@ -127,6 +143,7 @@ const Interrupt = ({ message_id, interrupt }) => {
           action_request={action_request}
           review_config={review_configs[index]}
           descision={action_request?.decision}
+          chat={chat}
         />
       ))}
     </div>

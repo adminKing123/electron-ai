@@ -45,8 +45,12 @@ const useMessageStore = create(
         const message = state.data[message_id];
         if (!message?.interrupt?.value?.action_requests?.[action_index]) return;
 
-        message.interrupt.value.action_requests[action_index].decision = decision;
+        message.interrupt.value.action_requests[action_index].decision =
+          decision;
       });
+      const message = get().data[message_id];
+      const requests = message.interrupt?.value?.action_requests || [];
+      return requests.map((req) => ({ type: req.decision || null }));
     },
     deleteMessage: (message_id, id) => {
       set((state) => {
