@@ -40,6 +40,14 @@ const useMessageStore = create(
     getMessage: (id) => {
       return get().data[id];
     },
+    setActionRequestDecision: (message_id, action_index, decision) => {
+      set((state) => {
+        const message = state.data[message_id];
+        if (!message?.interrupt?.value?.action_requests?.[action_index]) return;
+
+        message.interrupt.value.action_requests[action_index].decision = decision;
+      });
+    },
     deleteMessage: (message_id, id) => {
       set((state) => {
         state.messages = state.messages.filter((msg) => msg !== message_id);
@@ -82,7 +90,9 @@ const useMessageStore = create(
         } else if (eventtype === "duration") {
           state.data[id].duration = eventdata.seconds;
         } else if (eventtype === "file") {
-          state.data[id].answer_files = state.data[id].answer_files.concat([eventdata]);
+          state.data[id].answer_files = state.data[id].answer_files.concat([
+            eventdata,
+          ]);
         } else if (eventtype === "interrupt") {
           state.data[id].interrupt = eventdata;
         } else {
