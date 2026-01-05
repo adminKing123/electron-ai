@@ -128,6 +128,7 @@ const Prompt = ({ chat }) => {
         generate_image,
         created_at: oldMessge.created_at,
         updated_at: new Date(),
+        interrupt: {},
       });
     } else {
       id = addMessage({
@@ -150,6 +151,7 @@ const Prompt = ({ chat }) => {
           download_url: file.download_url,
           size: file.size,
         })),
+        interrupt: {},
       });
     }
 

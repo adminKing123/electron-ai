@@ -83,6 +83,8 @@ const useMessageStore = create(
           state.data[id].duration = eventdata.seconds;
         } else if (eventtype === "file") {
           state.data[id].answer_files = state.data[id].answer_files.concat([eventdata]);
+        } else if (eventtype === "interrupt") {
+          state.data[id].interrupt = eventdata;
         } else {
           state.data[id].answer[index] = {
             id: eventid,
