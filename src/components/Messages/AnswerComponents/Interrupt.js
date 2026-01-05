@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 const RejectButton = () => {
   return (
     <button className="text-white dark:text-white text-xs bg-red-500 font-semibold rounded-md px-2 py-1">
@@ -48,30 +46,6 @@ const Interrupt = ({ message_id, interrupt }) => {
   const interrupt_id = interrupt?.id;
   const action_requests = interrupt?.value?.action_requests || [];
   const review_configs = interrupt?.value?.review_configs || [];
-
-  useEffect(() => {
-    function togglePromptVisiblity(show = false) {
-      const promptBox = document.getElementById("prompt-box");
-      const messageActionsBox = document.getElementById(
-        `message-actions-${message_id}`
-      );
-      if (promptBox && messageActionsBox) {
-        if (show) {
-          promptBox.classList.remove("hidden");
-          messageActionsBox.classList.remove("hidden");
-        } else {
-          promptBox.classList.add("hidden");
-          messageActionsBox.classList.add("hidden");
-        }
-      }
-    }
-    if (action_requests.length === 0 || !interrupt_id)
-      togglePromptVisiblity(true);
-    else togglePromptVisiblity(false);
-    return () => {
-      togglePromptVisiblity(true);
-    };
-  }, []);
 
   if (action_requests.length === 0 || !interrupt_id) return null;
 
