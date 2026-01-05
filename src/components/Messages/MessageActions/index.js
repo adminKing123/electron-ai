@@ -23,7 +23,7 @@ const MessageActions = ({ message_id, chat }) => {
   if (process?.id === message_id) return null;
 
   return (
-    <div className="my-2">
+    <div className="my-2" id={`message-actions-${message_id}`}>
       <div className="flex items-center justify-between">
         <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
           <CopyButton handleCopy={handleAnswerCopy} />

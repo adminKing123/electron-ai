@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const RejectButton = () => {
   return (
     <button className="text-white dark:text-white text-xs bg-red-500 font-semibold rounded-md px-2 py-1">
@@ -19,7 +21,7 @@ const ActionRequest = ({ message_id, action_request, review_config }) => {
   const { allowed_decisions } = review_config || [];
 
   return (
-    <div className="border border-[#E4E4E4] dark:border-[#454545] bg-[#eeeeee] dark:bg-[#292929] rounded-xl px-5 py-3">
+    <div className="border border-[#E4E4E4] dark:border-[#454545] bg-[#f6f6f6] dark:bg-[#292929] rounded-xl px-5 py-3">
       <div className="mb-3">
         <h3 className="text-black dark:text-white font-semibold italic">
           <span>{name}</span>
@@ -47,7 +49,29 @@ const Interrupt = ({ message_id, interrupt }) => {
   const action_requests = interrupt?.value?.action_requests || [];
   const review_configs = interrupt?.value?.review_configs || [];
 
-  console.log("Interrupt:", interrupt);
+  useEffect(() => {
+    function togglePromptVisiblity(show = false) {
+      const promptBox = document.getElementById("prompt-box");
+      const messageActionsBox = document.getElementById(
+        `message-actions-${message_id}`
+      );
+      if (promptBox && messageActionsBox) {
+        if (show) {
+          promptBox.classList.remove("hidden");
+          messageActionsBox.classList.remove("hidden");
+        } else {
+          promptBox.classList.add("hidden");
+          messageActionsBox.classList.add("hidden");
+        }
+      }
+    }
+    if (action_requests.length === 0 || !interrupt_id)
+      togglePromptVisiblity(true);
+    else togglePromptVisiblity(false);
+    return () => {
+      togglePromptVisiblity(true);
+    };
+  }, []);
 
   if (action_requests.length === 0 || !interrupt_id) return null;
 
