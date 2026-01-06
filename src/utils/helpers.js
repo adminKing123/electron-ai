@@ -119,6 +119,11 @@ export const copyAnswer = async (message, callback) => {
   }
 };
 
+export const copyText = async (text, callback) => {
+  await navigator.clipboard.writeText(text);
+  callback?.();
+};
+
 export const validate_chart_data = (data) => {
   if (typeof data !== "string") return null;
   let trimmedData = data.trim();

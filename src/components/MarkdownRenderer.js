@@ -8,12 +8,14 @@ import "katex/dist/katex.min.css";
 import MdCode from "./MarkdownComponents/MdCode";
 import MdImage from "./MarkdownComponents/MdImage";
 import MdChart from "./MarkdownComponents/MdChart";
+import MdCopyInlineText from "./MarkdownComponents/CopyInlineText";
 
 const MarkdownRenderer = ({ message_id, content }) => {
-//const MarkdownRenderer = ({ content }) => {
+//const MarkdownRenderer = ({ content }) => {MdCopyInlineText
   const components = useMemo(
     () => ({
       chartdata: ({ node, ...props }) => <MdChart message_id={message_id} {...props} />,
+      copyinlinetext: ({ node, ...props }) => <MdCopyInlineText {...props} />,
       img: ({ node, ...props }) => <MdImage {...props} />,
       code({ node, inline, className, children, ...props }) {
         const match = /language-(\w+)/.exec(className || "");

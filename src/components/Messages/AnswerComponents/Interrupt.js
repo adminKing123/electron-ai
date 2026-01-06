@@ -26,7 +26,7 @@ const DecisionBadge = ({ decision }) => {
 const RejectButton = ({ ...props }) => {
   return (
     <button
-      className="text-white dark:text-white text-xs bg-red-500 font-semibold rounded-md px-2 py-1"
+      className="text-white dark:text-white text-xs bg-red-500 hover:bg-red-600 active:bg-red-700 font-semibold rounded-md px-2 py-1"
       {...props}
     >
       Reject
@@ -37,7 +37,7 @@ const RejectButton = ({ ...props }) => {
 const ApproveButton = ({ ...props }) => {
   return (
     <button
-      className="text-white dark:text-white text-xs bg-green-500 font-semibold rounded-md px-2 py-1"
+      className="text-white dark:text-white text-xs bg-green-500 hover:bg-green-600 active:bg-green-700 font-semibold rounded-md px-2 py-1"
       {...props}
     >
       Approve
@@ -48,7 +48,7 @@ const ApproveButton = ({ ...props }) => {
 const UndoButton = ({ ...props }) => {
   return (
     <button
-      className="text-white dark:text-white text-xs bg-yellow-500 font-semibold rounded-md px-2 py-1"
+      className="text-white dark:text-white text-xs bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 font-semibold rounded-md px-2 py-1"
       {...props}
     >
       Undo
