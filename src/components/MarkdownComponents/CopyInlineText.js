@@ -23,8 +23,8 @@ const MdCopyInlineText = ({ children }) => {
       onClick={handleCopy}
       className="px-2 py-1 text-xs inline-flex items-center border border-[#eaeaea] dark:border-[#414141] bg-[#EAEAEA] dark:bg-[#232323] hover:bg-[#EFEFEF] dark:hover:bg-[#252525] active:bg-[#dbdbdb] dark:active:bg-[#1f1f1f] rounded-full"
     >
-      <div className="max-w-[100px] truncate">
-        <span className="">{text}</span>
+      <div className="max-w-[100px] truncate mr-1">
+        <span>{text}</span>
       </div>
       {copied ? <MdDone /> : <LuCopy />}
     </button>
