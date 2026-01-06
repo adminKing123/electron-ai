@@ -147,7 +147,7 @@ const Interrupt = ({ chat, message_id, interrupt }) => {
   if (action_requests.length === 0 || !interrupt_id) return null;
 
   return (
-    <div>
+    <div className="flex flex-col gap-3 my-3">
       {action_requests.map((action_request, index) => (
         <ActionRequest
           key={index}
