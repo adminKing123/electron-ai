@@ -47,7 +47,7 @@ const CONFIG = {
       models: [
         {
           id: "noney-1.0-twinkle-20241001",
-          name: "Noney 1.0 Twinkle",
+          name: "Electron AI 1.0 Twinkle",
           google_search: false,
           active: "True",
           from: "NONEY",
@@ -55,7 +55,7 @@ const CONFIG = {
         },
         {
           id: "noney-2.0-twinkle-20241001",
-          name: "Noney 2.0 Twinkle",
+          name: "Electron AI 2.0 Twinkle",
           google_search: false,
           active: "True",
           from: "NONEY",
@@ -68,7 +68,7 @@ const CONFIG = {
       models: [
         {
           id: "noney-code-gen-20241001",
-          name: "Noney Code Gen1.0",
+          name: "Electron AI Code Gen1.0",
           google_search: false,
           active: "True",
           from: "NONEY",
@@ -76,7 +76,7 @@ const CONFIG = {
         },
         {
           id: "noney-code-gen-pro-20241001",
-          name: "Noney Code Gen Pro",
+          name: "Electron AI Code Gen Pro",
           google_search: false,
           active: "True",
           from: "NONEY",

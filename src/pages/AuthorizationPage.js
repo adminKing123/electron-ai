@@ -22,7 +22,7 @@ const AuthorizationPage = () => {
               Authorization Required
             </h2>
             <p className="text-[#aaa] text-sm">
-              To continue using <b>Noney</b>
+              To continue using <b>Electron AI</b>
             </p>
           </div>
           <div className="flex justify-center mt-6">

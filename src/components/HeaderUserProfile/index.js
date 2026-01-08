@@ -50,7 +50,7 @@ const HeaderUserProfile = () => {
 
             <DropdownMenu.Item className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8 outline-none cursor-pointer">
               <LuSettings2 />
-              <span>Customize Noney</span>
+              <span>Customize Electron AI</span>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item asChild>
