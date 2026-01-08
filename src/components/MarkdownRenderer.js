@@ -9,6 +9,7 @@ import MdCode from "./MarkdownComponents/MdCode";
 import MdImage from "./MarkdownComponents/MdImage";
 import MdChart from "./MarkdownComponents/MdChart";
 import MdCopyInlineText from "./MarkdownComponents/CopyInlineText";
+import MdDownloadInlineFile from "./MarkdownComponents/MdDownloadInlineFile";
 
 const MarkdownRenderer = ({ message_id, content }) => {
 //const MarkdownRenderer = ({ content }) => {MdCopyInlineText
@@ -16,6 +17,7 @@ const MarkdownRenderer = ({ message_id, content }) => {
     () => ({
       chartdata: ({ node, ...props }) => <MdChart message_id={message_id} {...props} />,
       copyinlinetext: ({ node, ...props }) => <MdCopyInlineText {...props} />,
+      downloadinlinefile: ({ node, ...props }) => <MdDownloadInlineFile {...props} />,
       img: ({ node, ...props }) => <MdImage {...props} />,
       code({ node, inline, className, children, ...props }) {
         const match = /language-(\w+)/.exec(className || "");
