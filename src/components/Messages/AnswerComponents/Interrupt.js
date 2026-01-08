@@ -97,7 +97,7 @@ const ActionRequest = ({
           <span>{name}</span>
         </h3>
         <p className="text-[13px] text-[#333333] dark:text-[#CCCCCC]">
-          <pre>{description}</pre>
+          <pre className="text-wrap">{description}</pre>
         </p>
       </div>
 
