@@ -33,7 +33,7 @@ const Header = () => {
       <div className="flex items-center">
         <SidebarOpenButton />
         <button className="text-xl text-black dark:text-white font-semibold p-2 rounded-lg">
-          Electron AI
+          Spiral
         </button>
       </div>
       <div className="flex items-center gap-5">

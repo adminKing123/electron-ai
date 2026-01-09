@@ -6,7 +6,7 @@ const AuthorizationHeader = () => {
       <div className="flex items-center">
         <button className="text-xl text-[#000000] dark:text-white font-semibold py-1.5 px-3 rounded-lg flex items-center gap-2">
           <TbGalaxy />
-          Electron AI
+          Spiral
         </button>
       </div>
     </header>
