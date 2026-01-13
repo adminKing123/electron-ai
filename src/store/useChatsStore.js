@@ -40,7 +40,7 @@ const useChatsStore = create((set, get) => ({
       await renameChatAPI(id, newTitle);
       set((state) => ({
         chats: state.chats.map((chat) =>
-          chat.id === id ? { ...chat, title: newTitle, updated_at: new Date() } : chat
+          chat.id === id ? { ...chat, title: newTitle, updated_at: new Date().toISOString() } : chat
         ),
       }));
     } catch (error) {

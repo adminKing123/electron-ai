@@ -119,7 +119,7 @@ export const handleSend = (chat, navigate) => {
       google_search,
       generate_image,
       created_at: oldMessge.created_at,
-      updated_at: new Date(),
+      updated_at: new Date().toISOString(),
       interrupt: {},
     });
   } else if (action?.type === CONFIG.PROMPT_ACTION_TYPES.INTERRUPT_CONTINUE) {
@@ -138,8 +138,8 @@ export const handleSend = (chat, navigate) => {
       model: model,
       google_search,
       generate_image,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       files: files.map((file) => ({
         file_id: file.file_id,
         user_id: file.user_id,
