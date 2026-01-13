@@ -9,9 +9,9 @@ const ENDPOINTS = {
   },
   DELETE_CHAT: (userId, chatId) => `/delete_chat/${userId}/${chatId}`,
   RENAME_CHAT: (userId, chatId) => `/rename_chat/${userId}/${chatId}`,
-  GET_UPLOAD_FILE: () => `${CONFIG.API_BASE_URL}/upload_file`,
+  GET_UPLOAD_FILE: () => `${CONFIG.FILE_CDN_URL}/upload_file`,
   GET_DELETE_FILE: (filename) =>
-    `${CONFIG.API_BASE_URL}/delete_file/${filename}`,
+    `${CONFIG.FILE_CDN_URL}/delete_file/${filename}`,
 
   GET_DOWNLOAD_URI: (download_path) => `${download_path}`,
 };

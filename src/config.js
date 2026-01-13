@@ -2,6 +2,7 @@ import { convertToJson } from "./utils/helpers";
 
 const CONFIG = {
   API_BASE_URL: process.env.REACT_APP_API_URL,
+  FILE_CDN_URL: process.env.REACT_APP_FILE_CDN_URL,
   CHECK_RUNNING_STATUS:
     process.env.REACT_APP_CHECK_RUNNING_STATUS === undefined
       ? true
