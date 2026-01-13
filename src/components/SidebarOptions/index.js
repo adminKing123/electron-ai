@@ -6,10 +6,20 @@ import ROUTES from "../../router/routes";
 import { useSidebarOpenState } from "../../store/useSidebarStores";
 import useMessageStore from "../../store/useMessagesStore";
 
-const SidebarOptionButton = ({ icon: Icon, label, ...props }) => {
+const SidebarOptionButton = ({
+  icon: Icon,
+  label,
+  showActiveState,
+  ...props
+}) => {
   return (
     <NavLink
-      className="px-[10px] py-[7px] text-[#000000] dark:text-[#E9E9E9] text-[14px] flex items-center gap-2 hover:bg-[#EFEFEF] dark:hover:bg-[#2F2F2F] active:bg-[#dbdbdb] dark:active:bg-[#232323] rounded-lg w-full"
+      className={({ isActive }) =>
+        `px-[10px] py-[7px] text-[#000000] dark:text-[#E9E9E9] text-[14px] flex items-center gap-2 hover:bg-[#EFEFEF] dark:hover:bg-[#2F2F2F] active:bg-[#dbdbdb] dark:active:bg-[#232323] rounded-lg w-full` +
+        (showActiveState && isActive
+          ? " bg-[#EFEFEF] dark:bg-[#232323]"
+          : "")
+      }
       {...props}
     >
       <span>
@@ -46,7 +56,14 @@ const SearchChatsButton = () => {
 };
 
 const LibraryButton = () => {
-  return <SidebarOptionButton icon={BiLibrary} label="Library" />;
+  return (
+    <SidebarOptionButton
+      icon={BiLibrary}
+      label="Library"
+      to={ROUTES.LIBRARY}
+      showActiveState
+    />
+  );
 };
 
 const SidebarOptions = () => {

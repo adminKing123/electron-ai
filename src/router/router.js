@@ -5,6 +5,7 @@ import ROUTES from "./routes";
 import CheckLogin from "../page_layouts/CheckLogin";
 import NewChatPage from "../pages/NewChatPage";
 import ChatPage from "../pages/ChatPage";
+import LibraryPage from "../pages/Library";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,9 @@ const AppRoutes = () => {
           <Route element={<MainLayout />}>
             <Route path={ROUTES.INDEX} element={<NewChatPage />} />
             <Route path={ROUTES.CHAT_PAGE} element={<ChatPage />} />
+          </Route>
+          <Route element={<MainLayout type="library" />}>
+            <Route path={ROUTES.LIBRARY} element={<LibraryPage />} />
           </Route>
         </Route>
       </Routes>

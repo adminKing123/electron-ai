@@ -24,7 +24,7 @@ const SidebarOpenButton = () => {
   );
 };
 
-const Header = () => {
+const Header = ({ type }) => {
   return (
     <header
       id="header"
@@ -37,7 +37,7 @@ const Header = () => {
         </button>
       </div>
       <div className="flex items-center gap-5">
-        <AITypeSelector />
+        {type === "chat" ? <AITypeSelector /> : null}
         <HeaderUserProfile />
       </div>
     </header>
