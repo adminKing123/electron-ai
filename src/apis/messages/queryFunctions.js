@@ -12,12 +12,8 @@ import { db } from "../../firebase";
 import { getChatAPI } from "../chats/queryFunctions";
 
 export const deleteMessageAPI = async (data) => {
-  const user = useUserStore.getState().user;
-
   const docRef = doc(
     db,
-    "users",
-    user.uid,
     "chats",
     data.chat_id,
     "messages",
@@ -32,12 +28,8 @@ export const deleteMessageAPI = async (data) => {
 };
 
 export const createMessageAPI = async (chat, message) => {
-  const user = useUserStore.getState().user;
-
   const docRef = doc(
     db,
-    "users",
-    user.uid,
     "chats",
     chat.id,
     "messages",
@@ -53,12 +45,8 @@ export const createMessageAPI = async (chat, message) => {
 };
 
 export const getMessagesAPI = async (chat) => {
-  const user = useUserStore.getState().user;
-
   const messagesRef = collection(
     db,
-    "users",
-    user.uid,
     "chats",
     chat.id,
     "messages"

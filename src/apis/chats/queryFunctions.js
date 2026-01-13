@@ -9,6 +9,7 @@ import {
   startAfter,
   getDoc,
   deleteDoc,
+  where,
 } from "firebase/firestore";
 import api from "..";
 import { db } from "../../firebase";
@@ -32,11 +33,12 @@ export const createChatAPI = async (data) => {
   const payload = {
     id: data.id,
     title: data.title,
+    owner_id: user.uid,
     created_at: data.created_at,
     updated_at: data.updated_at,
   };
 
-  const docRef = doc(db, "users", user.uid, "chats", data.id);
+  const docRef = doc(db, "chats", data.id);
   await setDoc(docRef, payload);
 
   return {
@@ -90,14 +92,19 @@ export const getDraftAPI = async (chatId) => {
 
 export const getChatsAPI = async (pageParam = null) => {
   const user = useUserStore.getState().user;
-  const chatsRef = collection(db, "users", user.uid, "chats");
+  const chatsRef = collection(db, "chats");
   const pageSize = CONFIG.CHATS_PAGE_SIZE;
-
-  let q = query(chatsRef, orderBy("updated_at", "desc"), limit(pageSize));
+  let q = query(
+    chatsRef,
+    where("owner_id", "==", user.uid),
+    orderBy("updated_at", "desc"),
+    limit(pageSize)
+  );
 
   if (pageParam) {
     q = query(
       chatsRef,
+      where("owner_id", "==", user.uid),
       orderBy("updated_at", "desc"),
       startAfter(pageParam),
       limit(pageSize)
@@ -121,9 +128,7 @@ export const getChatsAPI = async (pageParam = null) => {
 };
 
 export const getChatAPI = async (chat) => {
-  const user = useUserStore.getState().user;
-
-  const chatDocRef = doc(db, "users", user.uid, "chats", chat.id);
+  const chatDocRef = doc(db, "chats", chat.id);
   const chatDoc = await getDoc(chatDocRef);
 
   if (!chatDoc.exists()) return {};
