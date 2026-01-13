@@ -119,8 +119,6 @@ export const getChatsAPI = async (pageParam = null) => {
       id: doc.id,
       ...data,
       docRef: doc,
-      updated_at: data.updated_at?.toDate(),
-      created_at: data.created_at?.toDate(),
     };
   });
 

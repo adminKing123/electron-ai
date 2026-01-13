@@ -13,10 +13,8 @@ const MainLayout = ({ type = "chat" }) => {
       <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex">
         <Sidebar />
         <div className="w-full min-w-0 h-full flex-grow relative">
-          {type === "chat" ? <Header type={type} /> : null}
-          <div
-            className={`${type === "chat" ? "h-[calc(100%-64px)]" : "h-full"}`}
-          >
+          <Header type={type} />
+          <div className="h-[calc(100%-64px)]">
             <Outlet />
           </div>
         </div>
