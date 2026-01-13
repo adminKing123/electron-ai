@@ -6,15 +6,17 @@ import ROUTES from "../router/routes";
 import MainSideLayout from "../components/MainSideLayout";
 import MainModalLayout from "../components/MainModalLayout";
 
-const MainLayout = ({ type="chat" }) => {
+const MainLayout = ({ type = "chat" }) => {
   const user = useUserStore((state) => state.user);
   if (user)
     return (
       <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex">
         <Sidebar />
         <div className="w-full min-w-0 h-full flex-grow relative">
-          <Header type={type} />
-          <div className="h-[calc(100%-64px)]">
+          {type === "chat" ? <Header type={type} /> : null}
+          <div
+            className={`${type === "chat" ? "h-[calc(100%-64px)]" : "h-full"}`}
+          >
             <Outlet />
           </div>
         </div>
