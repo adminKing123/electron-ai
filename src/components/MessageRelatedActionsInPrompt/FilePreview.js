@@ -17,7 +17,7 @@ const FilePreview = ({ fileId }) => {
     e.stopPropagation();
     removeFile(fileObj.id);
     fileObj?.abort?.();
-    if (fileObj.download_url) removeFileAPI(fileObj.filename);
+    if (fileObj.download_url) removeFileAPI(fileObj.id);
   };
 
   return (

@@ -68,10 +68,10 @@ export const uploadFileAPI = ({
   };
 };
 
-export const removeFileAPI = async (filename) => {
+export const removeFileAPI = async (file_id) => {
   const response = await api({
     method: "DELETE",
-    url: ENDPOINTS.GET_DELETE_FILE(filename),
+    url: ENDPOINTS.GET_DELETE_FILE(file_id),
   });
   return response.data;
 };
