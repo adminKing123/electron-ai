@@ -13,7 +13,7 @@ import usePromptStore, {
 } from "../store/usePromptStores";
 import useChatsStore from "../store/useChatsStore";
 import ROUTES from "../router/routes";
-import { createMessageAPI } from "../apis/messages/queryFunctions";
+// import { createMessageAPI } from "../apis/messages/queryFunctions";
 import CONFIG from "../config";
 import { notifyTextAreaLimitReached } from "./notifier";
 import { removeDraftAPI } from "../apis/chats/queryFunctions";
@@ -76,7 +76,7 @@ export const handleSend = (chat, navigate) => {
 
   const onEnd = (data) => {
     const messageAdded = useMessageStore.getState().data[data.id];
-    createMessageAPI(chat, messageAdded);
+    // createMessageAPI(chat, messageAdded);
   };
 
   const onError = (data) => {
@@ -93,7 +93,7 @@ export const handleSend = (chat, navigate) => {
       },
     });
     const messageAdded = useMessageStore.getState().data[data.id];
-    createMessageAPI(chat, messageAdded);
+    // createMessageAPI(chat, messageAdded);
   };
 
   const handleNewChatEntered = (chat, summarization_data) => {

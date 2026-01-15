@@ -5,9 +5,8 @@ import {
   getDocs,
   orderBy,
   query,
-  setDoc,
+  // setDoc,
 } from "firebase/firestore";
-import useUserStore from "../../store/useUserStore";
 import { db } from "../../firebase";
 import { getChatAPI } from "../chats/queryFunctions";
 
@@ -27,22 +26,23 @@ export const deleteMessageAPI = async (data) => {
   };
 };
 
-export const createMessageAPI = async (chat, message) => {
-  const docRef = doc(
-    db,
-    "chats",
-    chat.id,
-    "messages",
-    message.id
-  );
+// export const createMessageAPI = async (chat, message) => {
+  // console.log(message)
+  // const docRef = doc(
+  //   db,
+  //   "chats",
+  //   chat.id,
+  //   "messages",
+  //   message.id
+  // );
   
-  await setDoc(docRef, message);
+  // await setDoc(docRef, message);
 
-  return {
-    ...message,
-    docRef,
-  };
-};
+  // return {
+  //   ...message,
+  //   docRef,
+  // };
+// };
 
 export const getMessagesAPI = async (chat) => {
   const messagesRef = collection(
