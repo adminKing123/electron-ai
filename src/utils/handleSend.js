@@ -107,9 +107,11 @@ export const handleSend = (chat, navigate) => {
     });
   };
 
+  let payload = null;
+
   if (action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT) {
     const oldMessge = getMessage(action.data.message_id);
-    id = setMessage(action.data.message_id, {
+    payload = {
       prompt,
       answer: [],
       sources: [],
@@ -121,15 +123,26 @@ export const handleSend = (chat, navigate) => {
       created_at: oldMessge.created_at,
       updated_at: new Date().toISOString(),
       interrupt: {},
-    });
+      files: files.map((file) => ({
+        file_id: file.file_id,
+        user_id: file.user_id,
+        original_name: file.original_name,
+        filename: file.filename,
+        file_type: file.file_type,
+        download_url: file.download_url,
+        size: file.size,
+      })),
+    };
+    id = setMessage(action.data.message_id, payload);
   } else if (action?.type === CONFIG.PROMPT_ACTION_TYPES.INTERRUPT_CONTINUE) {
     const oldMessge = getMessage(action.data.message_id);
-    id = setMessage(action.data.message_id, {
+    payload = {
       ...oldMessge,
       interrupt: {},
-    });
+    };
+    id = setMessage(action.data.message_id, payload);
   } else {
-    id = addMessage({
+    payload = {
       prompt,
       answer: [],
       sources: [],
@@ -150,7 +163,9 @@ export const handleSend = (chat, navigate) => {
         size: file.size,
       })),
       interrupt: {},
-    });
+    };
+    id = addMessage(payload);
+    payload.id = id;
   }
 
   if (chat.is_new) {
@@ -159,16 +174,24 @@ export const handleSend = (chat, navigate) => {
     });
   }
 
+  const payloadToSend = {
+    id: id,
+    chat_id: chat.id,
+    prompt: payload.prompt,
+    model: payload.model,
+    google_search: payload.google_search,
+    generate_image: payload.generate_image,
+    created_at: payload.created_at,
+    updated_at: payload.updated_at,
+    files: payload.files,
+    interrupt: payload.interrupt,
+    descisions: action?.data?.descisions || undefined,
+    deep_research: useDeepResearchStore.getState().isDeepResearch,
+  };
+
   handleStream(
-    id,
-    {
-      chat_id: chat.id,
-      prompt,
-      google_search,
-      model_id: model?.id,
-      deep_research: useDeepResearchStore.getState().isDeepResearch,
-      descisions: action?.data?.descisions || undefined,
-    },
+    payload.id,
+    payloadToSend,
     onProgress,
     onStart,
     onEnd,

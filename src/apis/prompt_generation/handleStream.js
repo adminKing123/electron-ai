@@ -38,14 +38,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
         "Content-Type": "application/json",
         Authorization: token ? `Bearer ${token}` : "",
       },
-      body: JSON.stringify({
-        prompt: data.prompt,
-        model_id: data?.model_id ?? null,
-        google_search: data?.google_search ?? false,
-        chat_uid: data?.chat_id ?? null,
-        deep_research: data?.deep_research ?? false,
-        descisions: data?.descisions ?? null,
-      }),
+      body: JSON.stringify(data),
       signal: controller.signal,
     });
 
