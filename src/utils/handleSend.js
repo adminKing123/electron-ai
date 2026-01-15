@@ -187,6 +187,7 @@ export const handleSend = (chat, navigate) => {
     interrupt: payload.interrupt,
     descisions: action?.data?.descisions || undefined,
     deep_research: useDeepResearchStore.getState().isDeepResearch,
+    action_type: action?.type || null,
   };
 
   handleStream(
