@@ -22,7 +22,7 @@ const AuthorizationPage = () => {
               Authorization Required
             </h2>
             <p className="text-[#aaa] text-sm">
-              To continue using <b>Spiral</b>
+              To continue using <b>AURA</b>
             </p>
           </div>
           <div className="flex justify-center mt-6">

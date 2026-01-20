@@ -48,7 +48,7 @@ const CONFIG = {
       models: [
         {
           id: "noney-1.0-twinkle-20241001",
-          name: "Spiral 1.0 Twinkle",
+          name: "AURA 1.0 Twinkle",
           google_search: false,
           active: "True",
           from: "NONEY",
@@ -56,7 +56,7 @@ const CONFIG = {
         },
         {
           id: "noney-2.0-twinkle-20241001",
-          name: "Spiral 2.0 Twinkle",
+          name: "AURA 2.0 Twinkle",
           google_search: false,
           active: "True",
           from: "NONEY",
@@ -69,7 +69,7 @@ const CONFIG = {
       models: [
         {
           id: "noney-code-gen-20241001",
-          name: "Spiral Code Gen1.0",
+          name: "AURA Code Gen1.0",
           google_search: false,
           active: "True",
           from: "NONEY",
@@ -77,7 +77,7 @@ const CONFIG = {
         },
         {
           id: "noney-code-gen-pro-20241001",
-          name: "Spiral Code Gen Pro",
+          name: "AURA Code Gen Pro",
           google_search: false,
           active: "True",
           from: "NONEY",
