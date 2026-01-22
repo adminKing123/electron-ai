@@ -35,6 +35,11 @@ const CONFIG = {
       description: "Best for coding tasks",
     },
     {
+      id: "MEDIA_GENERATOR",
+      name: "Media Generator",
+      description: "Generate media content",
+    },
+    {
       id: "HRMS_ASSISTANT_1_0",
       name: "HRMS Assistant 1.0",
       description: "@Synapses XTL",
@@ -82,7 +87,20 @@ const CONFIG = {
           active: "True",
           from: "NONEY",
           description: "Advanced code generation.",
-        }        
+        },
+      ],
+      default_model: null,
+    },
+    MEDIA_GENERATOR: {
+      models: [
+        {
+          id: "noney-image-gen-20241001",
+          name: "AURA Image Gen1.0",
+          google_search: false,
+          active: "True",
+          from: "NONEY",
+          description: "Best for Image Generation.",
+        },
       ],
       default_model: null,
     },
@@ -123,6 +141,8 @@ const CONFIG = {
 
 CONFIG.AI_MODELS.TEXT.default_model = CONFIG.AI_MODELS.TEXT.models[0];
 CONFIG.AI_MODELS.CODE.default_model = CONFIG.AI_MODELS.CODE.models[0];
+CONFIG.AI_MODELS.MEDIA_GENERATOR.default_model =
+  CONFIG.AI_MODELS.MEDIA_GENERATOR.models[0];
 CONFIG.AI_MODELS.HRMS_ASSISTANT_1_0.default_model =
   CONFIG.AI_MODELS.HRMS_ASSISTANT_1_0.models[0];
 

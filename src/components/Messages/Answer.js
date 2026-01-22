@@ -7,13 +7,14 @@ import AnswerFiles from "./AnswerComponents/AnswerFiles";
 import AnswerProcess from "./AnswerComponents/AnswerProcess";
 import AnswerSources from "./AnswerComponents/AnswerSources";
 import AnswerSteps from "./AnswerComponents/AnswerSteps";
+import GeneratedImages from "./AnswerComponents/GeneratedImages";
 import Interrupt from "./AnswerComponents/Interrupt";
 
 const Answer = ({ message_id, chat }) => {
   const message = useMessageStore((state) => state.data[message_id]);
 
   const process = useProcessController(
-    (state) => state.message_process?.[message.id]
+    (state) => state.message_process?.[message.id],
   );
   if (
     process?.id === message?.id &&
@@ -32,7 +33,15 @@ const Answer = ({ message_id, chat }) => {
       ) : null}
       {message?.answer?.map((part) => {
         if (part.type === "text") {
-          return <MarkdownRenderer key={part.id} message_id={message?.id} content={part.data} />;
+          return (
+            <MarkdownRenderer
+              key={part.id}
+              message_id={message?.id}
+              content={part.data}
+            />
+          );
+        } else if (part.type === "generated_images") {
+          return <GeneratedImages key={part.id} images={part?.data || []} />;
         }
         return (
           <div
@@ -55,7 +64,10 @@ const Answer = ({ message_id, chat }) => {
         );
       })}
       {message?.answer_files?.length ? (
-        <AnswerFiles answer_files={message?.answer_files} message_id={message?.id} />
+        <AnswerFiles
+          answer_files={message?.answer_files}
+          message_id={message?.id}
+        />
       ) : null}
       {message?.sources?.length ? (
         <AnswerSources sources={message?.sources} message_id={message?.id} />
@@ -63,9 +75,13 @@ const Answer = ({ message_id, chat }) => {
       {message?.steps?.length ? (
         <AnswerProcess message_id={message_id} steps={message?.steps} />
       ) : null}
-      {
-        message?.interrupt?.id ? <Interrupt message_id={message_id} interrupt={message.interrupt} chat={chat} /> : null
-      }
+      {message?.interrupt?.id ? (
+        <Interrupt
+          message_id={message_id}
+          interrupt={message.interrupt}
+          chat={chat}
+        />
+      ) : null}
     </div>
   );
 };

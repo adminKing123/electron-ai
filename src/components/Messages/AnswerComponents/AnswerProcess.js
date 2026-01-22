@@ -2,7 +2,7 @@ import { useProcessController } from "../../../store/useMessagesStore";
 
 const AnswerProcess = ({ message_id, steps }) => {
   const process = useProcessController(
-    (state) => state.message_process?.[message_id]
+    (state) => state.message_process?.[message_id],
   );
   const lastStep = steps[steps.length - 1];
 
@@ -11,6 +11,12 @@ const AnswerProcess = ({ message_id, steps }) => {
     return (
       <div className="mt-3">
         <button className="skeleton w-[108px] h-[34px] rounded-full"></button>
+      </div>
+    );
+  if (lastStep?.type === "image_generation")
+    return (
+      <div className="my-4">
+        <div className="bg-red-500 skeleton w-full max-w-[400px] aspect-square rounded-lg"></div>
       </div>
     );
 };
