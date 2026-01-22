@@ -10,7 +10,7 @@ const GeneratedImages = ({ images }) => {
         <ImageWithSkeleton
           src={images[0].download_url}
           alt={images[0].original_name}
-          className="max-w-[400px] rounded-2xl overflow-hidden"
+          className="w-full max-w-[400px] rounded-2xl overflow-hidden"
           skeletonClassName="w-full max-w-[400px] aspect-square rounded-lg"
         />
       </div>
