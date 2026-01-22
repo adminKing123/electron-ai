@@ -16,7 +16,7 @@ const AnswerProcess = ({ message_id, steps }) => {
   if (lastStep?.type === "image_generation")
     return (
       <div className="my-4">
-        <div className="bg-red-500 skeleton w-full max-w-[400px] aspect-square rounded-lg"></div>
+        <div className="skeleton w-full max-w-[400px] aspect-square rounded-lg"></div>
       </div>
     );
 };
