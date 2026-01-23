@@ -220,8 +220,8 @@ const ServerHealthCheck = ({ children }) => {
   if (serverState === SERVER_STATES.CONNECTING) return <LoadingStateUI checks={checks} />;
 
   if (serverState === SERVER_STATES.FAILED) return <ErrorStateUI checks={checks} />;
-  return <LoadingStateUI checks={checks} />
-  // return children;
+  
+  return children;
 };
 
 export default ServerHealthCheck;
