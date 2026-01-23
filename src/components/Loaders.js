@@ -18,3 +18,11 @@ export const LoadingMessages = () => {
     </div>
   );
 };
+
+export const BasicLoader = () => {
+  return (
+    <div className="flex items-center justify-center">
+      <div className="w-3 h-3 border-2 border-t-transparent border-black dark:border-t-transparent dark:border-white rounded-full animate-spin"></div>
+    </div>
+  );
+};

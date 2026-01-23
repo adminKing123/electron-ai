@@ -3,11 +3,22 @@ import CONFIG from "../config";
 import { checkServerHealth } from "../apis/health/queryFunctions";
 import { TbGalaxy } from "react-icons/tb";
 import { motion, AnimatePresence } from "framer-motion";
+import { MdDone } from "react-icons/md";
+import { MdErrorOutline } from "react-icons/md";
+
+import { BasicLoader } from "./Loaders";
 
 const SERVER_STATES = {
   CONNECTING: "connecting",
   READY: "ready",
   FAILED: "failed",
+};
+
+const CHECK_STATES = {
+  PENDING: "pending",
+  CHECKING: "checking",
+  SUCCESS: "success",
+  ERROR: "error",
 };
 
 const messages = [
@@ -25,7 +36,22 @@ const messages = [
   "Insight comes from connecting ideas, not isolating them.",
 ];
 
-const LoadingStateUI = () => {
+const getStatusIcon = (state) => {
+  switch (state) {
+    case CHECK_STATES.PENDING:
+      return <span><BasicLoader /></span>;
+    case CHECK_STATES.CHECKING:
+      return <span><BasicLoader /></span>;
+    case CHECK_STATES.SUCCESS:
+      return <span className="text-green-500"><MdDone /></span>;
+    case CHECK_STATES.ERROR:
+      return <span className="text-red-500"><MdErrorOutline /></span>;
+    default:
+      return <span><BasicLoader /></span>;
+  }
+};
+
+const LoadingStateUI = ({ checks }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -54,14 +80,34 @@ const LoadingStateUI = () => {
       <p className="opacity-50 text-[#000000] dark:text-white text-xs text-center px-4 mt-10">
         Please wait
       </p>
-      <p className="opacity-50 text-[#000000] dark:text-white text-xs text-center px-4">
+      <p className="opacity-50 text-[#000000] dark:text-white text-xs text-center px-4 mb-2">
         while we check the server status...
       </p>
+      <div className="px-4">
+        <div className="flex items-center gap-3 text-sm">
+          <span className="text-xl w-5 h-5">{getStatusIcon(checks.api)}</span>
+          <span className="text-[#000000] dark:text-white font-mono text-xs">
+            API Server
+          </span>
+          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+            {CONFIG.API_BASE_URL}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-sm">
+          <span className="text-xl w-5 h-5">{getStatusIcon(checks.cdn)}</span>
+          <span className="text-[#000000] dark:text-white font-mono text-xs">
+            CDN Server
+          </span>
+          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+            {CONFIG.FILE_CDN_URL}
+          </span>
+        </div>
+      </div>
     </div>
   );
 };
 
-const ErrorStateUI = () => {
+const ErrorStateUI = ({ checks }) => {
   return (
     <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex items-center justify-center flex-col">
       <motion.div
@@ -90,7 +136,37 @@ const ErrorStateUI = () => {
         be a network issue, server downtime, or configuration mismatch.
       </p>
 
-      <p className="opacity-40 text-[#000000] dark:text-white text-xs text-center px-4 mt-4">
+      {/* Server Status Details */}
+      <div className="mt-6 px-4">
+        <div className="flex items-center gap-3 text-sm">
+          <span className="text-xl w-5 h-5">{getStatusIcon(checks.api)}</span>
+          <span className={`font-mono text-xs ${
+            checks.api === CHECK_STATES.SUCCESS
+              ? "text-green-500"
+              : "text-red-500"
+          }`}>
+            API Server
+          </span>
+          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+            {CONFIG.API_BASE_URL}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-sm">
+          <span className="text-xl w-5 h-5">{getStatusIcon(checks.cdn)}</span>
+          <span className={`font-mono text-xs ${
+            checks.cdn === CHECK_STATES.SUCCESS
+              ? "text-green-500"
+              : "text-red-500"
+          }`}>
+            CDN Server
+          </span>
+          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+            {CONFIG.FILE_CDN_URL}
+          </span>
+        </div>
+      </div>
+
+      <p className="opacity-40 text-[#000000] dark:text-white text-xs text-center px-4 mt-6">
         Please contact the administrator if the issue persists.
       </p>
     </div>
@@ -99,6 +175,10 @@ const ErrorStateUI = () => {
 
 const ServerHealthCheck = ({ children }) => {
   const [serverState, setServerState] = useState(SERVER_STATES.CONNECTING);
+  const [checks, setChecks] = useState({
+    api: CHECK_STATES.PENDING,
+    cdn: CHECK_STATES.PENDING,
+  });
 
   useEffect(() => {
     if (!CONFIG.CHECK_RUNNING_STATUS) return;
@@ -107,7 +187,15 @@ const ServerHealthCheck = ({ children }) => {
       const startTime = Date.now();
 
       try {
-        await checkServerHealth();
+        // Use the checkServerHealth function with progress callback
+        await checkServerHealth((server, state) => {
+          const stateMap = {
+            'checking': CHECK_STATES.CHECKING,
+            'success': CHECK_STATES.SUCCESS,
+            'error': CHECK_STATES.ERROR,
+          };
+          setChecks((prev) => ({ ...prev, [server]: stateMap[state] }));
+        });
 
         const elapsed = Date.now() - startTime;
         const remaining = 3000 - elapsed; // 3000ms minimum delay
@@ -129,11 +217,11 @@ const ServerHealthCheck = ({ children }) => {
 
   if (!CONFIG?.CHECK_RUNNING_STATUS) return children;
 
-  if (serverState === SERVER_STATES.CONNECTING) return <LoadingStateUI />;
+  if (serverState === SERVER_STATES.CONNECTING) return <LoadingStateUI checks={checks} />;
 
-  if (serverState === SERVER_STATES.FAILED) return <ErrorStateUI />;
-
-  return children;
+  if (serverState === SERVER_STATES.FAILED) return <ErrorStateUI checks={checks} />;
+  return <LoadingStateUI checks={checks} />
+  // return children;
 };
 
 export default ServerHealthCheck;
