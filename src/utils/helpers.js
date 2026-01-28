@@ -234,3 +234,27 @@ export const getClassNameWithAspectRatio = (aspectRatio) => {
       return "w-full max-w-[400px]";
   }
 };
+
+export const RENDERABLE_CONTENT_TYPES = {
+  svg: {
+    languages: ['svg', 'xml', 'html'],
+    detector: (content) => {
+      const trimmed = content.trim();
+      return trimmed.startsWith('<svg') || /<svg[\s>]/i.test(trimmed);
+    }
+  },
+};
+
+export const detectRenderableContent = (lang, content) => {
+  if (!lang || !content) return null;
+  
+  const normalizedLang = lang.toLowerCase();
+  
+  for (const [type, config] of Object.entries(RENDERABLE_CONTENT_TYPES)) {
+    if (config.languages.includes(normalizedLang) && config.detector(content)) {
+      return type;
+    }
+  }
+  
+  return null;
+};
