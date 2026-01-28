@@ -1,5 +1,5 @@
 import { useProcessController } from "../../../store/useMessagesStore";
-import { getAspectRatio } from "../../../utils/helpers";
+import { getAspectRatio, getClassNameWithAspectRatio } from "../../../utils/helpers";
 
 const AnswerProcess = ({ message_id, steps }) => {
   const process = useProcessController(
@@ -18,8 +18,7 @@ const AnswerProcess = ({ message_id, steps }) => {
     return (
       <div className="my-4">
         <div 
-          className="skeleton w-full max-w-[400px] rounded-lg"
-          style={{ aspectRatio: getAspectRatio(lastStep?.detail?.aspect_ratio) }}
+          className={`skeleton ${getClassNameWithAspectRatio(lastStep?.detail?.aspect_ratio)} rounded-2xl`}
         ></div>
       </div>
     );

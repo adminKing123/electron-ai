@@ -3,10 +3,10 @@ import { convertToJson } from "./utils/helpers";
 const CONFIG = {
   API_BASE_URL: process.env.REACT_APP_API_URL,
   FILE_CDN_URL: process.env.REACT_APP_FILE_CDN_URL,
-  CHECK_RUNNING_STATUS:
-    process.env.REACT_APP_CHECK_RUNNING_STATUS === undefined
-      ? true
-      : process.env.REACT_APP_CHECK_RUNNING_STATUS === "true",
+  CHECK_RUNNING_STATUS: false,
+    // process.env.REACT_APP_CHECK_RUNNING_STATUS === undefined
+    //   ? true
+    //   : process.env.REACT_APP_CHECK_RUNNING_STATUS === "true",
 
   FIREBASE_CONFIG: {
     apiKey: process.env.REACT_APP_APIKEY,

@@ -208,11 +208,9 @@ export const convertByteToSize = (byte) => {
 export const formartJSON = (value) => {
   try {
     return JSON.stringify(
-      typeof value === "string"
-        ? JSON.parse(value)
-        : value,
+      typeof value === "string" ? JSON.parse(value) : value,
       null,
-      2
+      2,
     );
   } catch {
     return value;
@@ -221,5 +219,23 @@ export const formartJSON = (value) => {
 
 export const getAspectRatio = (aspectRatio) => {
   const ratio = aspectRatio || "1:1";
-  return ratio.replace(':', '/');
+  return ratio.replace(":", "/");
+};
+
+export const getClassNameWithAspectRatio = (aspectRatio) => {
+  const ratio = aspectRatio || "1:1";
+  switch (ratio) {
+    case "1:1":
+      return "w-full max-w-[400px] aspect-square";
+    case "9:16":
+      return "h-full max-h-[560px] aspect-[9/16]";
+    case "16:9":
+      return "w-full max-w-[600px] aspect-video";
+    case "4:3":
+      return "w-full max-w-[400px] aspect-[4/3]";
+    case "3:4":
+      return "h-full max-h-[560px] aspect-[3/4]";
+    default:
+      return "w-full max-w-[400px]";
+  }
 };

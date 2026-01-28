@@ -1,5 +1,5 @@
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton";
-import { getAspectRatio } from "../../../utils/helpers";
+import { getAspectRatio, getClassNameWithAspectRatio } from "../../../utils/helpers";
 
 const GeneratedImages = ({ images }) => {
   const len = images.length;
@@ -11,9 +11,8 @@ const GeneratedImages = ({ images }) => {
         <ImageWithSkeleton
           src={images[0].download_url}
           alt={images[0].original_name}
-          className="w-full max-w-[400px] rounded-2xl overflow-hidden"
-          skeletonClassName="w-full max-w-[400px] rounded-lg"
-          skeletonStyle={{ aspectRatio: getAspectRatio(images[0].aspect_ratio) }}
+          className={`${getClassNameWithAspectRatio(images[0].aspect_ratio)} overflow-hidden rounded-2xl`}
+          skeletonClassName={`${getClassNameWithAspectRatio(images[0].aspect_ratio)} rounded-2xl`}
         />
       </div>
     );
