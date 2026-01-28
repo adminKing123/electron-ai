@@ -1,4 +1,5 @@
 import { useProcessController } from "../../../store/useMessagesStore";
+import { getAspectRatio } from "../../../utils/helpers";
 
 const AnswerProcess = ({ message_id, steps }) => {
   const process = useProcessController(
@@ -13,12 +14,16 @@ const AnswerProcess = ({ message_id, steps }) => {
         <button className="skeleton w-[108px] h-[34px] rounded-full"></button>
       </div>
     );
-  if (lastStep?.type === "image_generation")
+  if (lastStep?.type === "image_generation") {
     return (
       <div className="my-4">
-        <div className="skeleton w-full max-w-[400px] aspect-square rounded-lg"></div>
+        <div 
+          className="skeleton w-full max-w-[400px] rounded-lg"
+          style={{ aspectRatio: getAspectRatio(lastStep?.detail?.aspect_ratio) }}
+        ></div>
       </div>
     );
+  }
 };
 
 export default AnswerProcess;

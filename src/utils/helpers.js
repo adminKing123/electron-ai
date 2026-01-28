@@ -218,3 +218,8 @@ export const formartJSON = (value) => {
     return value;
   }
 };
+
+export const getAspectRatio = (aspectRatio) => {
+  const ratio = aspectRatio || "1:1";
+  return ratio.replace(':', '/');
+};
