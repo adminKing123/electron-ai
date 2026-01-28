@@ -39,15 +39,15 @@ const messages = [
 const getStatusIcon = (state) => {
   switch (state) {
     case CHECK_STATES.PENDING:
-      return <span><BasicLoader /></span>;
+      return <span className="w-3"><BasicLoader /></span>;
     case CHECK_STATES.CHECKING:
-      return <span><BasicLoader /></span>;
+      return <span className="w-3"><BasicLoader /></span>;
     case CHECK_STATES.SUCCESS:
-      return <span className="text-green-500"><MdDone /></span>;
+      return <span className="w-3 text-green-500"><MdDone /></span>;
     case CHECK_STATES.ERROR:
-      return <span className="text-red-500"><MdErrorOutline /></span>;
+      return <span className="w-3 text-red-500"><MdErrorOutline /></span>;
     default:
-      return <span><BasicLoader /></span>;
+      return <span className="w-3"><BasicLoader /></span>;
   }
 };
 
@@ -86,8 +86,8 @@ const LoadingStateUI = ({ checks }) => {
       <div className="px-4">
         <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.api)}
-          <span className="text-[#000000] dark:text-white font-mono text-xs">
-            API Server
+          <span className="min-w-[40px] text-[#000000] dark:text-white font-mono text-xs">
+            Server
           </span>
           <span className="text-[#000000] dark:text-white opacity-40 text-xs">
             {CONFIG.API_BASE_URL}
@@ -95,8 +95,8 @@ const LoadingStateUI = ({ checks }) => {
         </div>
         <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.cdn)}
-          <span className="text-[#000000] dark:text-white font-mono text-xs">
-            CDN Server
+          <span className="min-w-[40px] text-[#000000] dark:text-white font-mono text-xs">
+            CDN
           </span>
           <span className="text-[#000000] dark:text-white opacity-40 text-xs">
             {CONFIG.FILE_CDN_URL}
