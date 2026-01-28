@@ -85,7 +85,7 @@ const LoadingStateUI = ({ checks }) => {
       </p>
       <div className="px-4">
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-xl w-5 h-5">{getStatusIcon(checks.api)}</span>
+          {getStatusIcon(checks.api)}
           <span className="text-[#000000] dark:text-white font-mono text-xs">
             API Server
           </span>
@@ -94,7 +94,7 @@ const LoadingStateUI = ({ checks }) => {
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-xl w-5 h-5">{getStatusIcon(checks.cdn)}</span>
+          {getStatusIcon(checks.cdn)}
           <span className="text-[#000000] dark:text-white font-mono text-xs">
             CDN Server
           </span>
@@ -139,7 +139,7 @@ const ErrorStateUI = ({ checks }) => {
       {/* Server Status Details */}
       <div className="mt-6 px-4">
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-xl w-5 h-5">{getStatusIcon(checks.api)}</span>
+          {getStatusIcon(checks.api)}
           <span className={`font-mono text-xs ${
             checks.api === CHECK_STATES.SUCCESS
               ? "text-green-500"
@@ -152,7 +152,7 @@ const ErrorStateUI = ({ checks }) => {
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-xl w-5 h-5">{getStatusIcon(checks.cdn)}</span>
+          {getStatusIcon(checks.cdn)}
           <span className={`font-mono text-xs ${
             checks.cdn === CHECK_STATES.SUCCESS
               ? "text-green-500"
