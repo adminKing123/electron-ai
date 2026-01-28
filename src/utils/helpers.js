@@ -217,11 +217,6 @@ export const formartJSON = (value) => {
   }
 };
 
-export const getAspectRatio = (aspectRatio) => {
-  const ratio = aspectRatio || "1:1";
-  return ratio.replace(":", "/");
-};
-
 export const getClassNameWithAspectRatio = (aspectRatio) => {
   const ratio = aspectRatio || "1:1";
   switch (ratio) {

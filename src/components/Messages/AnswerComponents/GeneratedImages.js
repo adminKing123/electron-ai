@@ -1,5 +1,6 @@
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton";
-import { getAspectRatio, getClassNameWithAspectRatio } from "../../../utils/helpers";
+import { getClassNameWithAspectRatio } from "../../../utils/helpers";
+import ENDPOINTS from "../../../apis/endpoints";
 
 const GeneratedImages = ({ images }) => {
   const len = images.length;
@@ -9,7 +10,7 @@ const GeneratedImages = ({ images }) => {
     return (
       <div className="my-2">
         <ImageWithSkeleton
-          src={images[0].download_url}
+          src={ENDPOINTS.GET_DOWNLOAD_URI(images[0].download_url)}
           alt={images[0].original_name}
           className={`${getClassNameWithAspectRatio(images[0].aspect_ratio)} overflow-hidden rounded-2xl`}
           skeletonClassName={`${getClassNameWithAspectRatio(images[0].aspect_ratio)} rounded-2xl`}

@@ -1,5 +1,5 @@
 import { useProcessController } from "../../../store/useMessagesStore";
-import { getAspectRatio, getClassNameWithAspectRatio } from "../../../utils/helpers";
+import { getClassNameWithAspectRatio } from "../../../utils/helpers";
 
 const AnswerProcess = ({ message_id, steps }) => {
   const process = useProcessController(

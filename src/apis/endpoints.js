@@ -1,4 +1,5 @@
 import CONFIG from "../config";
+import useUserStore from "../store/useUserStore";
 
 const ENDPOINTS = {
   GET_MODELS: "/get_models",
@@ -13,7 +14,15 @@ const ENDPOINTS = {
   GET_DELETE_FILE: (filename) =>
     `${CONFIG.FILE_CDN_URL}/delete_file/${filename}`,
 
-  GET_DOWNLOAD_URI: (download_path) => `${download_path}`,
+  GET_DOWNLOAD_URI: (download_path = "") => {
+    const user = useUserStore.getState().user;
+    if (user?.email === CONFIG.SUPER_ADMIN_EMAIL)
+      return download_path.replace(
+        `${CONFIG.FILE_CDN_URL}/download`,
+        CONFIG.FILE_CDN_URL_2,
+      );
+    return download_path;
+  },
 };
 
 export default ENDPOINTS;
