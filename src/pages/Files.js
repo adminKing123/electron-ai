@@ -67,7 +67,7 @@ const FilesListing = ({ files }) => {
       {files.length === 0 ? (
         <p className="text-gray-500 dark:text-gray-400">No files found.</p>
       ) : (
-        <div className="grid grid-cols-6 gap-5">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
           {files.map((file) => (
             <FilePreview key={file.id} file={file} />
           ))}
