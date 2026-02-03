@@ -237,24 +237,40 @@ export const getClassNameWithAspectRatio = (aspectRatio) => {
 
 export const RENDERABLE_CONTENT_TYPES = {
   svg: {
-    languages: ['svg', 'xml', 'html'],
+    languages: ["svg", "xml", "html"],
     detector: (content) => {
       const trimmed = content.trim();
-      return trimmed.startsWith('<svg') || /<svg[\s>]/i.test(trimmed);
-    }
+      return trimmed.startsWith("<svg") || /<svg[\s>]/i.test(trimmed);
+    },
   },
 };
 
 export const detectRenderableContent = (lang, content) => {
   if (!lang || !content) return null;
-  
+
   const normalizedLang = lang.toLowerCase();
-  
+
   for (const [type, config] of Object.entries(RENDERABLE_CONTENT_TYPES)) {
     if (config.languages.includes(normalizedLang) && config.detector(content)) {
       return type;
     }
   }
-  
+
   return null;
 };
+
+export function createSvgDataUrl(rawSvg) {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = rawSvg;
+
+  let svgEl = wrapper.querySelector("svg");
+  if (!svgEl) {
+    svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgEl.append(...wrapper.childNodes);
+  }
+
+  const serializer = new XMLSerializer();
+  const fixedSvg = serializer.serializeToString(svgEl);
+  const blob = new Blob([fixedSvg], { type: "image/svg+xml" });
+  return URL.createObjectURL(blob);
+}
