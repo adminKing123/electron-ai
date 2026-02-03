@@ -1,4 +1,3 @@
-import { forwardRef } from "react";
 import { GrSun } from "react-icons/gr";
 import { MdDarkMode, MdOutlineDevices } from "react-icons/md";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
@@ -10,7 +9,7 @@ const themeOptions = [
   THEME_OPTIONS.SYSTEM,
 ];
 
-const ThemeChangeOption = forwardRef((props, ref) => {
+const ThemeChangeOption = () => {
   const theme = useThemeStore((state) => state.theme);
   const setTheme = useThemeStore((state) => state.setTheme);
 
@@ -35,11 +34,7 @@ const ThemeChangeOption = forwardRef((props, ref) => {
   };
 
   return (
-    <div
-      ref={ref}
-      {...props}
-      className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8"
-    >
+    <div className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8">
       <div className="flex-shrink-0">{Icon}</div>
       <div className="flex-grow flex items-center justify-between">
         <div>Theme</div>
@@ -59,8 +54,6 @@ const ThemeChangeOption = forwardRef((props, ref) => {
       </div>
     </div>
   );
-});
-
-ThemeChangeOption.displayName = "ThemeChangeOption";
+};
 
 export default ThemeChangeOption;

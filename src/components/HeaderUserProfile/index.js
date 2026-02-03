@@ -3,26 +3,19 @@ import useUserStore from "../../store/useUserStore";
 import { SiInfluxdb } from "react-icons/si";
 import { LuSettings2 } from "react-icons/lu";
 import { MdSettings, MdLogout } from "react-icons/md";
-import { IoExtensionPuzzle } from "react-icons/io5";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import ROUTES from "../../router/routes";
 import ThemeChangeOption from "../ThemeChangeOption";
-import useMainModalStore from "../../store/useMainModalStore";
 
 const HeaderUserProfile = () => {
   const user = useUserStore((state) => state.user);
-  const setData = useMainModalStore((state) => state.setData);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       window.location = ROUTES.AUTH;
     } catch (error) {}
-  };
-
-  const openConnectAppsModal = () => {
-    setData({ type: "connect_apps" });
   };
 
   return (
@@ -62,14 +55,6 @@ const HeaderUserProfile = () => {
 
             <DropdownMenu.Item asChild>
               <ThemeChangeOption />
-            </DropdownMenu.Item>
-
-            <DropdownMenu.Item
-              className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8 outline-none cursor-pointer"
-              onSelect={openConnectAppsModal}
-            >
-              <IoExtensionPuzzle />
-              <span>Connect Apps</span>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8 outline-none cursor-pointer">
