@@ -240,7 +240,7 @@ export const RENDERABLE_CONTENT_TYPES = {
     languages: ["svg", "xml", "html"],
     detector: (content) => {
       const trimmed = content.trim();
-      return trimmed.startsWith("<svg") || /<svg[\s>]/i.test(trimmed);
+      return trimmed.startsWith("<svg");
     },
   },
 };
