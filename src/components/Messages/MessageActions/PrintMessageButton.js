@@ -5,22 +5,18 @@ const PrintMessageButton = ({ message_id }) => {
     const messageElement = document.getElementById(message_id);
     if (!messageElement) return;
 
-    // Create a temporary container for print content
     const printContainer = document.createElement("div");
     printContainer.id = "print-container";
     printContainer.style.display = "none";
-    
-    // Clone the message content
+
     const content = messageElement.cloneNode(true);
-    
-    // Remove buttons and interactive elements from cloned content
+
     const buttonsToRemove = content.querySelectorAll("button, [role='button']");
-    buttonsToRemove.forEach(btn => btn.remove());
-    
+    buttonsToRemove.forEach((btn) => btn.remove());
+
     printContainer.appendChild(content);
     document.body.appendChild(printContainer);
 
-    // Create print styles
     const printStyle = document.createElement("style");
     printStyle.id = "print-style";
     printStyle.innerHTML = `
@@ -57,10 +53,8 @@ const PrintMessageButton = ({ message_id }) => {
     `;
     document.head.appendChild(printStyle);
 
-    // Trigger print
     window.print();
 
-    // Cleanup after print dialog closes
     setTimeout(() => {
       document.body.removeChild(printContainer);
       document.head.removeChild(printStyle);

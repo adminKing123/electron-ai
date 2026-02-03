@@ -39,15 +39,35 @@ const messages = [
 const getStatusIcon = (state) => {
   switch (state) {
     case CHECK_STATES.PENDING:
-      return <span className="w-3"><BasicLoader /></span>;
+      return (
+        <span className="w-3">
+          <BasicLoader />
+        </span>
+      );
     case CHECK_STATES.CHECKING:
-      return <span className="w-3"><BasicLoader /></span>;
+      return (
+        <span className="w-3">
+          <BasicLoader />
+        </span>
+      );
     case CHECK_STATES.SUCCESS:
-      return <span className="w-3 text-green-500"><MdDone /></span>;
+      return (
+        <span className="w-3 text-green-500">
+          <MdDone />
+        </span>
+      );
     case CHECK_STATES.ERROR:
-      return <span className="w-3 text-red-500"><MdErrorOutline /></span>;
+      return (
+        <span className="w-3 text-red-500">
+          <MdErrorOutline />
+        </span>
+      );
     default:
-      return <span className="w-3"><BasicLoader /></span>;
+      return (
+        <span className="w-3">
+          <BasicLoader />
+        </span>
+      );
   }
 };
 
@@ -135,16 +155,16 @@ const ErrorStateUI = ({ checks }) => {
         We tried reaching the backend server but it didn’t respond. This could
         be a network issue, server downtime, or configuration mismatch.
       </p>
-
-      {/* Server Status Details */}
       <div className="mt-6 px-4">
         <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.api)}
-          <span className={`font-mono text-xs ${
-            checks.api === CHECK_STATES.SUCCESS
-              ? "text-green-500"
-              : "text-red-500"
-          }`}>
+          <span
+            className={`font-mono text-xs ${
+              checks.api === CHECK_STATES.SUCCESS
+                ? "text-green-500"
+                : "text-red-500"
+            }`}
+          >
             API Server
           </span>
           <span className="text-[#000000] dark:text-white opacity-40 text-xs">
@@ -153,11 +173,13 @@ const ErrorStateUI = ({ checks }) => {
         </div>
         <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.cdn)}
-          <span className={`font-mono text-xs ${
-            checks.cdn === CHECK_STATES.SUCCESS
-              ? "text-green-500"
-              : "text-red-500"
-          }`}>
+          <span
+            className={`font-mono text-xs ${
+              checks.cdn === CHECK_STATES.SUCCESS
+                ? "text-green-500"
+                : "text-red-500"
+            }`}
+          >
             CDN Server
           </span>
           <span className="text-[#000000] dark:text-white opacity-40 text-xs">
@@ -187,18 +209,17 @@ const ServerHealthCheck = ({ children }) => {
       const startTime = Date.now();
 
       try {
-        // Use the checkServerHealth function with progress callback
         await checkServerHealth((server, state) => {
           const stateMap = {
-            'checking': CHECK_STATES.CHECKING,
-            'success': CHECK_STATES.SUCCESS,
-            'error': CHECK_STATES.ERROR,
+            checking: CHECK_STATES.CHECKING,
+            success: CHECK_STATES.SUCCESS,
+            error: CHECK_STATES.ERROR,
           };
           setChecks((prev) => ({ ...prev, [server]: stateMap[state] }));
         });
 
         const elapsed = Date.now() - startTime;
-        const remaining = 3000 - elapsed; // 3000ms minimum delay
+        const remaining = 3000 - elapsed;
 
         if (remaining > 0) {
           setTimeout(() => {
@@ -217,10 +238,12 @@ const ServerHealthCheck = ({ children }) => {
 
   if (!CONFIG?.CHECK_RUNNING_STATUS) return children;
 
-  if (serverState === SERVER_STATES.CONNECTING) return <LoadingStateUI checks={checks} />;
+  if (serverState === SERVER_STATES.CONNECTING)
+    return <LoadingStateUI checks={checks} />;
 
-  if (serverState === SERVER_STATES.FAILED) return <ErrorStateUI checks={checks} />;
-  
+  if (serverState === SERVER_STATES.FAILED)
+    return <ErrorStateUI checks={checks} />;
+
   return children;
 };
 

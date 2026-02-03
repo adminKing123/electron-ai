@@ -1,39 +1,36 @@
 import CONFIG from "../../config";
 
 export const checkServerHealth = async (onProgress) => {
-  // Start both checks in parallel
   const apiPromise = (async () => {
-    onProgress('api', 'checking');
+    onProgress("api", "checking");
     try {
       const response = await fetch(`${CONFIG.API_BASE_URL}/health`);
       if (!response.ok) throw new Error("API Server not ready");
       const data = await response.json();
-      onProgress('api', 'success');
+      onProgress("api", "success");
       return { success: true, data };
     } catch (error) {
-      onProgress('api', 'error');
+      onProgress("api", "error");
       return { success: false, error: error.message };
     }
   })();
 
   const cdnPromise = (async () => {
-    onProgress('cdn', 'checking');
+    onProgress("cdn", "checking");
     try {
       const response = await fetch(`${CONFIG.FILE_CDN_URL}/health`);
       if (!response.ok) throw new Error("CDN Server not ready");
       const data = await response.json();
-      onProgress('cdn', 'success');
+      onProgress("cdn", "success");
       return { success: true, data };
     } catch (error) {
-      onProgress('cdn', 'error');
+      onProgress("cdn", "error");
       return { success: false, error: error.message };
     }
   })();
 
-  // Wait for both to complete
   const [apiResult, cdnResult] = await Promise.all([apiPromise, cdnPromise]);
 
-  // If any failed, throw error
   if (!apiResult.success || !cdnResult.success) {
     throw new Error("One or more servers are not ready");
   }
@@ -41,6 +38,6 @@ export const checkServerHealth = async (onProgress) => {
   return {
     api: apiResult.data,
     cdn: cdnResult.data,
-    status: "healthy"
+    status: "healthy",
   };
 };

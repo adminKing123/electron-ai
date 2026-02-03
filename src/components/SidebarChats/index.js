@@ -8,7 +8,6 @@ import { useSidebarOpenState } from "../../store/useSidebarStores";
 import SidebarChatMenu from "./SidebarChatMenu";
 import CONFIG from "../../config";
 
-
 const SidebarChatButton = ({ chat, ...props }) => {
   useEffect(() => {
     if (chat.is_new && chat.summarization_data) {
@@ -46,7 +45,7 @@ const SidebarChats = () => {
   const setLastDoc = useChatsStore((state) => state.setLastDoc);
   const setHasMore = useChatsStore((state) => state.setHasMore);
   const setIsLoading = useChatsStore((state) => state.setIsLoading);
-  
+
   const groupedData = groupByDate(chats, "updated_at");
   const setOpen = useSidebarOpenState((state) => state.setOpen);
   const loadingRef = useRef(false);
@@ -57,14 +56,13 @@ const SidebarChats = () => {
     }
   };
 
-  // Load initial chats
   useEffect(() => {
     const getInitialData = async () => {
       setIsLoading(true);
       try {
         const fetchedChats = await getChatsAPI();
         setChats(fetchedChats);
-        
+
         if (fetchedChats.length > 0) {
           const lastVisible = fetchedChats[fetchedChats.length - 1].docRef;
           setLastDoc(lastVisible);
@@ -83,7 +81,6 @@ const SidebarChats = () => {
     getInitialData();
   }, [setChats, setLastDoc, setHasMore, setIsLoading]);
 
-  // Load more chats
   const loadMoreChats = useCallback(async () => {
     if (!hasMore || isLoading || loadingRef.current || !lastDoc) {
       return;
@@ -94,7 +91,7 @@ const SidebarChats = () => {
 
     try {
       const moreChats = await getChatsAPI(lastDoc);
-      
+
       if (moreChats.length > 0) {
         appendChats(moreChats);
         const newLastDoc = moreChats[moreChats.length - 1].docRef;
@@ -110,9 +107,16 @@ const SidebarChats = () => {
       setIsLoading(false);
       loadingRef.current = false;
     }
-  }, [hasMore, isLoading, lastDoc, appendChats, setLastDoc, setHasMore, setIsLoading]);
+  }, [
+    hasMore,
+    isLoading,
+    lastDoc,
+    appendChats,
+    setLastDoc,
+    setHasMore,
+    setIsLoading,
+  ]);
 
-  // Handle scroll event
   const handleScroll = useCallback(() => {
     const container = document.getElementById("sidebar-scroll-container");
     if (!container) return;
@@ -125,7 +129,6 @@ const SidebarChats = () => {
     }
   }, [loadMoreChats]);
 
-  // Attach scroll listener
   useEffect(() => {
     const container = document.getElementById("sidebar-scroll-container");
     if (!container) return;
@@ -152,7 +155,7 @@ const SidebarChats = () => {
           </div>
         </div>
       ))}
-      
+
       {isLoading && (
         <div className="flex items-center justify-center py-4">
           <div className="w-3 h-3 border-2 border-t-transparent border-black dark:border-t-transparent dark:border-white rounded-full animate-spin"></div>

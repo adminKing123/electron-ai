@@ -12,12 +12,15 @@ import MdCopyInlineText from "./MarkdownComponents/CopyInlineText";
 import MdDownloadInlineFile from "./MarkdownComponents/MdDownloadInlineFile";
 
 const MarkdownRenderer = ({ message_id, content }) => {
-//const MarkdownRenderer = ({ content }) => {MdCopyInlineText
   const components = useMemo(
     () => ({
-      chartdata: ({ node, ...props }) => <MdChart message_id={message_id} {...props} />,
+      chartdata: ({ node, ...props }) => (
+        <MdChart message_id={message_id} {...props} />
+      ),
       copyinlinetext: ({ node, ...props }) => <MdCopyInlineText {...props} />,
-      downloadinlinefile: ({ node, ...props }) => <MdDownloadInlineFile {...props} />,
+      downloadinlinefile: ({ node, ...props }) => (
+        <MdDownloadInlineFile {...props} />
+      ),
       img: ({ node, ...props }) => <MdImage {...props} />,
       code({ node, inline, className, children, ...props }) {
         const match = /language-(\w+)/.exec(className || "");
@@ -34,14 +37,13 @@ const MarkdownRenderer = ({ message_id, content }) => {
         );
       },
     }),
-    // [message_id]
-    []
+
+    [],
   );
   return (
     <div className="markdown-body">
       <ReactMarkdown
         rehypePlugins={[remarkRaw, rehypeKatex]}
-        // rehypePlugins={[rehypeKatex]}
         remarkPlugins={[remarkGfm, remarkMath]}
         components={components}
       >

@@ -19,7 +19,6 @@ const GeneratedImages = ({ images }) => {
     );
   }
 
-  // we will handle it later when we will generate multiple images
   return null;
 };
 
