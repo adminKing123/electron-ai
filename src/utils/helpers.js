@@ -223,13 +223,13 @@ export const getClassNameWithAspectRatio = (aspectRatio) => {
     case "1:1":
       return "w-full max-w-[400px] aspect-square";
     case "9:16":
-      return "h-full max-h-[560px] aspect-[9/16]";
+      return "w-full max-w-[315px] aspect-[9/16]";
     case "16:9":
       return "w-full max-w-[600px] aspect-video";
     case "4:3":
       return "w-full max-w-[400px] aspect-[4/3]";
     case "3:4":
-      return "h-full max-h-[560px] aspect-[3/4]";
+      return "w-full max-w-[420px] aspect-[3/4]";
     default:
       return "w-full max-w-[400px]";
   }
