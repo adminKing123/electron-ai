@@ -120,15 +120,7 @@ export const handleSend = (chat, navigate) => {
       created_at: oldMessge.created_at,
       updated_at: new Date().toISOString(),
       interrupt: {},
-      files: files.map((file) => ({
-        file_id: file.file_id,
-        user_id: file.user_id,
-        original_name: file.original_name,
-        filename: file.filename,
-        file_type: file.file_type,
-        download_url: file.download_url,
-        size: file.size,
-      })),
+      files: files,
     };
     id = setMessage(action.data.message_id, payload);
   } else if (action?.type === CONFIG.PROMPT_ACTION_TYPES.INTERRUPT_CONTINUE) {
@@ -150,15 +142,7 @@ export const handleSend = (chat, navigate) => {
       generate_image,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      files: files.map((file) => ({
-        file_id: file.file_id,
-        user_id: file.user_id,
-        original_name: file.original_name,
-        filename: file.filename,
-        file_type: file.file_type,
-        download_url: file.download_url,
-        size: file.size,
-      })),
+      files: files,
       interrupt: {},
     };
     id = addMessage(payload);
