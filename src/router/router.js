@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import MainLayout from "../page_layouts/MainLayout";
 import AuthorizationPage from "../pages/AuthorizationPage";
@@ -6,6 +7,9 @@ import CheckLogin from "../page_layouts/CheckLogin";
 import NewChatPage from "../pages/NewChatPage";
 import ChatPage from "../pages/ChatPage";
 import LibraryPage from "../pages/Library";
+
+const AuraRjPage = lazy(() => import("../pages/AuraRjPage"));
+const CodigoPage = lazy(() => import("../pages/CodigoPage"));
 
 const AppRoutes = () => {
   return (
@@ -20,6 +24,9 @@ const AppRoutes = () => {
           <Route element={<MainLayout type="library" />}>
             <Route path={ROUTES.LIBRARY} element={<LibraryPage />} />
           </Route>
+
+          <Route path={ROUTES.AURA_RJ} element={<AuraRjPage />} />
+          <Route path={ROUTES.CODIGO} element={<CodigoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
