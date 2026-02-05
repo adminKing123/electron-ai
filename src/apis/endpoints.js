@@ -23,6 +23,8 @@ const ENDPOINTS = {
       );
     return download_path;
   },
+
+  AURA_RJ_GET_TRACK: "/aura-rj/get-track",
 };
 
 export default ENDPOINTS;
