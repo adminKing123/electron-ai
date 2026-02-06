@@ -3,6 +3,7 @@ import FilesPage from "./Files";
 import { IoApps } from "react-icons/io5";
 import { FaRadio } from "react-icons/fa6";
 import { BsRobot } from "react-icons/bs";
+import { BsStars } from "react-icons/bs";
 import ROUTES from "../router/routes";
 import { Link } from "react-router-dom";
 
@@ -22,6 +23,12 @@ const MoreApps = () => {
       description: "AI Powered Code Editor",
       to: ROUTES.CODIGO,
     },
+    {
+      Icon: BsStars,
+      name: "Aura Parlante",
+      description: "AI Powered Live Chat",
+      to: ROUTES.LIVE_CHAT_WITH_AI,
+    }
   ];
 
   return (

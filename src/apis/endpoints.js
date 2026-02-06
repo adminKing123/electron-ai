@@ -25,6 +25,7 @@ const ENDPOINTS = {
   },
 
   AURA_RJ_GET_TRACK: "/aura-rj/get-track",
+  AURA_VOICE_GET_SESSION_ID: "/aura-voice/get/session-id",
 };
 
 export default ENDPOINTS;

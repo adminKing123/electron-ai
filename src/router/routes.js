@@ -7,6 +7,7 @@ const ROUTES = {
 
   AURA_RJ: "/aura-rj",
   CODIGO: "/codigo",
+  LIVE_CHAT_WITH_AI: "/live-chat-with-ai",
 };
 
 export default ROUTES;
