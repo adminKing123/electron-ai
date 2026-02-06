@@ -56,11 +56,22 @@ const SearchChatsButton = () => {
 };
 
 const LibraryButton = () => {
+  const setOpen = useSidebarOpenState((state) => state.setOpen);
+  const resetMessages = useMessageStore((state) => state.resetMessages);
+
+  const handleClick = () => {
+    resetMessages();
+    if (window.innerWidth <= 768) {
+      setOpen(false);
+    }
+  };
+
   return (
     <SidebarOptionButton
       icon={BiLibrary}
       label="Library"
       to={ROUTES.LIBRARY}
+      onClick={handleClick}
       showActiveState
     />
   );
