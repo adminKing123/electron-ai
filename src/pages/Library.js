@@ -74,7 +74,7 @@ const LibraryPage = () => {
           </h3>
         </div>
         <MoreApps />
-        <FilesPage />
+        {/* <FilesPage /> */}
       </div>
     </div>
   );
