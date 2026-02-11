@@ -108,7 +108,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
         <div className="flex justify-center mt-6">
           <button
             onClick={onStop}
-            className="text-black dark:text-black p-3 border rounded-full"
+            className="text-black dark:text-white p-3 border border-black dark:border-white rounded-full"
           >
             <IoClose className="text-xl" />
           </button>
