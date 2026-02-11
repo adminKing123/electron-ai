@@ -36,15 +36,11 @@ export const handleSend = (chat, navigate) => {
       ? true
       : false || any_file_uploading || isRecording;
 
-  if (
-    !action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT &&
-    prompt.length > CONFIG.MAX_PROMPT_LENGTH
-  ) {
+  if (prompt.length > CONFIG.MAX_PROMPT_LENGTH) {
     notifyTextAreaLimitReached();
     return;
   }
-  if (!action?.type === CONFIG.PROMPT_ACTION_TYPES.EDIT && isPromptSendDisabled)
-    return;
+  if (isPromptSendDisabled) return;
 
   const google_search = isWebSearchDisabled ? false : isWebSearchOn;
   const generate_image = false;
