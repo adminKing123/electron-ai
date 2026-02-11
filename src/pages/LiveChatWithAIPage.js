@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { GoogleGenAI, Modality } from "@google/genai";
 import { getLiveSessionIdAPI } from "../apis/live_ai/queryFunctions";
 
@@ -7,19 +7,58 @@ const base64ToBytes = (b64) =>
 
 export default function LiveChatWithAIPage() {
   const [status, setStatus] = useState("idle");
-
   const sessionRef = useRef(null);
-
-  // mic
   const audioCtxRef = useRef(null);
   const processorRef = useRef(null);
   const streamRef = useRef(null);
 
-  // realtime speaker
   const playbackCtxRef = useRef(null);
   const playerNodeRef = useRef(null);
 
-  /* ================= START ================= */
+  const cleanup = () => {
+    try {
+      if (sessionRef.current) {
+        sessionRef.current.sendRealtimeInput({ audioStreamEnd: true });
+        sessionRef.current.close();
+        sessionRef.current = null;
+      }
+
+      if (processorRef.current) {
+        processorRef.current.disconnect();
+        processorRef.current = null;
+      }
+
+      if (audioCtxRef.current) {
+        audioCtxRef.current.close();
+        audioCtxRef.current = null;
+      }
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+      }
+
+      if (playerNodeRef.current) {
+        playerNodeRef.current.port.postMessage({ type: "clear" });
+        playerNodeRef.current.disconnect();
+        playerNodeRef.current = null;
+      }
+
+      if (playbackCtxRef.current) {
+        playbackCtxRef.current.close();
+        playbackCtxRef.current = null;
+      }
+    } catch (e) {
+      console.error("Cleanup error:", e);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      cleanup();
+    };
+  }, []);
+
   async function start() {
     try {
       setStatus("Fetching token...");
@@ -45,9 +84,7 @@ export default function LiveChatWithAIPage() {
           onclose: () => setStatus("Connection closed"),
           onerror: (e) => console.error("WS Error:", e),
 
-          /* ================= RECEIVE AUDIO ================= */
           onmessage: (msg) => {
-            // ⭐⭐⭐ TRUE INTERRUPT SUPPORT
             if (msg?.serverContent?.interrupted) {
               playerNodeRef.current?.port.postMessage({ type: "clear" });
               return;
@@ -82,7 +119,6 @@ export default function LiveChatWithAIPage() {
 
       sessionRef.current = session;
 
-      /* ================= SPEAKER ================= */
       const playbackCtx = new AudioContext({ sampleRate: 24000 });
       playbackCtxRef.current = playbackCtx;
 
@@ -92,7 +128,6 @@ export default function LiveChatWithAIPage() {
       playerNode.connect(playbackCtx.destination);
       playerNodeRef.current = playerNode;
 
-      /* ================= MICROPHONE ================= */
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
@@ -142,23 +177,9 @@ export default function LiveChatWithAIPage() {
     }
   }
 
-  /* ================= STOP ================= */
   function stop() {
-    try {
-      sessionRef.current?.sendRealtimeInput({ audioStreamEnd: true });
-      sessionRef.current?.close();
-
-      processorRef.current?.disconnect();
-      audioCtxRef.current?.close();
-      streamRef.current?.getTracks().forEach((t) => t.stop());
-
-      playerNodeRef.current?.port.postMessage({ type: "clear" });
-      playbackCtxRef.current?.close();
-
-      setStatus("stopped");
-    } catch (e) {
-      console.error(e);
-    }
+    cleanup();
+    setStatus("stopped");
   }
 
   return (
