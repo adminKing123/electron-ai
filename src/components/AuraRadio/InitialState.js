@@ -6,6 +6,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa";
 import Header from "../Header";
+import { Link } from "react-router-dom";
 
 export default function InitialState({ onStart }) {
   return (
@@ -14,25 +15,26 @@ export default function InitialState({ onStart }) {
         <Header type="aura-rj" />
         <section id="intro" className="bg-[#303030] py-32">
           <div className="max-w-xl px-5 mx-auto">
-            <h1 className="text-black dark:text-white text-5xl text-center font-semibold">
+            <h1 className="text-white dark:text-white text-5xl text-center font-semibold">
               Introducing AuraRJ
             </h1>
             <div className="flex items-center justify-center gap-2 mt-5">
               <button
-                className="bg-white text-white dark:text-black px-5 font-medium py-2 text-sm rounded-3xl flex items-center gap-1"
+                className="bg-white text-black dark:text-black px-5 font-medium py-2 text-sm rounded-3xl flex items-center gap-1"
                 onClick={onStart}
               >
                 Try AuraRJ <GoArrowUpRight className="text-base" />
               </button>
-              <button
+              <Link
+                to={"https://tombmusic.netlify.app/home"}
+                target="_blank"
                 className="text-white dark:text-white px-5 font-medium py-2 text-sm rounded-3xl flex items-center gap-1"
-                onClick={onStart}
               >
                 Visit Arhythm <IoChevronForward className="text-base" />
-              </button>
+              </Link>
             </div>
             <div className="mt-10">
-              <p className="text-black dark:text-white text-justify">
+              <p className="text-white dark:text-white text-justify">
                 AuraRJ is an AI radio jockey that creates a real-time radio show
                 from your listening taste, talking, reacting, and playing songs
                 as if the station was made only for you.
