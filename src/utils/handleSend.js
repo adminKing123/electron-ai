@@ -40,7 +40,7 @@ export const handleSend = (chat, navigate) => {
     notifyTextAreaLimitReached();
     return;
   }
-  if (isPromptSendDisabled) return;
+  if (!action?.type === CONFIG.PROMPT_ACTION_TYPES.INTERRUPT_CONTINUE && isPromptSendDisabled) return;
 
   const google_search = isWebSearchDisabled ? false : isWebSearchOn;
   const generate_image = false;
