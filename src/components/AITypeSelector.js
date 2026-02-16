@@ -10,6 +10,7 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 import CONFIG from "../config";
 import { MdWorkOutline } from "react-icons/md";
 import { SiTicktick } from "react-icons/si";
+import { useEffect } from "react";
 
 const AI_ICONS = {
   TEXT: GoDependabot,
@@ -48,6 +49,15 @@ function AITypeSelector() {
     localStorage.setItem("AI_DEFAULT_TYPE", JSON.stringify(type));
   };
 
+  useEffect(() => {
+    if (!selectedType && defaultAIType) {
+      setType(defaultAIType);
+      setModel(AI_MODELS[defaultAIType.id].default_model);
+    }
+  }, [selectedType, defaultAIType]);
+
+  if (!selectedType) return null;
+  
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>

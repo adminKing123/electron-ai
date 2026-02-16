@@ -49,7 +49,7 @@ function PromptDraftMaintainer({ chat }) {
         chat?.is_new ? CONFIG.NEW_CHAT_DRAFT_ID : chat.id
       );
       setPrompt(data?.prompt || "");
-      setModel(data?.model || AI_MODELS?.[AI_DEFAULT_TYPE.id]?.default_model || null);
+      setModel(data?.model || AI_MODELS?.[AI_DEFAULT_TYPE?.id]?.default_model || null);
       setIsWebSearchOn(data?.isWebSearchOn || false);
       setIsDeepResearch(data?.isDeepResearch || false);
       setIsWebSearchDisabled(data?.model?.google_search ? false : true);
