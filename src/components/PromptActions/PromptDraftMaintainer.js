@@ -44,7 +44,8 @@ function PromptDraftMaintainer({ chat }) {
     const aiTypeTogglerEle = document.getElementById("ai-type-toggler");
     const getDraft = async () => {
       promptInnerBoxEle.classList.add("fd-state");
-      aiTypeTogglerEle.classList.add("hidden");
+      if (aiTypeTogglerEle?.classList)
+        aiTypeTogglerEle.classList.add("hidden");
       const data = await getDraftAPI(
         chat?.is_new ? CONFIG.NEW_CHAT_DRAFT_ID : chat.id
       );
@@ -55,7 +56,8 @@ function PromptDraftMaintainer({ chat }) {
       setIsWebSearchDisabled(data?.model?.google_search ? false : true);
       useModelStore.getState().setType(data?.type || AI_DEFAULT_TYPE);
       promptInnerBoxEle.classList.remove("fd-state");
-      aiTypeTogglerEle.classList.remove("hidden");
+      if (aiTypeTogglerEle?.classList)
+        aiTypeTogglerEle.classList.remove("hidden");
       last_fetch_chat_draft = chat;
     };
 
