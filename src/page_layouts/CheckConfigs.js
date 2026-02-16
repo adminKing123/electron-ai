@@ -10,9 +10,9 @@ const CheckConfigs = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        useUserStore.getState().setUser(currentUser);
+        await useUserStore.getState().setUser(currentUser);
         getConfigAPI({
           successCallback: (configData) => {
             useModelStore.getState().setAITypes(configData.AI_TYPES || []);
