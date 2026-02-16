@@ -13,15 +13,17 @@ const CheckConfigs = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         useUserStore.getState().setUser(currentUser);
+        getConfigAPI({
+          successCallback: (configData) => {
+            useModelStore.getState().setAITypes(configData.AI_TYPES || []);
+            useModelStore.getState().setAIModels(configData.AI_MODELS || {});
+            useModelStore
+              .getState()
+              .setDefaultAIType(configData.AI_DEFAULT_TYPE || null);
+          },
+        });
       }
       setLoading(false);
-    });
-    getConfigAPI({
-      successCallback: (configData) => {
-        useModelStore.getState().setAITypes(configData.AI_TYPES || []);
-        useModelStore.getState().setAIModels(configData.AI_MODELS || {});
-        useModelStore.getState().setDefaultAIType(configData.AI_DEFAULT_TYPE || null);
-      },
     });
     return () => unsubscribe();
   }, []);
