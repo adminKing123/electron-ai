@@ -3,8 +3,10 @@ import { Outlet } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import useUserStore from "../store/useUserStore";
+import { getConfigAPI } from "../apis/get_config/queryFunctions";
+import { useModelStore } from "../store/usePromptStores";
 
-const CheckLogin = () => {
+const CheckConfigs = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,7 +16,13 @@ const CheckLogin = () => {
       }
       setLoading(false);
     });
-
+    getConfigAPI({
+      successCallback: (configData) => {
+        useModelStore.getState().setAITypes(configData.AI_TYPES || []);
+        useModelStore.getState().setAIModels(configData.AI_MODELS || {});
+        useModelStore.getState().setDefaultAIType(configData.AI_DEFAULT_TYPE || null);
+      },
+    });
     return () => unsubscribe();
   }, []);
 
@@ -22,4 +30,4 @@ const CheckLogin = () => {
   return <Outlet />;
 };
 
-export default CheckLogin;
+export default CheckConfigs;

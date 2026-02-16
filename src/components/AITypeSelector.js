@@ -19,9 +19,11 @@ const AI_ICONS = {
   MEDIA_GENERATOR: RiMagicLine,
 };
 
-const get_ai_icon = (type_id) => AI_ICONS[type_id] || GoDependabot;
+const get_ai_icon = (type_id) => AI_ICONS?.[type_id] || GoDependabot;
 
 function AITypeSelector() {
+  const AI_TYPES = useModelStore((state) => state.AI_TYPES);
+  const AI_MODELS = useModelStore((state) => state.AI_MODELS);
   const setModel = useModelStore((state) => state.setModel);
   const selectedType = useModelStore((state) => state.type);
   const defaultAIType = useModelStore((state) => state.defaultAIType);
@@ -31,10 +33,10 @@ function AITypeSelector() {
   );
   const setType = useModelStore((state) => state.setType);
 
-  const SelectedIcon = get_ai_icon(selectedType.id);
+  const SelectedIcon = get_ai_icon(selectedType?.id);
 
   const handleSelect = (type) => {
-    const model_selected = CONFIG.AI_MODELS[type.id].default_model;
+    const model_selected = AI_MODELS[type.id].default_model;
     setType(type);
     setModel(model_selected);
     setIsWebSearchDisabled(model_selected.google_search === false);
@@ -64,7 +66,7 @@ function AITypeSelector() {
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Content className="p-2 shadow-xl rounded-xl z-10 border border-[#E1E1E1] dark:border-[#2F2F2F] bg-[#ffffff] dark:bg-[#2F2F2F]">
-        {CONFIG.AI_TYPES.map((type) => {
+        {AI_TYPES.map((type) => {
           const Icon = get_ai_icon(type.id);
           const isSelected = selectedType?.id === type.id;
           return (

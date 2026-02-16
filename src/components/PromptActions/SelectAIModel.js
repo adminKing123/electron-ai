@@ -13,6 +13,7 @@ const AI_ICONS = {
 };
 
 const SelectAIModel = ({ disabled }) => {
+  const AI_MODELS = useModelStore((state) => state.AI_MODELS);
   const selectedModel = useModelStore((state) => state.model);
   const setModel = useModelStore((state) => state.setModel);
   const setIsWebSearchDisabled = useWebSearchStore(
@@ -26,7 +27,7 @@ const SelectAIModel = ({ disabled }) => {
 
   const type = useModelStore((state) => state.type);
 
-  const data = CONFIG.AI_MODELS[type.id];
+  const data = AI_MODELS[type?.id] || null;
   
   const model_selected = selectedModel || data?.default_model;
   const isDisabled = disabled || !data?.models?.length;

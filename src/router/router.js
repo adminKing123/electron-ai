@@ -3,7 +3,7 @@ import { Route, BrowserRouter, Routes } from "react-router-dom";
 import MainLayout from "../page_layouts/MainLayout";
 import AuthorizationPage from "../pages/AuthorizationPage";
 import ROUTES from "./routes";
-import CheckLogin from "../page_layouts/CheckLogin";
+import CheckConfigs from "../page_layouts/CheckConfigs";
 import NewChatPage from "../pages/NewChatPage";
 import ChatPage from "../pages/ChatPage";
 import LibraryPage from "../pages/Library";
@@ -16,7 +16,7 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<CheckLogin />}>
+        <Route element={<CheckConfigs />}>
           <Route path={ROUTES.AUTH} element={<AuthorizationPage />} />
           <Route element={<MainLayout />}>
             <Route path={ROUTES.INDEX} element={<NewChatPage />} />

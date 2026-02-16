@@ -22,7 +22,7 @@ const handlePromptChange = debounce((chat, data) => {
 
 function PromptDraftMaintainer({ chat }) {
   const { prompt, setPrompt } = usePromptStore();
-  const { model, setModel } = useModelStore();
+  const { model, setModel, AI_MODELS, AI_DEFAULT_TYPE } = useModelStore();
   const { isWebSearchOn, setIsWebSearchOn, setIsWebSearchDisabled } =
     useWebSearchStore();
   const { isDeepResearch, setIsDeepResearch } = useDeepResearchStore();
@@ -49,11 +49,11 @@ function PromptDraftMaintainer({ chat }) {
         chat?.is_new ? CONFIG.NEW_CHAT_DRAFT_ID : chat.id
       );
       setPrompt(data?.prompt || "");
-      setModel(data?.model || CONFIG.AI_MODELS[CONFIG.AI_DEFAULT_TYPE.id].default_model);
+      setModel(data?.model || AI_MODELS?.[AI_DEFAULT_TYPE.id]?.default_model || null);
       setIsWebSearchOn(data?.isWebSearchOn || false);
       setIsDeepResearch(data?.isDeepResearch || false);
       setIsWebSearchDisabled(data?.model?.google_search ? false : true);
-      useModelStore.getState().setType(data?.type || CONFIG.AI_DEFAULT_TYPE);
+      useModelStore.getState().setType(data?.type || AI_DEFAULT_TYPE);
       promptInnerBoxEle.classList.remove("fd-state");
       aiTypeTogglerEle.classList.remove("hidden");
       last_fetch_chat_draft = chat;
