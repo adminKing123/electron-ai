@@ -27,7 +27,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A] transition-colors"
+          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A]"
           title="First page"
           aria-label="First page"
         >
@@ -37,7 +37,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A] transition-colors"
+          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A]"
           title="Previous page"
           aria-label="Previous page"
         >
@@ -51,7 +51,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A] transition-colors"
+          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A]"
           title="Next page"
           aria-label="Next page"
         >
@@ -61,7 +61,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage >= totalPages}
-          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A] transition-colors"
+          className="p-1.5 text-lg rounded border border-gray-300 dark:border-[#4E4E4E] bg-white dark:bg-[#2F2F2F] text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-[#3A3A3A]"
           title="Last page"
           aria-label="Last page"
         >

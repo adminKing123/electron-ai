@@ -1,21 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../../../../apis";
 
-/**
- * Custom hook for fetching and managing paginated table data
- * @param {Object} config - Table configuration object with uri, method, and query_params
- * @returns {Object} - Table data state and handlers
- */
-export const useTableData = (config) => {
-  const [loading, setLoading] = useState(true);
+export const useTableData = (config, enabled = true) => {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [tableData, setTableData] = useState(null);
   const [currentPage, setCurrentPage] = useState(
-    config?.query_params?.page || 1
+    config?.query_params?.page || 1,
   );
   const [limit, setLimit] = useState(config?.query_params?.limit || 10);
 
   const fetchTableData = useCallback(async () => {
+    if (!enabled) return;
+
     setLoading(true);
     setError(null);
     try {
@@ -36,11 +33,13 @@ export const useTableData = (config) => {
     } finally {
       setLoading(false);
     }
-  }, [config.uri, config.method, currentPage, limit]);
+  }, [config.uri, config.method, currentPage, limit, enabled]);
 
   useEffect(() => {
-    fetchTableData();
-  }, [fetchTableData]);
+    if (enabled) {
+      fetchTableData();
+    }
+  }, [fetchTableData, enabled]);
 
   const handlePageChange = useCallback((newPage) => {
     setCurrentPage(newPage);
@@ -48,7 +47,7 @@ export const useTableData = (config) => {
 
   const handleLimitChange = useCallback((newLimit) => {
     setLimit(newLimit);
-    setCurrentPage(1); // Reset to first page when changing limit
+    setCurrentPage(1);
   }, []);
 
   return {

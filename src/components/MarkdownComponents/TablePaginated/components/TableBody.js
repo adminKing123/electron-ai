@@ -18,7 +18,7 @@ const TableBody = ({ cols, data }) => {
           {data.map((row, rowIdx) => (
             <tr
               key={rowIdx}
-              className="border-b border-[#E4E4E4] dark:border-[#454545] hover:bg-gray-50 dark:hover:bg-[#2A2A2A] transition-colors"
+              className="border-b border-[#E4E4E4] dark:border-[#454545] hover:bg-gray-50 dark:hover:bg-[#2A2A2A]"
             >
               {cols.map((col, colIdx) => (
                 <td

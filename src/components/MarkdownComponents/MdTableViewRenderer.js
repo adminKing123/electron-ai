@@ -22,7 +22,7 @@ const MdTableViewRenderer = ({ content, message_id }) => {
   }
 
   if (tableConfig?.type === "TABLE_PAGINATED") {
-    return <TablePaginatedView config={tableConfig} />;
+    return <TablePaginatedView config={tableConfig} message_id={message_id} />;
   }
 
   return <div className="p-4">{content}</div>;
