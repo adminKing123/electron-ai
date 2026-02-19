@@ -10,6 +10,8 @@ export const useTableData = (config, enabled = true) => {
   );
   const [limit, setLimit] = useState(config?.query_params?.limit || 10);
   const [search, setSearch] = useState(config?.query_params?.search || "");
+  
+  const [sorts, setSorts] = useState([]);
 
   const fetchTableData = useCallback(async () => {
     if (!enabled) return;
@@ -22,9 +24,15 @@ export const useTableData = (config, enabled = true) => {
         limit: limit,
       });
       
-      // Add search param if it exists
       if (search) {
         params.append("search", search);
+      }
+      
+      if (sorts.length > 0) {
+        const sortBy = sorts.map(s => s.column).join(",");
+        const sortOrder = sorts.map(s => s.order).join(",");
+        params.append("sort_by", sortBy);
+        params.append("sort_order", sortOrder);
       }
       
       const url = `${config.uri}?${params.toString()}`;
@@ -40,7 +48,7 @@ export const useTableData = (config, enabled = true) => {
     } finally {
       setLoading(false);
     }
-  }, [config.uri, config.method, currentPage, limit, search, enabled]);
+  }, [config.uri, config.method, currentPage, limit, search, sorts, enabled]);
 
   useEffect(() => {
     if (enabled) {
@@ -59,7 +67,28 @@ export const useTableData = (config, enabled = true) => {
 
   const handleSearchChange = useCallback((newSearch) => {
     setSearch(newSearch);
-    setCurrentPage(1); // Reset to first page on search
+    setCurrentPage(1); 
+  }, []);
+
+  const handleSortChange = useCallback((columnKey) => {
+    setSorts(prevSorts => {
+      const existingIndex = prevSorts.findIndex(s => s.column === columnKey);
+      
+      if (existingIndex >= 0) {
+        const currentSort = prevSorts[existingIndex];
+        
+        if (currentSort.order === "asc") {
+          const newSorts = [...prevSorts];
+          newSorts[existingIndex] = { column: columnKey, order: "desc" };
+          return newSorts;
+        } else {
+          return prevSorts.filter((_, i) => i !== existingIndex);
+        }
+      } else {
+        return [...prevSorts, { column: columnKey, order: "asc" }];
+      }
+    });
+    setCurrentPage(1); 
   }, []);
 
   return {
@@ -69,9 +98,11 @@ export const useTableData = (config, enabled = true) => {
     currentPage,
     limit,
     search,
+    sorts,
     handlePageChange,
     handleLimitChange,
     handleSearchChange,
+    handleSortChange,
     refetch: fetchTableData,
   };
 };

@@ -22,9 +22,11 @@ const TablePaginatedView = ({ config, message_id }) => {
     currentPage,
     limit,
     search,
+    sorts,
     handlePageChange,
     handleLimitChange,
     handleSearchChange,
+    handleSortChange,
   } = useTableData(config, isExpanded);
 
   const { cols = [], data = [], pagination = {} } = tableData || {};
@@ -47,7 +49,13 @@ const TablePaginatedView = ({ config, message_id }) => {
       return <EmptyState />;
     }
 
-    return <TableBody cols={cols} data={data} />;
+    return <TableBody 
+      cols={cols} 
+      data={data} 
+      sorts={sorts}
+      onSortChange={handleSortChange}
+      sortableColumns={config?.sortable_columns || []}
+    />;
   };
 
   return (
