@@ -243,6 +243,12 @@ export const RENDERABLE_CONTENT_TYPES = {
       return trimmed.startsWith("<svg");
     },
   },
+  tableview: {
+    languages: ["tableview"],
+    detector: (content) => {
+      return true;
+    },
+  },
 };
 
 export const detectRenderableContent = (lang, content) => {

@@ -27,7 +27,7 @@ const MarkdownRenderer = ({ message_id, content }) => {
         const lang = match?.[1];
 
         return !inline && match ? (
-          <MdCode lang={lang} {...props}>
+          <MdCode lang={lang} message_id={message_id} {...props}>
             {children}
           </MdCode>
         ) : (
