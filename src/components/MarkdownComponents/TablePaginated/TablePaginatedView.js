@@ -21,14 +21,18 @@ const TablePaginatedView = ({ config, message_id }) => {
     tableData,
     currentPage,
     limit,
+    search,
     handlePageChange,
     handleLimitChange,
+    handleSearchChange,
   } = useTableData(config, isExpanded);
 
   const { cols = [], data = [], pagination = {} } = tableData || {};
   const totalPages = pagination.total
     ? Math.ceil(pagination.total / pagination.limit)
     : 1;
+
+  const hasSearchParam = config?.query_params?.hasOwnProperty("search");
 
   const renderContent = () => {
     if (loading) {
@@ -57,7 +61,13 @@ const TablePaginatedView = ({ config, message_id }) => {
       {isExpanded && (
         <>
           {!error && (
-            <TableHeader limit={limit} onLimitChange={handleLimitChange} />
+            <TableHeader 
+              limit={limit} 
+              onLimitChange={handleLimitChange}
+              search={search}
+              onSearchChange={handleSearchChange}
+              hasSearch={hasSearchParam}
+            />
           )}
 
           {renderContent()}

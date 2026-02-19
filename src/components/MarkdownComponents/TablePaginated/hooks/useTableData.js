@@ -9,6 +9,7 @@ export const useTableData = (config, enabled = true) => {
     config?.query_params?.page || 1,
   );
   const [limit, setLimit] = useState(config?.query_params?.limit || 10);
+  const [search, setSearch] = useState(config?.query_params?.search || "");
 
   const fetchTableData = useCallback(async () => {
     if (!enabled) return;
@@ -20,6 +21,12 @@ export const useTableData = (config, enabled = true) => {
         page: currentPage,
         limit: limit,
       });
+      
+      // Add search param if it exists
+      if (search) {
+        params.append("search", search);
+      }
+      
       const url = `${config.uri}?${params.toString()}`;
 
       const response = await api({
@@ -33,7 +40,7 @@ export const useTableData = (config, enabled = true) => {
     } finally {
       setLoading(false);
     }
-  }, [config.uri, config.method, currentPage, limit, enabled]);
+  }, [config.uri, config.method, currentPage, limit, search, enabled]);
 
   useEffect(() => {
     if (enabled) {
@@ -50,14 +57,21 @@ export const useTableData = (config, enabled = true) => {
     setCurrentPage(1);
   }, []);
 
+  const handleSearchChange = useCallback((newSearch) => {
+    setSearch(newSearch);
+    setCurrentPage(1); // Reset to first page on search
+  }, []);
+
   return {
     loading,
     error,
     tableData,
     currentPage,
     limit,
+    search,
     handlePageChange,
     handleLimitChange,
+    handleSearchChange,
     refetch: fetchTableData,
   };
 };
