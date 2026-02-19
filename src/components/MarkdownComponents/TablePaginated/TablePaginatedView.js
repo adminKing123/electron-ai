@@ -21,8 +21,7 @@ const TablePaginatedView = ({ config }) => {
     return <ErrorState error={error} />;
   }
 
-//   if (!loading && (!tableData || !tableData.cols || !tableData.data)) {
-  if (true) {
+  if (!loading && (!tableData || !tableData.cols || !tableData.data)) {
     return <EmptyState />;
   }
 
