@@ -215,7 +215,7 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
               <div className="fixed inset-0 z-[9999] backdrop-blur-md bg-black/20 flex flex-col">
                 <button
                   onClick={() => setIsFullscreen(false)}
-                  className="absolute top-4 right-4 z-10 p-1.5 bg-black/50 hover:bg-black/70 text-white rounded transition-colors"
+                  className="absolute top-6 right-[40px] z-10 p-1.5 bg-black/50 hover:bg-black/70 text-white rounded transition-colors"
                   title="Close (Esc)"
                 >
                   <IoClose size={20} />
