@@ -3,6 +3,7 @@ import MdCodeCopyButton from "./MdCodeCopyButton";
 import MdSvgRenderer from "./MdSvgRenderer";
 import { detectRenderableContent } from "../../utils/helpers";
 import MdTableViewRenderer from "./MdTableViewRenderer";
+import MdWebCodeViewRenderer from "./MdWebCodeView";
 
 const MdCode = ({ lang = "", message_id = "", children, ...props }) => {
   const handleCopy = async (callback) => {
@@ -27,6 +28,8 @@ const MdCode = ({ lang = "", message_id = "", children, ...props }) => {
       );
     else if (renderType === "tableview")
       return <MdTableViewRenderer content={content} message_id={message_id} />;
+    else if (renderType === "htmlview")
+      return <MdWebCodeViewRenderer content={content} message_id={message_id} />;
     else
       return (
         <div className="p-4">
@@ -42,7 +45,7 @@ const MdCode = ({ lang = "", message_id = "", children, ...props }) => {
       );
   };
 
-  if (renderType === "tableview") return renderContent();
+  if (renderType === "tableview" || renderType === "htmlview") return renderContent();
   else
     return (
       <div className="my-4 bg-[#F9F9F9] dark:bg-[#171717] border border-[#E4E4E4] dark:border-[#454545] rounded-2xl overflow-hidden">

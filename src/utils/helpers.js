@@ -249,6 +249,12 @@ export const RENDERABLE_CONTENT_TYPES = {
       return true;
     },
   },
+  htmlview: {
+    languages: ["htmlview"],
+    detector: (content) => {
+      return true;
+    },
+  },
 };
 
 export const detectRenderableContent = (lang, content) => {
