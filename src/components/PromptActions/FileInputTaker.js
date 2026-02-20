@@ -2,11 +2,13 @@ import { v4 as uuidv4 } from "uuid";
 import { IoIosAttach } from "react-icons/io";
 import { useFileInputStore } from "../../store/usePromptStores";
 import { uploadFileAPI } from "../../apis/file_upload/queryFunctions";
+import { notifyRenameChatError } from "../../utils/notifier";
 
 const FileInputTaker = ({ inputRef, disabled, chat }) => {
   const chat_id = chat.id;
   const addFile = useFileInputStore((state) => state.addFile);
   const updateFile = useFileInputStore((state) => state.updateFile);
+  const removeFile = useFileInputStore((state) => state.removeFile);
 
   const onProgress = (fileObj, progress) => {
     updateFile(fileObj.id, { progress });
@@ -22,7 +24,9 @@ const FileInputTaker = ({ inputRef, disabled, chat }) => {
   };
 
   const onError = (fileObj, error) => {
-    updateFile(fileObj.id, { in_progress: false, abort: null });
+    removeFile(fileObj.id);
+    notifyRenameChatError("Failed to upload file: " + (fileObj?.file?.name || "Unknown error"));
+    console.error("File upload error:", error);
   };
 
   const onAbort = (fileObj) => {
