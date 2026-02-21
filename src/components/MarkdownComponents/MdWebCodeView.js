@@ -139,7 +139,7 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
         className={`px-[18px] py-2 ${view === VIEWS.PREVIEW ? "" : ""} flex justify-between items-center`}
       >
         <div className="font-semibold text-black dark:text-white text-sm flex items-center gap-2">
-          <IoCode />
+          {isLoading ? <BasicLoader /> : <IoCode />}
           HTML
         </div>
         <div className="flex items-center gap-3">
