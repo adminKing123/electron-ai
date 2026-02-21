@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { useProcessController } from "../../store/useMessagesStore";
 import { LuCopy } from "react-icons/lu";
 import { MdOutlineDone } from "react-icons/md";
-import { IoCodeSlash, IoClose } from "react-icons/io5";
-import { VscPreview } from "react-icons/vsc";
+import { IoCode, IoCodeSlash, IoClose } from "react-icons/io5";
+import { IoPlayOutline } from "react-icons/io5";
 import { BiExpandAlt } from "react-icons/bi";
 import { BasicLoader } from "../Loaders";
 
@@ -91,8 +92,10 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
 
   useEffect(() => {
     if (isLoading && view === VIEWS.CODE && codeContainerRef.current) {
-      codeContainerRef.current.scrollTop =
-        codeContainerRef.current.scrollHeight;
+      codeContainerRef.current.scrollTo({
+        top: codeContainerRef.current.scrollHeight,
+        // behavior: "smooth",
+      });
     }
   }, [content, isLoading, view]);
 
@@ -128,25 +131,21 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
     }
   };
 
-  const getButtonClasses = (btnView) =>
-    `p-2 rounded transition-colors ${
-      view === btnView
-        ? "bg-[#E4E4E4] dark:bg-[#454545] text-black dark:text-white"
-        : "text-gray-500 dark:text-gray-400 hover:bg-[#E4E4E4] dark:hover:bg-[#3A3A3A]"
-    }`;
-
   return (
     <div
-      className={`my-4 ${view === VIEWS.PREVIEW ? "" : "bg-[#F9F9F9] dark:bg-[#171717] border border-[#E4E4E4] dark:border-[#454545] rounded-2xl"} overflow-hidden`}
+      className={`my-4 ${view === VIEWS.PREVIEW ? "" : "bg-[#F9F9F9] dark:bg-[#181818] rounded-3xl"} overflow-hidden`}
     >
       <div
-        className={`px-[18px] py-2 ${view === VIEWS.PREVIEW ? "" : "bg-[#f1f1f1] dark:bg-[#1d1d1d] rounded-t-2xl"} flex justify-between items-center`}
+        className={`px-[18px] py-2 ${view === VIEWS.PREVIEW ? "" : ""} flex justify-between items-center`}
       >
-        <div className="font-bold text-black dark:text-white text-sm">HTML</div>
-        <div className="flex items-center gap-2">
+        <div className="font-semibold text-black dark:text-white text-sm flex items-center gap-2">
+          <IoCode />
+          HTML
+        </div>
+        <div className="flex items-center gap-3">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 text-base hover:opacity-80 transition-opacity"
             title="Copy code"
           >
             {copied ? (
@@ -158,27 +157,34 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
               <LuCopy />
             )}
           </button>
-
-          <div className="w-px h-4 bg-[#E4E4E4] dark:bg-[#454545]" />
-
-          <button
-            onClick={() => setView(VIEWS.CODE)}
-            className={getButtonClasses(VIEWS.CODE)}
-            title="View code"
+          <ToggleGroup.Root
+            type="single"
+            value={view}
+            onValueChange={(value) => {
+              if (value && !(value === VIEWS.PREVIEW && isLoading)) {
+                setView(value);
+              }
+            }}
+            className="flex items-center bg-[#E8E8E8] dark:bg-[#0B0B0B] rounded-full p-1"
           >
-            <IoCodeSlash size={16} />
-          </button>
-
-          <button
-            onClick={() => !isLoading && setView(VIEWS.PREVIEW)}
-            className={`${getButtonClasses(VIEWS.PREVIEW)} ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            title={isLoading ? "Loading..." : "Preview"}
-            disabled={isLoading}
-          >
-            <VscPreview size={16} />
-          </button>
+            <ToggleGroup.Item
+              value={VIEWS.CODE}
+              className="p-2 rounded-full transition-colors data-[state=on]:bg-[#ffffff] dark:data-[state=on]:bg-[#212121] data-[state=off]:bg-transparent text-[#6f6f6f] dark:text-[#b0b0b0] data-[state=on]:text-black dark:data-[state=on]:text-white"
+              title="View code"
+            >
+              <IoCodeSlash size={16} />
+            </ToggleGroup.Item>
+            <ToggleGroup.Item
+              value={VIEWS.PREVIEW}
+              className={`p-2 rounded-full transition-colors data-[state=on]:bg-[#ffffff] dark:data-[state=on]:bg-[#212121] data-[state=off]:bg-transparent text-[#6f6f6f] dark:text-[#b0b0b0] data-[state=on]:text-black dark:data-[state=on]:text-white ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              title={isLoading ? "Loading..." : "Preview"}
+              disabled={isLoading}
+            >
+              <IoPlayOutline size={16} />
+            </ToggleGroup.Item>
+          </ToggleGroup.Root>
         </div>
       </div>
 
@@ -188,7 +194,7 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
         </div>
       ) : view === VIEWS.CODE ? (
         <div ref={codeContainerRef} className="overflow-auto max-h-[500px]">
-          <pre className="!m-0 p-4 whitespace-pre-wrap break-words text-sm font-mono">
+          <pre className="!m-0 px-4 whitespace-pre-wrap break-words text-sm font-mono">
             <code>{String(content).replace(/\n$/, "")}</code>
           </pre>
         </div>
