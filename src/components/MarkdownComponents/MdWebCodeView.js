@@ -129,7 +129,7 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
   };
 
   const getButtonClasses = (btnView) =>
-    `p-1.5 rounded transition-colors ${
+    `p-2 rounded transition-colors ${
       view === btnView
         ? "bg-[#E4E4E4] dark:bg-[#454545] text-black dark:text-white"
         : "text-gray-500 dark:text-gray-400 hover:bg-[#E4E4E4] dark:hover:bg-[#3A3A3A]"
@@ -146,7 +146,7 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 text-sm hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
             title="Copy code"
           >
             {copied ? (
@@ -187,17 +187,17 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
           <BasicLoader /> Loading preview...
         </div>
       ) : view === VIEWS.CODE ? (
-        <div ref={codeContainerRef} className="p-4 overflow-auto max-h-[500px]">
-          <pre className="m-0 whitespace-pre-wrap break-words text-sm font-mono">
+        <div ref={codeContainerRef} className="overflow-auto max-h-[500px]">
+          <pre className="!m-0 p-4 whitespace-pre-wrap break-words text-sm font-mono">
             <code>{String(content).replace(/\n$/, "")}</code>
           </pre>
         </div>
       ) : (
         <div>
-          <div className="relative border border-[#E4E4E4] dark:border-[#454545] rounded-lg overflow-hidden bg-white">
+          <div className="relative rounded-3xl overflow-hidden">
             <button
               onClick={() => setIsFullscreen(true)}
-              className="absolute top-2 right-2 z-10 p-1.5 bg-black/50 hover:bg-black/70 text-white rounded transition-colors"
+              className="absolute top-2 right-2 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
               title="Fullscreen"
             >
               <BiExpandAlt size={16} />
@@ -215,13 +215,13 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
               <div className="fixed inset-0 z-[9999] backdrop-blur-md bg-black/20 flex flex-col">
                 <button
                   onClick={() => setIsFullscreen(false)}
-                  className="absolute top-6 right-[40px] z-10 p-1.5 bg-black/50 hover:bg-black/70 text-white rounded transition-colors"
+                  className="absolute top-6 right-[29px] z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
                   title="Close (Esc)"
                 >
                   <IoClose size={20} />
                 </button>
 
-                <div className="flex-1 bg-white m-4 rounded-lg overflow-hidden shadow-2xl">
+                <div className="flex-1 sm:m-4 sm:rounded-3xl overflow-hidden shadow-2xl">
                   <iframe
                     title="HTML Preview Fullscreen"
                     src={blobUrl}
