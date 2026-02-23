@@ -102,8 +102,13 @@ const PrintMessageButton = ({ message_id }) => {
     printWindow.onload = () => {
       setTimeout(() => {
         printWindow.focus();
+
+        // Close window only after print dialog is dismissed (print or cancel)
+        printWindow.onafterprint = () => {
+          printWindow.close();
+        };
+
         printWindow.print();
-        printWindow.close();
       }, 250);
     };
   };
