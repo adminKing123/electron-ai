@@ -1,64 +1,111 @@
 import { FiPrinter } from "react-icons/fi";
 
 const PrintMessageButton = ({ message_id }) => {
+  const getPageStyles = () => {
+    let styles = "";
+
+    const styleSheets = document.querySelectorAll(
+      'link[rel="stylesheet"], style',
+    );
+    styleSheets.forEach((sheet) => {
+      if (sheet.tagName === "LINK") {
+        styles += `<link rel="stylesheet" href="${sheet.href}" />`;
+      } else if (sheet.tagName === "STYLE") {
+        styles += `<style>${sheet.innerHTML}</style>`;
+      }
+    });
+
+    return styles;
+  };
+
   const handlePrint = () => {
     const messageElement = document.getElementById(message_id);
-    if (!messageElement) return;
-
-    const printContainer = document.createElement("div");
-    printContainer.id = "print-container";
-    printContainer.style.display = "none";
+    if (!messageElement) {
+      console.warn(`Message element with id "${message_id}" not found`);
+      return;
+    }
 
     const content = messageElement.cloneNode(true);
+    const elementsToRemove = content.querySelectorAll(
+      'button, [role="button"], [data-no-print]',
+    );
+    elementsToRemove.forEach((el) => el.remove());
 
-    const buttonsToRemove = content.querySelectorAll("button, [role='button']");
-    buttonsToRemove.forEach((btn) => btn.remove());
+    const printWindow = window.open("", "_blank");
 
-    printContainer.appendChild(content);
-    document.body.appendChild(printContainer);
+    if (!printWindow) {
+      console.error("Failed to open print window. Check popup blocker.");
+      return;
+    }
 
-    const printStyle = document.createElement("style");
-    printStyle.id = "print-style";
-    printStyle.innerHTML = `
-      @media print {
-        body * {
-          visibility: hidden;
-        }
-        #print-container,
-        #print-container * {
-          visibility: visible;
-        }
-        #print-container {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          display: block !important;
-          padding: 20px;
-        }
-        button,
-        [role="button"] {
-          display: none !important;
-        }
-        .max-h-\\[160px\\] {
-          max-height: none !important;
-        }
-        .overflow-hidden {
-          overflow: visible !important;
-        }
-        .bg-gradient-to-t {
-          display: none !important;
-        }
-      }
+    const htmlClasses = document.documentElement.className;
+    const bodyClasses = document.body.className;
+
+    const printDocument = `
+      <!DOCTYPE html>
+      <html class="${htmlClasses}">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Print Message</title>
+          ${getPageStyles()}
+          <style>
+            /* Print-specific styles */
+            body {
+              padding: 20px;
+              margin: 0;
+            }
+            
+            /* Remove height constraints and gradients */
+            .max-h-\\[160px\\] {
+              max-height: none !important;
+            }
+            .overflow-hidden {
+              overflow: visible !important;
+            }
+            .bg-gradient-to-t {
+              display: none !important;
+            }
+            
+            /* Ensure images fit on page */
+            img {
+              max-width: 100% !important;
+              height: auto !important;
+            }
+            
+            /* Clean code blocks for printing */
+            pre, code {
+              white-space: pre-wrap !important;
+              word-wrap: break-word !important;
+            }
+            
+            @media print {
+              body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+              }
+            }
+          </style>
+        </head>
+        <body class="${bodyClasses}">
+          <div id="print-content">
+            ${content.innerHTML}
+          </div>
+        </body>
+      </html>
     `;
-    document.head.appendChild(printStyle);
 
-    window.print();
+    printWindow.document.open();
+    printWindow.document.write(printDocument);
+    printWindow.document.close();
 
-    setTimeout(() => {
-      document.body.removeChild(printContainer);
-      document.head.removeChild(printStyle);
-    }, 100);
+    printWindow.onload = () => {
+      setTimeout(() => {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+      }, 250);
+    };
   };
 
   return (
@@ -66,6 +113,7 @@ const PrintMessageButton = ({ message_id }) => {
       onClick={handlePrint}
       className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md"
       title="Print message"
+      aria-label="Print this message"
     >
       <FiPrinter />
     </button>
