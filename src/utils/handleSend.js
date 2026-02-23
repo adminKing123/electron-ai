@@ -75,7 +75,12 @@ export const handleSend = (chat, navigate) => {
   };
 
   const onEnd = (data) => {
-    const messageAdded = useMessageStore.getState().data[data.id];
+    if (data.stopped) {
+      onError(data);
+      return;
+    }
+
+    // const messageAdded = useMessageStore.getState().data[data.id];
   };
 
   const onError = (data) => {
@@ -91,7 +96,7 @@ export const handleSend = (chat, navigate) => {
         ],
       },
     });
-    const messageAdded = useMessageStore.getState().data[data.id];
+    // const messageAdded = useMessageStore.getState().data[data.id];
   };
 
   const handleNewChatEntered = (chat, summarization_data) => {

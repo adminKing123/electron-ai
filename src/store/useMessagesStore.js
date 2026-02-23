@@ -4,6 +4,7 @@ import { deleteMessageAPI } from "../apis/messages/queryFunctions";
 import { immer } from "zustand/middleware/immer";
 import usePromptStore from "./usePromptStores";
 import useMainSideLayoutStore from "./useMainSideLayoutStore";
+import { stopGeneration } from "../apis/prompt_generation/generationControl";
 
 const useMessageStore = create(
   immer((set, get) => ({
@@ -113,7 +114,7 @@ const useMessageStore = create(
         messages: [],
         data: {},
       }));
-      useProcessController.getState().setProcess(null, null, true);
+      useProcessController.getState().setProcess(null, null, false);
       usePromptStore.getState().setAction({});
       useMainSideLayoutStore.getState().setData(null);
     },
@@ -121,21 +122,34 @@ const useMessageStore = create(
 );
 
 export const useProcessController = create(
-  immer((set) => ({
+  immer((set, get) => ({
     process: null,
     message_process: {},
     controller: null,
     setProcess: (process = null, controller = null, shouldStop = false) => {
+      const currentProcess = get().process;
+      const messageIdToStop = shouldStop && currentProcess?.messageId ? currentProcess.messageId : null;
+      const controllerToAbort = shouldStop ? get().controller : null;
+      
       set((state) => {
         if (process?.id) {
           state.message_process[process?.id] = process;
         } else {
           state.message_process = {};
         }
-        if (shouldStop) state.controller?.abort();
         state.process = process;
         state.controller = controller;
       });
+      
+      if (messageIdToStop) {
+        stopGeneration(messageIdToStop).catch((err) => {
+          console.error("Failed to stop generation:", err);
+        });
+      }
+      
+      if (controllerToAbort) {
+        controllerToAbort.abort();
+      }
     },
   }))
 );

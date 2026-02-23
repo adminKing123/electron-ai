@@ -1,6 +1,7 @@
 import { useProcessController } from "../../store/useMessagesStore";
 import useUserStore from "../../store/useUserStore";
 import ENDPOINTS from "../endpoints";
+import { stopGeneration } from "./generationControl";
 
 const chunkParser = (id, eventType, dataString, onProgress) => {
   if (eventType === "error" || eventType === "end") return;
@@ -27,6 +28,7 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
         type: "GENERATION",
         process_name: "GETTING_STARTED",
         id: id,
+        messageId: id,
       },
       controller
     );
@@ -47,11 +49,15 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
       throw new Error("Stream error");
     }
 
+    const taskId = response.headers.get("X-Task-ID");
+
     setProcess(
       {
         type: "GENERATION",
         process_name: "GENERATING",
         id: id,
+        messageId: id,
+        taskId: taskId,
       },
       controller
     );
@@ -82,6 +88,18 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
             }
           }
 
+          if (eventType === "end") {
+            setProcess(null);
+            onEnd?.({ id });
+            return;
+          }
+
+          if (eventType === "stopped") {
+            setProcess(null);
+            onEnd?.({ id, stopped: true });
+            return;
+          }
+
           try {
             chunkParser(id, eventType, dataString, onProgress);
           } catch (e) {
@@ -94,9 +112,20 @@ const handleStream = async (id, data, onProgress, onStart, onEnd, onError) => {
     setProcess(null);
     onEnd?.({ id });
   } catch (err) {
+    if (err.name === "AbortError") {
+      setProcess(null);
+      onEnd?.({ id, stopped: true });
+      return;
+    }
+    
     setProcess(null);
     onError?.({ id, error: err.message });
   }
+};
+
+export const stopCurrentGeneration = async (messageId) => {
+  const result = await stopGeneration(messageId);
+  return result.success;
 };
 
 export default handleStream;
