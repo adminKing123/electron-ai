@@ -2,12 +2,11 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useModelStore, useWebSearchStore } from "../store/usePromptStores";
 import { GoDependabot } from "react-icons/go";
 import { GiMusicalNotes } from "react-icons/gi";
-import { RiMagicLine } from "react-icons/ri"
+import { RiMagicLine } from "react-icons/ri";
 
 import { IoCodeSlash } from "react-icons/io5";
 import { IoInformationCircleOutline } from "react-icons/io5";
 
-import CONFIG from "../config";
 import { MdWorkOutline } from "react-icons/md";
 import { SiTicktick } from "react-icons/si";
 import { useEffect } from "react";
@@ -30,7 +29,7 @@ function AITypeSelector() {
   const defaultAIType = useModelStore((state) => state.defaultAIType);
   const setDefaultAIType = useModelStore((state) => state.setDefaultAIType);
   const setIsWebSearchDisabled = useWebSearchStore(
-    (state) => state.setIsWebSearchDisabled
+    (state) => state.setIsWebSearchDisabled,
   );
   const setType = useModelStore((state) => state.setType);
 
@@ -43,12 +42,6 @@ function AITypeSelector() {
     setIsWebSearchDisabled(model_selected.google_search === false);
   };
 
-  const setAsDefault = (e, type) => {
-    e.stopPropagation();
-    setDefaultAIType(type);
-    localStorage.setItem("AI_DEFAULT_TYPE", JSON.stringify(type));
-  };
-
   useEffect(() => {
     if (!selectedType && defaultAIType) {
       setType(defaultAIType);
@@ -57,7 +50,7 @@ function AITypeSelector() {
   }, [selectedType, defaultAIType]);
 
   if (!selectedType) return null;
-  
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -93,16 +86,7 @@ function AITypeSelector() {
                 </div>
               </div>
               {isSelected ? (
-                defaultAIType.id === type.id ? (
-                  <SiTicktick className="w-3 h-3 fill-[#000000] dark:fill-[#C8C8C8]" />
-                ) : (
-                  <button
-                    onClick={(e) => setAsDefault(e, type)}
-                    className="text-[10px]"
-                  >
-                    Make Default
-                  </button>
-                )
+                <SiTicktick className="w-3 h-3 fill-[#000000] dark:fill-[#C8C8C8]" />
               ) : null}
             </DropdownMenu.Item>
           );
