@@ -8,9 +8,10 @@ import StepsList from "./StepsList";
 function AnswerSteps({ steps, message_id }) {
   const [isOpen, setIsOpen] = useState(false);
   const process = useProcessController(
-    (state) => state.message_process?.[message_id]
+    (state) => state.message_process?.[message_id],
   );
   const lastStep = steps[steps.length - 1];
+  const isError = lastStep?.type === "error";
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -20,27 +21,27 @@ function AnswerSteps({ steps, message_id }) {
     <div className="mb-2">
       <div className="flex items-center gap-2">
         <TbGalaxy
-          className={`text-[#000000] dark:text-white w-[24px] h-[24px] ${
-            process?.id === message_id ? "spin-animation" : ""
-          }`}
+          className={`w-[24px] h-[24px] ${
+            isError ? "text-red-600" : "text-[#000000] dark:text-white"
+          } ${process?.id === message_id ? "spin-animation" : ""}`}
         />
         <button
           onClick={handleToggle}
-          className="text-[11px] text-[#000000] dark:text-white rounded-2xl flex items-center gap-1 hover:opacity-80 transition-opacity"
+          className={`text-[11px] rounded-2xl flex items-center gap-1 hover:opacity-80 transition-opacity ${
+            isError ? "text-red-600" : "text-[#000000] dark:text-white"
+          }`}
         >
           <span>{lastStep.title}</span>
           <span>
             <FaAngleDown
-              className={`text-[#000000] dark:text-white text-[11px] transition-transform duration-300 ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`text-[11px] transition-transform duration-300 ${
+                isError ? "text-red-600" : "text-[#000000] dark:text-white"
+              } ${isOpen ? "rotate-180" : ""}`}
             />
           </span>
         </button>
       </div>
-      <AnimatePresence>
-        {isOpen && <StepsList steps={steps} />}
-      </AnimatePresence>
+      <AnimatePresence>{isOpen && <StepsList steps={steps} />}</AnimatePresence>
     </div>
   );
 }
