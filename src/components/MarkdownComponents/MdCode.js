@@ -32,12 +32,12 @@ const MdCode = ({ lang = "", message_id = "", children, ...props }) => {
       return <MdWebCodeViewRenderer content={content} message_id={message_id} />;
     else
       return (
-        <div className="p-4">
+        <div>
           <SyntaxHighlighter
             language={lang}
             useInlineStyles={false}
             style={{}}
-            customStyle={{ margin: 0 }}
+            customStyle={{ margin: 0, padding: "16px" }}
           >
             {content}
           </SyntaxHighlighter>
