@@ -31,6 +31,8 @@ const ENDPOINTS = {
   AURA_VOICE_GET_SESSION_ID: "/aura-voice/get/session-id",
 
   GET_CONFIG: "/get-config",
+
+  TTS_SPEAK: "/tts/speak",
 };
 
 export default ENDPOINTS;

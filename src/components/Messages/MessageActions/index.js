@@ -8,6 +8,7 @@ import CopyButton from "./CopyMessageButton";
 import GoToMessageTop from "./GoToMessageTop";
 import PrintMessageButton from "./PrintMessageButton";
 import ShowSelectedModel from "./ShowSelectedModel";
+import TextToSpeechButton from "./TextToSpeechButton";
 
 const MessageActions = ({ message_id, chat }) => {
   const message = useMessageStore((state) => state.data[message_id]);
@@ -27,6 +28,7 @@ const MessageActions = ({ message_id, chat }) => {
       <div className="flex items-center justify-between">
         <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
           <CopyButton handleCopy={handleAnswerCopy} />
+          <TextToSpeechButton message={message} />
           <PrintMessageButton message_id={message_id} />
           <GoToMessageTop id={message_id} />
         </div>
