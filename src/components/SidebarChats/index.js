@@ -19,17 +19,18 @@ const SidebarChatButton = ({ chat, ...props }) => {
     <NavLink
       to={ROUTES.GET_CHAT_PAGE_URL(chat.id)}
       className={({ isActive }) =>
-        `${
+        `group flex items-center w-full rounded-lg text-[13px] font-medium
+        transition-colors duration-100 outline-none
+        text-[#333] dark:text-[#ccc]
+        ${
           isActive
-            ? "bg-[#EAEAEA] dark:bg-[#232323]"
-            : "hover:bg-[#EFEFEF] dark:hover:bg-[#2F2F2F] active:bg-[#dbdbdb] dark:active:bg-[#232323] focus:bg-[#EAEAEA] dark:focus:bg-[#2F2F2F]"
-        } group pl-[10px] dark:text-[#E9E9E9] text-[14px] flex items-center focus:outline-none rounded-lg w-full`
+            ? "bg-[#e6e6e6] dark:bg-[#242424] text-[#111] dark:text-white"
+            : "hover:bg-[#ebebeb] dark:hover:bg-[#222]"
+        }`
       }
       {...props}
     >
-      <span className="truncate max-w-[200px] py-[7px] flex-grow">
-        {chat.title}
-      </span>
+      <span className="truncate px-3 py-[7px] flex-grow">{chat.title}</span>
       <SidebarChatMenu chat={chat} />
     </NavLink>
   );
@@ -138,13 +139,13 @@ const SidebarChats = () => {
   }, [handleScroll]);
 
   return (
-    <div className="mx-[8px] my-8">
+    <div className="px-2 pb-6">
       {Object.keys(groupedData).map((date) => (
-        <div key={date} className="mt-[30px] first:mt-0">
-          <h3 className="text-[14px] text-[#8F8F8F] dark:text-[#AFAFAF] px-[10px] mb-1">
+        <div key={date} className="mt-4 first:mt-2">
+          <p className="text-[11px] text-[#aaa] dark:text-[#555] px-3 mb-1">
             {formatDateTimeV1(date)}
-          </h3>
-          <div>
+          </p>
+          <div className="flex flex-col gap-px">
             {groupedData[date].map((chat) => (
               <SidebarChatButton
                 key={chat.id}

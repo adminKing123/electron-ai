@@ -6,85 +6,65 @@ import ROUTES from "../../router/routes";
 import { useSidebarOpenState } from "../../store/useSidebarStores";
 import useMessageStore from "../../store/useMessagesStore";
 
-const SidebarOptionButton = ({
-  icon: Icon,
-  label,
-  showActiveState,
-  ...props
-}) => {
-  return (
-    <NavLink
-      className={({ isActive }) =>
-        `px-[10px] py-[7px] text-[#000000] dark:text-[#E9E9E9] text-[14px] flex items-center gap-2 hover:bg-[#EFEFEF] dark:hover:bg-[#2F2F2F] active:bg-[#dbdbdb] dark:active:bg-[#232323] rounded-lg w-full` +
-        (showActiveState && isActive
-          ? " bg-[#EFEFEF] dark:bg-[#232323]"
-          : "")
-      }
-      {...props}
-    >
-      <span>
-        <Icon />
-      </span>
-      <span>{label}</span>
-    </NavLink>
-  );
-};
+/* Shared item style used by every option row */
+const itemBase =
+  "flex items-center gap-2.5 w-full rounded-lg px-3 py-[7px] text-[13px] font-medium text-[#333] dark:text-[#ccc] hover:bg-[#ebebeb] dark:hover:bg-[#222] transition-colors duration-100 outline-none";
+
+const SidebarNavLink = ({ icon: Icon, label, showActiveState, ...props }) => (
+  <NavLink
+    className={({ isActive }) =>
+      itemBase +
+      (showActiveState && isActive ? " bg-[#e6e6e6] dark:bg-[#242424] text-[#111] dark:text-white" : "")
+    }
+    {...props}
+  >
+    <Icon className="w-4 h-4 flex-shrink-0 opacity-50" />
+    <span>{label}</span>
+  </NavLink>
+);
 
 const CreateNewChatButton = () => {
   const setOpen = useSidebarOpenState((state) => state.setOpen);
   const resetMessages = useMessageStore((state) => state.resetMessages);
-
-  const handleClick = () => {
-    resetMessages();
-    if (window.innerWidth <= 768) {
-      setOpen(false);
-    }
-  };
-
   return (
-    <SidebarOptionButton
+    <SidebarNavLink
       icon={FaPlus}
       label="New chat"
       to={ROUTES.INDEX}
-      onClick={handleClick}
+      onClick={() => {
+        resetMessages();
+        if (window.innerWidth <= 768) setOpen(false);
+      }}
     />
   );
 };
 
-const SearchChatsButton = () => {
-  return <SidebarOptionButton icon={BsSearch} label="Search chats" />;
-};
+const SearchChatsButton = () => <SidebarNavLink icon={BsSearch} label="Search" />;
 
 const LibraryButton = () => {
   const setOpen = useSidebarOpenState((state) => state.setOpen);
   const resetMessages = useMessageStore((state) => state.resetMessages);
-
-  const handleClick = () => {
-    resetMessages();
-    if (window.innerWidth <= 768) {
-      setOpen(false);
-    }
-  };
-
   return (
-    <SidebarOptionButton
+    <SidebarNavLink
       icon={BiLibrary}
       label="Library"
       to={ROUTES.LIBRARY}
-      onClick={handleClick}
       showActiveState
+      onClick={() => {
+        resetMessages();
+        if (window.innerWidth <= 768) setOpen(false);
+      }}
     />
   );
 };
 
-const SidebarOptions = () => {
-  return (
-    <div className="my-2 mx-[8px]">
-      <CreateNewChatButton />
-      <SearchChatsButton />
-      <LibraryButton />
-    </div>
-  );
-};
+const SidebarOptions = () => (
+  <div className="px-2 pt-3 pb-1 flex flex-col gap-0.5">
+    <CreateNewChatButton />
+    <SearchChatsButton />
+    <LibraryButton />
+  </div>
+);
 
 export default SidebarOptions;
+

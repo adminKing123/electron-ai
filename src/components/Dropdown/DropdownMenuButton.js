@@ -7,12 +7,17 @@ export const DropdownMenuButton = ({
   ...props
 }) => (
   <DropdownMenu.Item
-    className={`px-[10px] py-2 text-sm cursor-pointer flex items-center gap-2 outline-none hover:bg-[#F5F5F5] dark:hover:bg-[#454545] rounded-[12px] ${className}`}
+    className={`flex items-center gap-2.5 px-2.5 py-[7px] text-[13px] font-medium rounded-lg
+      cursor-pointer outline-none
+      text-[#333] dark:text-[#ccc]
+      hover:bg-[#f0f0f0] dark:hover:bg-[#333]
+      transition-colors duration-100 ${className}`}
     {...props}
   >
-    <Icon />
+    <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />
     {label}
   </DropdownMenu.Item>
 );
 
 export default DropdownMenuButton;
+

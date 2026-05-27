@@ -37,9 +37,14 @@ const SidebarChatMenu = ({ chat }) => {
             e.stopPropagation();
             e.preventDefault();
           }}
-          className="flex-shrink-0 py-[7px] px-[10px] opacity-0 group-hover:opacity-100 transition-opacity data-[state=open]:opacity-100"
+          className="flex-shrink-0 w-7 h-7 mr-1.5 flex items-center justify-center rounded-md
+            opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100
+            text-[#888] dark:text-[#666]
+            hover:text-[#111] dark:hover:text-white
+            
+            transition-opacity"
         >
-          <SlOptions />
+          <SlOptions className="w-[11px] h-[11px]" />
         </button>
       </DropdownMenu.Trigger>
 
@@ -47,24 +52,19 @@ const SidebarChatMenu = ({ chat }) => {
         <DropdownMenu.Content
           side="bottom"
           align="start"
-          className="text-black dark:text-white min-w-[120px] bg-[#ffffff] dark:bg-[#353535] border border-[#E1E1E1] dark:border-[#2F2F2F] rounded-2xl p-[6px] shadow-lg z-50"
+          className="min-w-[150px] p-1 rounded-xl z-50
+            bg-white dark:bg-[#252525]
+            border border-[#e8e8e8] dark:border-[#2e2e2e]
+            shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
         >
-          <DropdownMenuButton
-            onClick={handleClick}
-            icon={PiShareBold}
-            label="Share"
-          />
-          <DropdownMenuButton
-            onClick={handleRename}
-            icon={FiEdit2}
-            label="Rename"
-          />
-          <DropdownMenu.Separator className="h-px mx-2 bg-[#E6E6E6] dark:bg-[#ffffff26] my-1" />
+          <DropdownMenuButton onClick={handleClick} icon={PiShareBold} label="Share" />
+          <DropdownMenuButton onClick={handleRename} icon={FiEdit2} label="Rename" />
+          <DropdownMenu.Separator className="h-px my-1 bg-[#ebebeb] dark:bg-[#2e2e2e]" />
           <DropdownMenuButton
             onClick={handleDelete}
             icon={AiOutlineDelete}
             label="Delete"
-            className="text-red-400"
+            className="text-red-500 dark:text-red-400"
           />
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

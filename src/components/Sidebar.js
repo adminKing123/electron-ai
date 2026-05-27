@@ -1,4 +1,4 @@
-import { TbLayoutSidebar } from "react-icons/tb";
+import { TbLayoutSidebar, TbEdit } from "react-icons/tb";
 import { TbGalaxy } from "react-icons/tb";
 import { useSidebarOpenState } from "../store/useSidebarStores";
 import { useEffect } from "react";
@@ -7,6 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import SidebarOptions from "./SidebarOptions";
 import SidebarChats from "./SidebarChats";
 import useMainSideLayoutStore from "../store/useMainSideLayoutStore";
+import { NavLink } from "react-router-dom";
+import ROUTES from "../router/routes";
+import useMessageStore from "../store/useMessagesStore";
 
 const SidebarOverlay = ({ open, toggleSidebar }) => {
   const mainSidebarLayoutType = useMainSideLayoutStore(
@@ -32,18 +35,48 @@ const SidebarOverlay = ({ open, toggleSidebar }) => {
 };
 
 const SidebarHeader = ({ toggleSidebar }) => {
+  const resetMessages = useMessageStore((state) => state.resetMessages);
+  const setOpen = useSidebarOpenState((state) => state.setOpen);
+
+  const handleNewChat = () => {
+    resetMessages();
+    if (window.innerWidth <= 768) setOpen(false);
+  };
+
   return (
-    <div className="bg-[#F9F9F9] dark:bg-[#181818] w-full h-[56px] flex items-center justify-between px-3 flex-shrink-0">
-      <button className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg">
-        <TbGalaxy className="text-[#000000] dark:text-white w-[24px] h-[24px]" />
-      </button>
-      <button
-        onClick={toggleSidebar}
-        className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
-      >
-        <TbLayoutSidebar className="text-[#8F8F8F] dark:text-white w-[24px] h-[24px] hidden md:block" />
-        <IoClose className="text-[#8F8F8F] dark:text-white w-[24px] h-[24px] block md:hidden" />
-      </button>
+    <div className="w-full h-[56px] flex items-center justify-between px-4 flex-shrink-0 border-b border-[#ebebeb] dark:border-[#232323]">
+      <div className="flex items-center gap-2.5">
+        <TbGalaxy className="text-[#111] dark:text-white w-[18px] h-[18px]" />
+        <span className="font-semibold text-[14px] text-[#111] dark:text-white tracking-tight">
+          AURA
+        </span>
+      </div>
+      <div className="flex items-center gap-0.5">
+        <NavLink
+          to={ROUTES.INDEX}
+          onClick={handleNewChat}
+          title="New chat"
+          className="w-8 h-8 flex items-center justify-center rounded-lg
+            text-[#888] dark:text-[#666]
+            hover:text-[#111] dark:hover:text-[#fff]
+            hover:bg-[#ebebeb] dark:hover:bg-[#242424]
+            transition-colors"
+        >
+          <TbEdit className="w-[17px] h-[17px]" />
+        </NavLink>
+        <button
+          onClick={toggleSidebar}
+          title="Toggle sidebar"
+          className="w-8 h-8 flex items-center justify-center rounded-lg
+            text-[#888] dark:text-[#666]
+            hover:text-[#111] dark:hover:text-[#fff]
+            hover:bg-[#ebebeb] dark:hover:bg-[#242424]
+            transition-colors"
+        >
+          <TbLayoutSidebar className="w-[17px] h-[17px] hidden md:block" />
+          <IoClose className="w-[17px] h-[17px] block md:hidden" />
+        </button>
+      </div>
     </div>
   );
 };
@@ -92,3 +125,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
