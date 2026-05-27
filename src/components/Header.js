@@ -6,19 +6,20 @@ import AITypeSelector from "./AITypeSelector";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
+/** Shared icon-button style used across header controls */
+const iconBtnCls =
+  "w-8 h-8 flex items-center justify-center rounded-lg " +
+  "text-[#888] dark:text-[#666] " +
+  "hover:text-[#111] dark:hover:text-white " +
+  "hover:bg-[#ebebeb] dark:hover:bg-[#222] " +
+  "transition-colors";
+
 const BackButton = () => {
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1);
-  };
-
   return (
-    <button
-      onClick={handleBack}
-      className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
-    >
-      <IoChevronBackOutline className="text-[#666666] dark:text-white w-[24px] h-[24px] block" />
+    <button onClick={() => navigate(-1)} className={iconBtnCls}>
+      <IoChevronBackOutline className="w-[18px] h-[18px]" />
     </button>
   );
 };
@@ -27,18 +28,11 @@ const SidebarOpenButton = () => {
   const open = useSidebarOpenState((state) => state.open);
   const setOpen = useSidebarOpenState((state) => state.setOpen);
 
-  const toggleSidebar = () => {
-    setOpen(!open);
-  };
-
   if (open && window.innerWidth > 768) return null;
   return (
-    <button
-      onClick={toggleSidebar}
-      className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
-    >
-      <TbLayoutSidebarFilled className="text-[#666666] dark:text-white w-[24px] h-[24px] hidden md:block" />
-      <HiMenuAlt2 className="text-[#666666] dark:text-white w-[24px] h-[24px] block md:hidden" />
+    <button onClick={() => setOpen(!open)} className={iconBtnCls}>
+      <TbLayoutSidebarFilled className="w-[18px] h-[18px] hidden md:block" />
+      <HiMenuAlt2 className="w-[18px] h-[18px] block md:hidden" />
     </button>
   );
 };
@@ -47,15 +41,15 @@ const Header = ({ type }) => {
   return (
     <header
       id="header"
-      className="h-[56px] w-full flex items-center justify-between gap-2 px-3 mb-[1px]"
+      className="h-[56px] w-full flex items-center justify-between gap-2 px-3 border-b border-[#ebebeb] dark:border-[#1e1e1e]"
     >
-      <div className="flex items-center">
+      <div className="flex items-center gap-1.5">
         {type === "aura-rj" ? <BackButton /> : <SidebarOpenButton />}
-        <button className="text-xl text-black dark:text-white font-semibold p-2 rounded-lg">
+        <span className="text-[14px] font-semibold tracking-tight text-[#111] dark:text-white select-none">
           AURA
-        </button>
+        </span>
       </div>
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-3">
         {type === "chat" ? <AITypeSelector /> : null}
         <HeaderUserProfile />
       </div>
