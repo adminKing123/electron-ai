@@ -34,22 +34,28 @@ const ThemeChangeOption = () => {
   };
 
   return (
-    <div className="flex text-[#000000] dark:text-[#C8C8C8] items-center gap-2 w-full hover:bg-[#F5F5F5] dark:hover:bg-[#3A3A3A] rounded-lg px-2 py-1 text-[14px] h-8">
-      <div className="flex-shrink-0">{Icon}</div>
+    <div className="flex items-center gap-2.5 w-full px-2.5 py-[7px] text-[13px] rounded-xl cursor-pointer transition-colors text-[#333] dark:text-[#ccc] hover:bg-[#f4f4f4] dark:hover:bg-[#363636]">
+      <div className="flex-shrink-0 w-[14px] h-[14px] opacity-60 flex items-center justify-center">
+        {Icon}
+      </div>
       <div className="flex-grow flex items-center justify-between">
-        <div>Theme</div>
-        <div className="flex items-center gap-2">
-          <div className="w-[14px] h-[14px]">
-            <button onClick={handlePrev}>
-              <FaAngleLeft />
-            </button>
-          </div>
-          <div className="capitalize">{theme}</div>
-          <div className="w-[14px] h-[14px]">
-            <button onClick={handleNext}>
-              <FaAngleRight />
-            </button>
-          </div>
+        <span>Theme</span>
+        <div className="flex items-center gap-1.5 text-[#aaa] dark:text-[#555]">
+          <button
+            onClick={handlePrev}
+            className="w-5 h-5 flex items-center justify-center rounded hover:bg-[#e8e8e8] dark:hover:bg-[#2e2e2e] transition-colors"
+          >
+            <FaAngleLeft className="w-[10px] h-[10px]" />
+          </button>
+          <span className="text-[11px] font-medium capitalize w-[38px] text-center text-[#777] dark:text-[#666]">
+            {theme}
+          </span>
+          <button
+            onClick={handleNext}
+            className="w-5 h-5 flex items-center justify-center rounded hover:bg-[#e8e8e8] dark:hover:bg-[#2e2e2e] transition-colors"
+          >
+            <FaAngleRight className="w-[10px] h-[10px]" />
+          </button>
         </div>
       </div>
     </div>

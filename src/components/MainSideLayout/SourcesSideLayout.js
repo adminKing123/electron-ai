@@ -9,22 +9,32 @@ const Source = ({ data }) => {
       href={data.url}
       rel="noreferrer"
       target="_blank"
-      className="p-2 hover:bg-[#f2f2f2] dark:hover:bg-[#303030] rounded-lg"
+      className="flex flex-col gap-1 p-3 rounded-xl
+        hover:bg-[#f5f5f5] dark:hover:bg-[#222]
+        transition-colors"
     >
-      <div className="text-xs text-[#454545] dark:text-[#929292] flex items-center gap-2 mb-2">
-        <span className="w-[14px] h-[14px]">
+      {/* Domain row */}
+      <div className="flex items-center gap-1.5">
+        <span className="w-[13px] h-[13px] flex-shrink-0 overflow-hidden rounded-full">
           <img
             alt={data.domain}
             src={CONFIG.GOOGLE_ICON_IMAGE_LOAD_API_64(data.domain)}
             loading="lazy"
+            className="w-full h-full object-contain"
           />
         </span>
-        <span className="truncate">{data.from}</span>
+        <span className="text-[11px] font-medium text-[#888] dark:text-[#555] truncate">
+          {data.from}
+        </span>
       </div>
-      <h2 className="text-sm line-clamp-2 font-semibold text-[#000000] dark:text-[#ffffff]">
+
+      {/* Headline */}
+      <h2 className="text-[13px] font-semibold leading-snug line-clamp-2 text-[#111] dark:text-[#e8e8e8]">
         {data.headline}
       </h2>
-      <p className="text-sm opacity-65 text-[#000000] dark:text-[#ffffff] line-clamp-2">
+
+      {/* Summary */}
+      <p className="text-[12px] leading-snug line-clamp-2 text-[#777] dark:text-[#666]">
         {data.summary}
       </p>
     </a>
@@ -34,10 +44,6 @@ const Source = ({ data }) => {
 function SourcesSideLayout() {
   const data = useMainSideLayoutStore((state) => state.data);
   const setData = useMainSideLayoutStore((state) => state.setData);
-
-  const toggleSideLayout = () => {
-    setData(null);
-  };
 
   const animateVariants = {
     hidden: { width: "var(--fm-ssl-width-from)", opacity: 0 },
@@ -50,22 +56,35 @@ function SourcesSideLayout() {
       animate="visible"
       exit="hidden"
       variants={animateVariants}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed lg:static top-0 left-0 w-screen h-[100dvh] lg:w-[380px] lg:flex-shrink-0 z-[100] lg:z-auto p-5 lg:p-0 flex justify-center lg:justify-normal items-center lg:items-stretch bg-[#2f2f2fa3] dark:bg-[#00000076] lg:bg-transparent"
+      transition={{ duration: 0.25, ease: "easeInOut" }}
+      className="fixed lg:static top-0 left-0 w-screen h-[100dvh] lg:w-[360px] lg:flex-shrink-0 z-[100] lg:z-auto p-5 lg:p-0 flex justify-center lg:justify-normal items-center lg:items-stretch bg-black/30 dark:bg-black/50 lg:bg-transparent"
     >
-      <motion.div className="rounded-xl lg:rounded-none min-w-[280px] lg:min-w-[380px] max-w-[640px] lg:max-w-none w-full h-auto lg:h-full bg-[#ffffff] dark:bg-[#212121] shadow-xl lg:shadow-none border lg:border-0 lg:border-l border-[#f2f2f2] dark:border-[#303030] flex flex-col">
-        <div className="px-4 header-shadow mb-[1px] flex items-center justify-between h-14">
-          <h2 className="text-lg font-semibold text-[#000000] dark:text-[#ffffff]">
+      <motion.div className="rounded-2xl lg:rounded-none min-w-[280px] lg:min-w-[360px] max-w-[580px] lg:max-w-none w-full h-auto lg:h-full
+        bg-white dark:bg-[#191919]
+        shadow-[0_8px_40px_rgba(0,0,0,0.15)] lg:shadow-none
+        border lg:border-0 lg:border-l
+        border-[#ebebeb] dark:border-[#222]
+        flex flex-col"
+      >
+        {/* Header */}
+        <div className="px-4 h-[56px] flex-shrink-0 flex items-center justify-between border-b border-[#ebebeb] dark:border-[#222]">
+          <h2 className="text-[14px] font-semibold text-[#111] dark:text-white">
             Sources
           </h2>
           <button
-            onClick={toggleSideLayout}
-            className="w-10 h-10 px-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
+            onClick={() => setData(null)}
+            className="w-8 h-8 flex items-center justify-center rounded-lg
+              text-[#888] dark:text-[#666]
+              hover:text-[#111] dark:hover:text-white
+              hover:bg-[#ebebeb] dark:hover:bg-[#222]
+              transition-colors"
           >
-            <IoClose className="text-[#8F8F8F] dark:text-white w-[24px] h-[24px]" />
+            <IoClose className="w-[16px] h-[16px]" />
           </button>
         </div>
-        <div className="flex flex-col gap-2 p-2 max-h-[80dvh] lg:max-h-none lg:h-[calc(100%-57px)] overflow-y-auto">
+
+        {/* Source list */}
+        <div className="flex flex-col p-2 max-h-[80dvh] lg:max-h-none lg:flex-1 overflow-y-auto">
           {data?.payload?.sources.map((source, index) => (
             <Source key={index} data={source} />
           ))}

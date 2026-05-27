@@ -14,7 +14,7 @@ const DeleteChatModal = ({ data }) => {
   const navigate = useNavigate();
 
   const handleDeleteChat = () => {
-    toggleSideLayout();
+    close();
     deleteChat(data?.payload?.chat?.id);
     if (chat_id === data?.payload?.chat?.id) {
       resetMessages();
@@ -22,48 +22,65 @@ const DeleteChatModal = ({ data }) => {
     }
   };
 
-  const toggleSideLayout = () => {
-    setData(null);
-  };
-
-  const animateVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-  };
+  const close = () => setData(null);
 
   return createPortal(
     <motion.div
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-      variants={animateVariants}
-      transition={{ duration: 0.1, ease: "easeInOut" }}
-      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm top-0 left-0 w-screen h-[100dvh]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      onClick={close}
+      className="fixed inset-0 z-50 flex items-center justify-center
+        bg-black/40 dark:bg-black/60 backdrop-blur-sm px-4"
     >
-      <motion.div className="text-black dark:text-white bg-white dark:bg-[#2F2F2F] border border-[#eaeaea] dark:border-[#414141] rounded-2xl shadow-lg w-full max-w-md p-4">
-        <h2 className="text-lg">Delete Chat?</h2>
-        <div className="text-base my-4">
-          <p>
-            This will delete <b>{data?.payload.chat?.title}.</b>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 6 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 6 }}
+        transition={{ duration: 0.15 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-sm p-5 rounded-2xl
+          bg-white dark:bg-[#1e1e1e]
+          border border-[#e8e8e8] dark:border-[#2a2a2a]
+          shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]"
+      >
+        {/* Title */}
+        <h2 className="text-[15px] font-semibold text-[#111] dark:text-white mb-1">
+          Delete chat?
+        </h2>
+
+        {/* Body */}
+        <div className="mt-2 mb-5 space-y-1.5">
+          <p className="text-[13px] text-[#444] dark:text-[#aaa] leading-relaxed">
+            <span className="font-medium text-[#111] dark:text-white">
+              {data?.payload.chat?.title}
+            </span>{" "}
+            will be permanently deleted.
           </p>
-          <p className="text-sm text-[#AFAFAF] mt-2">
-            Visit{" "}
-            <u>
-              <a href="#settings/Personalization">settings</a>
-            </u>{" "}
-            to delete any memories saved during this chat.
+          <p className="text-[12px] text-[#aaa] dark:text-[#555]">
+            Visit settings to delete any memories saved during this chat.
           </p>
         </div>
-        <div className="flex justify-end gap-3 text-sm font-semibold">
+
+        {/* Actions */}
+        <div className="flex justify-end gap-2">
           <button
-            onClick={toggleSideLayout}
-            className="px-4 py-2 rounded-full dark:bg-[#2F2F2F] bg-[#ffffff] border border-[#D9D9D9] dark:border-[#4E4E4E]"
+            onClick={close}
+            className="px-4 py-1.5 rounded-full text-[13px] font-medium
+              bg-[#f4f4f4] dark:bg-[#2a2a2a]
+              text-[#333] dark:text-[#ccc]
+              hover:bg-[#ebebeb] dark:hover:bg-[#333]
+              border border-[#e8e8e8] dark:border-[#333]
+              transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleDeleteChat}
-            className="px-4 py-2 rounded-full text-white bg-[#E02E2A]"
+            className="px-4 py-1.5 rounded-full text-[13px] font-medium
+              bg-red-500 hover:bg-red-600
+              text-white transition-colors"
           >
             Delete
           </button>
