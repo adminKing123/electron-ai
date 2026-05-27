@@ -9,6 +9,7 @@ import usePromptStore, {
   useFileInputStore,
   useMicStore,
   useModelStore,
+  useOutputOptionsStore,
   useWebSearchStore,
 } from "../store/usePromptStores";
 import useChatsStore from "../store/useChatsStore";
@@ -25,6 +26,7 @@ export const handleSend = (chat, navigate) => {
   const { clearFiles: clearFilesFromInputBox, attachedFiles } =
     useFileInputStore.getState();
   const { isRecording } = useMicStore.getState();
+  const { generateHtml, generateCharts } = useOutputOptionsStore.getState();
 
   const files = Object.values(attachedFiles);
   const any_file_uploading = files.some((file) =>
@@ -49,6 +51,8 @@ export const handleSend = (chat, navigate) => {
 
   const google_search = isWebSearchDisabled ? false : isWebSearchOn;
   const generate_image = false;
+  const generate_html = generateHtml;
+  const generate_charts = generateCharts;
 
   let id = null;
 
@@ -123,6 +127,8 @@ export const handleSend = (chat, navigate) => {
       model: model,
       google_search,
       generate_image,
+      generate_html,
+      generate_charts,
       created_at: oldMessge.created_at,
       updated_at: new Date().toISOString(),
       interrupt: {},
@@ -146,6 +152,8 @@ export const handleSend = (chat, navigate) => {
       model: model,
       google_search,
       generate_image,
+      generate_html,
+      generate_charts,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       files: files,
@@ -168,6 +176,8 @@ export const handleSend = (chat, navigate) => {
     model: payload.model,
     google_search: payload.google_search,
     generate_image: payload.generate_image,
+    generate_html: payload.generate_html,
+    generate_charts: payload.generate_charts,
     created_at: payload.created_at,
     updated_at: payload.updated_at,
     files: payload.files,

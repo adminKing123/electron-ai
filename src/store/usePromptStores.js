@@ -86,4 +86,15 @@ export const useMicStore = create((set) => ({
   setRecordedText: (value) => set({ recordedText: value }),
 }));
 
+/**
+ * Store for output generation options.
+ * Controls whether the AI should generate HTML or chart outputs.
+ */
+export const useOutputOptionsStore = create((set) => ({
+  generateHtml: false,
+  setGenerateHtml: (value) => set({ generateHtml: value }),
+  generateCharts: false,
+  setGenerateCharts: (value) => set({ generateCharts: value }),
+}));
+
 export default usePromptStore;

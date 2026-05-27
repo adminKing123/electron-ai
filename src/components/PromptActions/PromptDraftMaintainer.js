@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import usePromptStore, {
   useDeepResearchStore,
   useModelStore,
+  useOutputOptionsStore,
   useWebSearchStore,
 } from "../../store/usePromptStores";
 import debounce from "lodash.debounce";
@@ -26,6 +27,8 @@ function PromptDraftMaintainer({ chat }) {
   const { isWebSearchOn, setIsWebSearchOn, setIsWebSearchDisabled } =
     useWebSearchStore();
   const { isDeepResearch, setIsDeepResearch } = useDeepResearchStore();
+  const { generateHtml, setGenerateHtml, generateCharts, setGenerateCharts } =
+    useOutputOptionsStore();
 
   useEffect(() => {
     if (chat?.id && last_fetch_chat_draft?.id === chat.id) {
@@ -34,10 +37,12 @@ function PromptDraftMaintainer({ chat }) {
         model: model,
         isWebSearchOn: isWebSearchOn,
         isDeepResearch: isDeepResearch,
+        generateHtml: generateHtml,
+        generateCharts: generateCharts,
         type: useModelStore.getState().type,
       });
     }
-  }, [chat, prompt, model, isWebSearchOn, isDeepResearch]);
+  }, [chat, prompt, model, isWebSearchOn, isDeepResearch, generateHtml, generateCharts]);
 
   useEffect(() => {
     const promptInnerBoxEle = document.getElementById("inner-prompt-box");
@@ -53,6 +58,8 @@ function PromptDraftMaintainer({ chat }) {
       setModel(data?.model || AI_MODELS?.[AI_DEFAULT_TYPE?.id]?.default_model || null);
       setIsWebSearchOn(data?.isWebSearchOn || false);
       setIsDeepResearch(data?.isDeepResearch || false);
+      setGenerateHtml(data?.generateHtml || false);
+      setGenerateCharts(data?.generateCharts || false);
       setIsWebSearchDisabled(data?.model?.google_search ? false : true);
       useModelStore.getState().setType(data?.type || AI_DEFAULT_TYPE);
       promptInnerBoxEle.classList.remove("fd-state");
@@ -71,6 +78,8 @@ function PromptDraftMaintainer({ chat }) {
     setIsWebSearchOn,
     setIsDeepResearch,
     setIsWebSearchDisabled,
+    setGenerateHtml,
+    setGenerateCharts,
   ]);
 
   return null;
