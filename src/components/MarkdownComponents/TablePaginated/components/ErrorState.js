@@ -1,6 +1,8 @@
 const ErrorState = ({ error }) => {
   return (
-    <div className="py-4 px-1.5">Facing Issues, please contact support, if issue is not resolved.</div>
+    <div className="py-6 px-4 text-[13px] text-[#aaa] dark:text-[#555]">
+      Facing issues, please contact support if the problem persists.
+    </div>
   );
 };
 

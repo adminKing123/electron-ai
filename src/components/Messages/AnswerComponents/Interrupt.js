@@ -5,56 +5,57 @@ import usePromptStore from "../../../store/usePromptStores";
 import { handleSend } from "../../../utils/handleSend";
 
 const DecisionBadge = ({ decision }) => {
-  let textColor = "text-gray-500";
+  let cls = "text-[#888] dark:text-[#555] bg-[#f0f0f0] dark:bg-[#2a2a2a] border border-[#e5e5e5] dark:border-[#333]";
   let text = "Unknown";
   if (decision === "approve") {
-    textColor = "text-green-500";
+    cls = "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/40";
     text = "Approved";
   } else if (decision === "reject") {
-    textColor = "text-red-500";
+    cls = "text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/40";
     text = "Rejected";
   }
   return (
-    <span
-      className={`text-white dark:text-white text-xs font-bold rounded-md px-2 py-1 ${textColor}`}
-    >
+    <span className={`text-[11px] font-semibold rounded-full px-2.5 py-1 ${cls}`}>
       {text}
     </span>
   );
 };
 
-const RejectButton = ({ ...props }) => {
-  return (
-    <button
-      className="text-white dark:text-white text-xs bg-red-500 hover:bg-red-600 active:bg-red-700 font-semibold rounded-md px-2 py-1"
-      {...props}
-    >
-      Reject
-    </button>
-  );
-};
+const RejectButton = ({ ...props }) => (
+  <button
+    className="text-white text-[12px] font-medium rounded-full px-3 py-1.5
+      bg-red-500 hover:bg-red-600 active:bg-red-700
+      transition-colors"
+    {...props}
+  >
+    Reject
+  </button>
+);
 
-const ApproveButton = ({ ...props }) => {
-  return (
-    <button
-      className="text-white dark:text-white text-xs bg-green-500 hover:bg-green-600 active:bg-green-700 font-semibold rounded-md px-2 py-1"
-      {...props}
-    >
-      Approve
-    </button>
-  );
-};
+const ApproveButton = ({ ...props }) => (
+  <button
+    className="text-white text-[12px] font-medium rounded-full px-3 py-1.5
+      bg-green-500 hover:bg-green-600 active:bg-green-700
+      transition-colors"
+    {...props}
+  >
+    Approve
+  </button>
+);
 
-const UndoButton = ({ ...props }) => {
-  return (
-    <button
-      className="text-white dark:text-white text-xs bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 font-semibold rounded-md px-2 py-1"
-      {...props}
-    >
-      Undo
-    </button>
-  );
-};
+const UndoButton = ({ ...props }) => (
+  <button
+    className="text-[12px] font-medium rounded-full px-3 py-1.5
+      border border-[#e5e5e5] dark:border-[#333]
+      bg-[#f0f0f0] dark:bg-[#2a2a2a]
+      text-[#666] dark:text-[#aaa]
+      hover:bg-[#e8e8e8] dark:hover:bg-[#333]
+      transition-colors"
+    {...props}
+  >
+    Undo
+  </button>
+);
 
 const ActionRequest = ({
   index,
@@ -91,13 +92,13 @@ const ActionRequest = ({
   };
 
   return (
-    <div className="border border-[#E4E4E4] dark:border-[#454545] bg-[#f6f6f6] dark:bg-[#292929] rounded-xl px-5 py-3">
+    <div className="border border-[#e8e8e8] dark:border-[#2a2a2a] bg-[#f8f8f8] dark:bg-[#1e1e1e] rounded-2xl px-4 py-3.5">
       <div>
-        <h3 className="text-black dark:text-white font-semibold italic">
-          <span>{name}</span>
+        <h3 className="text-[13px] font-semibold text-[#111] dark:text-white italic mb-1">
+          {name}
         </h3>
-        <p className="text-[13px] text-[#333333] dark:text-[#CCCCCC]">
-          <pre className="text-wrap">{description}</pre>
+        <p className="text-[13px] text-[#666] dark:text-[#888] leading-relaxed">
+          <pre className="text-wrap font-sans m-0 whitespace-pre-wrap">{description}</pre>
         </p>
       </div>
 

@@ -1,6 +1,5 @@
 import { GrSun } from "react-icons/gr";
 import { MdDarkMode, MdOutlineDevices } from "react-icons/md";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import useThemeStore, { THEME_OPTIONS } from "../store/useThemeStore";
 
 const themeOptions = [
@@ -19,43 +18,30 @@ const ThemeChangeOption = () => {
     [THEME_OPTIONS.SYSTEM]: <MdOutlineDevices />,
   };
 
-  const Icon = Icons[theme];
-
-  const currentIndex = themeOptions.indexOf(theme);
-  const handlePrev = () => {
-    const prevIndex =
-      (currentIndex - 1 + themeOptions.length) % themeOptions.length;
-    setTheme(themeOptions[prevIndex]);
-  };
-
-  const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % themeOptions.length;
-    setTheme(themeOptions[nextIndex]);
-  };
-
   return (
-    <div className="flex items-center gap-2.5 w-full px-2.5 py-[7px] text-[13px] rounded-xl cursor-pointer transition-colors text-[#333] dark:text-[#ccc] hover:bg-[#f4f4f4] dark:hover:bg-[#363636]">
-      <div className="flex-shrink-0 w-[14px] h-[14px] opacity-60 flex items-center justify-center">
-        {Icon}
-      </div>
+    <div className="flex items-center gap-2.5 w-full px-2.5 py-[7px] text-[13px] rounded-xl text-[#333] dark:text-[#ccc] hover:bg-[#f4f4f4] dark:hover:bg-[#363636] transition-colors">
       <div className="flex-grow flex items-center justify-between">
         <span>Theme</span>
-        <div className="flex items-center gap-1.5 text-[#aaa] dark:text-[#555]">
-          <button
-            onClick={handlePrev}
-            className="w-5 h-5 flex items-center justify-center rounded hover:bg-[#e8e8e8] dark:hover:bg-[#2e2e2e] transition-colors"
-          >
-            <FaAngleLeft className="w-[10px] h-[10px]" />
-          </button>
-          <span className="text-[11px] font-medium capitalize w-[38px] text-center text-[#777] dark:text-[#666]">
-            {theme}
-          </span>
-          <button
-            onClick={handleNext}
-            className="w-5 h-5 flex items-center justify-center rounded hover:bg-[#e8e8e8] dark:hover:bg-[#2e2e2e] transition-colors"
-          >
-            <FaAngleRight className="w-[10px] h-[10px]" />
-          </button>
+        <div className="flex items-center gap-0.5 bg-[#e8e8e8] dark:bg-[#2a2a2a] rounded-lg p-0.5">
+          {themeOptions.map((option) => {
+            const isActive = theme === option;
+            return (
+              <button
+                key={option}
+                onClick={() => setTheme(option)}
+                title={option.charAt(0).toUpperCase() + option.slice(1)}
+                className={`w-6 h-6 flex items-center justify-center rounded-md transition-colors ${
+                  isActive
+                    ? "bg-white dark:bg-[#1e1e1e] text-[#111] dark:text-white shadow-sm"
+                    : "text-[#aaa] dark:text-[#555] hover:text-[#555] dark:hover:text-[#aaa]"
+                }`}
+              >
+                <span className="w-[13px] h-[13px] flex items-center justify-center">
+                  {Icons[option]}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

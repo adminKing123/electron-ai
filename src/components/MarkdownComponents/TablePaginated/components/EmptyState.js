@@ -1,7 +1,7 @@
 const EmptyState = () => {
   return (
-    <div className="py-4 px-1.5">
-      No data available to display. Please check your data source or adjust your filters.
+    <div className="py-6 px-4 text-[13px] text-[#aaa] dark:text-[#555]">
+      No data available. Try adjusting your filters.
     </div>
   );
 };

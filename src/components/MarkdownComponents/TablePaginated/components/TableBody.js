@@ -31,7 +31,7 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
   return (
     <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
       <table className="hidden sm:table w-full text-xs">
-        <thead className="bg-gray-50 dark:bg-[#252525] border-b border-[#E4E4E4] dark:border-[#454545]">
+        <thead className="bg-[#f8f8f8] dark:bg-[#1a1a1a] border-b border-[#e8e8e8] dark:border-[#2a2a2a]">
           <tr>
             {cols.map((col, idx) => {
               const sortable = isSortable(col._k);
@@ -58,12 +58,12 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
           {data.map((row, rowIdx) => (
             <tr
               key={rowIdx}
-              className="border-b border-[#E4E4E4] dark:border-[#454545] hover:bg-gray-50 dark:hover:bg-[#2A2A2A]"
+              className="border-b border-[#e8e8e8] dark:border-[#2a2a2a] hover:bg-[#f8f8f8] dark:hover:bg-[#1e1e1e] transition-colors"
             >
               {cols.map((col, colIdx) => (
                 <td
                   key={colIdx}
-                  className="px-4 py-3 text-gray-800 dark:text-gray-200"
+                  className="px-4 py-2.5 text-[12px] text-[#333] dark:text-[#bbb]"
                 >
                   {row[col._k] || "-"}
                 </td>

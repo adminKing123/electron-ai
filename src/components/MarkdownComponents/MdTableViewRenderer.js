@@ -11,14 +11,18 @@ const MdTableViewRenderer = ({ content, message_id }) => {
 
   if (process?.id === message_id && !tableConfig) {
     return (
-      <div className="py-4 px-1.5 flex items-center gap-1.5">
+      <div className="py-4 px-1.5 flex items-center gap-1.5 text-[#aaa] dark:text-[#555] text-[13px]">
         <BasicLoader /> please wait...
       </div>
     );
   }
 
   if (!tableConfig) {
-    return <div className="p-4">No data to display</div>;
+    return (
+      <div className="p-4 text-[13px] text-[#aaa] dark:text-[#555]">
+        No data to display
+      </div>
+    );
   }
 
   if (tableConfig?.type === "TABLE_PAGINATED") {

@@ -19,7 +19,7 @@ const ScrollToBottomButton = () => {
         bg-white dark:bg-[#1e1e1e]
         border border-[#e5e5e5] dark:border-[#2a2a2a]
         shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]
-        text-[#888] dark:text-[#666]
+        text-[#888] dark:text-[#888]
         hover:text-[#111] dark:hover:text-white
         transition-colors
         absolute left-1/2 -translate-x-1/2 bottom-full mb-3 hidden"

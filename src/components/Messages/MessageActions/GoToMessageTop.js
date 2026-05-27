@@ -11,7 +11,7 @@ const GoToMessageTop = ({ id }) => {
       onClick={handleClick}
       title="Scroll to top of message"
       className="w-7 h-7 flex items-center justify-center rounded-lg
-        text-[#888] dark:text-[#666]
+        text-[#888] dark:text-[#888]
         hover:text-[#111] dark:hover:text-white
         hover:bg-[#ebebeb] dark:hover:bg-[#222]
         transition-colors"

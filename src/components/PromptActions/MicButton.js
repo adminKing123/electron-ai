@@ -64,7 +64,7 @@ const MicButton = () => {
           onClick={handleCancel}
           title="Cancel"
           className="w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#888] dark:text-[#666]
+            text-[#888] dark:text-[#888]
             hover:text-red-500 dark:hover:text-red-400
             hover:bg-[#ebebeb] dark:hover:bg-[#222]
             transition-colors"
@@ -75,7 +75,7 @@ const MicButton = () => {
           onClick={handlePass}
           title="Apply transcription"
           className="w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#888] dark:text-[#666]
+            text-[#888] dark:text-[#888]
             hover:text-[#111] dark:hover:text-white
             hover:bg-[#ebebeb] dark:hover:bg-[#222]
             transition-colors"
@@ -91,7 +91,7 @@ const MicButton = () => {
       onClick={handleStart}
       title="Speak"
       className="w-7 h-7 flex items-center justify-center rounded-lg
-        text-[#888] dark:text-[#666]
+        text-[#888] dark:text-[#888]
         hover:text-[#111] dark:hover:text-white
         hover:bg-[#ebebeb] dark:hover:bg-[#222]
         transition-colors"

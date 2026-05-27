@@ -133,28 +133,44 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
 
   return (
     <div
-      className={`my-4 ${view === VIEWS.PREVIEW ? "" : "bg-[#F9F9F9] dark:bg-[#181818] rounded-3xl"} overflow-hidden`}
+      className={`my-4 ${
+        view === VIEWS.PREVIEW
+          ? "rounded-2xl overflow-hidden"
+          : "bg-[#f8f8f8] dark:bg-[#161616] border border-[#e8e8e8] dark:border-[#2a2a2a] rounded-2xl overflow-hidden"
+      }`}
     >
       <div
-        className={`px-[18px] py-2 ${view === VIEWS.PREVIEW ? "" : ""} flex justify-between items-center`}
+        className={`px-4 py-2.5 flex justify-between items-center ${
+          view === VIEWS.CODE
+            ? "bg-[#f0f0f0] dark:bg-[#1e1e1e] border-b border-[#e8e8e8] dark:border-[#2a2a2a]"
+            : ""
+        }`}
       >
-        <div className="font-semibold text-black dark:text-white text-sm flex items-center gap-2">
-          {isLoading ? <BasicLoader /> : <IoCode />}
+        <div className="text-[12px] font-medium text-[#888] dark:text-[#555] tracking-wide flex items-center gap-2">
+          {isLoading ? <BasicLoader /> : <IoCode className="w-[13px] h-[13px]" />}
           HTML
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-2 text-base hover:opacity-80 transition-opacity"
+            className="flex items-center gap-1.5 px-2 py-1 rounded-md
+              text-[11px] font-medium
+              text-[#888] dark:text-[#666]
+              hover:text-[#333] dark:hover:text-[#ccc]
+              hover:bg-[#e4e4e4] dark:hover:bg-[#2a2a2a]
+              transition-colors"
             title="Copy code"
           >
             {copied ? (
               <>
-                <MdOutlineDone className="text-green-500" />
-                <span className="text-xs">Copied</span>
+                <MdOutlineDone className="w-[13px] h-[13px] text-green-500" />
+                <span>Copied</span>
               </>
             ) : (
-              <LuCopy />
+              <>
+                <LuCopy className="w-[12px] h-[12px]" />
+                <span>Copy</span>
+              </>
             )}
           </button>
           <ToggleGroup.Root
@@ -165,24 +181,33 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
                 setView(value);
               }
             }}
-            className="flex items-center bg-[#E8E8E8] dark:bg-[#0B0B0B] rounded-full p-1"
+            className="flex items-center bg-[#e4e4e4] dark:bg-[#252525] rounded-full p-0.5"
           >
             <ToggleGroup.Item
               value={VIEWS.CODE}
-              className="p-2 rounded-full transition-colors data-[state=on]:bg-[#ffffff] dark:data-[state=on]:bg-[#212121] data-[state=off]:bg-transparent text-[#6f6f6f] dark:text-[#b0b0b0] data-[state=on]:text-black dark:data-[state=on]:text-white"
+              className="p-1.5 rounded-full transition-colors
+                data-[state=on]:bg-white dark:data-[state=on]:bg-[#1e1e1e]
+                data-[state=on]:shadow-sm
+                data-[state=off]:bg-transparent
+                text-[#888] dark:text-[#555]
+                data-[state=on]:text-[#111] dark:data-[state=on]:text-white"
               title="View code"
             >
-              <IoCodeSlash size={16} />
+              <IoCodeSlash size={14} />
             </ToggleGroup.Item>
             <ToggleGroup.Item
               value={VIEWS.PREVIEW}
-              className={`p-2 rounded-full transition-colors data-[state=on]:bg-[#ffffff] dark:data-[state=on]:bg-[#212121] data-[state=off]:bg-transparent text-[#6f6f6f] dark:text-[#b0b0b0] data-[state=on]:text-black dark:data-[state=on]:text-white ${
-                isLoading ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`p-1.5 rounded-full transition-colors
+                data-[state=on]:bg-white dark:data-[state=on]:bg-[#1e1e1e]
+                data-[state=on]:shadow-sm
+                data-[state=off]:bg-transparent
+                text-[#888] dark:text-[#555]
+                data-[state=on]:text-[#111] dark:data-[state=on]:text-white
+                ${ isLoading ? "opacity-40 cursor-not-allowed" : "" }`}
               title={isLoading ? "Loading..." : "Preview"}
               disabled={isLoading}
             >
-              <IoPlayOutline size={16} />
+              <IoPlayOutline size={14} />
             </ToggleGroup.Item>
           </ToggleGroup.Root>
         </div>
@@ -194,19 +219,20 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
         </div>
       ) : view === VIEWS.CODE ? (
         <div ref={codeContainerRef} className="overflow-auto max-h-[500px]">
-          <pre className="!m-0 px-4 whitespace-pre-wrap break-words text-sm font-mono">
+          <pre className="!m-0 px-4 pt-4 whitespace-pre-wrap break-words text-[11px] font-mono">
             <code>{String(content).replace(/\n$/, "")}</code>
           </pre>
         </div>
       ) : (
         <div>
-          <div className="relative rounded-3xl overflow-hidden">
+          <div className="relative rounded-2xl overflow-hidden">
             <button
               onClick={() => setIsFullscreen(true)}
-              className="absolute top-2 right-2 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+              className="absolute top-2 right-2 z-10 w-7 h-7 flex items-center justify-center
+                bg-black/40 hover:bg-black/60 text-white rounded-full transition-colors"
               title="Fullscreen"
             >
-              <BiExpandAlt size={16} />
+              <BiExpandAlt size={13} />
             </button>
             <iframe
               title="HTML Preview"
@@ -221,10 +247,11 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
               <div className="fixed inset-0 z-[9999] backdrop-blur-md bg-black/20 flex flex-col">
                 <button
                   onClick={() => setIsFullscreen(false)}
-                  className="absolute top-6 right-[29px] z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+                  className="absolute top-6 right-[29px] z-10 w-8 h-8 flex items-center justify-center
+                    bg-black/40 hover:bg-black/60 text-white rounded-full transition-colors"
                   title="Close (Esc)"
                 >
-                  <IoClose size={20} />
+                  <IoClose size={16} />
                 </button>
 
                 <div className="flex-1 sm:m-4 sm:rounded-3xl overflow-hidden shadow-2xl">

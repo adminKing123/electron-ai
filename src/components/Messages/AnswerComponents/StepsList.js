@@ -23,8 +23,8 @@ function JsonCodeBlock({ data }) {
 function ToolStep({ step, label, data }) {
   return (
     <StepWrapper>
-      <div className="text-[12px] text-[#888] dark:text-[#555] mb-0.5">
-        {label}: <span className="text-[#555] dark:text-[#777]">{step.tool_name}</span>
+      <div className="text-[12px] text-[#888] dark:text-[#777] mb-0.5">
+        {label}: <span className="text-[#555] dark:text-[#999]">{step.tool_name}</span>
       </div>
       <JsonCodeBlock data={data} />
     </StepWrapper>
@@ -52,7 +52,7 @@ function Step({ step }) {
             {step.title}
           </div>
           {step.description && (
-            <div className="text-[11px] text-[#aaa] dark:text-[#555] leading-snug mt-0.5">
+            <div className="text-[11px] text-[#aaa] dark:text-[#666] leading-snug mt-0.5">
               {step.description}
             </div>
           )}

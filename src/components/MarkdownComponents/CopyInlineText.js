@@ -21,12 +21,19 @@ const MdCopyInlineText = ({ children }) => {
   return (
     <button
       onClick={handleCopy}
-      className="px-2 py-1 text-xs inline-flex items-center border border-[#eaeaea] dark:border-[#414141] bg-[#EAEAEA] dark:bg-[#232323] hover:bg-[#EFEFEF] dark:hover:bg-[#252525] active:bg-[#dbdbdb] dark:active:bg-[#1f1f1f] rounded-full"
+      className="px-2 py-1 text-[11px] inline-flex items-center gap-1
+        border border-[#e5e5e5] dark:border-[#2e2e2e]
+        bg-[#f0f0f0] dark:bg-[#252525]
+        hover:bg-[#e8e8e8] dark:hover:bg-[#2a2a2a]
+        active:bg-[#e0e0e0] dark:active:bg-[#222]
+        rounded-full
+        text-[#555] dark:text-[#aaa]
+        transition-colors"
     >
-      <div className="max-w-[100px] truncate mr-1">
-        <span>{text}</span>
-      </div>
-      {copied ? <MdDone /> : <LuCopy />}
+      <span className="max-w-[100px] truncate">{text}</span>
+      {copied
+        ? <MdDone className="w-[12px] h-[12px] flex-shrink-0 text-green-500" />
+        : <LuCopy className="w-[11px] h-[11px] flex-shrink-0" />}
     </button>
   );
 };
