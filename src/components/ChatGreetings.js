@@ -31,7 +31,7 @@ function ChatGreetings() {
     allGreets[Math.floor(Math.random() * allGreets.length)];
 
   return (
-    <h2 className="text-black dark:text-white w-full text-center text-[22px] min-[474px]:text-[28px] absolute bottom-full h-[70px]">
+    <h2 className="font-semibold text-[#111] dark:text-white w-full text-center text-[20px] min-[474px]:text-[24px] absolute bottom-full h-[70px] flex items-center justify-center tracking-tight">
       {randomGreeting}
     </h2>
   );

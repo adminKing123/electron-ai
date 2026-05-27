@@ -7,8 +7,8 @@ const AttachFilesPreview = ({ fileInputRef }) => {
 
   if (files.length === 0) return null;
   return (
-    <div className="px-2 pt-2">
-      <div className="flex gap-1.5 overflow-x-auto pb-2">
+    <div className="px-3 pt-3">
+      <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
         {files.map((fileObj) => (
           <FilePreview key={fileObj.id} fileId={fileObj.id} />
         ))}

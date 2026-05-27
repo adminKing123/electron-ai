@@ -20,17 +20,27 @@ const MessageBeingEdited = ({ action }) => {
   return (
     <div
       onClick={handleClick}
-      className="flex items-center gap-2 font-sans px-5 py-2 mx-1 mt-1 text-black dark:text-white bg-[#f0f0f0] dark:bg-[#444444] rounded-t-[18px] rounded-b-lg cursor-pointer active:bg-[#e0e0e0] dark:active:bg-[#3a3a3a]"
+      className="flex items-center gap-2 px-4 py-2 mx-1 mt-1
+        text-[#555] dark:text-[#888]
+        bg-[#f5f5f5] dark:bg-[#2a2a2a]
+        rounded-t-[20px] rounded-b-md
+        border-b border-[#e8e8e8] dark:border-[#333]
+        cursor-pointer
+        hover:bg-[#f0f0f0] dark:hover:bg-[#2e2e2e]
+        transition-colors"
     >
-      <FiEdit2 className="text-[11px] flex-shrink-0" />
-      <div className="line-clamp-2 text-[11px] flex-grow">
+      <FiEdit2 className="w-[11px] h-[11px] flex-shrink-0 opacity-60" />
+      <div className="line-clamp-1 text-[12px] flex-grow leading-snug">
         {action.data.prompt}
       </div>
       <button
         onClick={handleCancel}
-        className="p-[6px] hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A] rounded-lg"
+        className="w-6 h-6 flex items-center justify-center rounded-md flex-shrink-0
+          hover:bg-[#e4e4e4] dark:hover:bg-[#3a3a3a]
+          hover:text-[#111] dark:hover:text-white
+          transition-colors"
       >
-        <IoClose />
+        <IoClose className="w-[12px] h-[12px]" />
       </button>
     </div>
   );

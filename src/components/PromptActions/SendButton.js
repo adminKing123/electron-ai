@@ -26,18 +26,25 @@ const SendButton = ({ onClick }) => {
     return (
       <button
         onClick={stopGeneration}
-        className="bg-black dark:bg-[#ffffff] hover:bg-[#4C4C4C] dark:hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
+        className="w-8 h-8 flex items-center justify-center rounded-full
+          bg-[#111] dark:bg-white
+          hover:bg-[#333] dark:hover:bg-[#e0e0e0]
+          transition-colors"
       >
-        <IoStop className="text-white dark:text-black" />
+        <IoStop className="w-[14px] h-[14px] text-white dark:text-[#111]" />
       </button>
     );
   return (
     <button
       onClick={onClick}
       disabled={disabled || any_file_uploading}
-      className="bg-black dark:bg-[#ffffff] hover:bg-[#4C4C4C] dark:hover:bg-[#C1C1C1] disabled:opacity-50 p-2 rounded-full"
+      className="w-8 h-8 flex items-center justify-center rounded-full
+        bg-[#111] dark:bg-white
+        hover:bg-[#333] dark:hover:bg-[#e0e0e0]
+        disabled:opacity-30
+        transition-colors"
     >
-      <IoArrowUp className="text-white dark:text-black" />
+      <IoArrowUp className="w-[15px] h-[15px] text-white dark:text-[#111]" />
     </button>
   );
 };

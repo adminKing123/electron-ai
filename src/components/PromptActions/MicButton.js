@@ -59,18 +59,28 @@ const MicButton = () => {
 
   if (isRecording) {
     return (
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5">
         <button
           onClick={handleCancel}
-          className="disabled:opacity-50 rounded-full p-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A]"
+          title="Cancel"
+          className="w-7 h-7 flex items-center justify-center rounded-lg
+            text-[#888] dark:text-[#666]
+            hover:text-red-500 dark:hover:text-red-400
+            hover:bg-[#ebebeb] dark:hover:bg-[#222]
+            transition-colors"
         >
-          <PiX className="text-black dark:text-white text-base" />
+          <PiX className="w-[14px] h-[14px]" />
         </button>
         <button
           onClick={handlePass}
-          className="disabled:opacity-50 rounded-full p-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A]"
+          title="Apply transcription"
+          className="w-7 h-7 flex items-center justify-center rounded-lg
+            text-[#888] dark:text-[#666]
+            hover:text-[#111] dark:hover:text-white
+            hover:bg-[#ebebeb] dark:hover:bg-[#222]
+            transition-colors"
         >
-          <PiCheck className="text-black dark:text-white text-base" />
+          <PiCheck className="w-[14px] h-[14px]" />
         </button>
       </div>
     );
@@ -79,9 +89,14 @@ const MicButton = () => {
   return (
     <button
       onClick={handleStart}
-      className="disabled:opacity-50 rounded-full p-2 hover:bg-[#EAEAEA] dark:hover:bg-[#3A3A3A]"
+      title="Speak"
+      className="w-7 h-7 flex items-center justify-center rounded-lg
+        text-[#888] dark:text-[#666]
+        hover:text-[#111] dark:hover:text-white
+        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        transition-colors"
     >
-      <BsMic className="text-black dark:text-white text-base" />
+      <BsMic className="w-[14px] h-[14px]" />
     </button>
   );
 };
