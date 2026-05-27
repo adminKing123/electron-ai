@@ -24,9 +24,9 @@ const MessageActions = ({ message_id, chat }) => {
   if (process?.id === message_id || message?.interrupt?.id) return null;
 
   return (
-    <div className="my-2" id={`message-actions-${message_id}`}>
+    <div className="mt-1 mb-3" id={`message-actions-${message_id}`}>
       <div className="flex items-center justify-between">
-        <div className="text-[#5D5D5D] dark:text-white overflow-hidden">
+        <div className="flex items-center gap-0.5">
           <CopyButton handleCopy={handleAnswerCopy} />
           <TextToSpeechButton message={message} />
           <PrintMessageButton message_id={message_id} />

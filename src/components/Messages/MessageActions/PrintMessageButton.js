@@ -116,11 +116,15 @@ const PrintMessageButton = ({ message_id }) => {
   return (
     <button
       onClick={handlePrint}
-      className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md"
       title="Print message"
       aria-label="Print this message"
+      className="w-7 h-7 flex items-center justify-center rounded-lg
+        text-[#888] dark:text-[#666]
+        hover:text-[#111] dark:hover:text-white
+        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        transition-colors"
     >
-      <FiPrinter />
+      <FiPrinter className="w-[14px] h-[14px]" />
     </button>
   );
 };

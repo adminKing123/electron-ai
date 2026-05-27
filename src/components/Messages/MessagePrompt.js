@@ -11,45 +11,52 @@ const COLLAPSED_HEIGHT = 160;
 
 const PromptBox = ({ prompt }) => {
   const [collapsed, setCollapsed] = useState(true);
-  const [shouldShowButton, setShouldShowButton] = useState(true);
+  const [shouldShowButton, setShouldShowButton] = useState(false);
   const contentRef = useRef(null);
 
   useEffect(() => {
     if (contentRef.current) {
-      const height = contentRef.current.scrollHeight;
-      setShouldShowButton(height > COLLAPSED_HEIGHT);
+      setShouldShowButton(contentRef.current.scrollHeight > COLLAPSED_HEIGHT);
     }
   }, [prompt]);
 
-  const handleClick = () => {
-    setCollapsed((prev) => !prev);
-  };
-
   return (
-    <div className="flex justify-end">
+    <div className="flex flex-col items-end gap-1">
+      {/* Bubble */}
       <div
         ref={contentRef}
-        className={`relative max-w-full font-sans text-[15px] text-black dark:text-white px-5 py-[10px] bg-[#F4F4F4] dark:bg-[#303030] rounded-3xl rounded-tr-lg w-fit break-words whitespace-pre-wrap ${
-          collapsed && shouldShowButton ? "max-h-[160px] overflow-hidden" : ""
-        }`}
+        className={`relative max-w-[80%] sm:max-w-[68%] font-sans text-[14px] leading-[1.55]
+          text-[#111] dark:text-[#e8e8e8]
+          px-4 py-2.5
+          bg-[#efefef] dark:bg-[#252525]
+          rounded-2xl rounded-tr-[4px]
+          w-fit break-words whitespace-pre-wrap
+          ${collapsed && shouldShowButton ? "max-h-[160px] overflow-hidden" : ""}
+        `}
       >
         {prompt}
-        {shouldShowButton && (
-          <button
-            onClick={handleClick}
-            className="w-8 h-8 px-2 transparent rounded-lg absolute top-[10px] right-[20px]"
-          >
-            <FaAngleDown
-              className={`text-[#666666] dark:text-white w-[16px] h-[16px] ${
-                collapsed ? "" : "rotate-180"
-              } transition-transform duration-150`}
-            />
-          </button>
-        )}
         {collapsed && shouldShowButton && (
-          <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-[#F4F4F4] dark:from-[#303030] to-transparent pointer-events-none rounded-b-3xl" />
+          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-[#efefef] dark:from-[#252525] to-transparent pointer-events-none" />
         )}
       </div>
+
+      {/* Expand / collapse toggle */}
+      {shouldShowButton && (
+        <button
+          onClick={() => setCollapsed((prev) => !prev)}
+          className="flex items-center gap-1 text-[11px] font-medium
+            text-[#aaa] dark:text-[#555]
+            hover:text-[#555] dark:hover:text-[#888]
+            transition-colors"
+        >
+          <FaAngleDown
+            className={`w-[10px] h-[10px] transition-transform duration-200 ${
+              collapsed ? "" : "rotate-180"
+            }`}
+          />
+          <span>{collapsed ? "Show more" : "Show less"}</span>
+        </button>
+      )}
     </div>
   );
 };

@@ -18,9 +18,14 @@ const CopyButton = ({ handleCopy }) => {
   return (
     <button
       onClick={handleClickCopy}
-      className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md"
+      title={copied ? "Copied!" : "Copy"}
+      className="w-7 h-7 flex items-center justify-center rounded-lg
+        text-[#888] dark:text-[#666]
+        hover:text-[#111] dark:hover:text-white
+        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        transition-colors"
     >
-      {copied ? <MdDone /> : <LuCopy />}
+      {copied ? <MdDone className="w-[14px] h-[14px]" /> : <LuCopy className="w-[14px] h-[14px]" />}
     </button>
   );
 };

@@ -27,7 +27,7 @@ const Answer = ({ message_id, chat }) => {
     );
 
   return (
-    <div className="text-white max-w-full">
+    <div className="max-w-full">
       {message?.steps?.length ? (
         <AnswerSteps steps={message?.steps} message_id={message?.id} />
       ) : null}
@@ -46,16 +46,16 @@ const Answer = ({ message_id, chat }) => {
         return (
           <div
             key={part?.id}
-            className="my-4 bg-[#F9F9F9] dark:bg-[#171717] border border-[#E4E4E4] dark:border-[#454545] rounded-2xl overflow-hidden"
+            className="my-3 bg-[#f5f5f5] dark:bg-[#161616] border border-[#e8e8e8] dark:border-[#2a2a2a] rounded-2xl overflow-hidden"
           >
-            <div className="px-[18px] py-2 bg-[#f1f1f1] dark:bg-[#2F2F2F] rounded-t-2xl flex justify-between items-center">
-              <div className="font-bold text-black dark:text-white text-[11px]">
+            <div className="px-4 py-2 bg-[#efefef] dark:bg-[#1e1e1e] border-b border-[#e8e8e8] dark:border-[#2a2a2a] flex justify-between items-center">
+              <span className="text-[11px] font-medium text-[#888] dark:text-[#555]">
                 {part.type}
-              </div>
+              </span>
             </div>
             <div className="p-4 overflow-auto">
               <pre className="!m-0">
-                <code className="text-nowrap text-[11px]">
+                <code className="text-nowrap text-[11px] text-[#555] dark:text-[#888]">
                   {JSON.stringify(part.data, null, 2)}
                 </code>
               </pre>

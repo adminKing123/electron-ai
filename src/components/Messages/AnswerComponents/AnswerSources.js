@@ -15,16 +15,19 @@ const AnswerSources = ({ sources, message_id }) => {
     <div className="mt-3">
       <button
         onClick={handleClick}
-        className="px-3 py-2 border border-[#c4c4c4] dark:border-[#616161] w-fit rounded-full flex items-center gap-1"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full
+          border border-[#e0e0e0] dark:border-[#2a2a2a]
+          bg-white dark:bg-[#1e1e1e]
+          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+          transition-colors"
       >
         <div className="flex flex-row-reverse">
           {Array.from(new Map(sources.map((s) => [s.domain, s])).values())
             .slice(0, 3)
-            .slice(0, 3)
             .map((source, index) => (
               <div
                 key={index}
-                className="w-4 h-4 overflow-hidden rounded-full border-2 border-[#ffffff] dark:border-[#212121] -ml-1"
+                className="w-4 h-4 overflow-hidden rounded-full border-2 border-white dark:border-[#1e1e1e] -ml-1"
               >
                 <img
                   alt={source.domain}
@@ -34,9 +37,9 @@ const AnswerSources = ({ sources, message_id }) => {
               </div>
             ))}
         </div>
-        <h2 className="text-xs font-semibold text-[#131313] dark:text-[#c4c4c4]">
-          Sources
-        </h2>
+        <span className="text-[12px] font-medium text-[#555] dark:text-[#aaa]">
+          {sources.length} {sources.length === 1 ? "source" : "sources"}
+        </span>
       </button>
     </div>
   );

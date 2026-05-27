@@ -110,14 +110,18 @@ const TextToSpeechButton = ({ message }) => {
       onClick={handleSpeak}
       disabled={status === "loading"}
       title={status === "playing" ? "Stop speaking" : "Read aloud"}
-      className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md disabled:opacity-50"
+      className="w-7 h-7 flex items-center justify-center rounded-lg
+        text-[#888] dark:text-[#666]
+        hover:text-[#111] dark:hover:text-white
+        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        transition-colors disabled:opacity-40"
     >
       {status === "loading" ? (
         <BasicLoader />
       ) : status === "playing" ? (
-        <MdStop />
+        <MdStop className="w-[14px] h-[14px]" />
       ) : (
-        <RxSpeakerLoud />
+        <RxSpeakerLoud className="w-[14px] h-[14px]" />
       )}
     </button>
   );

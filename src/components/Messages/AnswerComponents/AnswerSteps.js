@@ -18,27 +18,25 @@ function AnswerSteps({ steps, message_id }) {
   };
 
   return (
-    <div className="mb-2">
+    <div className="mb-3">
       <div className="flex items-center gap-2">
         <TbGalaxy
-          className={`w-[24px] h-[24px] ${
-            isError ? "text-red-600" : "text-[#000000] dark:text-white"
+          className={`w-[18px] h-[18px] flex-shrink-0 ${
+            isError ? "text-red-500" : "text-[#888] dark:text-[#555]"
           } ${process?.id === message_id ? "spin-animation" : ""}`}
         />
         <button
           onClick={handleToggle}
-          className={`text-[11px] rounded-2xl flex items-center gap-1 hover:opacity-80 transition-opacity ${
-            isError ? "text-red-600" : "text-[#000000] dark:text-white"
+          className={`text-[12px] font-medium flex items-center gap-1 hover:opacity-70 transition-opacity ${
+            isError ? "text-red-500" : "text-[#666] dark:text-[#555]"
           }`}
         >
           <span>{lastStep.title}</span>
-          <span>
-            <FaAngleDown
-              className={`text-[11px] transition-transform duration-300 ${
-                isError ? "text-red-600" : "text-[#000000] dark:text-white"
-              } ${isOpen ? "rotate-180" : ""}`}
-            />
-          </span>
+          <FaAngleDown
+            className={`w-[11px] h-[11px] transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
         </button>
       </div>
       <AnimatePresence>{isOpen && <StepsList steps={steps} />}</AnimatePresence>

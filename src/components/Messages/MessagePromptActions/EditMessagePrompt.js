@@ -4,9 +4,14 @@ const EditMessagePrompt = ({ handleEdit }) => {
   return (
     <button
       onClick={handleEdit}
-      className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md"
+      title="Edit prompt"
+      className="w-7 h-7 flex items-center justify-center rounded-lg
+        text-[#888] dark:text-[#666]
+        hover:text-[#111] dark:hover:text-white
+        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        transition-colors"
     >
-      <FiEdit2 />
+      <FiEdit2 className="w-[13px] h-[13px]" />
     </button>
   );
 };

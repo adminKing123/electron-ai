@@ -11,9 +11,14 @@ const DeleteMessageButton = ({ id, chat }) => {
   return (
     <button
       onClick={handleClickDelete}
-      className="p-[6px] hover:bg-[#E8E8E8] dark:hover:bg-[#1d1d1d] rounded-md"
+      title="Delete message"
+      className="w-7 h-7 flex items-center justify-center rounded-lg
+        text-[#888] dark:text-[#666]
+        hover:text-red-500 dark:hover:text-red-400
+        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        transition-colors"
     >
-      <AiOutlineDelete />
+      <AiOutlineDelete className="w-[14px] h-[14px]" />
     </button>
   );
 };
