@@ -77,14 +77,13 @@ const FileInputTaker = ({ inputRef, disabled, chat }) => {
       <label
         htmlFor="file-upload"
         title="Attach File"
-        className={`border p-2 rounded-full flex items-center cursor-pointer group disabled:opacity-50`}
+        className="flex items-center gap-1.5 px-2 py-1.5 rounded-full cursor-pointer
+          bg-[#f4f4f4] dark:bg-[#3a3a3a]
+          hover:bg-[#e9e9e9] dark:hover:bg-[#444444]
+          text-black dark:text-white
+          transition-colors duration-150"
       >
-        <IoIosAttach className="fill-black dark:fill-white" />
-        <span
-          className={`text-black dark:text-white text-xs max-w-0 opacity-0 overflow-hidden whitespace-nowrap group-hover:max-w-[100px] group-hover:pl-2 group-hover:opacity-100 transition-[max-width,opacity,padding] duration-300`}
-        >
-          Attach File
-        </span>
+        <IoIosAttach className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
       </label>
     </div>
   );
