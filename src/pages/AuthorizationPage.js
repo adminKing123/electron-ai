@@ -71,7 +71,7 @@ const AuthorizationPage = () => {
           {/* Legal footnote */}
           <motion.p
             variants={itemVariants}
-            className="mt-6 text-[11px] text-[#bbb] dark:text-[#555] text-center max-w-[300px] leading-relaxed"
+            className="mt-6 text-[11px] text-[#bbb] dark:text-[#555] text-center max-w-[380px] leading-relaxed"
           >
             By continuing, you agree to our Terms of Service and Privacy Policy.
           </motion.p>
