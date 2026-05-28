@@ -65,6 +65,10 @@ const HeaderUserProfile = () => {
           <DropdownMenu.Separator className="h-px bg-[#ebebeb] dark:bg-[#333] mx-1 mb-1" />
 
           <div className="flex flex-col gap-px">
+            <DropdownMenu.Item asChild>
+              <ThemeChangeOption />
+            </DropdownMenu.Item>
+            
             <DropdownMenu.Item className={itemCls}>
               <SiInfluxdb className="w-[14px] h-[14px] opacity-60 flex-shrink-0" />
               <span>Upgrade Plan</span>
@@ -73,10 +77,6 @@ const HeaderUserProfile = () => {
             <DropdownMenu.Item className={itemCls}>
               <LuSettings2 className="w-[14px] h-[14px] opacity-60 flex-shrink-0" />
               <span>Customize AURA</span>
-            </DropdownMenu.Item>
-
-            <DropdownMenu.Item asChild>
-              <ThemeChangeOption />
             </DropdownMenu.Item>
 
             <DropdownMenu.Item className={itemCls}>
