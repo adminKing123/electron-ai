@@ -11,13 +11,13 @@ const CONFIG = {
       : process.env.REACT_APP_CHECK_RUNNING_STATUS === "true",
 
   FIREBASE_CONFIG: {
-    apiKey: process.env.REACT_APP_APIKEY,
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_AUTHDOMAIN,
-    projectId: process.env.REACT_APP_PROJECTID,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
     storageBucket: process.env.REACT_APP_STORAGEBUCKET,
-    messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_APPID,
-    measurementId: process.env.REACT_APP_MEASUREMENTID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
   },
 
   PROMPT_ACTION_TYPES: {
