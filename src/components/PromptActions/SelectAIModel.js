@@ -66,22 +66,22 @@ const SelectAIModel = ({ disabled }) => {
               <DropdownMenu.Item
                 key={model.id}
                 onSelect={() => onSelect(model)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl outline-none cursor-pointer
-                  text-[#111] dark:text-[#f0f0f0]
+                className="flex items-center gap-2 px-2.5 py-[7px] rounded-xl outline-none cursor-pointer
+                  text-[#333] dark:text-[#ccc]
                   hover:bg-[#f4f4f4] dark:hover:bg-[#363636]
                   transition-colors duration-100"
               >
-                <Icon className="w-4 h-4 flex-shrink-0 opacity-60" />
+                <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium truncate">{model.name}</p>
+                  <p className="text-[13px] font-medium leading-snug truncate">{model.name}</p>
                   {model?.description && (
-                    <p className="text-[11px] text-[#888] dark:text-[#666] truncate mt-0.5">
+                    <p className="text-[11px] text-[#aaa] dark:text-[#666] leading-snug truncate">
                       {model.description}
                     </p>
                   )}
                 </div>
                 {isSelected && (
-                  <IoCheckmark className="w-4 h-4 flex-shrink-0 text-[#111] dark:text-[#f0f0f0] opacity-80" />
+                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-[#333] dark:text-[#ccc] opacity-70" />
                 )}
               </DropdownMenu.Item>
             );

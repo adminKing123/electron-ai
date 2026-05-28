@@ -81,22 +81,22 @@ function AITypeSelector() {
               <DropdownMenu.Item
                 key={type.id}
                 onSelect={() => handleSelect(type)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl
+                className="flex items-center gap-2 px-2.5 py-[7px] rounded-xl
                   text-[#333] dark:text-[#ccc]
                   hover:bg-[#f4f4f4] dark:hover:bg-[#363636]
                   outline-none cursor-pointer transition-colors"
               >
-                <Icon className="w-[16px] h-[16px] flex-shrink-0 opacity-75" />
+                <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />
                 <div className="flex flex-col flex-grow min-w-0">
-                  <span className="text-[13px] font-medium leading-tight">{type.name}</span>
+                  <span className="text-[13px] font-medium leading-snug">{type.name}</span>
                   {type.description ? (
-                    <span className="text-[11px] text-[#999] dark:text-[#666] leading-tight mt-0.5 truncate">
+                    <span className="text-[11px] text-[#aaa] dark:text-[#666] leading-snug truncate">
                       {type.description}
                     </span>
                   ) : null}
                 </div>
                 {isSelected && (
-                  <IoCheckmark className="w-[14px] h-[14px] flex-shrink-0 text-[#111] dark:text-white" />
+                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-[#333] dark:text-[#ccc] opacity-70" />
                 )}
               </DropdownMenu.Item>
             );
