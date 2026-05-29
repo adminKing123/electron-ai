@@ -97,7 +97,11 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
   }, []);
 
   const btnCls =
-    "w-8 h-8 flex items-center justify-center rounded-lg text-white/80 hover:text-white hover:bg-white/15 transition-colors flex-shrink-0";
+    "w-8 h-8 flex items-center justify-center rounded-lg " +
+    "text-black/60 dark:text-white/80 " +
+    "hover:text-black dark:hover:text-white " +
+    "hover:bg-black/10 dark:hover:bg-white/15 " +
+    "transition-colors flex-shrink-0";
 
   return createPortal(
     <AnimatePresence>
@@ -108,16 +112,15 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
-          className="fixed inset-0 z-[9999] flex flex-col select-none"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.92)" }}
+          className="fixed inset-0 z-[9999] flex flex-col select-none bg-white/[0.96] dark:bg-black/[0.92]"
           onClick={onClose}
         >
           {/* ── Top control bar ─────────────────────────────────────── */}
           <div
-            className="flex items-center justify-between px-4 py-4 flex-shrink-0 bg-gradient-to-b from-black/60 to-transparent"
+            className="flex items-center justify-between px-4 py-4 flex-shrink-0 bg-gradient-to-b from-black/10 dark:from-black/60 to-transparent"
             onClick={(e) => e.stopPropagation()}
           >
-            <span className="text-white/75 text-[12px] font-medium truncate max-w-[50%]">
+            <span className="text-black/70 dark:text-white/75 text-[12px] font-medium truncate max-w-[50%]">
               {alt}
             </span>
 
@@ -126,7 +129,7 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
                 <BiZoomOut className="w-[17px] h-[17px]" />
               </button>
 
-              <span className="text-white/60 text-[11px] w-11 text-center tabular-nums">
+              <span className="text-black/50 dark:text-white/60 text-[11px] w-11 text-center tabular-nums">
                 {Math.round(scale * 100)}%
               </span>
 
@@ -138,7 +141,7 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
                 <MdOutlineFitScreen className="w-[16px] h-[16px]" />
               </button>
 
-              <div className="w-px h-4 bg-white/20 mx-1.5" />
+              <div className="w-px h-4 bg-black/15 dark:bg-white/20 mx-1.5" />
 
               <a
                 href={src}
@@ -191,7 +194,7 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
 
             {/* Hint overlaid at the bottom — no layout space cost */}
             <div className="absolute bottom-3 left-0 right-0 text-center pointer-events-none">
-              <span className="text-white/30 text-[11px]">
+              <span className="text-black/30 dark:text-white/30 text-[11px]">
                 Scroll to zoom · Drag to pan · Esc to close
               </span>
             </div>
