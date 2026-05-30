@@ -14,7 +14,7 @@ COPY . .
 # 1. Declare the arguments (these can be passed during the Docker build command, e.g., --build-arg REACT_APP_API_URL=...)
 #    In Cloud Build, these will receive values from the "Build arguments" field, which in turn
 #    get values from Cloud Build's "Substitution variables".
-ARG CI=true
+ARG CI=false
 ARG GENERATE_SOURCEMAP=false
 ARG NODE_OPTIONS=--max-old-space-size=4096
 
