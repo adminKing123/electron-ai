@@ -19,7 +19,7 @@ ARG GENERATE_SOURCEMAP=false
 ARG NODE_OPTIONS=--max-old-space-size=4096
 
 
-ARG REACT_APP_API_URL=http://127.0.0.1:8000
+ARG REACT_APP_API_URL=https://flask-app-446814703652.europe-west1.run.app
 ARG REACT_APP_ARSONGS_AI_API_URL=https://hbemasterly.pythonanywhere.com
 
 ARG REACT_APP_AUTHDOMAIN=aura-hypen-dev.firebaseapp.com
@@ -28,7 +28,7 @@ ARG REACT_APP_CHECK_RUNNING_STATUS=False
 ARG REACT_APP_DEFAULT_USER_ORG_ID=synapses
 ARG REACT_APP_DEFAULT_USER_UID=pmBSCSloRBgudiOPhQBMMc9evty1
 
-ARG REACT_APP_FILE_CDN_URL=https://noney-api-an60.onrender.com
+ARG REACT_APP_FILE_CDN_URL=https://flask-app-446814703652.europe-west1.run.app
 ARG REACT_APP_FILE_CDN_URL_2=https://raw.githubusercontent.com/experimental-core/dummy-src/main
 
 ARG REACT_APP_FIREBASE_API_KEY=AIzaSyDyIlVW4r86wt00M2J66hVlDIxAZZkFvuo
