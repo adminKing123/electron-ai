@@ -5,11 +5,41 @@ import { getUserAnalyticsAPI } from "../../apis/library/analyticsQueryFunctions"
 import ROUTES from "../../router/routes";
 
 /**
- * Compact horizontal analytics summary bar for the Library page.
+ * Single stat column inside the usage card.
+ * `accent` applies the golden colour used for cost figures.
+ */
+const StatItem = ({ icon: Icon, label, value, accent = false }) => (
+  <div className="flex-1 flex flex-col gap-1.5 px-5 first:pl-0 last:pr-0">
+    <div className="flex items-center gap-1.5">
+      <Icon className="text-sm text-[#bbb] dark:text-[#555] flex-shrink-0" />
+      <span className="text-[10px] font-semibold uppercase tracking-widest text-[#aaa] dark:text-[#555]">
+        {label}
+      </span>
+    </div>
+    <p
+      className={`text-2xl font-semibold tracking-tight ${
+        accent ? "text-[#b8860b] dark:text-[#daa500]" : "text-black dark:text-white"
+      }`}
+    >
+      {value}
+    </p>
+  </div>
+);
+
+/** Skeleton placeholder for a single stat column while loading. */
+const StatSkeleton = () => (
+  <div className="flex-1 flex flex-col gap-2 px-5 first:pl-0 last:pr-0 animate-pulse">
+    <div className="h-2.5 w-14 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
+    <div className="h-7 w-20 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
+  </div>
+);
+
+/**
+ * Usage summary card for the Library page.
  *
- * Shows total chats, token consumption, and estimated spend as minimal
- * pill chips, with a link through to the full analytics dashboard.
- * Designed to be lightweight — one Firestore read, no charts, ~40px tall.
+ * Shows total chats, token consumption, and estimated spend in a clean
+ * bordered card. Links through to the full analytics dashboard.
+ * One Firestore read on mount — no charts.
  */
 const AnalyticsSummaryBar = () => {
   const [data, setData] = useState(null);
@@ -32,65 +62,55 @@ const AnalyticsSummaryBar = () => {
   };
 
   return (
-    <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
-      <div className="flex items-center gap-2.5 flex-wrap">
-        <span className="text-xs font-semibold text-[#555] dark:text-[#888] uppercase tracking-wide">
-          Your Usage
-        </span>
-
-        {loading ? (
-          // Skeleton pills
-          <div className="flex gap-2">
-            {[72, 96, 80].map((w, i) => (
-              <span
-                key={i}
-                className="h-6 rounded-full bg-[#e8e8e8] dark:bg-[#2a2a2a] animate-pulse inline-block"
-                style={{ width: w }}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 flex-wrap">
-            <Pill icon={LuMessageSquare} label={`${data?.totalChats ?? 0} Chats`} />
-            <Pill
-              icon={LuZap}
-              label={`${fmt(data?.totalTokens ?? 0)} Tokens`}
-            />
-            <Pill
-              icon={LuCoins}
-              label={`$${(data?.totalCostUsd ?? 0).toFixed(4)}`}
-              accent
-            />
-          </div>
-        )}
+    <>
+      {/* Section label row */}
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-[11px] font-semibold text-[#aaa] dark:text-[#555] uppercase tracking-widest">
+          Usage
+        </p>
+        <Link
+          to={ROUTES.ANALYTICS}
+          className="flex items-center gap-1 text-[11px] font-medium text-[#888] dark:text-[#666]
+            hover:text-black dark:hover:text-white transition-colors"
+        >
+          View Analytics
+          <LuArrowRight className="text-xs" />
+        </Link>
       </div>
 
-      <Link
-        to={ROUTES.ANALYTICS}
-        className="flex items-center gap-1 text-xs font-medium text-[#555] dark:text-[#888]
-          hover:text-black dark:hover:text-white transition-colors text-nowrap shrink-0"
-      >
-        Full Analytics
-        <LuArrowRight className="text-sm" />
-      </Link>
-    </div>
+      {/* Stats card */}
+      <div className="border border-[#E1E1E1] dark:border-[#2F2F2F] bg-white dark:bg-[#141414] rounded-2xl px-5 py-4">
+        <div className="flex items-stretch divide-x divide-[#E1E1E1] dark:divide-[#2F2F2F]">
+          {loading ? (
+            <>
+              <StatSkeleton />
+              <StatSkeleton />
+              <StatSkeleton />
+            </>
+          ) : (
+            <>
+              <StatItem
+                icon={LuMessageSquare}
+                label="Chats"
+                value={data?.totalChats ?? 0}
+              />
+              <StatItem
+                icon={LuZap}
+                label="Tokens"
+                value={fmt(data?.totalTokens ?? 0)}
+              />
+              <StatItem
+                icon={LuCoins}
+                label="Total Spend"
+                value={`$${(data?.totalCostUsd ?? 0).toFixed(4)}`}
+                accent
+              />
+            </>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
-
-/**
- * Inline pill chip used inside AnalyticsSummaryBar.
- */
-const Pill = ({ icon: Icon, label, accent = false }) => (
-  <span
-    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border ${
-      accent
-        ? "border-[#daa500]/40 bg-[#fffbef] dark:bg-[#1e1a0e] text-[#b8860b] dark:text-[#daa500]"
-        : "border-[#E1E1E1] dark:border-[#2F2F2F] bg-[#f9f9f9] dark:bg-[#1a1a1a] text-[#444] dark:text-[#bbb]"
-    }`}
-  >
-    <Icon className="flex-shrink-0" />
-    {label}
-  </span>
-);
 
 export default AnalyticsSummaryBar;

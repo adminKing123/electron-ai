@@ -9,7 +9,10 @@ const emptyModelStats = () => ({
   inputTokens: 0,
   outputTokens: 0,
   totalTokens: 0,
+  imagesGenerated: 0,
   costUsd: 0,
+  // 'text' | 'image' — overwritten on first aggregation; never summed.
+  generationType: "text",
 });
 
 /**
@@ -51,23 +54,28 @@ export const fetchUserUsageRaw = async () => {
     Object.entries(rawByModel).forEach(([, stats]) => {
       const realId = stats.model_id || "unknown";
       byModel[realId] = {
-        count:        stats.count         ?? 0,
-        inputTokens:  stats.input_tokens  ?? 0,
-        outputTokens: stats.output_tokens ?? 0,
-        totalTokens:  stats.total_tokens  ?? 0,
-        costUsd:      stats.cost_usd      ?? 0,
+        count:           stats.count            ?? 0,
+        inputTokens:     stats.input_tokens     ?? 0,
+        outputTokens:    stats.output_tokens    ?? 0,
+        totalTokens:     stats.total_tokens     ?? 0,
+        imagesGenerated: stats.images_generated ?? 0,
+        costUsd:         stats.cost_usd         ?? 0,
+        // 'text' | 'image' — stored as a plain string on the Firestore doc.
+        // Lets the dashboard know 0 tokens on an image model is correct.
+        generationType:  stats.generation_type  ?? "text",
       };
     });
 
     return {
-      chatId:          docSnap.id,
+      chatId:           docSnap.id,
       byModel,
-      inputTokens:     tokens.input  ?? 0,
-      outputTokens:    tokens.output ?? 0,
-      totalTokens:     tokens.total  ?? 0,
-      costUsd:         data.total_cost_usd   ?? 0,
-      generationCount: data.generation_count ?? 0,
-      createdAt:       data.created_at ? new Date(data.created_at) : null,
+      inputTokens:      tokens.input  ?? 0,
+      outputTokens:     tokens.output ?? 0,
+      totalTokens:      tokens.total  ?? 0,
+      imagesGenerated:  data.total_images_generated ?? 0,
+      costUsd:          data.total_cost_usd   ?? 0,
+      generationCount:  data.generation_count ?? 0,
+      createdAt:        data.created_at ? new Date(data.created_at) : null,
     };
   });
 };
@@ -90,6 +98,7 @@ export const fetchUserUsageRaw = async () => {
  *   inputTokens: number,
  *   outputTokens: number,
  *   totalTokens: number,
+ *   totalImagesGenerated: number,
  *   totalCostUsd: number,
  *   byModel: Record<string, object>,
  *   daily: Array
@@ -98,7 +107,7 @@ export const fetchUserUsageRaw = async () => {
 export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null } = {}) => {
   const empty = {
     totalChats: 0, inputTokens: 0, outputTokens: 0,
-    totalTokens: 0, totalCostUsd: 0, byModel: {}, daily: [],
+    totalTokens: 0, totalImagesGenerated: 0, totalCostUsd: 0, byModel: {}, daily: [],
   };
 
   if (!rawUsage || rawUsage.length === 0) return empty;
@@ -106,14 +115,20 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
   const cutoff    = days > 0 ? startOfDay(subDays(new Date(), days - 1)) : null;
   const chartDays = days > 0 ? days : 30;
 
-  let totalChats = 0, inputTokens = 0, outputTokens = 0, totalTokens = 0, totalCostUsd = 0;
+  let totalChats = 0, inputTokens = 0, outputTokens = 0, totalTokens = 0,
+      totalImagesGenerated = 0, totalCostUsd = 0;
   /** @type {Record<string, ReturnType<typeof emptyModelStats>>} */
   const byModel = {};
   /** @type {Record<string, { tokens: number, inputTokens: number, outputTokens: number, cost: number, chats: number }>} */
   const dailyMap = {};
 
   rawUsage.forEach((chat) => {
-    const { byModel: chatByModel = {}, inputTokens: chatInp, outputTokens: chatOut, totalTokens: chatTotal, costUsd: chatCost, createdAt } = chat;
+    const {
+      byModel: chatByModel = {},
+      inputTokens: chatInp, outputTokens: chatOut, totalTokens: chatTotal,
+      imagesGenerated: chatImgs,
+      costUsd: chatCost, createdAt,
+    } = chat;
 
     // ── Date filter ──────────────────────────────────────────────────────
     if (cutoff && createdAt && createdAt < cutoff) return;
@@ -123,34 +138,41 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
 
     // When a model filter is active, attribute only that model's share of
     // tokens/cost to the totals; otherwise use the full chat-level figures.
-    let inp, out, total, cost;
+    let inp, out, total, cost, imgs;
     if (modelFilter) {
       const ms = chatByModel[modelFilter];
       inp   = ms.inputTokens;
       out   = ms.outputTokens;
       total = ms.totalTokens;
       cost  = ms.costUsd;
+      imgs  = ms.imagesGenerated;
     } else {
       inp   = chatInp;
       out   = chatOut;
       total = chatTotal;
       cost  = chatCost;
+      imgs  = chatImgs;
     }
 
-    totalChats   += 1;
-    inputTokens  += inp;
-    outputTokens += out;
-    totalTokens  += total;
-    totalCostUsd += cost;
+    totalChats           += 1;
+    inputTokens          += inp;
+    outputTokens         += out;
+    totalTokens          += total;
+    totalImagesGenerated += imgs ?? 0;
+    totalCostUsd         += cost;
 
     // ── Per-model aggregation — iterate each model used in this chat ──────
     Object.entries(chatByModel).forEach(([modelId, stats]) => {
       if (!byModel[modelId]) byModel[modelId] = emptyModelStats();
-      byModel[modelId].chats        += stats.count        ?? 0;
-      byModel[modelId].inputTokens  += stats.inputTokens  ?? 0;
-      byModel[modelId].outputTokens += stats.outputTokens ?? 0;
-      byModel[modelId].totalTokens  += stats.totalTokens  ?? 0;
-      byModel[modelId].costUsd      += stats.costUsd      ?? 0;
+      byModel[modelId].chats           += stats.count           ?? 0;
+      byModel[modelId].inputTokens     += stats.inputTokens     ?? 0;
+      byModel[modelId].outputTokens    += stats.outputTokens    ?? 0;
+      byModel[modelId].totalTokens     += stats.totalTokens     ?? 0;
+      byModel[modelId].imagesGenerated += stats.imagesGenerated ?? 0;
+      byModel[modelId].costUsd         += stats.costUsd         ?? 0;
+      // generation_type is a label, not a counter — overwrite is safe since
+      // the same model ID always has the same type.
+      byModel[modelId].generationType   = stats.generationType  ?? "text";
     });
 
     // ── Daily aggregation (keyed YYYY-MM-DD by chat createdAt) ───────────
@@ -178,7 +200,7 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
     };
   });
 
-  return { totalChats, inputTokens, outputTokens, totalTokens, totalCostUsd, byModel, daily };
+  return { totalChats, inputTokens, outputTokens, totalTokens, totalImagesGenerated, totalCostUsd, byModel, daily };
 };
 
 /**

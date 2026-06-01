@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { LuCoins, LuMessageSquare, LuZap, LuRefreshCw } from "react-icons/lu";
 import { fetchUserUsageRaw, computeAnalytics } from "../apis/library/analyticsQueryFunctions";
-import { MODEL_META, getModelName } from "../constants/modelMappings";
+import { getModelName } from "../constants/modelMappings";
 import StatCard from "../components/Analytics/StatCard";
 import DailyUsageChart from "../components/Analytics/DailyUsageChart";
 import ModelBreakdownChart from "../components/Analytics/ModelBreakdownChart";
@@ -172,32 +172,29 @@ const AnalyticsPage = () => {
             ))}
           </div>
 
-          {/* Model filter — only shown when the user has used multiple models */}
-          {usedModels.length > 1 && (
-            <div className="flex items-center gap-1.5 flex-wrap">
+          {/* Model filter dropdown — only shown when at least one model has been used */}
+          {usedModels.length > 0 && (
+            <div className="flex items-center gap-2">
               <span className="text-[11px] text-[#aaa] dark:text-[#666]">Model:</span>
-              <PillButton
-                label="All"
-                active={selectedModel === null}
-                onClick={() => setSelectedModel(null)}
-              />
-              {usedModels.map((m) => {
-                const meta = MODEL_META[m];
-                const isActive = selectedModel === m;
-                return (
-                  <PillButton
-                    key={m}
-                    label={getModelName(m)}
-                    active={isActive}
-                    onClick={() => setSelectedModel(isActive ? null : m)}
-                    style={
-                      isActive && meta
-                        ? { borderColor: meta.color, backgroundColor: meta.colorAlpha, color: meta.color, border: "1px solid" }
-                        : {}
-                    }
-                  />
-                );
-              })}
+              <select
+                value={selectedModel ?? ""}
+                onChange={(e) => setSelectedModel(e.target.value || null)}
+                className="text-xs rounded-full border border-[#E1E1E1] dark:border-[#2F2F2F]
+                  bg-white dark:bg-[#141414] text-[#333] dark:text-[#ccc]
+                  px-3 py-1 pr-6 appearance-none cursor-pointer
+                  focus:outline-none focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20
+                  transition-colors"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 10px center",
+                }}
+              >
+                <option value="">All models</option>
+                {usedModels.map((m) => (
+                  <option key={m} value={m}>{getModelName(m)}</option>
+                ))}
+              </select>
             </div>
           )}
         </div>
