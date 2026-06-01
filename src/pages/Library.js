@@ -6,6 +6,7 @@ import { BsRobot } from "react-icons/bs";
 import { BsStars } from "react-icons/bs";
 import ROUTES from "../router/routes";
 import { Link } from "react-router-dom";
+import AnalyticsSummaryBar from "../components/Analytics/AnalyticsSummaryBar";
 
 const MoreApps = () => {
   const [open, setOpen] = useState(false);
@@ -74,6 +75,8 @@ const LibraryPage = () => {
           </h3>
         </div>
         <MoreApps />
+        {/* Compact usage summary — links to /analytics for the full dashboard */}
+        <AnalyticsSummaryBar />
         <FilesPage />
       </div>
     </div>

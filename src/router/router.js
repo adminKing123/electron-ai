@@ -11,6 +11,7 @@ import LibraryPage from "../pages/Library";
 const AuraRjPage = lazy(() => import("../pages/AuraRjPage"));
 const CodigoPage = lazy(() => import("../pages/CodigoPage"));
 const LiveChatWithAIPage = lazy(() => import("../pages/LiveChatWithAIPage"));
+const AnalyticsPage = lazy(() => import("../pages/AnalyticsPage"));
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
           </Route>
           <Route element={<MainLayout type="library" />}>
             <Route path={ROUTES.LIBRARY} element={<LibraryPage />} />
+            <Route path={ROUTES.ANALYTICS} element={<AnalyticsPage />} />
           </Route>
 
           <Route path={ROUTES.AURA_RJ} element={<AuraRjPage />} />
