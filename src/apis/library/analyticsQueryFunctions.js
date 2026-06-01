@@ -43,9 +43,25 @@ export const fetchUserUsageRaw = async () => {
   return snapshot.docs.map((docSnap) => {
     const data = docSnap.data();
     const tokens = data.total_tokens ?? {};
+
+    // Convert the Firestore by_model map (safe keys with dots→underscores) back
+    // to real AURA model IDs using the stored model_id field on each entry.
+    const rawByModel = data.by_model ?? {};
+    const byModel = {};
+    Object.entries(rawByModel).forEach(([, stats]) => {
+      const realId = stats.model_id || "unknown";
+      byModel[realId] = {
+        count:        stats.count         ?? 0,
+        inputTokens:  stats.input_tokens  ?? 0,
+        outputTokens: stats.output_tokens ?? 0,
+        totalTokens:  stats.total_tokens  ?? 0,
+        costUsd:      stats.cost_usd      ?? 0,
+      };
+    });
+
     return {
       chatId:          docSnap.id,
-      model:           data.model ?? "unknown",
+      byModel,
       inputTokens:     tokens.input  ?? 0,
       outputTokens:    tokens.output ?? 0,
       totalTokens:     tokens.total  ?? 0,
@@ -96,25 +112,46 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
   /** @type {Record<string, { tokens: number, inputTokens: number, outputTokens: number, cost: number, chats: number }>} */
   const dailyMap = {};
 
-  rawUsage.forEach(({ model, inputTokens: inp, outputTokens: out, totalTokens: total, costUsd, createdAt }) => {
-    // ── Date filter ─────────────────────────────────────────────────────
+  rawUsage.forEach((chat) => {
+    const { byModel: chatByModel = {}, inputTokens: chatInp, outputTokens: chatOut, totalTokens: chatTotal, costUsd: chatCost, createdAt } = chat;
+
+    // ── Date filter ──────────────────────────────────────────────────────
     if (cutoff && createdAt && createdAt < cutoff) return;
-    // ── Model filter ─────────────────────────────────────────────────────
-    if (modelFilter && model !== modelFilter) return;
 
-    totalChats    += 1;
-    inputTokens   += inp;
-    outputTokens  += out;
-    totalTokens   += total;
-    totalCostUsd  += costUsd;
+    // ── Model filter — only include chats that used this model ───────────
+    if (modelFilter && !chatByModel[modelFilter]) return;
 
-    // ── Per-model aggregation ─────────────────────────────────────────────
-    if (!byModel[model]) byModel[model] = emptyModelStats();
-    byModel[model].chats        += 1;
-    byModel[model].inputTokens  += inp;
-    byModel[model].outputTokens += out;
-    byModel[model].totalTokens  += total;
-    byModel[model].costUsd      += costUsd;
+    // When a model filter is active, attribute only that model's share of
+    // tokens/cost to the totals; otherwise use the full chat-level figures.
+    let inp, out, total, cost;
+    if (modelFilter) {
+      const ms = chatByModel[modelFilter];
+      inp   = ms.inputTokens;
+      out   = ms.outputTokens;
+      total = ms.totalTokens;
+      cost  = ms.costUsd;
+    } else {
+      inp   = chatInp;
+      out   = chatOut;
+      total = chatTotal;
+      cost  = chatCost;
+    }
+
+    totalChats   += 1;
+    inputTokens  += inp;
+    outputTokens += out;
+    totalTokens  += total;
+    totalCostUsd += cost;
+
+    // ── Per-model aggregation — iterate each model used in this chat ──────
+    Object.entries(chatByModel).forEach(([modelId, stats]) => {
+      if (!byModel[modelId]) byModel[modelId] = emptyModelStats();
+      byModel[modelId].chats        += stats.count        ?? 0;
+      byModel[modelId].inputTokens  += stats.inputTokens  ?? 0;
+      byModel[modelId].outputTokens += stats.outputTokens ?? 0;
+      byModel[modelId].totalTokens  += stats.totalTokens  ?? 0;
+      byModel[modelId].costUsd      += stats.costUsd      ?? 0;
+    });
 
     // ── Daily aggregation (keyed YYYY-MM-DD by chat createdAt) ───────────
     if (createdAt) {
@@ -122,11 +159,11 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
       if (!dailyMap[dayKey]) {
         dailyMap[dayKey] = { tokens: 0, inputTokens: 0, outputTokens: 0, cost: 0, chats: 0 };
       }
-      dailyMap[dayKey].tokens      += total;
-      dailyMap[dayKey].inputTokens += inp;
-      dailyMap[dayKey].outputTokens+= out;
-      dailyMap[dayKey].cost        += costUsd;
-      dailyMap[dayKey].chats       += 1;
+      dailyMap[dayKey].tokens       += total;
+      dailyMap[dayKey].inputTokens  += inp;
+      dailyMap[dayKey].outputTokens += out;
+      dailyMap[dayKey].cost         += cost;
+      dailyMap[dayKey].chats        += 1;
     }
   });
 

@@ -98,11 +98,12 @@ const AnalyticsPage = () => {
     [rawUsage, days, selectedModel]
   );
 
-  /** Unique AURA model IDs the user has actually used (derived from raw docs). */
-  const usedModels = useMemo(
-    () => Array.from(new Set(rawUsage.map((c) => c.model).filter(Boolean))),
-    [rawUsage]
-  );
+  /** Unique AURA model IDs used across all chats (union of every chat's byModel keys). */
+  const usedModels = useMemo(() => {
+    const ids = new Set();
+    rawUsage.forEach((chat) => Object.keys(chat.byModel ?? {}).forEach((id) => ids.add(id)));
+    return Array.from(ids);
+  }, [rawUsage]);
 
   const fmt = (n) => {
     if (!n) return "0";
