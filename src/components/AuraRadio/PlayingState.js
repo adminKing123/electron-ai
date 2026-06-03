@@ -1,118 +1,174 @@
 import React from "react";
-import { IoClose } from "react-icons/io5";
-import { BsMusicNoteBeamed } from "react-icons/bs";
+import { IoStop } from "react-icons/io5";
+import { FaRadio } from "react-icons/fa6";
 import { STATUS } from "../../hooks/useAuraRadio";
 import Header from "../Header";
 
+/* Artwork circle diameter in px. */
+const ALBUM_SIZE  = 200;
+/* SVG container is slightly larger to fit the decorative tick ring. */
+const RING_SIZE   = 232;
+const RING_CENTER = RING_SIZE / 2;
+/* Ring sits just outside the artwork border. */
+const RING_RADIUS = ALBUM_SIZE / 2 + 12;
+const TICK_COUNT  = 72;
+const TICK_HALF   = 4; /* half-length of each tick in px */
+
+/**
+ * Decorative static ring of mini tick marks rendered as SVG lines.
+ * Purely presentational — no canvas, no animation loop.
+ */
+function MiniRing() {
+  return (
+    <svg
+      width={RING_SIZE}
+      height={RING_SIZE}
+      className="absolute inset-0"
+      aria-hidden="true"
+    >
+      {Array.from({ length: TICK_COUNT }, (_, i) => {
+        const angle = (i / TICK_COUNT) * Math.PI * 2 - Math.PI / 2;
+        const cos   = Math.cos(angle);
+        const sin   = Math.sin(angle);
+        return (
+          <line
+            key={i}
+            x1={RING_CENTER + cos * (RING_RADIUS - TICK_HALF)}
+            y1={RING_CENTER + sin * (RING_RADIUS - TICK_HALF)}
+            x2={RING_CENTER + cos * (RING_RADIUS + TICK_HALF)}
+            y2={RING_CENTER + sin * (RING_RADIUS + TICK_HALF)}
+            stroke="rgba(129,140,248,0.35)"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 export default function PlayingState({ status, currentTrack, onStop }) {
-  const isLoading = [
-    STATUS.STARTING,
-    STATUS.LOADING,
-    STATUS.BUFFERING,
-  ].includes(status);
-  const isSongPlaying = currentTrack?.type === "song" && currentTrack?.metadata;
+  const isSongPlaying  = currentTrack?.type === "song" && currentTrack?.metadata;
   const isIntroPlaying = currentTrack?.type === "intro";
+  const isPlaying      = status === STATUS.PLAYING; // eslint-disable-line no-unused-vars
 
-  const getAlbumThumbnail = () => {
-    if (!isSongPlaying) return null;
-    const baseUrl =
-      "https://raw.githubusercontent.com/harshcore/arsongs-src-copy/main/";
-    return baseUrl + currentTrack.metadata.album.thumbnail1200x1200;
-  };
+  /* ── Initial load: no track arrived yet ── */
+  if (!currentTrack) {
+    return (
+      <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-[#0d0d0d]">
+        <Header type="aura-rj" />
+        <div className="flex-1 flex flex-col items-center justify-center gap-3">
+          <div className="flex items-center gap-1.5">
+            {[0, 0.15, 0.3].map((delay) => (
+              <div
+                key={delay}
+                className="w-1.5 h-1.5 rounded-full bg-black dark:bg-white opacity-40"
+                style={{ animation: `pulse 1.2s ease-in-out ${delay}s infinite` }}
+              />
+            ))}
+          </div>
+          <p className="text-xs text-[#999] dark:text-[#555] tracking-wide">
+            Getting your station ready
+          </p>
+        </div>
+      </main>
+    );
+  }
 
-  const getStatusText = () => {
-    if (isLoading) return "Preparing";
-    if (isIntroPlaying) return "Aura is speaking";
-    if (isSongPlaying) return "Now Playing";
-    return "Buffering...";
-  };
+  const albumThumbnail = isSongPlaying
+    ? "https://raw.githubusercontent.com/harshcore/arsongs-src-copy/main/" +
+      currentTrack.metadata.album.thumbnail1200x1200
+    : null;
 
-  const getStatusColor = () => {
-    if (isIntroPlaying) return "text-indigo-500";
-    if (isSongPlaying) return "text-green-500";
-    return "text-gray-500";
-  };
+  const statusLabel = isIntroPlaying
+    ? "Aura is speaking"
+    : isSongPlaying
+    ? "Now playing"
+    : "Buffering…";
+
+  const artistLine = isSongPlaying
+    ? currentTrack.metadata.artists.map((a) => a.name).join("  ·  ")
+    : null;
 
   return (
-    <main className="h-screen overflow-auto bg-gradient-to-b from-gray-50 to-white dark:from-[#1a1a1a] dark:to-[#0a0a0a]">
+    <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-[#0d0d0d]">
       <Header type="aura-rj" />
 
-      <div className="max-w-4xl mx-auto px-5 py-10">
-        <div className="flex items-center justify-center mb-8">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#2a2a2a] shadow-lg border border-gray-200 dark:border-gray-800">
-            <div
-              className={`w-2 h-2 rounded-full ${isIntroPlaying ? "bg-indigo-500 animate-pulse" : isSongPlaying ? "bg-green-500 animate-pulse" : "bg-gray-500"}`}
-            ></div>
-            <span className={`text-sm font-medium ${getStatusColor()}`}>
-              {getStatusText()}
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 px-5 pb-4">
+
+        {/* ── Live badge + status ── */}
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-red-500">
+              Live
             </span>
           </div>
+          <span className="text-[10px] text-[#bbb] dark:text-[#444]">·</span>
+          <span className="text-[10px] text-[#888] dark:text-[#555] tracking-wide">
+            {statusLabel}
+          </span>
         </div>
 
-        {isSongPlaying ? (
-          <div className="flex flex-col items-center">
-            <div className="relative group">
-              <div className="w-80 h-80 rounded-2xl overflow-hidden shadow-2xl transform transition-transform duration-300 group-hover:scale-105">
-                <img
-                  src={getAlbumThumbnail()}
-                  alt={currentTrack.metadata.album.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+        {/* ── Artwork + decorative mini tick ring ── */}
+        <div
+          className="relative flex-shrink-0 flex items-center justify-center"
+          style={{ width: RING_SIZE, height: RING_SIZE }}
+        >
+          <MiniRing />
 
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-green-500/20 to-blue-500/20 animate-pulse pointer-events-none"></div>
+          {/* Artwork centered inside the ring */}
+          {isSongPlaying ? (
+            <img
+              src={albumThumbnail}
+              alt={currentTrack.metadata.album.title}
+              style={{ width: ALBUM_SIZE, height: ALBUM_SIZE }}
+              className="rounded-full object-cover shadow-2xl relative z-10"
+            />
+          ) : (
+            <div
+              style={{ width: ALBUM_SIZE, height: ALBUM_SIZE }}
+              className="rounded-full bg-white dark:bg-[#141414] border border-[#e5e5e5] dark:border-[#222] shadow-xl flex items-center justify-center relative z-10"
+            >
+              <FaRadio className="text-4xl text-[#bbb] dark:text-[#444]" />
             </div>
-
-            <div className="mt-8 text-center max-w-xl">
-              <h1 className="text-3xl font-bold text-black dark:text-white mb-2">
-                {currentTrack.metadata.original_name}
-              </h1>
-
-              <div className="flex items-center justify-center gap-2 text-lg text-gray-700 dark:text-gray-300 mb-3">
-                {currentTrack.metadata.artists.map((artist, index) => (
-                  <React.Fragment key={artist.id}>
-                    {index > 0 && <span className="text-gray-400">•</span>}
-                    <span>{artist.name}</span>
-                  </React.Fragment>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                <span className="flex items-center gap-1">
-                  <BsMusicNoteBeamed />
-                  {currentTrack.metadata.album.title}
-                </span>
-                <span className="text-gray-400">•</span>
-                <span>{currentTrack.metadata.album.year}</span>
-              </div>
-
-              {currentTrack.metadata.languages &&
-                currentTrack.metadata.languages.length > 0 && (
-                  <div className="flex items-center justify-center gap-2 mt-4">
-                    {currentTrack.metadata.languages.map((lang) => (
-                      <span
-                        key={lang.id}
-                        className="px-3 py-1 text-xs font-medium rounded-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
-                      >
-                        {lang.name}
-                      </span>
-                    ))}
-                  </div>
-                )}
-            </div>
-          </div>
-        ) : <div className="flex flex-col items-center my-20">
-            <div className="w-[300px] h-[300px] border-2 rounded-full"></div>
-          </div>}
-
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={onStop}
-            className="text-black dark:text-white p-3 border border-black dark:border-white rounded-full"
-          >
-            <IoClose className="text-xl" />
-          </button>
+          )}
         </div>
+
+        {/* ── Track info ── */}
+        <div className="text-center max-w-xs">
+          <p className="text-base font-semibold text-black dark:text-white leading-snug">
+            {isSongPlaying ? currentTrack.metadata.original_name : "Aura RJ"}
+          </p>
+
+          {isSongPlaying ? (
+            <>
+              <p className="text-sm text-[#777] dark:text-[#555] mt-1">
+                {artistLine}
+              </p>
+              <p className="text-xs text-[#aaa] dark:text-[#444] mt-0.5">
+                {currentTrack.metadata.album.title}&ensp;·&ensp;{currentTrack.metadata.album.year}
+              </p>
+            </>
+          ) : (
+            <p className="text-sm text-[#777] dark:text-[#555] mt-1">
+              Your personal radio station
+            </p>
+          )}
+        </div>
+
+        {/* ── Stop button ── */}
+        <button
+          onClick={onStop}
+          aria-label="Stop radio"
+          className="flex items-center gap-2 px-5 py-2 rounded-full border border-[#ddd] dark:border-[#2a2a2a]
+            text-xs font-medium text-black dark:text-white
+            hover:bg-[#f5f5f5] dark:hover:bg-[#1a1a1a] transition-colors"
+        >
+          <IoStop className="text-sm" />
+          Stop
+        </button>
+
       </div>
     </main>
   );

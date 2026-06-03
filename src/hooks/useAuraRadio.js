@@ -31,12 +31,12 @@ export const useAuraRadio = () => {
   const [currentTrack, setCurrentTrack] = useState(null);
 
   const sessionIdRef = useRef(uuidv4());
-  const audioRef = useRef(null);
-  const contextRef = useRef([]);
-  const queueRef = useRef([]);
-  const loadingRef = useRef(false);
-  const waitersRef = useRef([]);
-  const isCleanedUp = useRef(false);
+  const audioRef     = useRef(null);
+  const contextRef   = useRef([]);
+  const queueRef        = useRef([]);
+  const loadingRef      = useRef(false);
+  const waitersRef      = useRef([]);
+  const isCleanedUp     = useRef(false);
 
   const { mutateAsync: getTrack } = useGetTrack();
 
