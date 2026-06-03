@@ -9,8 +9,6 @@ import ChatPage from "../pages/ChatPage";
 import LibraryPage from "../pages/Library";
 
 const AuraRjPage = lazy(() => import("../pages/AuraRjPage"));
-const CodigoPage = lazy(() => import("../pages/CodigoPage"));
-const LiveChatWithAIPage = lazy(() => import("../pages/LiveChatWithAIPage"));
 const AnalyticsPage = lazy(() => import("../pages/AnalyticsPage"));
 
 const AppRoutes = () => {
@@ -29,8 +27,6 @@ const AppRoutes = () => {
           </Route>
 
           <Route path={ROUTES.AURA_RJ} element={<AuraRjPage />} />
-          <Route path={ROUTES.CODIGO} element={<CodigoPage />} />
-          <Route path={ROUTES.LIVE_CHAT_WITH_AI} element={<LiveChatWithAIPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

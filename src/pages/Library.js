@@ -1,6 +1,5 @@
 import FilesPage from "./Files";
 import { FaRadio } from "react-icons/fa6";
-import { BsRobot, BsStars } from "react-icons/bs";
 import ROUTES from "../router/routes";
 import { Link } from "react-router-dom";
 import AnalyticsSummaryBar from "../components/Analytics/AnalyticsSummaryBar";
@@ -14,20 +13,6 @@ const APPS = [
     to: ROUTES.AURA_RJ,
     color: "#7c3aed",
   },
-  {
-    Icon: BsRobot,
-    name: "Código",
-    description: "AI Code Editor",
-    to: ROUTES.CODIGO,
-    color: "#0284c7",
-  },
-  {
-    Icon: BsStars,
-    name: "Aura Parlante",
-    description: "Live AI Chat",
-    to: ROUTES.LIVE_CHAT_WITH_AI,
-    color: "#db2777",
-  },
 ];
 
 const AppCard = ({ app }) => (
@@ -35,7 +20,7 @@ const AppCard = ({ app }) => (
     to={app.to}
     className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-[#E1E1E1] dark:border-[#2F2F2F]
       bg-white dark:bg-[#141414] hover:bg-[#fafafa] dark:hover:bg-[#1e1e1e]
-      transition-colors flex-1 min-w-[140px]"
+      transition-colors w-full max-w-[220px]"
   >
     <div
       className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
