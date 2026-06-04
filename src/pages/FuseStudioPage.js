@@ -61,12 +61,23 @@ export default function FuseStudioPage() {
         onNameBlur={handleNameBlur}
         saving={saving}
       />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex">
         <FuseStudioSidebar
           creating={creating}
           onCreate={handleCreate}
           onAddNode={handleAddNode}
         />
+        <div className="flex-1 flex gap-2.5 rounded-xl p-4 mb-3 mr-3
+          bg-[#f7f7f7] dark:bg-[#1a1a1a]
+          border border-[#e5e5e5] dark:border-[#252525]
+          shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]">
+
+            <div className="flex-1"></div>
+            <div className="flex-1 rounded-xl max-w-[550px]
+              bg-white dark:bg-[#212121]
+              border border-[#e5e5e5] dark:border-[#2a2a2a]
+              shadow-sm"></div>
+          </div>
       </div>
     </main>
   );
