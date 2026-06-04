@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { FuseStudioHeader, FuseStudioSidebar } from "../components/Fuse";
+import { FuseStudioHeader, FuseStudioSidebar, WorkflowCanvas, NodeConfigPanel } from "../components/Fuse";
 import {
   getWorkflowByIdAPI,
   updateWorkflowNameAPI,
@@ -47,11 +47,9 @@ export default function FuseStudioPage() {
     }
   }, [id, workflowName]);
 
-  const { creating, handleCreate } = useCreateWorkflow();
+  const [selectedNode, setSelectedNode] = useState(null);
 
-  const handleAddNode = () => {
-    /* TODO: open node picker / add node to canvas */
-  };
+  const { creating, handleCreate } = useCreateWorkflow();
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
@@ -65,18 +63,17 @@ export default function FuseStudioPage() {
         <FuseStudioSidebar
           creating={creating}
           onCreate={handleCreate}
-          onAddNode={handleAddNode}
         />
         <div className="flex-1 flex gap-2.5 rounded-xl p-4 mb-3 mr-3
           bg-[#f7f7f7] dark:bg-[#1a1a1a]
           border border-[#e5e5e5] dark:border-[#252525]
           shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]">
 
-            <div className="flex-1"></div>
-            <div className="flex-1 rounded-xl max-w-[550px]
-              bg-white dark:bg-[#212121]
-              border border-[#e5e5e5] dark:border-[#2a2a2a]
-              shadow-sm"></div>
+          <WorkflowCanvas className="flex-1" onNodeClick={setSelectedNode} />
+          <NodeConfigPanel
+            className="flex-1 rounded-xl max-w-[550px] bg-white dark:bg-[#212121] border border-[#e5e5e5] dark:border-[#2a2a2a] shadow-sm"
+            selectedNode={selectedNode}
+          />
           </div>
       </div>
     </main>

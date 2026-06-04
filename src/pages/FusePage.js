@@ -10,19 +10,6 @@ import {
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import ROUTES from "../router/routes";
 
-/* ---------------------------------------------------------
-   Sub-components
---------------------------------------------------------- */
-
-/**
- * Page heading row � title, workflow count, and Create New CTA.
- *
- * @param {object}   props
- * @param {number}   props.count    � total number of workflows
- * @param {boolean}  props.loading  � when true shows "�" instead of count
- * @param {boolean}  props.creating � disables button + plays shimmer sweep
- * @param {Function} props.onCreate � called when Create New is clicked
- */
 const WorkflowsHeading = ({ count, loading, creating, onCreate }) => (
   <div className="flex items-end justify-between mb-7">
     <div>
@@ -44,10 +31,6 @@ const WorkflowsHeading = ({ count, loading, creating, onCreate }) => (
   </div>
 );
 
-/**
- * Animated placeholder shown while workflows are loading.
- * Renders 3 skeleton rows matching the table row layout.
- */
 const WorkflowsSkeletonLoader = () => (
   <div className="rounded-2xl border border-[#ebebeb] dark:border-[#232323] overflow-hidden bg-white dark:bg-[#1a1a1a] animate-pulse">
     {[...Array(3)].map((_, i) => (
@@ -65,10 +48,6 @@ const WorkflowsSkeletonLoader = () => (
   </div>
 );
 
-/* ---------------------------------------------------------
-   FusePage � standalone layout (no MainLayout / no Sidebar).
-   Displays the user's Fuse workflows in a sortable table.
---------------------------------------------------------- */
 export default function FusePage() {
   const navigate = useNavigate();
   const { creating, handleCreate } = useCreateWorkflow();
@@ -76,7 +55,6 @@ export default function FusePage() {
   const [loading, setLoading]     = useState(true);
   const [deletingId, setDeletingId] = useState(null);
 
-  /* Load workflows on mount */
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -100,10 +78,7 @@ export default function FusePage() {
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
-      {/* -- Top bar -- */}
       <Header type="fuse" />
-
-      {/* -- Scrollable content area -- */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-[860px] mx-auto px-6 py-10">
 
