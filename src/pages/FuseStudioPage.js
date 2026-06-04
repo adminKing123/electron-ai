@@ -75,23 +75,19 @@ export default function FuseStudioPage() {
       .catch(() => {})
       .finally(() => { if (!cancelled) setLoading(false); });
 
-    // Fetch starter node definitions — skip if already cached in the store
-    if (starterNodes.length === 0) {
-      setLoadingNodes(true);
-      getStarterNodesAPI()
-        .then((nodes) => { if (!cancelled) setStarterNodes(nodes); })
-        .catch(() => {})
-        .finally(() => { if (!cancelled) setLoadingNodes(false); });
-    }
+    // Always fetch node definitions on each new workflow load so a fresh
+    // navigation never shows stale-empty listings from a prior resetStudio.
+    setLoadingNodes(true);
+    getStarterNodesAPI()
+      .then((nodes) => { if (!cancelled) setStarterNodes(nodes); })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setLoadingNodes(false); });
 
-    // Fetch action node definitions — skip if already cached in the store
-    if (actionNodes.length === 0) {
-      setLoadingActionNodes(true);
-      getActionNodesAPI()
-        .then((nodes) => { if (!cancelled) setActionNodes(nodes); })
-        .catch(() => {})
-        .finally(() => { if (!cancelled) setLoadingActionNodes(false); });
-    }
+    setLoadingActionNodes(true);
+    getActionNodesAPI()
+      .then((nodes) => { if (!cancelled) setActionNodes(nodes); })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setLoadingActionNodes(false); });
 
     return () => {
       cancelled = true;

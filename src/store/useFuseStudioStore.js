@@ -153,7 +153,7 @@ const useFuseStudioStore = create((set) => ({
   clearSelectedNode: ()    => set({ selectedNode: null }),
 
   // --- Cleanup ---
-  /** Called on page unmount. Clears workflow + canvas. Preserves starterNodes. */
+  /** Called on page unmount. Clears all workflow + canvas + node definition state. */
   resetStudio: () =>
     set({
       workflow: null,
@@ -164,8 +164,8 @@ const useFuseStudioStore = create((set) => ({
       edges: [],
       selectedNode: null,
       addingNode: false,
-      // Action nodes are cheap to re-fetch and may change during development;
-      // clear them so the next page entry always gets fresh definitions.
+      starterNodes: [],
+      loadingNodes: false,
       actionNodes: [],
       loadingActionNodes: false,
     }),
