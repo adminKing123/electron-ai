@@ -114,12 +114,39 @@ const SelectChevron = () => (
 
 // ─── Field input components ────────────────────────────────────────────────────
 
-/**
- * Date input.
- * `[color-scheme:light]` / `[color-scheme:dark]` forces the browser to tint
- * the native calendar icon to match the surrounding theme so it doesn't appear
- * as a dark blob on a dark background or a white blob on a light background.
- */
+/** Plain single-line text input. */
+const TextField = ({ field, value, onChange }) => (
+  <input
+    type="text"
+    value={value ?? ""}
+    placeholder={field.placeholder ?? ""}
+    onChange={(e) => onChange(e.target.value)}
+    className={INPUT_BASE}
+  />
+);
+
+/** Multi-line textarea. */
+const TextareaField = ({ field, value, onChange }) => (
+  <textarea
+    value={value ?? ""}
+    rows={3}
+    placeholder={field.placeholder ?? ""}
+    onChange={(e) => onChange(e.target.value)}
+    className={`${INPUT_BASE} resize-none leading-relaxed`}
+  />
+);
+
+/** Numeric input. */
+const NumberField = ({ field, value, onChange }) => (
+  <input
+    type="number"
+    value={value ?? ""}
+    placeholder={field.placeholder ?? ""}
+    onChange={(e) => onChange(e.target.value)}
+    className={INPUT_BASE}
+  />
+);
+
 const DateField = ({ value, onChange }) => (
   <input
     type="date"
@@ -185,15 +212,14 @@ const TimezoneSelectField = ({ value, onChange }) => {
  */
 const FieldInput = ({ field, value, onChange }) => {
   switch (field.type) {
-    case "date":
-      return <DateField value={value} onChange={onChange} />;
-    case "time":
-      return <TimeField value={value} onChange={onChange} />;
-    case "timezone_select":
-      return <TimezoneSelectField value={value} onChange={onChange} />;
+    case "text":            return <TextField     field={field} value={value} onChange={onChange} />;
+    case "textarea":        return <TextareaField  field={field} value={value} onChange={onChange} />;
+    case "number":          return <NumberField    field={field} value={value} onChange={onChange} />;
+    case "date":            return <DateField      value={value} onChange={onChange} />;
+    case "time":            return <TimeField      value={value} onChange={onChange} />;
+    case "timezone_select": return <TimezoneSelectField value={value} onChange={onChange} />;
     case "select":
-    default:
-      return <SelectField field={field} value={value} onChange={onChange} />;
+    default:                return <SelectField   field={field} value={value} onChange={onChange} />;
   }
 };
 

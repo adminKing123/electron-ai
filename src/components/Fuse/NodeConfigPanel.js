@@ -1,21 +1,33 @@
 import React from "react";
-import { TbLayoutGrid, TbTrash } from "react-icons/tb";
+import { TbLayoutGrid, TbTrash, TbX, TbSearch } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { getNodeIcon } from "./iconRegistry";
 import FormBuilder from "./FormBuilder";
 
 const StarterNodeCard = ({ node, onPick }) => {
   const Icon = getNodeIcon(node.icon);
+
+  const handleDragStart = (e) => {
+    // Tag the payload as a starter node so WorkflowCanvas sets isStarter correctly.
+    e.dataTransfer.setData(
+      "application/fuse-node",
+      JSON.stringify({ ...node, isStarter: true })
+    );
+    e.dataTransfer.effectAllowed = "copy";
+  };
+
   return (
     <button
       type="button"
+      draggable
+      onDragStart={handleDragStart}
       onClick={() => onPick(node)}
       className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-left w-full
         bg-white dark:bg-[#1c1c1c]
         border border-[#e8e8e8] dark:border-[#272727]
         hover:bg-[#f5f7ff] dark:hover:bg-[#202030]
         hover:border-[#c7cfe8] dark:hover:border-[#363660]
-        transition-colors"
+        transition-colors cursor-grab active:cursor-grabbing"
     >
       <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
         bg-[#eef0fb] dark:bg-[#252540]">
@@ -93,6 +105,188 @@ const StarterPanel = () => {
   );
 };
 
+// ─── ActionNodeCard ────────────────────────────────────────────────────────────
+// Draggable card displayed inside the 2-column section grid of AddNodePanel.
+// Supports both drag-and-drop onto the canvas and a single click to add at a
+// default position (same UX as StarterNodeCard).
+const ActionNodeCard = ({ node, onPick }) => {
+  const Icon = getNodeIcon(node.icon);
+
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData("application/fuse-node", JSON.stringify(node));
+    e.dataTransfer.effectAllowed = "copy";
+  };
+
+  return (
+    <div
+      draggable
+      onDragStart={handleDragStart}
+      onClick={() => onPick(node)}
+      title={node.description ?? node.label}
+      className="flex items-center gap-2 px-3 py-3 rounded-xl
+        cursor-grab active:cursor-grabbing
+        bg-white dark:bg-[#1c1c1c]
+        border border-[#e8e8e8] dark:border-[#272727]
+        hover:bg-[#f5f7ff] dark:hover:bg-[#202030]
+        hover:border-[#c7cfe8] dark:hover:border-[#363660]
+        transition-colors select-none"
+    >
+      <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
+        bg-[#eef0fb] dark:bg-[#252540]">
+        {Icon
+          ? <Icon className="w-[15px] h-[15px] text-[#4a6cf7] dark:text-[#6b8aff]" />
+          : <span className="w-3.5 h-3.5 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
+        }
+      </span>
+      <span className="text-[12px] font-medium leading-snug text-[#222] dark:text-[#d8d8d8] truncate">
+        {node.label}
+      </span>
+    </div>
+  );
+};
+
+// ─── AddNodePanel ──────────────────────────────────────────────────────────────
+// Shown when the user clicks "Add Node" in the header.
+// Groups action nodes by their `section` field and renders each group with a
+// section heading + 2-column grid of draggable ActionNodeCards.
+const AddNodePanel = () => {
+  const actionNodes        = useFuseStudioStore((s) => s.actionNodes);
+  const loadingActionNodes = useFuseStudioStore((s) => s.loadingActionNodes);
+  const setAddingNode      = useFuseStudioStore((s) => s.setAddingNode);
+  const addFlowNode        = useFuseStudioStore((s) => s.addFlowNode);
+  const selectNode         = useFuseStudioStore((s) => s.selectNode);
+  const canvasNodes        = useFuseStudioStore((s) => s.nodes);
+  const [query, setQuery]  = React.useState("");
+
+  /**
+   * Click-to-add: place the node at a slightly offset position so successive
+   * click-adds don't stack exactly on top of each other.
+   */
+  const handlePick = (node) => {
+    const offset = canvasNodes.length * 40;
+    const flowNode = {
+      id: `node_${Date.now()}`,
+      type: "fuse_node",
+      position: { x: 350 + offset, y: 200 + offset },
+      data: {
+        nodeType: node.type,
+        label:    node.label,
+        icon:     node.icon ?? null,
+        config:   {},
+        isStarter: false,
+      },
+    };
+    addFlowNode(flowNode);
+    selectNode(flowNode);
+    setAddingNode(false);
+  };
+
+  // Filter nodes by search query, then group them by `section`.
+  const sections = React.useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const filtered = q
+      ? actionNodes.filter(
+          (n) =>
+            n.label.toLowerCase().includes(q) ||
+            (n.description ?? "").toLowerCase().includes(q)
+        )
+      : actionNodes;
+
+    // Preserve insertion order of sections.
+    const map = {};
+    filtered.forEach((node) => {
+      const key = node.section ?? "Other";
+      if (!map[key]) map[key] = [];
+      map[key].push(node);
+    });
+    return Object.entries(map); // [[sectionTitle, [nodes...]], ...]
+  }, [actionNodes, query]);
+
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Header */}
+      <div className="px-4 pt-4 pb-3 border-b border-[#ebebeb] dark:border-[#252525] flex-shrink-0">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-[13px] font-semibold text-[#444] dark:text-[#bbb]">
+            Add Node
+          </span>
+          <button
+            type="button"
+            onClick={() => setAddingNode(false)}
+            className="w-7 h-7 flex items-center justify-center rounded-lg
+              text-[#888] dark:text-[#555]
+              hover:text-[#111] dark:hover:text-[#ddd]
+              hover:bg-[#f0f0f0] dark:hover:bg-[#272727]
+              transition-colors"
+            aria-label="Close"
+          >
+            <TbX className="w-[15px] h-[15px]" />
+          </button>
+        </div>
+        {/* Search */}
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg
+          bg-[#f5f5f5] dark:bg-[#1e1e1e]
+          border border-[#e8e8e8] dark:border-[#2a2a2a]">
+          <TbSearch className="w-[14px] h-[14px] text-[#aaa] dark:text-[#555] flex-shrink-0" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search nodes…"
+            className="flex-1 bg-transparent text-[12.5px] text-[#333] dark:text-[#ccc]
+              placeholder:text-[#bbb] dark:placeholder:text-[#444]
+              outline-none border-none"
+          />
+        </div>
+      </div>
+
+      {/* Sectioned node list */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-5">
+        {loadingActionNodes ? (
+          // Loading skeleton: two mock sections
+          ["Section A", "Section B"].map((sk) => (
+            <div key={sk} className="flex flex-col gap-2">
+              <div className="h-3 w-24 rounded bg-[#efefef] dark:bg-[#222] animate-pulse" />
+              <div className="grid grid-cols-2 gap-2">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="h-14 rounded-xl bg-[#f0f0f0] dark:bg-[#1e1e1e] animate-pulse" />
+                ))}
+              </div>
+            </div>
+          ))
+        ) : sections.length === 0 ? (
+          <p className="text-center text-[12px] text-[#bbb] dark:text-[#444] select-none mt-6">
+            {query ? "No nodes match your search" : "No action nodes available"}
+          </p>
+        ) : (
+          sections.map(([title, nodes]) => (
+            <div key={title} className="flex flex-col gap-2">
+              {/* Section heading */}
+              <p className="text-[10.5px] font-semibold uppercase tracking-wider
+                text-[#bbb] dark:text-[#484848]">
+                {title}
+              </p>
+              {/* 2-column grid of node cards */}
+              <div className="grid grid-cols-2 gap-2">
+                {nodes.map((node) => (
+                  <ActionNodeCard key={node.type} node={node} onPick={handlePick} />
+                ))}
+              </div>
+            </div>
+          ))
+        )}
+
+        {/* Hint — only shown when nodes are loaded and results exist */}
+        {!loadingActionNodes && sections.length > 0 && (
+          <p className="text-center text-[11px] text-[#c8c8c8] dark:text-[#383838] select-none pb-1">
+            Drag a node onto the canvas to add it
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // ─── NodeConfigView ────────────────────────────────────────────────────────────
 // Shown when a React Flow node is selected.
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
@@ -162,33 +356,35 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef }) => {
 /**
  * Right panel of the workflow studio canvas.
  *
- * States:
- *   steps empty            → StarterPanel (pick a starter node to begin)
- *   steps present, none selected → prompt to select a node
- *   steps present, selected      → NodeConfigView (config form from API schema)
+ * Panel states (in priority order):
+ *   1. nodes.length === 0          → StarterPanel   (no workflow started yet)
+ *   2. addingNode === true          → AddNodePanel   (user clicked "Add Node")
+ *   3. selectedNode !== null        → NodeConfigView (configure selected node)
+ *   4. default                      → idle prompt    (nodes exist, none selected)
  */
 const NodeConfigPanel = ({ className = "" }) => {
-  // Read nodes from the flat React Flow array in the store (not from workflow.steps).
   const nodes        = useFuseStudioStore((s) => s.nodes);
   const selectedNode = useFuseStudioStore((s) => s.selectedNode);
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
+  const actionNodes  = useFuseStudioStore((s) => s.actionNodes);
+  const addingNode   = useFuseStudioStore((s) => s.addingNode);
+
+  const hasStarterNode = nodes.some((n) => n.data?.isStarter === true);
+
+  // Combined lookup across both node definition lists.
+  const allNodeDefs = [...starterNodes, ...actionNodes];
 
   let content;
 
-  if (nodes.length === 0) {
-    // No nodes placed yet — show the starter picker.
+  if (nodes.length === 0 || !hasStarterNode) {
+    // No nodes placed yet — must choose a starter first.
     content = <StarterPanel />;
-  } else if (!selectedNode) {
-    content = (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-[12px] text-[#bbb] dark:text-[#444] select-none">
-          Select a node to configure it
-        </p>
-      </div>
-    );
-  } else {
-    // selectedNode is a React Flow node — type info is under selectedNode.data.nodeType.
-    const nodeDef   = starterNodes.find((n) => n.type === selectedNode.data.nodeType);
+  } else if (addingNode) {
+    // User opened the "Add Node" picker via the header button.
+    content = <AddNodePanel />;
+  } else if (selectedNode) {
+    // A canvas node is selected — show its config form.
+    const nodeDef   = allNodeDefs.find((n) => n.type === selectedNode.data.nodeType);
     const nodeIndex = nodes.findIndex((n) => n.id === selectedNode.id);
 
     content = nodeDef ? (
@@ -197,6 +393,15 @@ const NodeConfigPanel = ({ className = "" }) => {
       <div className="flex items-center justify-center h-full">
         <p className="text-[12px] text-[#bbb] dark:text-[#444] select-none">
           Unknown node type: {selectedNode.data?.nodeType}
+        </p>
+      </div>
+    );
+  } else {
+    // Nodes exist but none is selected.
+    content = (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-[12px] text-[#bbb] dark:text-[#444] select-none">
+          Select a node to configure it
         </p>
       </div>
     );

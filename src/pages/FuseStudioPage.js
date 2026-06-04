@@ -10,6 +10,7 @@ import {
   getWorkflowByIdAPI,
   updateWorkflowNameAPI,
   getStarterNodesAPI,
+  getActionNodesAPI,
 } from "../apis/fuse/queryFunctions";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import useFuseStudioStore from "../store/useFuseStudioStore";
@@ -30,22 +31,26 @@ export default function FuseStudioPage() {
   const saving        = useFuseStudioStore((s) => s.saving);
   const storeWorkflow = useFuseStudioStore((s) => s.workflow);
   const starterNodes  = useFuseStudioStore((s) => s.starterNodes);
+  const actionNodes   = useFuseStudioStore((s) => s.actionNodes);
   const nodes         = useFuseStudioStore((s) => s.nodes);
 
-  // Buttons in the header are enabled only once at least one starter node
-  // has been placed on the canvas.
-  const hasNodes = nodes.length > 0;
+  // Header buttons and the "Add Node" panel are enabled only once a starter
+  // node (the workflow trigger) has been placed on the canvas.
+  const hasStarterNode = nodes.some((n) => n.data?.isStarter === true);
 
   // ── Store actions ────────────────────────────────────────────────────────
   const setWorkflow     = useFuseStudioStore((s) => s.setWorkflow);
   const setWorkflowName = useFuseStudioStore((s) => s.setWorkflowName);
   const setLoading      = useFuseStudioStore((s) => s.setLoading);
   const setSaving       = useFuseStudioStore((s) => s.setSaving);
-  const setStarterNodes = useFuseStudioStore((s) => s.setStarterNodes);
-  const setLoadingNodes = useFuseStudioStore((s) => s.setLoadingNodes);
-  const setNodes        = useFuseStudioStore((s) => s.setNodes);
-  const setEdges        = useFuseStudioStore((s) => s.setEdges);
-  const resetStudio     = useFuseStudioStore((s) => s.resetStudio);
+  const setStarterNodes    = useFuseStudioStore((s) => s.setStarterNodes);
+  const setLoadingNodes    = useFuseStudioStore((s) => s.setLoadingNodes);
+  const setActionNodes     = useFuseStudioStore((s) => s.setActionNodes);
+  const setLoadingActionNodes = useFuseStudioStore((s) => s.setLoadingActionNodes);
+  const setAddingNode      = useFuseStudioStore((s) => s.setAddingNode);
+  const setNodes           = useFuseStudioStore((s) => s.setNodes);
+  const setEdges           = useFuseStudioStore((s) => s.setEdges);
+  const resetStudio        = useFuseStudioStore((s) => s.resetStudio);
 
   // Not observable state — just a mutable comparison anchor
   const committedNameRef = useRef("");
@@ -77,6 +82,15 @@ export default function FuseStudioPage() {
         .then((nodes) => { if (!cancelled) setStarterNodes(nodes); })
         .catch(() => {})
         .finally(() => { if (!cancelled) setLoadingNodes(false); });
+    }
+
+    // Fetch action node definitions — skip if already cached in the store
+    if (actionNodes.length === 0) {
+      setLoadingActionNodes(true);
+      getActionNodesAPI()
+        .then((nodes) => { if (!cancelled) setActionNodes(nodes); })
+        .catch(() => {})
+        .finally(() => { if (!cancelled) setLoadingActionNodes(false); });
     }
 
     return () => {
@@ -117,8 +131,8 @@ export default function FuseStudioPage() {
         onNameChange={setWorkflowName}
         onNameBlur={handleNameBlur}
         saving={saving}
-        hasNodes={hasNodes}
-        onAddNode={() => { /* TODO: open node-picker panel */ }}
+        hasNodes={hasStarterNode}
+        onAddNode={() => setAddingNode(true)}
         onTurnOn={() => { /* TODO: toggle workflow active status */ }}
       />
       <div className="flex-1 flex overflow-hidden">

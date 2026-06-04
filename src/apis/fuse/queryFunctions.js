@@ -201,3 +201,105 @@ export const getStarterNodesAPI = async () => {
     },
   ];
 };
+
+/**
+ * GET /fuse/nodes/actions — returns all available action node definitions.
+ *
+ * Action nodes are the building blocks connected after the starter trigger.
+ * Each definition follows the same schema as starter nodes, with a full
+ * config_form so FormBuilder can render the configuration UI dynamically.
+ */
+export const getActionNodesAPI = async () => {
+  await delay(300);
+  return [
+    {
+      type: "get_notified",
+      label: "Get Notified",
+      icon: "TbBell",
+      section: "Notifications",
+      description:
+        "Send a web push notification to yourself when this workflow step is reached.",
+      config_form: {
+        sections: [
+          {
+            title: "Content",
+            fields: [
+              {
+                key: "title",
+                label: "Title",
+                type: "text",
+                placeholder: "e.g. Your report is ready",
+                required: true,
+                hint: "Short headline shown in bold at the top of the notification",
+              },
+              {
+                key: "body",
+                label: "Body",
+                type: "textarea",
+                placeholder: "e.g. The weekly sales report has been generated and is ready to view.",
+                required: true,
+                hint: "Main text of the notification (2–3 sentences max for best display)",
+              },
+              {
+                key: "icon_url",
+                label: "Icon URL",
+                type: "text",
+                placeholder: "https://example.com/icon-192.png",
+                hint: "Square image (192\u00d7192 px recommended) shown beside the notification",
+              },
+              {
+                key: "image_url",
+                label: "Banner Image URL",
+                type: "text",
+                placeholder: "https://example.com/banner.png",
+                hint: "Large image displayed below the body on supported browsers",
+              },
+            ],
+          },
+          {
+            title: "Action",
+            fields: [
+              {
+                key: "click_url",
+                label: "Click URL",
+                type: "text",
+                placeholder: "https://app.example.com/dashboard",
+                hint: "Page to open when the notification is clicked; defaults to the app URL",
+              },
+              {
+                key: "cta_label",
+                label: "Button Label",
+                type: "text",
+                placeholder: "e.g. View Report",
+                hint: "Optional action button shown inside the notification",
+              },
+            ],
+          },
+          {
+            title: "Options",
+            layout: "grid-2",
+            fields: [
+              {
+                key: "require_interaction",
+                label: "Require Interaction",
+                type: "select",
+                options: [
+                  { label: "No \u2014 dismiss automatically", value: "false" },
+                  { label: "Yes \u2014 stay until dismissed", value: "true" },
+                ],
+                hint: "Keep the notification visible until the user actively dismisses it",
+              },
+              {
+                key: "ttl_seconds",
+                label: "Time to Live (sec)",
+                type: "number",
+                placeholder: "86400",
+                hint: "How long the browser retries delivery if you are offline",
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ];
+};

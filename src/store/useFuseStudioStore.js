@@ -1,6 +1,21 @@
 import { create } from "zustand";
 import { applyNodeChanges, applyEdgeChanges, addEdge } from "@xyflow/react";
 
+// ─── Connection limits ─────────────────────────────────────────────────────────
+/**
+ * Maximum outgoing edges per node type. Defaults to 1 for any type not listed.
+ * To unlock multiple branches for a future node type (e.g. "if_else"),
+ * add an entry here — no other code needs to change.
+ *
+ *   if_else: 2   → true / false branches
+ *   fork:    Infinity  → unlimited
+ */
+const NODE_OUTGOING_LIMIT = {
+  // if_else: 2,  // reserved for future use
+};
+
+const getOutgoingLimit = (nodeType) => NODE_OUTGOING_LIMIT[nodeType] ?? 1;
+
 /**
  * Zustand store for the Fuse Studio (workflow builder) page.
  *
@@ -31,6 +46,14 @@ const useFuseStudioStore = create((set) => ({
   starterNodes: [],
   loadingNodes: false,
 
+  // --- Action node type definitions (from API, cached) ---
+  actionNodes: [],
+  loadingActionNodes: false,
+
+  // --- Panel mode ---
+  // true while the "Add Node" picker is open in the config panel.
+  addingNode: false,
+
   // --- React Flow graph ---
   nodes: [],
   edges: [],
@@ -45,6 +68,9 @@ const useFuseStudioStore = create((set) => ({
   setSaving:       (v)        => set({ saving: v }),
   setStarterNodes: (nodes)    => set({ starterNodes: nodes }),
   setLoadingNodes: (v)        => set({ loadingNodes: v }),
+  setActionNodes: (nodes)     => set({ actionNodes: nodes }),
+  setLoadingActionNodes: (v)  => set({ loadingActionNodes: v }),
+  setAddingNode: (v)          => set({ addingNode: v }),
 
   // --- Graph load (called once on API response) ---
   setNodes: (nodes) => set({ nodes }),
@@ -67,13 +93,10 @@ const useFuseStudioStore = create((set) => ({
   onConnect: (connection) =>
     set((state) => {
       const sourceNode = state.nodes.find((n) => n.id === connection.source);
-      // Guard: starter nodes are allowed exactly one outgoing edge
-      if (
-        sourceNode?.data?.isStarter &&
-        state.edges.some((e) => e.source === connection.source)
-      ) {
-        return {}; // reject — already has an outgoing edge
-      }
+      const limit      = getOutgoingLimit(sourceNode?.data?.nodeType);
+      const current    = state.edges.filter((e) => e.source === connection.source).length;
+      // Reject if the source node has reached its outgoing-edge limit.
+      if (current >= limit) return {};
       return {
         edges: addEdge({ ...connection, id: `edge_${Date.now()}` }, state.edges),
       };
@@ -115,7 +138,8 @@ const useFuseStudioStore = create((set) => ({
     })),
 
   // --- Selection ---
-  selectNode:       (node) => set({ selectedNode: node }),
+  // Selecting a node always closes the "Add Node" picker.
+  selectNode:       (node) => set({ selectedNode: node, addingNode: false }),
   clearSelectedNode: ()    => set({ selectedNode: null }),
 
   // --- Cleanup ---
@@ -129,6 +153,11 @@ const useFuseStudioStore = create((set) => ({
       nodes: [],
       edges: [],
       selectedNode: null,
+      addingNode: false,
+      // Action nodes are cheap to re-fetch and may change during development;
+      // clear them so the next page entry always gets fresh definitions.
+      actionNodes: [],
+      loadingActionNodes: false,
     }),
 }));
 
