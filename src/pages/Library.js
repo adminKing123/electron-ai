@@ -1,11 +1,19 @@
 import FilesPage from "./Files";
 import { FaRadio } from "react-icons/fa6";
+import { TbBolt } from "react-icons/tb";
 import ROUTES from "../router/routes";
 import { Link } from "react-router-dom";
 import AnalyticsSummaryBar from "../components/Analytics/AnalyticsSummaryBar";
 
 /** App shortcuts — always visible, no toggle required. */
 const APPS = [
+  {
+    Icon: TbBolt,
+    name: "Fuse",
+    description: "Connect flows & route to apps",
+    to: ROUTES.FUSE,
+    color: "#e87c10",
+  },
   {
     Icon: FaRadio,
     name: "Aura RJ",

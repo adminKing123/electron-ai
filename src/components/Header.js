@@ -37,16 +37,25 @@ const SidebarOpenButton = () => {
   );
 };
 
+/** Page-specific header labels — keyed by `type`. Falls back to "AURA". */
+const PAGE_LABELS = {
+  "aura-rj": "Aura RJ",
+  "fuse": "Fuse",
+};
+
 const Header = ({ type }) => {
+  const isStandalone = type === "aura-rj" || type === "fuse";
+  const label = PAGE_LABELS[type] ?? "AURA";
+
   return (
     <header
       id="header"
       className="h-[56px] w-full flex items-center justify-between gap-2 px-3 border-b border-[#ebebeb] dark:border-[#1e1e1e]"
     >
       <div className="flex items-center gap-1.5">
-        {type === "aura-rj" ? <BackButton /> : <SidebarOpenButton />}
+        {isStandalone ? <BackButton /> : <SidebarOpenButton />}
         <span className="text-[14px] font-semibold tracking-tight text-[#111] dark:text-white select-none">
-          AURA
+          {label}
         </span>
       </div>
       <div className="flex items-center gap-3">

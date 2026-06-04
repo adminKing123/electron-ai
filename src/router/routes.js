@@ -7,6 +7,8 @@ const ROUTES = {
   ANALYTICS: "/analytics",
 
   AURA_RJ: "/aura-rj",
+
+  FUSE: "/fuse",
 };
 
 export default ROUTES;
