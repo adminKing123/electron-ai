@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { TbPlus, TbPower } from "react-icons/tb";
 import HeaderUserProfile from "../HeaderUserProfile";
+import ROUTES from "../../router/routes";
 
 export const iconBtnCls =
   "w-8 h-8 flex items-center justify-center rounded-lg " +
@@ -15,7 +16,7 @@ export const iconBtnCls =
   const navigate = useNavigate();
   return (
     <button
-      onClick={() => navigate(-1)}
+      onClick={() => navigate(ROUTES.FUSE)}
       className={iconBtnCls}
       aria-label="Go back"
     >
