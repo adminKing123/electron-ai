@@ -31,27 +31,36 @@ const MOCK_WORKFLOWS = [
   },
 ];
 
+/** Artificial delay to simulate network latency during development. */
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 /** GET /fuse/workflows — returns all workflows for the current user. */
-export const getWorkflowsAPI = () =>
-  Promise.resolve([...MOCK_WORKFLOWS]);
+export const getWorkflowsAPI = async () => {
+  await delay(1200);
+  return [...MOCK_WORKFLOWS];
+};
 
 /**
  * POST /fuse/workflows — creates a new workflow.
  * @param {{ name: string }} data
  */
-export const createWorkflowAPI = (data) => {
+export const createWorkflowAPI = async (data) => {
+  await delay(800);
   const now = new Date().toISOString();
-  return Promise.resolve({
+  return {
     id: `wf_${Date.now()}`,
     name: data.name,
+    status: "inactive",
     createdAt: now,
     updatedAt: now,
-  });
+  };
 };
 
 /**
  * DELETE /fuse/workflows/:id — removes a workflow by ID.
  * @param {string} id
  */
-export const deleteWorkflowAPI = (id) =>
-  Promise.resolve({ success: true, id });
+export const deleteWorkflowAPI = async (id) => {
+  await delay(600);
+  return { success: true, id };
+};

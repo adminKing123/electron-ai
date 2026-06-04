@@ -9,6 +9,8 @@ const ROUTES = {
   AURA_RJ: "/aura-rj",
 
   FUSE: "/fuse",
+  FUSE_STUDIO: "/fuse/studio/:id",
+  GET_FUSE_STUDIO_URL: (id) => `/fuse/studio/${id}`,
 };
 
 export default ROUTES;

@@ -8,9 +8,10 @@ import NewChatPage from "../pages/NewChatPage";
 import ChatPage from "../pages/ChatPage";
 import LibraryPage from "../pages/Library";
 
-const AuraRjPage  = lazy(() => import("../pages/AuraRjPage"));
-const AnalyticsPage = lazy(() => import("../pages/AnalyticsPage"));
-const FusePage    = lazy(() => import("../pages/FusePage"));
+const AuraRjPage      = lazy(() => import("../pages/AuraRjPage"));
+const AnalyticsPage   = lazy(() => import("../pages/AnalyticsPage"));
+const FusePage        = lazy(() => import("../pages/FusePage"));
+const FuseStudioPage  = lazy(() => import("../pages/FuseStudioPage"));
 
 const AppRoutes = () => {
   return (
@@ -28,10 +29,8 @@ const AppRoutes = () => {
           </Route>
 
           {/* Fuse — standalone layout, mirrors AuraRJ pattern */}
-          <Route path={ROUTES.FUSE} element={<FusePage />}>
-            {/* Register child flow routes here, e.g.: */}
-            {/* <Route path="my-flow" element={<MyFlowPage />} /> */}
-          </Route>
+          <Route path={ROUTES.FUSE} element={<FusePage />} />
+          <Route path={ROUTES.FUSE_STUDIO} element={<FuseStudioPage />} />
 
           <Route path={ROUTES.AURA_RJ} element={<AuraRjPage />} />
         </Route>
