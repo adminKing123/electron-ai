@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { TbPlus } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { WorkflowsTable } from "../components/Fuse";
+import { WorkflowsTable, FusePrimaryButton } from "../components/Fuse";
 import {
   getWorkflowsAPI,
-  createWorkflowAPI,
   deleteWorkflowAPI,
 } from "../apis/fuse/queryFunctions";
+import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import ROUTES from "../router/routes";
 
 /* ---------------------------------------------------------
@@ -34,23 +34,13 @@ const WorkflowsHeading = ({ count, loading, creating, onCreate }) => (
       </p>
     </div>
 
-    <button
+    <FusePrimaryButton
+      icon={TbPlus}
+      loading={creating}
       onClick={onCreate}
-      disabled={creating}
-      className="relative flex items-center gap-2 px-4 py-2 rounded-xl
-        bg-[#111] dark:bg-[#f0f0f0]
-        text-white dark:text-[#111]
-        text-[13px] font-semibold
-        hover:opacity-80 active:opacity-70
-        transition-opacity duration-150 select-none
-        disabled:cursor-not-allowed overflow-hidden"
     >
-      {creating && (
-        <span className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/20 dark:via-black/10 to-transparent" />
-      )}
-      <TbPlus className="w-4 h-4 flex-shrink-0" />
       Create New
-    </button>
+    </FusePrimaryButton>
   </div>
 );
 
@@ -81,9 +71,9 @@ const WorkflowsSkeletonLoader = () => (
 --------------------------------------------------------- */
 export default function FusePage() {
   const navigate = useNavigate();
+  const { creating, handleCreate } = useCreateWorkflow();
   const [workflows, setWorkflows] = useState([]);
   const [loading, setLoading]     = useState(true);
-  const [creating, setCreating]   = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
   /* Load workflows on mount */
@@ -98,19 +88,6 @@ export default function FusePage() {
   }, []);
 
   /* -- Handlers -- */
-  const handleCreate = async () => {
-    setCreating(true);
-    try {
-      const newWorkflow = await createWorkflowAPI({ name: "Untitled Workflow" });
-      setWorkflows((prev) => [newWorkflow, ...prev]);
-      navigate(ROUTES.GET_FUSE_STUDIO_URL(newWorkflow.id));
-    } catch {
-      /* TODO: surface error to user via toast */
-    } finally {
-      setCreating(false);
-    }
-  };
-
   const handleEdit = (wf) => navigate(ROUTES.GET_FUSE_STUDIO_URL(wf.id));
 
   const handleDelete = async (wf) => {

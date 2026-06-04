@@ -1,9 +1,5 @@
 import { TbBolt } from "react-icons/tb";
 
-/**
- * Shown inside the workflow table when there are no workflows yet.
- * Rendered as a full-width table row spanning all columns.
- */
 const WorkflowEmptyState = () => (
   <tr>
     <td colSpan={5}>
