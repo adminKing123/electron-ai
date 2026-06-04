@@ -199,6 +199,89 @@ export const getStarterNodesAPI = async () => {
         ],
       },
     },
+    {
+      type: "webhook",
+      label: "On Webhook",
+      icon: "TbWebhook",
+      description:
+        "Start the workflow whenever an HTTP request hits the generated webhook URL.",
+      config_form: {
+        sections: [
+          {
+            title: "Endpoint",
+            fields: [
+              {
+                key: "method",
+                label: "HTTP Method",
+                type: "select",
+                required: true,
+                options: [
+                  { label: "POST", value: "POST" },
+                  { label: "GET",  value: "GET"  },
+                  { label: "PUT",  value: "PUT"  },
+                  { label: "PATCH", value: "PATCH" },
+                ],
+                hint: "Only requests matching this method will trigger the workflow",
+              },
+              {
+                key: "path",
+                label: "Custom Path (optional)",
+                type: "text",
+                placeholder: "e.g. /orders/new",
+                hint: "Leave blank to use the auto-generated path",
+              },
+            ],
+          },
+          {
+            title: "Security",
+            fields: [
+              {
+                key: "auth_type",
+                label: "Authentication",
+                type: "select",
+                options: [
+                  { label: "None",        value: "none"        },
+                  { label: "Bearer token", value: "bearer"     },
+                  { label: "Basic auth",  value: "basic"       },
+                  { label: "HMAC signature", value: "hmac"     },
+                ],
+                hint: "How the webhook verifies that the request is from a trusted sender",
+              },
+              {
+                key: "secret",
+                label: "Secret / Token",
+                type: "text",
+                placeholder: "Paste your secret here",
+                hint: "Used to verify the HMAC signature or as the expected bearer token",
+              },
+            ],
+          },
+          {
+            title: "Response",
+            fields: [
+              {
+                key: "response_code",
+                label: "Status Code",
+                type: "number",
+                placeholder: "200",
+                hint: "HTTP status returned immediately to the caller",
+              },
+            ],
+          },
+          {
+            title: "Body Schema",
+            fields: [
+              {
+                key: "body_schema",
+                label: "Incoming Body Fields",
+                type: "body_builder",
+                hint: "Define the fields you expect in the webhook request body. These become variables you can reference in downstream nodes using {{webhook.body.fieldName}}.",
+              },
+            ],
+          },
+        ],
+      },
+    },
   ];
 };
 
@@ -227,30 +310,30 @@ export const getActionNodesAPI = async () => {
               {
                 key: "title",
                 label: "Title",
-                type: "text",
+                type: "variable_text",
                 placeholder: "e.g. Your report is ready",
                 required: true,
-                hint: "Short headline shown in bold at the top of the notification",
+                hint: "Short headline shown in bold. Use @ to insert a variable.",
               },
               {
                 key: "body",
                 label: "Body",
-                type: "textarea",
-                placeholder: "e.g. The weekly sales report has been generated and is ready to view.",
+                type: "variable_textarea",
+                placeholder: "e.g. The weekly sales report has been generated.",
                 required: true,
-                hint: "Main text of the notification (2–3 sentences max for best display)",
+                hint: "Main notification text. Use @ to insert a variable.",
               },
               {
                 key: "icon_url",
                 label: "Icon URL",
-                type: "text",
+                type: "variable_text",
                 placeholder: "https://example.com/icon-192.png",
-                hint: "Square image (192\u00d7192 px recommended) shown beside the notification",
+                hint: "Square image (192×192 px recommended) shown beside the notification",
               },
               {
                 key: "image_url",
                 label: "Banner Image URL",
-                type: "text",
+                type: "variable_text",
                 placeholder: "https://example.com/banner.png",
                 hint: "Large image displayed below the body on supported browsers",
               },
@@ -262,14 +345,14 @@ export const getActionNodesAPI = async () => {
               {
                 key: "click_url",
                 label: "Click URL",
-                type: "text",
+                type: "variable_text",
                 placeholder: "https://app.example.com/dashboard",
                 hint: "Page to open when the notification is clicked; defaults to the app URL",
               },
               {
                 key: "cta_label",
                 label: "Button Label",
-                type: "text",
+                type: "variable_text",
                 placeholder: "e.g. View Report",
                 hint: "Optional action button shown inside the notification",
               },
@@ -295,6 +378,29 @@ export const getActionNodesAPI = async () => {
                 type: "number",
                 placeholder: "86400",
                 hint: "How long the browser retries delivery if you are offline",
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      type: "if_else",
+      label: "If / Else",
+      icon: "TbGitBranch",
+      section: "Logic",
+      description:
+        "Branch the workflow based on a condition. The True path runs when the condition passes; the False path runs otherwise.",
+      config_form: {
+        sections: [
+          {
+            title: "Condition",
+            fields: [
+              {
+                key: "condition",
+                label: "Condition",
+                type: "condition_builder",
+                hint: "Select a variable, choose an operator, and (if needed) enter a comparison value. Connect the True and False handles on the node to route each branch.",
               },
             ],
           },

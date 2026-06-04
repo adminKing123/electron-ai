@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useState, useCallback } from "react";
 
 // ─── Timezone options ──────────────────────────────────────────────────────────
 // Built once at module load from the browser's Intl API.
@@ -206,20 +206,518 @@ const TimezoneSelectField = ({ value, onChange }) => {
   );
 };
 
+// ─── Variable picker shared hook ──────────────────────────────────────────────
+/**
+ * Inserts a variable token `{{token}}` at the current cursor position inside
+ * a textarea or text input and fires onChange with the updated string.
+ */
+const useVariableInserter = (inputRef, value, onChange) =>
+  useCallback(
+    (token) => {
+      const el = inputRef.current;
+      const text = value ?? "";
+      const start = el?.selectionStart ?? text.length;
+      const end   = el?.selectionEnd   ?? text.length;
+      const next  = text.slice(0, start) + `{{${token}}}` + text.slice(end);
+      onChange(next);
+      // Restore cursor after the inserted token on next tick
+      requestAnimationFrame(() => {
+        if (!el) return;
+        const pos = start + token.length + 4; // 4 = len("{{" + "}}")
+        el.setSelectionRange(pos, pos);
+        el.focus();
+      });
+    },
+    [inputRef, value, onChange]
+  );
+
+/** Small floating variable picker dropdown. */
+const VariablePicker = ({ variables, onPick, onClose }) => {
+  if (!variables.length) {
+    return (
+      <div className="absolute z-50 right-0 top-full mt-1 w-52 rounded-xl
+        bg-white dark:bg-[#1e1e1e]
+        border border-[#e0e0e0] dark:border-[#2e2e2e]
+        shadow-lg p-3">
+        <p className="text-[11.5px] text-[#bbb] dark:text-[#555] text-center select-none">
+          No variables available yet.<br />
+          Define fields in the webhook body.
+        </p>
+      </div>
+    );
+  }
+  return (
+    <div className="absolute z-50 right-0 top-full mt-1 w-60 rounded-xl
+      bg-white dark:bg-[#1e1e1e]
+      border border-[#e0e0e0] dark:border-[#2e2e2e]
+      shadow-lg overflow-hidden">
+      <p className="px-3 pt-2.5 pb-1 text-[10px] font-semibold uppercase tracking-wider
+        text-[#bbb] dark:text-[#484848]">
+        Variables
+      </p>
+      <ul className="max-h-48 overflow-y-auto pb-1.5">
+        {variables.map((v) => (
+          <li key={v.token}>
+            <button
+              type="button"
+              onMouseDown={(e) => { e.preventDefault(); onPick(v.token); onClose(); }}
+              className="w-full text-left px-3 py-2 flex flex-col gap-0.5
+                hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
+            >
+              <span className="text-[12px] font-mono text-[#4a6cf7] dark:text-[#6b8aff]">
+                {`{{${v.token}}}`}
+              </span>
+              <span className="text-[11px] text-[#888] dark:text-[#555] truncate">
+                {v.label}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+/** Text input that supports `@` variable insertion via a picker button. */
+const VariableTextField = ({ field, value, onChange, variables }) => {
+  const inputRef    = useRef(null);
+  const containerRef = useRef(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const insertVariable = useVariableInserter(inputRef, value, onChange);
+
+  // Close picker when user clicks outside the entire container.
+  React.useEffect(() => {
+    if (!pickerOpen) return;
+    const handleOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, [pickerOpen]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div className="flex items-center gap-1.5">
+        <input
+          ref={inputRef}
+          type="text"
+          value={value ?? ""}
+          placeholder={field.placeholder ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${INPUT_BASE} flex-1 pr-9`}
+        />
+        {/* @ variable button */}
+        <button
+          type="button"
+          title="Insert variable"
+          onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
+          className="flex-shrink-0 w-8 h-[38px] flex items-center justify-center rounded-lg
+            text-[12px] font-mono font-bold
+            text-[#888] dark:text-[#555]
+            border border-[#ddd] dark:border-[#2e2e2e]
+            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
+            hover:border-[#c0c8f0] dark:hover:border-[#363660]
+            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            transition-colors"
+        >
+          @
+        </button>
+      </div>
+      {pickerOpen && (
+        <VariablePicker
+          variables={variables}
+          onPick={insertVariable}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+/** Textarea that supports `@` variable insertion via a picker button. */
+const VariableTextareaField = ({ field, value, onChange, variables }) => {
+  const inputRef     = useRef(null);
+  const containerRef = useRef(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const insertVariable = useVariableInserter(inputRef, value, onChange);
+
+  // Close picker when user clicks outside the entire container.
+  React.useEffect(() => {
+    if (!pickerOpen) return;
+    const handleOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, [pickerOpen]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div className="flex items-start gap-1.5">
+        <textarea
+          ref={inputRef}
+          value={value ?? ""}
+          rows={3}
+          placeholder={field.placeholder ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${INPUT_BASE} flex-1 resize-none leading-relaxed`}
+        />
+        <button
+          type="button"
+          title="Insert variable"
+          onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
+          className="flex-shrink-0 w-8 h-8 mt-0.5 flex items-center justify-center rounded-lg
+            text-[12px] font-mono font-bold
+            text-[#888] dark:text-[#555]
+            border border-[#ddd] dark:border-[#2e2e2e]
+            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
+            hover:border-[#c0c8f0] dark:hover:border-[#363660]
+            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            transition-colors"
+        >
+          @
+        </button>
+      </div>
+      {pickerOpen && (
+        <VariablePicker
+          variables={variables}
+          onPick={insertVariable}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+// ─── BodyBuilderField ─────────────────────────────────────────────────────────
+/**
+ * Recursive, visual-only body schema builder.
+ *
+ * Stored value shape:
+ * {
+ *   mode:   "visual",
+ *   fields: FieldNode[],
+ * }
+ *
+ * FieldNode:
+ * {
+ *   key:    string,
+ *   type:   "string" | "number" | "boolean" | "array" | "object",
+ *   fields: FieldNode[],  // when type === "object"
+ *   items:  {             // when type === "array"
+ *     type:   "string" | "number" | "boolean" | "array" | "object",
+ *     fields: FieldNode[], // when items.type === "object"
+ *   },
+ * }
+ */
+const BODY_FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
+const BODY_SCHEMA_MAX_DEPTH = 4;
+
+/**
+ * Renders one field row: [key input] [type select] [× button]
+ * Expands below with nested content for "object" and "array" types.
+ */
+const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
+  const handleTypeChange = (newType) => {
+    const updated = { ...field, type: newType };
+    if (newType === "object") updated.fields = field.fields ?? [];
+    if (newType === "array")  updated.items  = field.items  ?? { type: "string" };
+    onUpdate(updated);
+  };
+
+  const handleItemsTypeChange = (newType) => {
+    const items = { ...(field.items ?? {}), type: newType };
+    if (newType === "object") items.fields = field.items?.fields ?? [];
+    onUpdate({ ...field, items });
+  };
+
+  const canNest = depth < BODY_SCHEMA_MAX_DEPTH;
+  const indent  = "ml-5 pl-3 border-l border-[#e0e0e0] dark:border-[#2a2a2a]";
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      {/* Main row: key + type + remove */}
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={field.key}
+          placeholder="field_name"
+          onChange={(e) => onUpdate({ ...field, key: e.target.value })}
+          className={`${INPUT_BASE} flex-1 font-mono text-[12px]`}
+        />
+        <div className="relative flex-shrink-0 w-28">
+          <select
+            value={field.type}
+            onChange={(e) => handleTypeChange(e.target.value)}
+            className={SELECT_BASE}
+          >
+            {BODY_FIELD_TYPES.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <SelectChevron />
+        </div>
+        <button
+          type="button"
+          onClick={onRemove}
+          className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
+            text-[#bbb] dark:text-[#444]
+            hover:text-[#e05c5c] dark:hover:text-[#c26060]
+            hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
+            transition-colors text-lg leading-none"
+          aria-label="Remove field"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Array: choose items type + optionally define object properties */}
+      {field.type === "array" && (
+        <div className={`${indent} flex flex-col gap-1.5 py-1.5`}>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-[#999] dark:text-[#555] whitespace-nowrap">
+              Items type:
+            </span>
+            <div className="relative w-28">
+              <select
+                value={field.items?.type ?? "string"}
+                onChange={(e) => handleItemsTypeChange(e.target.value)}
+                className={SELECT_BASE}
+              >
+                {BODY_FIELD_TYPES.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+              <SelectChevron />
+            </div>
+          </div>
+          {/* If each array item is an object, define its properties */}
+          {field.items?.type === "object" && canNest && (
+            <SchemaFieldList
+              fields={field.items.fields ?? []}
+              depth={depth + 1}
+              label="Object properties"
+              onChange={(newFields) =>
+                onUpdate({ ...field, items: { ...field.items, fields: newFields } })
+              }
+            />
+          )}
+        </div>
+      )}
+
+      {/* Object: define its properties */}
+      {field.type === "object" && canNest && (
+        <div className={`${indent} py-1.5`}>
+          <SchemaFieldList
+            fields={field.fields ?? []}
+            depth={depth + 1}
+            label="Properties"
+            onChange={(newFields) => onUpdate({ ...field, fields: newFields })}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Renders a list of SchemaFieldRows with an "Add" button.
+ * Used both at the root level and recursively inside nested fields.
+ */
+const SchemaFieldList = ({ fields, depth, label, onChange }) => {
+  const addRow    = () => onChange([...fields, { key: "", type: "string" }]);
+  const removeRow = (i) => onChange(fields.filter((_, idx) => idx !== i));
+  const updateRow = (i, updated) =>
+    onChange(fields.map((f, idx) => (idx === i ? updated : f)));
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      {label && (
+        <span className="text-[10.5px] font-semibold uppercase tracking-wide
+          text-[#bbb] dark:text-[#444]">
+          {label}
+        </span>
+      )}
+      {fields.length === 0 && (
+        <p className="text-[11px] text-[#bbb] dark:text-[#444] pl-0.5 italic">
+          {depth === 0 ? "No fields defined yet." : "No properties yet."}
+        </p>
+      )}
+      {fields.map((f, i) => (
+        <SchemaFieldRow
+          key={i}
+          field={f}
+          depth={depth}
+          onUpdate={(updated) => updateRow(i, updated)}
+          onRemove={() => removeRow(i)}
+        />
+      ))}
+      <button
+        type="button"
+        onClick={addRow}
+        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[11.5px] font-medium
+          text-[#4a6cf7] dark:text-[#6b8aff]
+          border border-[#c7cfe8] dark:border-[#363660]
+          hover:bg-[#f0f3ff] dark:hover:bg-[#1a1a30]
+          transition-colors"
+      >
+        + Add {depth === 0 ? "field" : "property"}
+      </button>
+    </div>
+  );
+};
+
+const BodyBuilderField = ({ value, onChange }) => {
+  const fields = value?.fields ?? [];
+  return (
+    <SchemaFieldList
+      fields={fields}
+      depth={0}
+      onChange={(newFields) => onChange({ mode: "visual", fields: newFields })}
+    />
+  );
+};
+
+// ─── ConditionBuilderField ────────────────────────────────────────────────────
+/**
+ * Builds a single if/else condition: [variable] [operator] [value?]
+ *
+ * Operators that compare against a value: is, is not, >, <, >=, <=,
+ *   contains, does not contain, starts with, does not start with,
+ *   ends with, does not end with.
+ * Unary operators (no value needed): is empty, is not empty,
+ *   is even, is odd, is true, is false.
+ *
+ * Stored value shape:
+ * { variable: string, operator: string, value: string }
+ */
+const CONDITION_OPERATORS = [
+  { group: "Equality",     ops: ["is", "is not"] },
+  { group: "Comparison",   ops: [">", "<", ">=", "<="] },
+  { group: "Numeric",      ops: ["is even", "is odd"] },
+  { group: "Presence",     ops: ["is empty", "is not empty"] },
+  { group: "String",       ops: ["contains", "does not contain", "starts with",
+                                  "does not start with", "ends with", "does not end with"] },
+  { group: "Boolean",      ops: ["is true", "is false"] },
+];
+
+// Operators that don't need a comparison value.
+const UNARY_OPERATORS = new Set([
+  "is even", "is odd", "is empty", "is not empty", "is true", "is false",
+]);
+
+const ConditionBuilderField = ({ field, value, onChange, variables }) => {
+  const variable = value?.variable ?? "";
+  const operator = value?.operator ?? "is";
+  const val      = value?.value    ?? "";
+
+  const update = (patch) => onChange({ variable, operator, val, ...value, ...patch });
+
+  const isUnary = UNARY_OPERATORS.has(operator);
+
+  return (
+    <div className="flex flex-col gap-3">
+      {/* ── Variable selector ── */}
+      <div className="flex flex-col gap-1">
+        <span className="text-[11px] font-medium text-[#777] dark:text-[#555]">
+          Variable to check
+        </span>
+        <div className="relative">
+          <select
+            value={variable}
+            onChange={(e) => update({ variable: e.target.value })}
+            className={SELECT_BASE}
+          >
+            <option value="">— select a variable —</option>
+            {(variables ?? []).map((v) => (
+              <option key={v.token} value={`{{${v.token}}}`}>
+                {v.label}
+              </option>
+            ))}
+          </select>
+          <SelectChevron />
+        </div>
+        {variable && (
+          <span className="text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] pl-0.5 truncate">
+            {variable}
+          </span>
+        )}
+      </div>
+
+      {/* ── Operator selector ── */}
+      <div className="flex flex-col gap-1">
+        <span className="text-[11px] font-medium text-[#777] dark:text-[#555]">
+          Condition
+        </span>
+        <div className="relative">
+          <select
+            value={operator}
+            onChange={(e) => update({ operator: e.target.value })}
+            className={SELECT_BASE}
+          >
+            {CONDITION_OPERATORS.map(({ group, ops }) => (
+              <optgroup key={group} label={group}>
+                {ops.map((op) => (
+                  <option key={op} value={op}>{op}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <SelectChevron />
+        </div>
+      </div>
+
+      {/* ── Comparison value (hidden for unary operators) ── */}
+      {!isUnary && (
+        <div className="flex flex-col gap-1">
+          <span className="text-[11px] font-medium text-[#777] dark:text-[#555]">
+            Value
+          </span>
+          <input
+            type="text"
+            value={val}
+            placeholder="e.g. active, 100, true …"
+            onChange={(e) => update({ value: e.target.value })}
+            className={INPUT_BASE}
+          />
+        </div>
+      )}
+
+      {/* ── Live preview pill ── */}
+      {variable && operator && (
+        <div className="px-3 py-2 rounded-lg bg-[#f5f7ff] dark:bg-[#1a1a30]
+          border border-[#c7cfe8] dark:border-[#2a2a50] text-[11.5px] font-mono
+          text-[#4a6cf7] dark:text-[#6b8aff] break-all leading-snug">
+          {variable} <span className="font-bold not-italic">{operator}</span>
+          {!isUnary && val ? ` "${val}"` : ""}
+        </div>
+      )}
+    </div>
+  );
+};
+
 /**
  * Dispatch to the correct input component based on field.type.
  * Supported types: "date" | "time" | "select" | "timezone_select"
  */
-const FieldInput = ({ field, value, onChange }) => {
+const FieldInput = ({ field, value, onChange, variables = [] }) => {
   switch (field.type) {
-    case "text":            return <TextField     field={field} value={value} onChange={onChange} />;
-    case "textarea":        return <TextareaField  field={field} value={value} onChange={onChange} />;
-    case "number":          return <NumberField    field={field} value={value} onChange={onChange} />;
-    case "date":            return <DateField      value={value} onChange={onChange} />;
-    case "time":            return <TimeField      value={value} onChange={onChange} />;
-    case "timezone_select": return <TimezoneSelectField value={value} onChange={onChange} />;
+    case "text":              return <TextField           field={field} value={value} onChange={onChange} />;
+    case "textarea":          return <TextareaField        field={field} value={value} onChange={onChange} />;
+    case "number":            return <NumberField          field={field} value={value} onChange={onChange} />;
+    case "date":              return <DateField            value={value} onChange={onChange} />;
+    case "time":              return <TimeField            value={value} onChange={onChange} />;
+    case "timezone_select":   return <TimezoneSelectField  value={value} onChange={onChange} />;
+    case "variable_text":     return <VariableTextField     field={field} value={value} onChange={onChange} variables={variables} />;
+    case "variable_textarea": return <VariableTextareaField field={field} value={value} onChange={onChange} variables={variables} />;
+    case "body_builder":      return <BodyBuilderField      field={field} value={value} onChange={onChange} />;
+    case "condition_builder": return <ConditionBuilderField field={field} value={value} onChange={onChange} variables={variables} />;
     case "select":
-    default:                return <SelectField   field={field} value={value} onChange={onChange} />;
+    default:                  return <SelectField          field={field} value={value} onChange={onChange} />;
   }
 };
 
@@ -251,7 +749,7 @@ const FieldInput = ({ field, value, onChange }) => {
  *
  * @param {{ configForm: object, values: object, onChange: (newValues: object) => void }} props
  */
-const FormBuilder = ({ configForm, values = {}, onChange }) => {
+const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
   const { presets = [], sections = [] } = configForm ?? {};
 
   const handlePreset = (preset) => {
@@ -318,6 +816,7 @@ const FormBuilder = ({ configForm, values = {}, onChange }) => {
                   field={field}
                   value={values[field.key]}
                   onChange={(val) => handleFieldChange(field.key, val)}
+                  variables={variables}
                 />
 
                 {/* Hint below the input (e.g. "MM/DD/YYYY") */}

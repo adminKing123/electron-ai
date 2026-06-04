@@ -11,7 +11,7 @@ import { applyNodeChanges, applyEdgeChanges, addEdge } from "@xyflow/react";
  *   fork:    Infinity  → unlimited
  */
 const NODE_OUTGOING_LIMIT = {
-  // if_else: 2,  // reserved for future use
+  if_else: 2, // true + false branch, one edge each
 };
 
 const getOutgoingLimit = (nodeType) => NODE_OUTGOING_LIMIT[nodeType] ?? 1;
@@ -95,10 +95,20 @@ const useFuseStudioStore = create((set) => ({
       const sourceNode = state.nodes.find((n) => n.id === connection.source);
       const limit      = getOutgoingLimit(sourceNode?.data?.nodeType);
       const current    = state.edges.filter((e) => e.source === connection.source).length;
-      // Reject if the source node has reached its outgoing-edge limit.
+      // Reject if the source node has reached its total outgoing-edge limit.
       if (current >= limit) return {};
+      // For multi-handle nodes (e.g. if_else), also enforce one edge per handle.
+      if (connection.sourceHandle) {
+        const handleUsed = state.edges.some(
+          (e) => e.source === connection.source && e.sourceHandle === connection.sourceHandle
+        );
+        if (handleUsed) return {};
+      }
       return {
-        edges: addEdge({ ...connection, id: `edge_${Date.now()}` }, state.edges),
+        edges: addEdge(
+          { ...connection, id: `edge_${Date.now()}` },
+          state.edges
+        ),
       };
     }),
 

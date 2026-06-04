@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { TbLayoutGrid, TbTrash, TbX, TbSearch } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { getNodeIcon } from "./iconRegistry";
@@ -290,7 +290,7 @@ const AddNodePanel = () => {
 // ─── NodeConfigView ────────────────────────────────────────────────────────────
 // Shown when a React Flow node is selected.
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
-const NodeConfigView = ({ nodeIndex, node, nodeDef }) => {
+const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
   const removeNode       = useFuseStudioStore((s) => s.removeNode);
   const Icon = getNodeIcon(nodeDef.icon);
@@ -341,6 +341,7 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef }) => {
             configForm={nodeDef.config_form}
             values={node.data.config ?? {}}
             onChange={(newValues) => updateNodeConfig(node.id, newValues)}
+            variables={variables}
           />
         ) : (
           <p className="text-[12px] text-[#bbb] dark:text-[#444]">
@@ -364,6 +365,7 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef }) => {
  */
 const NodeConfigPanel = ({ className = "" }) => {
   const nodes        = useFuseStudioStore((s) => s.nodes);
+  const edges        = useFuseStudioStore((s) => s.edges);
   const selectedNode = useFuseStudioStore((s) => s.selectedNode);
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
   const actionNodes  = useFuseStudioStore((s) => s.actionNodes);
@@ -373,6 +375,72 @@ const NodeConfigPanel = ({ className = "" }) => {
 
   // Combined lookup across both node definition lists.
   const allNodeDefs = [...starterNodes, ...actionNodes];
+
+  /**
+   * Walk the entire ancestor chain backwards from `selectedNode` via BFS,
+   * collecting variables from every upstream node that exposes a `body_schema`.
+   *
+   * This means a node at any depth (e.g. webhook → notified → if_else) will
+   * still see variables produced by the webhook, not just its direct parent.
+   *
+   * Nested objects produce dot-notation paths:  <id>.body.address.street
+   * Array-of-object items produce bracket paths: <id>.body.items[].userId
+   */
+  const upstreamVariables = useMemo(() => {
+    if (!selectedNode) return [];
+
+    /** Recursively flatten FieldNode[] into { token, label } entries. */
+    const flattenFields = (fields, basePath, baseLabel) => {
+      const result = [];
+      (fields ?? []).forEach((f) => {
+        if (!f.key) return;
+        const path  = `${basePath}.${f.key}`;
+        const label = `${baseLabel}.${f.key}`;
+        result.push({ token: path, label });
+        if (f.type === "object") {
+          result.push(...flattenFields(f.fields, path, label));
+        } else if (f.type === "array" && f.items?.type === "object") {
+          result.push(...flattenFields(f.items.fields, `${path}[]`, `${label}[]`));
+        }
+      });
+      return result;
+    };
+
+    /**
+     * BFS up the edge graph from startId.
+     * Returns IDs of every ancestor node (excluding startId itself).
+     */
+    const getAllAncestorIds = (startId) => {
+      const visited = new Set();
+      const queue   = [startId];
+      while (queue.length) {
+        const current = queue.shift();
+        edges
+          .filter((e) => e.target === current)
+          .forEach((e) => {
+            if (!visited.has(e.source)) {
+              visited.add(e.source);
+              queue.push(e.source);
+            }
+          });
+      }
+      return [...visited];
+    };
+
+    const ancestorIds = getAllAncestorIds(selectedNode.id);
+    const vars = [];
+
+    ancestorIds.forEach((nid) => {
+      const n = nodes.find((x) => x.id === nid);
+      if (!n) return;
+      const schema = n.data?.config?.body_schema;
+      if (!schema || schema.mode !== "visual") return;
+      // Use node id as the unique key: {{node_abc123.body.field}}
+      vars.push(...flattenFields(schema.fields, `${n.id}.body`, n.data.label));
+    });
+
+    return vars;
+  }, [selectedNode, nodes, edges]);
 
   let content;
 
@@ -388,7 +456,12 @@ const NodeConfigPanel = ({ className = "" }) => {
     const nodeIndex = nodes.findIndex((n) => n.id === selectedNode.id);
 
     content = nodeDef ? (
-      <NodeConfigView nodeIndex={nodeIndex} node={selectedNode} nodeDef={nodeDef} />
+      <NodeConfigView
+        nodeIndex={nodeIndex}
+        node={selectedNode}
+        nodeDef={nodeDef}
+        variables={upstreamVariables}
+      />
     ) : (
       <div className="flex items-center justify-center h-full">
         <p className="text-[12px] text-[#bbb] dark:text-[#444] select-none">

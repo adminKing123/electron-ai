@@ -9,6 +9,7 @@ import {
   TbCloudUpload,
   TbFilter,
   TbGitMerge,
+  TbGitBranch,
   TbBell,
 } from "react-icons/tb";
 
@@ -30,6 +31,7 @@ export const ICON_REGISTRY = {
   TbCloudUpload,
   TbFilter,
   TbGitMerge,
+  TbGitBranch,
   TbBell,
 };
 
