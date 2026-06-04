@@ -30,6 +30,11 @@ export default function FuseStudioPage() {
   const saving        = useFuseStudioStore((s) => s.saving);
   const storeWorkflow = useFuseStudioStore((s) => s.workflow);
   const starterNodes  = useFuseStudioStore((s) => s.starterNodes);
+  const nodes         = useFuseStudioStore((s) => s.nodes);
+
+  // Buttons in the header are enabled only once at least one starter node
+  // has been placed on the canvas.
+  const hasNodes = nodes.length > 0;
 
   // ── Store actions ────────────────────────────────────────────────────────
   const setWorkflow     = useFuseStudioStore((s) => s.setWorkflow);
@@ -112,6 +117,9 @@ export default function FuseStudioPage() {
         onNameChange={setWorkflowName}
         onNameBlur={handleNameBlur}
         saving={saving}
+        hasNodes={hasNodes}
+        onAddNode={() => { /* TODO: open node-picker panel */ }}
+        onTurnOn={() => { /* TODO: toggle workflow active status */ }}
       />
       <div className="flex-1 flex overflow-hidden">
         <FuseStudioSidebar creating={creating} onCreate={handleCreate} />
