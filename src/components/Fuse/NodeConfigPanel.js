@@ -1,5 +1,5 @@
 import React from "react";
-import { TbLayoutGrid } from "react-icons/tb";
+import { TbLayoutGrid, TbTrash } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { getNodeIcon } from "./iconRegistry";
 import FormBuilder from "./FormBuilder";
@@ -35,18 +35,27 @@ const StarterNodeCard = ({ node, onPick }) => {
 const StarterPanel = () => {
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
   const loadingNodes = useFuseStudioStore((s) => s.loadingNodes);
-  const addStep      = useFuseStudioStore((s) => s.addStep);
+  const addFlowNode  = useFuseStudioStore((s) => s.addFlowNode);
   const selectNode   = useFuseStudioStore((s) => s.selectNode);
 
   const handlePick = (node) => {
-    const step = {
-      id: `step_${Date.now()}`,
-      type: node.type,
-      label: node.label,
-      config: {},
+    // Build a React Flow-compatible node so WorkflowCanvas can render it immediately.
+    const flowNode = {
+      id: `node_${Date.now()}`,
+      type: "fuse_node",
+      position: { x: 250, y: 100 },
+      data: {
+        nodeType: node.type,
+        label: node.label,
+        icon: node.icon ?? null,
+        config: {},
+        // Mark as the workflow trigger so WorkflowCanvas and the store can
+        // enforce the single-outgoing-edge rule.
+        isStarter: true,
+      },
     };
-    addStep(step);
-    selectNode(step);
+    addFlowNode(flowNode);
+    selectNode(flowNode);
   };
 
   return (
@@ -85,19 +94,35 @@ const StarterPanel = () => {
 };
 
 // ─── NodeConfigView ────────────────────────────────────────────────────────────
-// Shown when a step is selected. Renders the node's config_form via FormBuilder.
-// The entire form schema (fields, presets, layout) comes from the backend.
-const NodeConfigView = ({ stepIndex, step, nodeDef }) => {
-  const updateStepConfig = useFuseStudioStore((s) => s.updateStepConfig);
+// Shown when a React Flow node is selected.
+// Renders the node's config_form via FormBuilder and exposes a Delete action.
+const NodeConfigView = ({ nodeIndex, node, nodeDef }) => {
+  const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
+  const removeNode       = useFuseStudioStore((s) => s.removeNode);
   const Icon = getNodeIcon(nodeDef.icon);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
       <div className="px-4 pt-4 pb-3.5 border-b border-[#e8e8e8] dark:border-[#2a2a2a] flex-shrink-0">
-        <p className="text-[10.5px] font-semibold uppercase tracking-widest text-[#bbb] dark:text-[#555] mb-2">
-          Step {stepIndex + 1}
-        </p>
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <p className="text-[10.5px] font-semibold uppercase tracking-widest text-[#bbb] dark:text-[#555]">
+            {node.data.isStarter ? "Starter" : "Node"} {nodeIndex + 1}
+          </p>
+          {/* Delete node button */}
+          <button
+            type="button"
+            onClick={() => removeNode(node.id)}
+            title="Delete this node"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium
+              text-[#e05c5c] dark:text-[#c26060]
+              hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
+              transition-colors"
+          >
+            <TbTrash className="w-[13px] h-[13px]" />
+            Delete
+          </button>
+        </div>
         <div className="flex items-center gap-2.5">
           {Icon && (
             <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-[#f3f3f3] dark:bg-[#2a2a2a]">
@@ -120,8 +145,8 @@ const NodeConfigView = ({ stepIndex, step, nodeDef }) => {
         {nodeDef.config_form ? (
           <FormBuilder
             configForm={nodeDef.config_form}
-            values={step.config ?? {}}
-            onChange={(newValues) => updateStepConfig(step.id, newValues)}
+            values={node.data.config ?? {}}
+            onChange={(newValues) => updateNodeConfig(node.id, newValues)}
           />
         ) : (
           <p className="text-[12px] text-[#bbb] dark:text-[#444]">
@@ -143,16 +168,15 @@ const NodeConfigView = ({ stepIndex, step, nodeDef }) => {
  *   steps present, selected      → NodeConfigView (config form from API schema)
  */
 const NodeConfigPanel = ({ className = "" }) => {
-  // Keep ?? [] OUTSIDE the selector — returning a new [] literal inside
-  // causes useSyncExternalStore to see a changed snapshot every render → infinite loop.
-  const rawSteps     = useFuseStudioStore((s) => s.workflow?.steps);
-  const steps        = rawSteps ?? [];
+  // Read nodes from the flat React Flow array in the store (not from workflow.steps).
+  const nodes        = useFuseStudioStore((s) => s.nodes);
   const selectedNode = useFuseStudioStore((s) => s.selectedNode);
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
 
   let content;
 
-  if (steps.length === 0) {
+  if (nodes.length === 0) {
+    // No nodes placed yet — show the starter picker.
     content = <StarterPanel />;
   } else if (!selectedNode) {
     content = (
@@ -163,15 +187,16 @@ const NodeConfigPanel = ({ className = "" }) => {
       </div>
     );
   } else {
-    const nodeDef   = starterNodes.find((n) => n.type === selectedNode.type);
-    const stepIndex = steps.findIndex((s) => s.id === selectedNode.id);
+    // selectedNode is a React Flow node — type info is under selectedNode.data.nodeType.
+    const nodeDef   = starterNodes.find((n) => n.type === selectedNode.data.nodeType);
+    const nodeIndex = nodes.findIndex((n) => n.id === selectedNode.id);
 
     content = nodeDef ? (
-      <NodeConfigView stepIndex={stepIndex} step={selectedNode} nodeDef={nodeDef} />
+      <NodeConfigView nodeIndex={nodeIndex} node={selectedNode} nodeDef={nodeDef} />
     ) : (
       <div className="flex items-center justify-center h-full">
         <p className="text-[12px] text-[#bbb] dark:text-[#444] select-none">
-          Unknown node type: {selectedNode.type}
+          Unknown node type: {selectedNode.data?.nodeType}
         </p>
       </div>
     );

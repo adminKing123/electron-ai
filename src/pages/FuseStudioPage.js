@@ -38,6 +38,8 @@ export default function FuseStudioPage() {
   const setSaving       = useFuseStudioStore((s) => s.setSaving);
   const setStarterNodes = useFuseStudioStore((s) => s.setStarterNodes);
   const setLoadingNodes = useFuseStudioStore((s) => s.setLoadingNodes);
+  const setNodes        = useFuseStudioStore((s) => s.setNodes);
+  const setEdges        = useFuseStudioStore((s) => s.setEdges);
   const resetStudio     = useFuseStudioStore((s) => s.resetStudio);
 
   // Not observable state — just a mutable comparison anchor
@@ -56,6 +58,9 @@ export default function FuseStudioPage() {
         setWorkflowName(name);
         committedNameRef.current = name;
         setWorkflow(wf);
+        // Hydrate the React Flow graph from the saved workflow data.
+        setNodes(wf.nodes ?? []);
+        setEdges(wf.edges ?? []);
       })
       .catch(() => {})
       .finally(() => { if (!cancelled) setLoading(false); });
