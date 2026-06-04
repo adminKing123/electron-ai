@@ -75,7 +75,7 @@ export default function FusePage() {
               </h2>
               <p className="text-xs text-[#aaa] dark:text-[#555] mt-1">
                 {loading
-                  ? "Loading…"
+                  ? "..."
                   : `${workflows.length} workflow${workflows.length !== 1 ? "s" : ""}`}
               </p>
             </div>
