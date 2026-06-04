@@ -10,15 +10,80 @@ import {
 } from "../apis/fuse/queryFunctions";
 import ROUTES from "../router/routes";
 
-/* ─────────────────────────────────────────────────────────
-   FusePage — standalone layout (no MainLayout / no Sidebar).
+/* ---------------------------------------------------------
+   Sub-components
+--------------------------------------------------------- */
+
+/**
+ * Page heading row � title, workflow count, and Create New CTA.
+ *
+ * @param {object}   props
+ * @param {number}   props.count    � total number of workflows
+ * @param {boolean}  props.loading  � when true shows "�" instead of count
+ * @param {boolean}  props.creating � disables button + plays shimmer sweep
+ * @param {Function} props.onCreate � called when Create New is clicked
+ */
+const WorkflowsHeading = ({ count, loading, creating, onCreate }) => (
+  <div className="flex items-end justify-between mb-7">
+    <div>
+      <h2 className="text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight">
+        Workflows
+      </h2>
+      <p className="text-xs text-[#aaa] dark:text-[#555] mt-1">
+        {loading ? "…" : `${count} workflow${count !== 1 ? "s" : ""}`}
+      </p>
+    </div>
+
+    <button
+      onClick={onCreate}
+      disabled={creating}
+      className="relative flex items-center gap-2 px-4 py-2 rounded-xl
+        bg-[#111] dark:bg-[#f0f0f0]
+        text-white dark:text-[#111]
+        text-[13px] font-semibold
+        hover:opacity-80 active:opacity-70
+        transition-opacity duration-150 select-none
+        disabled:cursor-not-allowed overflow-hidden"
+    >
+      {creating && (
+        <span className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/20 dark:via-black/10 to-transparent" />
+      )}
+      <TbPlus className="w-4 h-4 flex-shrink-0" />
+      Create New
+    </button>
+  </div>
+);
+
+/**
+ * Animated placeholder shown while workflows are loading.
+ * Renders 3 skeleton rows matching the table row layout.
+ */
+const WorkflowsSkeletonLoader = () => (
+  <div className="rounded-2xl border border-[#ebebeb] dark:border-[#232323] overflow-hidden bg-white dark:bg-[#1a1a1a] animate-pulse">
+    {[...Array(3)].map((_, i) => (
+      <div
+        key={i}
+        className={`flex items-center gap-4 px-5 py-4
+          ${i !== 2 ? "border-b border-[#f0f0f0] dark:border-[#1d1d1d]" : ""}`}
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-[#e5e5e5] dark:bg-[#2a2a2a]" />
+        <div className="h-3 w-40 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
+        <div className="h-3 w-28 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto" />
+        <div className="h-3 w-28 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
+      </div>
+    ))}
+  </div>
+);
+
+/* ---------------------------------------------------------
+   FusePage � standalone layout (no MainLayout / no Sidebar).
    Displays the user's Fuse workflows in a sortable table.
-───────────────────────────────────────────────────────── */
+--------------------------------------------------------- */
 export default function FusePage() {
   const navigate = useNavigate();
   const [workflows, setWorkflows] = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [creating, setCreating]     = useState(false);
+  const [loading, setLoading]     = useState(true);
+  const [creating, setCreating]   = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
   /* Load workflows on mount */
@@ -32,7 +97,7 @@ export default function FusePage() {
     return () => { cancelled = true; };
   }, []);
 
-  /* ── Handlers ── */
+  /* -- Handlers -- */
   const handleCreate = async () => {
     setCreating(true);
     try {
@@ -46,9 +111,7 @@ export default function FusePage() {
     }
   };
 
-  const handleEdit = (wf) => {
-    navigate(ROUTES.GET_FUSE_STUDIO_URL(wf.id));
-  };
+  const handleEdit = (wf) => navigate(ROUTES.GET_FUSE_STUDIO_URL(wf.id));
 
   const handleDelete = async (wf) => {
     if (!window.confirm(`Delete workflow "${wf.name}"?`)) return;
@@ -60,63 +123,22 @@ export default function FusePage() {
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
-      {/* ── Top bar ── */}
+      {/* -- Top bar -- */}
       <Header type="fuse" />
 
-      {/* ── Content ── */}
+      {/* -- Scrollable content area -- */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-[860px] mx-auto px-6 py-10">
 
-          {/* ── Page heading row ── */}
-          <div className="flex items-end justify-between mb-7">
-            <div>
-              <h2 className="text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight">
-                Workflows
-              </h2>
-              <p className="text-xs text-[#aaa] dark:text-[#555] mt-1">
-                {loading
-                  ? "..."
-                  : `${workflows.length} workflow${workflows.length !== 1 ? "s" : ""}`}
-              </p>
-            </div>
+          <WorkflowsHeading
+            count={workflows.length}
+            loading={loading}
+            creating={creating}
+            onCreate={handleCreate}
+          />
 
-            {/* Primary CTA */}
-            <button
-              onClick={handleCreate}
-              disabled={creating}
-              className="relative flex items-center gap-2 px-4 py-2 rounded-xl
-                bg-[#111] dark:bg-[#f0f0f0]
-                text-white dark:text-[#111]
-                text-[13px] font-semibold
-                hover:opacity-80 active:opacity-70
-                transition-opacity duration-150 select-none
-                disabled:cursor-not-allowed overflow-hidden"
-            >
-              {creating && (
-                <span className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/20 dark:via-black/10 to-transparent" />
-              )}
-              <TbPlus className="w-4 h-4 flex-shrink-0" />
-              Create New
-            </button>
-          </div>
-
-          {/* ── Table ── */}
           {loading ? (
-            /* Skeleton rows while loading */
-            <div className="rounded-2xl border border-[#ebebeb] dark:border-[#232323] overflow-hidden bg-white dark:bg-[#1a1a1a] animate-pulse">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`flex items-center gap-4 px-5 py-4
-                    ${i !== 2 ? "border-b border-[#f0f0f0] dark:border-[#1d1d1d]" : ""}`}
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#e5e5e5] dark:bg-[#2a2a2a]" />
-                  <div className="h-3 w-40 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
-                  <div className="h-3 w-28 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto" />
-                  <div className="h-3 w-28 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
-                </div>
-              ))}
-            </div>
+            <WorkflowsSkeletonLoader />
           ) : (
             <WorkflowsTable
               workflows={workflows}

@@ -64,3 +64,24 @@ export const deleteWorkflowAPI = async (id) => {
   await delay(600);
   return { success: true, id };
 };
+
+/**
+ * GET /fuse/workflows/:id — fetches a single workflow by ID.
+ * @param {string} id
+ */
+export const getWorkflowByIdAPI = async (id) => {
+  await delay(500);
+  const found = MOCK_WORKFLOWS.find((wf) => wf.id === id);
+  if (!found) throw new Error(`Workflow ${id} not found`);
+  return { ...found };
+};
+
+/**
+ * PATCH /fuse/workflows/:id — updates the workflow name.
+ * @param {string} id
+ * @param {string} name
+ */
+export const updateWorkflowNameAPI = async (id, name) => {
+  await delay(300);
+  return { id, name, updatedAt: new Date().toISOString() };
+};
