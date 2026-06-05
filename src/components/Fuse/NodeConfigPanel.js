@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
-import { TbLayoutGrid, TbTrash, TbX, TbSearch } from "react-icons/tb";
+import { useParams } from "react-router-dom";
+import { TbLayoutGrid, TbTrash, TbX, TbSearch, TbCopy, TbCheck, TbLink } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { getNodeIcon } from "./iconRegistry";
 import FormBuilder from "./FormBuilder";
+import CONFIG from "../../config";
 
 const StarterNodeCard = ({ node, onPick }) => {
   const Icon = getNodeIcon(node.icon);
@@ -287,13 +289,73 @@ const AddNodePanel = () => {
   );
 };
 
+// ─── WebhookUrlDisplay ────────────────────────────────────────────────────────
+// Read-only row shown in the webhook node config panel, so the user can copy
+// the exact URL they need to send requests to.
+const WebhookUrlDisplay = ({ workflowId }) => {
+  const [copied, setCopied] = React.useState(false);
+  const base = (CONFIG.API_BASE_URL || "").replace(/\/$/, "");
+  const url  = `${base}/fuse/webhook/${workflowId}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <div className="flex flex-col gap-1.5 p-3 rounded-xl
+      bg-[#f5f7ff] dark:bg-[#1a1a2e]
+      border border-[#d0d8f5] dark:border-[#2a2a55]">
+      <div className="flex items-center gap-1.5">
+        <TbLink className="w-[12px] h-[12px] text-[#4a6cf7] dark:text-[#6b8aff] flex-shrink-0" />
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#4a6cf7] dark:text-[#6b8aff]">
+          Webhook URL
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <code
+          className="flex-1 text-[11px] font-mono text-[#333] dark:text-[#ccc]
+            bg-white dark:bg-[#141420]
+            border border-[#dce4f5] dark:border-[#30305a]
+            px-2.5 py-1.5 rounded-lg truncate"
+          title={url}
+        >
+          {url}
+        </code>
+        <button
+          type="button"
+          onClick={handleCopy}
+          title={copied ? "Copied!" : "Copy URL"}
+          className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
+            text-[#4a6cf7] dark:text-[#6b8aff]
+            hover:bg-[#e8edff] dark:hover:bg-[#252550]
+            transition-colors"
+        >
+          {copied
+            ? <TbCheck className="w-[14px] h-[14px] text-emerald-500" />
+            : <TbCopy className="w-[14px] h-[14px]" />
+          }
+        </button>
+      </div>
+      <p className="text-[11px] text-[#888] dark:text-[#555] leading-relaxed">
+        Send requests to this URL to trigger the workflow. The URL is fixed — no custom path is needed.
+      </p>
+    </div>
+  );
+};
+
 // ─── NodeConfigView ────────────────────────────────────────────────────────────
 // Shown when a React Flow node is selected.
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
 const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
   const removeNode       = useFuseStudioStore((s) => s.removeNode);
+  const { id: workflowId } = useParams();
   const Icon = getNodeIcon(nodeDef.icon);
+
+  const isWebhookStarter = node.data?.isStarter && node.data?.nodeType === "webhook";
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -335,7 +397,12 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
       </div>
 
       {/* Scrollable config form */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
+      <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
+        {/* Webhook URL — always shown for webhook starter nodes */}
+        {isWebhookStarter && (
+          <WebhookUrlDisplay workflowId={workflowId} />
+        )}
+
         {nodeDef.config_form ? (
           <FormBuilder
             configForm={nodeDef.config_form}

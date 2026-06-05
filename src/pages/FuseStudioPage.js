@@ -10,19 +10,38 @@ import {
   getWorkflowByIdAPI,
   updateWorkflowNameAPI,
   updateWorkflowGraphAPI,
-  updateWorkflowStatusAPI,
   getStarterNodesAPI,
   getActionNodesAPI,
+  activateWorkflowAPI,
+  deactivateWorkflowAPI,
 } from "../apis/fuse/queryFunctions";
+import CONFIG from "../config";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 
 /**
  * FuseStudioPage — the workflow builder canvas.
  *
- * All observable state lives in useFuseStudioStore.
- * useRef is used only for committedNameRef — a mutable anchor (not observable state)
- * that tracks the last successfully saved name for blur-comparison and error revert.
+ * All observable graph state lives in useFuseStudioStore.
+ * This page owns the async API calls and wires them into the store.
+ *
+ * Execution flow
+ * ──────────────
+ * Turn On  → activateWorkflowAPI  → backend compiles + starts execution
+ * Turn Off → deactivateWorkflowAPI → backend stops execution
+ * Recompile (active + dirty) → same as Turn On (activate endpoint handles it)
+ *
+ * Graph staleness
+ * ───────────────
+ * After activation the store tracks `isGraphDirty`.  Any structural graph
+ * change (add/remove node, connect/disconnect edge, update config) while the
+ * workflow is active sets `isGraphDirty = true`.  The header shows a
+ * "Recompile" button in this state.
+ *
+ * Graph auto-save
+ * ───────────────
+ * Debounced 1.5 s after every graph change.  Skipped during initial hydration.
+ * Auto-save does NOT recompile — the running execution is NOT updated.
  */
 export default function FuseStudioPage() {
   const { id } = useParams();
@@ -32,37 +51,52 @@ export default function FuseStudioPage() {
   const loading       = useFuseStudioStore((s) => s.loading);
   const saving        = useFuseStudioStore((s) => s.saving);
   const storeWorkflow = useFuseStudioStore((s) => s.workflow);
-  const starterNodes  = useFuseStudioStore((s) => s.starterNodes);
-  const actionNodes   = useFuseStudioStore((s) => s.actionNodes);
   const nodes         = useFuseStudioStore((s) => s.nodes);
   const edges         = useFuseStudioStore((s) => s.edges);
+  const compilationErrors = useFuseStudioStore((s) => s.compilationErrors);
+  const activating    = useFuseStudioStore((s) => s.activating);
+  const deactivating  = useFuseStudioStore((s) => s.deactivating);
+  const isGraphDirty  = useFuseStudioStore((s) => s.isGraphDirty);
 
-  // Header buttons and the "Add Node" panel are enabled only once a starter
-  // node (the workflow trigger) has been placed on the canvas.
+  // Enable header buttons only once a starter (trigger) node is on the canvas
   const hasStarterNode = nodes.some((n) => n.data?.isStarter === true);
 
-  // ── Store actions ────────────────────────────────────────────────────────
-  const setWorkflow     = useFuseStudioStore((s) => s.setWorkflow);
-  const setWorkflowName = useFuseStudioStore((s) => s.setWorkflowName);
-  const setLoading      = useFuseStudioStore((s) => s.setLoading);
-  const setSaving       = useFuseStudioStore((s) => s.setSaving);
-  const setStarterNodes    = useFuseStudioStore((s) => s.setStarterNodes);
-  const setLoadingNodes    = useFuseStudioStore((s) => s.setLoadingNodes);
-  const setActionNodes     = useFuseStudioStore((s) => s.setActionNodes);
-  const setLoadingActionNodes = useFuseStudioStore((s) => s.setLoadingActionNodes);
-  const setAddingNode      = useFuseStudioStore((s) => s.setAddingNode);
-  const setNodes           = useFuseStudioStore((s) => s.setNodes);
-  const setEdges           = useFuseStudioStore((s) => s.setEdges);
-  const resetStudio        = useFuseStudioStore((s) => s.resetStudio);
+  // Derive the workflow active status and webhook URL from store state
+  const isActive = storeWorkflow?.status === "active";
 
-  // Not observable state — just a mutable comparison anchor
+  const starterNode    = nodes.find((n) => n.data?.isStarter);
+  const isWebhookStart = starterNode?.data?.nodeType === "webhook";
+  const webhookUrl     = (isActive && isWebhookStart)
+    ? `${(CONFIG.API_BASE_URL || "").replace(/\/$/, "")}/fuse/webhook/${id}`
+    : null;
+
+  // ── Store actions ────────────────────────────────────────────────────────
+  const setWorkflow           = useFuseStudioStore((s) => s.setWorkflow);
+  const setWorkflowName       = useFuseStudioStore((s) => s.setWorkflowName);
+  const setLoading            = useFuseStudioStore((s) => s.setLoading);
+  const setSaving             = useFuseStudioStore((s) => s.setSaving);
+  const setStarterNodes       = useFuseStudioStore((s) => s.setStarterNodes);
+  const setLoadingNodes       = useFuseStudioStore((s) => s.setLoadingNodes);
+  const setActionNodes        = useFuseStudioStore((s) => s.setActionNodes);
+  const setLoadingActionNodes = useFuseStudioStore((s) => s.setLoadingActionNodes);
+  const setAddingNode         = useFuseStudioStore((s) => s.setAddingNode);
+  const setNodes              = useFuseStudioStore((s) => s.setNodes);
+  const setEdges              = useFuseStudioStore((s) => s.setEdges);
+  const resetStudio           = useFuseStudioStore((s) => s.resetStudio);
+  const setActivationSuccess  = useFuseStudioStore((s) => s.setActivationSuccess);
+  const setCompilationErrors  = useFuseStudioStore((s) => s.setCompilationErrors);
+  const setActivating         = useFuseStudioStore((s) => s.setActivating);
+  const setDeactivating       = useFuseStudioStore((s) => s.setDeactivating);
+  const initCompilationState  = useFuseStudioStore((s) => s.initCompilationState);
+  const clearCompilation      = useFuseStudioStore((s) => s.clearCompilation);
+
+  // Not observable state — mutable anchor to compare against for name autosave
   const committedNameRef = useRef("");
 
-  // ── Load workflow + starter nodes ────────────────────────────────────────
+  // ── Load workflow + node definitions ─────────────────────────────────────
   useEffect(() => {
     let cancelled = false;
 
-    // Fetch the workflow
     setLoading(true);
     getWorkflowByIdAPI(id)
       .then((wf) => {
@@ -71,15 +105,17 @@ export default function FuseStudioPage() {
         setWorkflowName(name);
         committedNameRef.current = name;
         setWorkflow(wf);
-        // Hydrate the React Flow graph from the saved workflow data.
         setNodes(wf.nodes ?? []);
         setEdges(wf.edges ?? []);
+        // Initialise compilation state so the header shows the correct status
+        // and the dirty-graph indicator is accurate on first load.
+        initCompilationState({
+          compiledAt: wf.compiled_at ?? null,
+        });
       })
       .catch(() => {})
       .finally(() => { if (!cancelled) setLoading(false); });
 
-    // Always fetch node definitions on each new workflow load so a fresh
-    // navigation never shows stale-empty listings from a prior resetStudio.
     setLoadingNodes(true);
     getStarterNodesAPI()
       .then((nodes) => { if (!cancelled) setStarterNodes(nodes); })
@@ -94,31 +130,25 @@ export default function FuseStudioPage() {
 
     return () => {
       cancelled = true;
-      resetStudio(); // clear workflow state on unmount; starterNodes are preserved
+      resetStudio();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-  // ↑ Intentionally omitting store actions (stable Zustand refs) and
-  //   starterNodes (checking .length inside avoids re-triggering on load).
 
-  // ── Auto-save graph (debounced) ─────────────────────────────────────────
-  // Saves the React Flow node/edge graph 1.5 s after the last change.
-  // Skipped while the workflow is still loading to avoid overwriting saved data
-  // with an empty graph on initial mount.
+  // ── Auto-save graph (debounced 1.5 s) ───────────────────────────────────
+  // Updates the DB record but does NOT recompile the running execution.
   const saveTimerRef = useRef(null);
   useEffect(() => {
-    if (loading) return;              // don't save during initial hydration
-    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    if (loading) return;
+    clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
-      updateWorkflowGraphAPI(id, nodes, edges).catch(() => {
-        // Silent failure — graph save errors should not surface as blocking UI.
-      });
+      updateWorkflowGraphAPI(id, nodes, edges).catch(() => {});
     }, 1500);
     return () => clearTimeout(saveTimerRef.current);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, edges]);
 
-  // ── Save name on blur ────────────────────────────────────────────────────
+  // ── Name autosave on blur ────────────────────────────────────────────────
   const handleNameBlur = async () => {
     const trimmed = workflowName.trim() || "Untitled Workflow";
     if (!workflowName.trim()) setWorkflowName("Untitled Workflow");
@@ -128,15 +158,44 @@ export default function FuseStudioPage() {
     try {
       await updateWorkflowNameAPI(id, trimmed);
       committedNameRef.current = trimmed;
-      // Sync the saved name back into the store's workflow object
       if (storeWorkflow) setWorkflow({ ...storeWorkflow, name: trimmed });
     } catch {
-      // Revert input to last known-good name
       setWorkflowName(committedNameRef.current);
     } finally {
       setSaving(false);
     }
   };
+
+  // ── Activate (Turn On / Recompile) ──────────────────────────────────────
+  const handleActivate = useCallback(async () => {
+    setActivating(true);
+    try {
+      const result = await activateWorkflowAPI(id);
+      // Update the workflow in the store so the status pill switches immediately
+      if (result.workflow) setWorkflow(result.workflow);
+      setActivationSuccess({ compiledAt: result.compiled_at });
+    } catch (err) {
+      // Backend returns { success: false, errors: [...] } on validation failure
+      const errData = err?.response?.data;
+      const errors  = errData?.errors ?? [errData?.error ?? "Compilation failed. Please try again."];
+      setCompilationErrors(errors);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  // ── Deactivate (Turn Off) ───────────────────────────────────────────────
+  const handleDeactivate = useCallback(async () => {
+    setDeactivating(true);
+    try {
+      const result = await deactivateWorkflowAPI(id);
+      if (result.workflow) setWorkflow(result.workflow);
+      clearCompilation();
+    } catch {
+      // Optimistically clear deactivating flag; workflow remains active
+      setDeactivating(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const { creating, handleCreate } = useCreateWorkflow();
 
@@ -149,15 +208,16 @@ export default function FuseStudioPage() {
         saving={saving}
         hasNodes={hasStarterNode}
         onAddNode={() => setAddingNode(true)}
-        onTurnOn={async () => {
-            const currentStatus = storeWorkflow?.status ?? "inactive";
-            const next = currentStatus === "active" ? "inactive" : "active";
-            try {
-              const updated = await updateWorkflowStatusAPI(id, next);
-              setWorkflow(updated);
-            } catch { /* silent */ }
-          }}
+        onActivate={handleActivate}
+        onDeactivate={handleDeactivate}
+        isActive={isActive}
+        isGraphDirty={isGraphDirty}
+        activating={activating}
+        deactivating={deactivating}
+        compilationErrors={compilationErrors}
+        webhookUrl={webhookUrl}
       />
+
       <div className="flex-1 flex overflow-hidden">
         <FuseStudioSidebar creating={creating} onCreate={handleCreate} />
         <div
@@ -166,10 +226,7 @@ export default function FuseStudioPage() {
             border border-[#e5e5e5] dark:border-[#252525]
             shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
-          {/* Left — node graph canvas */}
           <WorkflowCanvas className="flex-1" />
-
-          {/* Right — starter node picker or selected node config */}
           <NodeConfigPanel
             className="flex-1 rounded-xl max-w-[550px]
               bg-white dark:bg-[#212121]

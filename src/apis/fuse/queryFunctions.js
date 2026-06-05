@@ -90,3 +90,28 @@ export const getActionNodesAPI = async () => {
   const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_ACTIONS });
   return res.data;
 };
+
+// ─── Execution control ────────────────────────────────────────────────────────
+
+/**
+ * POST /fuse/workflows/:id/activate
+ * Compile the current graph and start execution.
+ * Returns { success, workflow, compiled_at, graph_hash, webhook_url }.
+ * Throws (with response.data.errors array) on validation failure.
+ * @param {string} id
+ */
+export const activateWorkflowAPI = async (id) => {
+  const res = await api({ method: "POST", url: ENDPOINTS.FUSE_WORKFLOW_ACTIVATE(id) });
+  return res.data;
+};
+
+/**
+ * POST /fuse/workflows/:id/deactivate
+ * Stop the workflow execution and set status to inactive.
+ * Returns { success, workflow }.
+ * @param {string} id
+ */
+export const deactivateWorkflowAPI = async (id) => {
+  const res = await api({ method: "POST", url: ENDPOINTS.FUSE_WORKFLOW_DEACTIVATE(id) });
+  return res.data;
+};

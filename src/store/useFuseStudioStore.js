@@ -61,6 +61,22 @@ const useFuseStudioStore = create((set) => ({
   // --- Selection ---
   selectedNode: null,
 
+  // --- Compilation / execution state ---
+  /** ISO-8601 timestamp of the last successful compilation, or null if never activated. */
+  compiledAt: null,
+  /** Validation errors from the most recent failed activation attempt. Cleared on success. */
+  compilationErrors: [],
+  /** True while an activate or deactivate API call is in-flight. */
+  activating: false,
+  /** True specifically while a deactivate call is in-flight (shows "Stopping…" vs "Compiling…"). */
+  deactivating: false,
+  /**
+   * True when the live graph (nodes/edges) differs structurally from what was
+   * last compiled.  Reset to false after every successful activation.
+   * Set to true on any structural graph change while the workflow is active.
+   */
+  isGraphDirty: false,
+
   // --- Metadata actions ---
   setWorkflow:     (workflow) => set({ workflow }),
   setWorkflowName: (name)     => set({ workflowName: name }),
@@ -71,6 +87,31 @@ const useFuseStudioStore = create((set) => ({
   setActionNodes: (nodes)     => set({ actionNodes: nodes }),
   setLoadingActionNodes: (v)  => set({ loadingActionNodes: v }),
   setAddingNode: (v)          => set({ addingNode: v }),
+
+  // --- Compilation / execution state actions ---
+  /** Call after a successful activation.  Clears errors and dirty flag. */
+  setActivationSuccess: ({ compiledAt }) =>
+    set({ compiledAt, compilationErrors: [], activating: false, isGraphDirty: false }),
+  /** Call when activation fails with validation errors. */
+  setCompilationErrors: (errors) =>
+    set({ compilationErrors: errors, activating: false }),
+  /** Mark in-flight activation/deactivation. */
+  setActivating:   (v) => set({ activating: v }),
+  setDeactivating: (v) => set({ deactivating: v }),
+  /**
+   * Initialise compilation state from the workflow document loaded from the API.
+   * Called once on page load so the UI reflects any prior activation state.
+   */
+  initCompilationState: ({ compiledAt }) =>
+    set({
+      compiledAt,
+      compilationErrors: [],
+      // Always start clean — dirty is only set by explicit edits in this session.
+      isGraphDirty: false,
+    }),
+  /** Clear compilation state (e.g. after deactivation). */
+  clearCompilation: () =>
+    set({ compiledAt: null, compilationErrors: [], isGraphDirty: false, activating: false, deactivating: false }),
 
   // --- Graph load (called once on API response) ---
   setNodes: (nodes) => set({ nodes }),
@@ -83,7 +124,15 @@ const useFuseStudioStore = create((set) => ({
 
   /** Wire directly to ReactFlow onEdgesChange. */
   onEdgesChange: (changes) =>
-    set((state) => ({ edges: applyEdgeChanges(changes, state.edges) })),
+    set((state) => {
+      const hasStructural = changes.some((c) => c.type === "remove" || c.type === "add");
+      return {
+        edges: applyEdgeChanges(changes, state.edges),
+        isGraphDirty:
+          state.isGraphDirty ||
+          (hasStructural && state.compiledAt !== null && !state.loading),
+      };
+    }),
 
   /**
    * Wire directly to ReactFlow onConnect.
@@ -109,13 +158,17 @@ const useFuseStudioStore = create((set) => ({
           { ...connection, id: `edge_${Date.now()}` },
           state.edges
         ),
+        isGraphDirty: state.compiledAt !== null,
       };
     }),
 
   // --- Graph mutation helpers ---
   /** Append a fully-formed React Flow node to the canvas. */
   addFlowNode: (node) =>
-    set((state) => ({ nodes: [...state.nodes, node] })),
+    set((state) => ({
+      nodes: [...state.nodes, node],
+      isGraphDirty: state.compiledAt !== null,
+    })),
 
   /**
    * Update the config values stored inside a node's data.
@@ -130,7 +183,7 @@ const useFuseStudioStore = create((set) => ({
         state.selectedNode?.id === nodeId
           ? { ...state.selectedNode, data: { ...state.selectedNode.data, config } }
           : state.selectedNode;
-      return { nodes, selectedNode };
+      return { nodes, selectedNode, isGraphDirty: state.compiledAt !== null };
     }),
 
   /**
@@ -145,6 +198,7 @@ const useFuseStudioStore = create((set) => ({
       ),
       selectedNode:
         state.selectedNode?.id === nodeId ? null : state.selectedNode,
+      isGraphDirty: state.compiledAt !== null,
     })),
 
   // --- Selection ---
@@ -168,6 +222,12 @@ const useFuseStudioStore = create((set) => ({
       loadingNodes: false,
       actionNodes: [],
       loadingActionNodes: false,
+      // Compilation state
+      compiledAt: null,
+      compilationErrors: [],
+      activating: false,
+      deactivating: false,
+      isGraphDirty: false,
     }),
 }));
 
