@@ -3,6 +3,7 @@ import { TbPlus } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { WorkflowsTable, FusePrimaryButton } from "../components/Fuse";
+import ConfirmDialog from "../components/Common/ConfirmDialog";
 import {
   getWorkflowsAPI,
   deleteWorkflowAPI,
@@ -54,6 +55,7 @@ export default function FusePage() {
   const [workflows, setWorkflows] = useState([]);
   const [loading, setLoading]     = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null); // workflow pending confirmation
 
   useEffect(() => {
     let cancelled = false;
@@ -68,17 +70,37 @@ export default function FusePage() {
   /* -- Handlers -- */
   const handleEdit = (wf) => navigate(ROUTES.GET_FUSE_STUDIO_URL(wf.id));
 
-  const handleDelete = async (wf) => {
-    if (!window.confirm(`Delete workflow "${wf.name}"?`)) return;
-    setDeletingId(wf.id);
-    await deleteWorkflowAPI(wf.id);
-    setWorkflows((prev) => prev.filter((w) => w.id !== wf.id));
-    setDeletingId(null);
+  // Step 1: open the confirmation dialog.
+  const handleDelete = (wf) => setDeleteTarget(wf);
+
+  // Step 2: user confirmed — perform the actual delete.
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    setDeletingId(deleteTarget.id);
+    try {
+      await deleteWorkflowAPI(deleteTarget.id);
+      setWorkflows((prev) => prev.filter((w) => w.id !== deleteTarget.id));
+    } finally {
+      setDeletingId(null);
+      setDeleteTarget(null);
+    }
   };
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
       <Header type="fuse" />
+
+      {/* Confirmation dialog — rendered at root level so it overlays everything */}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete workflow"
+        message={`"${deleteTarget?.name}" will be permanently deleted. This action cannot be undone.`}
+        confirmLabel="Delete"
+        variant="danger"
+        loading={!!deletingId}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-[860px] mx-auto px-6 py-10">
 

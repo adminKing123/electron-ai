@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   FuseStudioHeader,
@@ -9,6 +9,8 @@ import {
 import {
   getWorkflowByIdAPI,
   updateWorkflowNameAPI,
+  updateWorkflowGraphAPI,
+  updateWorkflowStatusAPI,
   getStarterNodesAPI,
   getActionNodesAPI,
 } from "../apis/fuse/queryFunctions";
@@ -33,6 +35,7 @@ export default function FuseStudioPage() {
   const starterNodes  = useFuseStudioStore((s) => s.starterNodes);
   const actionNodes   = useFuseStudioStore((s) => s.actionNodes);
   const nodes         = useFuseStudioStore((s) => s.nodes);
+  const edges         = useFuseStudioStore((s) => s.edges);
 
   // Header buttons and the "Add Node" panel are enabled only once a starter
   // node (the workflow trigger) has been placed on the canvas.
@@ -98,6 +101,23 @@ export default function FuseStudioPage() {
   // ↑ Intentionally omitting store actions (stable Zustand refs) and
   //   starterNodes (checking .length inside avoids re-triggering on load).
 
+  // ── Auto-save graph (debounced) ─────────────────────────────────────────
+  // Saves the React Flow node/edge graph 1.5 s after the last change.
+  // Skipped while the workflow is still loading to avoid overwriting saved data
+  // with an empty graph on initial mount.
+  const saveTimerRef = useRef(null);
+  useEffect(() => {
+    if (loading) return;              // don't save during initial hydration
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      updateWorkflowGraphAPI(id, nodes, edges).catch(() => {
+        // Silent failure — graph save errors should not surface as blocking UI.
+      });
+    }, 1500);
+    return () => clearTimeout(saveTimerRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodes, edges]);
+
   // ── Save name on blur ────────────────────────────────────────────────────
   const handleNameBlur = async () => {
     const trimmed = workflowName.trim() || "Untitled Workflow";
@@ -129,7 +149,14 @@ export default function FuseStudioPage() {
         saving={saving}
         hasNodes={hasStarterNode}
         onAddNode={() => setAddingNode(true)}
-        onTurnOn={() => { /* TODO: toggle workflow active status */ }}
+        onTurnOn={async () => {
+            const currentStatus = storeWorkflow?.status ?? "inactive";
+            const next = currentStatus === "active" ? "inactive" : "active";
+            try {
+              const updated = await updateWorkflowStatusAPI(id, next);
+              setWorkflow(updated);
+            } catch { /* silent */ }
+          }}
       />
       <div className="flex-1 flex overflow-hidden">
         <FuseStudioSidebar creating={creating} onCreate={handleCreate} />

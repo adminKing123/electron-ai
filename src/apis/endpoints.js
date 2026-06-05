@@ -32,6 +32,15 @@ const ENDPOINTS = {
   GET_CONFIG: "/get-config",
 
   TTS_SPEAK: "/tts/speak",
+
+  // ── Fuse Workflows ──────────────────────────────────────────────────────────
+  FUSE_WORKFLOWS:            "/fuse/workflows",
+  FUSE_WORKFLOW:             (id) => `/fuse/workflows/${id}`,
+  FUSE_WORKFLOW_NAME:        (id) => `/fuse/workflows/${id}/name`,
+  FUSE_WORKFLOW_GRAPH:       (id) => `/fuse/workflows/${id}/graph`,
+  FUSE_WORKFLOW_STATUS:      (id) => `/fuse/workflows/${id}/status`,
+  FUSE_NODES_STARTER:        "/fuse/nodes/starter",
+  FUSE_NODES_ACTIONS:        "/fuse/nodes/actions",
 };
 
 export default ENDPOINTS;

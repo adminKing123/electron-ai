@@ -61,8 +61,8 @@ const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => (
     <td className={TD}>
       <StatusBadge status={workflow.status} />
     </td>
-    <td className={TD}>{fmtDate(workflow.createdAt)}</td>
-    <td className={TD}>{fmtDate(workflow.updatedAt)}</td>
+    <td className={TD}>{fmtDate(workflow.created_at)}</td>
+    <td className={TD}>{fmtDate(workflow.updated_at)}</td>
     <td className={`${TD} text-right`}>
       <div className="flex items-center justify-end gap-0.5">
         <ActionBtn
