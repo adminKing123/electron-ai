@@ -48,6 +48,15 @@ const ENDPOINTS = {
   FUSE_PUSH_VAPID_KEY:          "/fuse/push/vapid-public-key",
   FUSE_PUSH_SUBSCRIBE:          "/fuse/push/subscribe",
   FUSE_PUSH_UNSUBSCRIBE:        "/fuse/push/unsubscribe",
+
+  // ── Fuse Runs & Logs ────────────────────────────────────────────────────────
+  FUSE_WORKFLOW_RUNS:   (id) => `/fuse/workflows/${id}/runs`,
+  FUSE_RUN:             (runId) => `/fuse/runs/${runId}`,
+  FUSE_RUN_LOGS:        (runId) => `/fuse/runs/${runId}/logs`,
+
+  // ── Fuse Compiled Versions ───────────────────────────────────────────────────
+  FUSE_WORKFLOW_VERSIONS: (id) => `/fuse/workflows/${id}/versions`,
+  FUSE_VERSION:           (versionId) => `/fuse/versions/${versionId}`,
 };
 
 export default ENDPOINTS;

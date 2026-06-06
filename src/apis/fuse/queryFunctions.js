@@ -9,10 +9,13 @@ import ENDPOINTS from "../endpoints";
 
 // ─── Workflows ────────────────────────────────────────────────────────────────
 
-/** GET /fuse/workflows — returns all workflows for the current user. */
-export const getWorkflowsAPI = async () => {
-  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_WORKFLOWS });
-  return res.data;
+/** GET /fuse/workflows — returns a paginated page of workflows for the current user.
+ * @param {{ limit?: number, after_created_at?: string, after_id?: string }} params
+ * @returns {{ items: object[], next_cursor: object|null }}
+ */
+export const getWorkflowsAPI = async (params = {}) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_WORKFLOWS, params });
+  return res.data; // { items, next_cursor }
 };
 
 /**
@@ -147,5 +150,62 @@ export const pushUnsubscribeAPI = async (endpoint) => {
     url: ENDPOINTS.FUSE_PUSH_UNSUBSCRIBE,
     data: { endpoint },
   });
+  return res.data;
+};
+
+// ─── Runs ──────────────────────────────────────────────────────────────────────
+
+/**
+ * GET /fuse/workflows/:id/runs — returns a paginated page of runs for a workflow.
+ * @param {string} workflowId
+ * @param {{ limit?: number, after_started_at?: string, after_run_id?: string }} params
+ * @returns {{ items: object[], next_cursor: object|null }}
+ */
+export const getWorkflowRunsAPI = async (workflowId, params = {}) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_WORKFLOW_RUNS(workflowId),
+    params,
+  });
+  return res.data; // { items, next_cursor }
+};
+
+/**
+ * GET /fuse/runs/:runId — fetch a single run document.
+ * @param {string} runId
+ */
+export const getRunAPI = async (runId) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_RUN(runId) });
+  return res.data;
+};
+
+/**
+ * GET /fuse/runs/:runId/logs — fetch a paginated page of node logs for a run.
+ * @param {string} runId
+ * @param {{ limit?: number, after_started_at?: string, after_log_id?: string }} params
+ * @returns {{ items: object[], next_cursor: object|null }}
+ */
+export const getRunLogsAPI = async (runId, params = {}) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_RUN_LOGS(runId), params });
+  return res.data; // { items, next_cursor }
+};
+
+// ─── Versions ──────────────────────────────────────────────────────────────────
+
+/**
+ * GET /fuse/workflows/:id/versions — list compiled graph versions (slim, no graph body).
+ * @param {string} workflowId
+ */
+export const getWorkflowVersionsAPI = async (workflowId) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_WORKFLOW_VERSIONS(workflowId) });
+  return res.data;
+};
+
+/**
+ * GET /fuse/versions/:versionId — fetch a single version including the full compiled_graph.
+ * @param {string} versionId
+ */
+export const getVersionAPI = async (versionId) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_VERSION(versionId) });
   return res.data;
 };

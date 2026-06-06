@@ -190,6 +190,7 @@ export default function FuseStudioPage() {
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
       <FuseStudioHeader
         name={loading ? "" : workflowName}
+        workflowId={id}
         onNameChange={setWorkflowName}
         onNameBlur={handleNameBlur}
         saving={saving}

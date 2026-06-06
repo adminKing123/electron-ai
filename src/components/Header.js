@@ -14,11 +14,11 @@ const iconBtnCls =
   "hover:bg-[#ebebeb] dark:hover:bg-[#222] " +
   "transition-colors";
 
-const BackButton = () => {
+const BackButton = ({ route = "" }) => {
   const navigate = useNavigate();
 
   return (
-    <button onClick={() => navigate(-1)} className={iconBtnCls}>
+    <button onClick={() => navigate(route ? route : -1)} className={iconBtnCls}>
       <IoChevronBackOutline className="w-[18px] h-[18px]" />
     </button>
   );
@@ -40,10 +40,10 @@ const SidebarOpenButton = () => {
 /** Page-specific header labels — keyed by `type`. Falls back to "AURA". */
 const PAGE_LABELS = {
   "aura-rj": "Aura RJ",
-  "fuse": "Fuse",
+  fuse: "Fuse",
 };
 
-const Header = ({ type }) => {
+const Header = ({ type, backRoute = "" }) => {
   const isStandalone = type === "aura-rj" || type === "fuse";
   const label = PAGE_LABELS[type] ?? "AURA";
 
@@ -53,7 +53,7 @@ const Header = ({ type }) => {
       className="h-[56px] w-full flex items-center justify-between gap-2 px-3 border-b border-[#ebebeb] dark:border-[#1e1e1e]"
     >
       <div className="flex items-center gap-1.5">
-        {isStandalone ? <BackButton /> : <SidebarOpenButton />}
+        {isStandalone ? <BackButton route={backRoute} /> : <SidebarOpenButton />}
         <span className="text-[14px] font-semibold tracking-tight text-[#111] dark:text-white select-none">
           {label}
         </span>

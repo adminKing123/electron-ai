@@ -11,8 +11,8 @@ const fmtDate = (iso) =>
   });
 
 const TH =
-  "px-5 py-3.5 text-left text-[11px] font-semibold text-[#aaa] dark:text-[#555] uppercase tracking-widest whitespace-nowrap";
-const TD = "px-5 py-4 text-[13px] text-[#555] dark:text-[#999] whitespace-nowrap";
+  "px-3 sm:px-5 py-3.5 text-left text-[11px] font-semibold text-[#aaa] dark:text-[#555] uppercase tracking-widest whitespace-nowrap";
+const TD = "px-3 sm:px-5 py-4 text-[13px] text-[#555] dark:text-[#999] whitespace-nowrap";
 
 const ActionBtn = ({ icon: Icon, title, onClick, disabled, hoverCls }) => (
   <button
@@ -55,14 +55,14 @@ const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => (
       hover:bg-[#fafafa] dark:hover:bg-[#1a1a1a]
       ${!isLast ? "border-b border-[#f0f0f0] dark:border-[#1d1d1d]" : ""}`}
   >
-    <td className={`${TD} font-medium text-[#111] dark:text-white`}>
+    <td className={`${TD} font-medium text-[#111] dark:text-white max-w-[140px] sm:max-w-none truncate`}>
       {workflow.name}
     </td>
     <td className={TD}>
       <StatusBadge status={workflow.status} />
     </td>
-    <td className={TD}>{fmtDate(workflow.created_at)}</td>
-    <td className={TD}>{fmtDate(workflow.updated_at)}</td>
+    <td className={`${TD} hidden sm:table-cell`}>{fmtDate(workflow.created_at)}</td>
+    <td className={`${TD} hidden sm:table-cell`}>{fmtDate(workflow.updated_at)}</td>
     <td className={`${TD} text-right`}>
       <div className="flex items-center justify-end gap-0.5">
         <ActionBtn
@@ -84,14 +84,14 @@ const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => (
 );
 
 const WorkflowsTable = ({ workflows, deletingId, onEdit, onDelete }) => (
-  <div className="rounded-2xl border border-[#ebebeb] dark:border-[#232323] overflow-hidden bg-white dark:bg-[#1a1a1a]">
-    <table className="w-full border-collapse">
+  <div className="overflow-x-auto rounded-2xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#1a1a1a]">
+    <table className="w-full min-w-[320px] border-collapse">
       <thead>
         <tr className="border-b border-[#ebebeb] dark:border-[#232323] bg-[#fafafa] dark:bg-[#161616]">
           <th className={TH}>Name</th>
           <th className={TH}>Status</th>
-          <th className={TH}>Created At</th>
-          <th className={TH}>Updated At</th>
+          <th className={`${TH} hidden sm:table-cell`}>Created At</th>
+          <th className={`${TH} hidden sm:table-cell`}>Updated At</th>
           <th className={`${TH} text-right`}></th>
         </tr>
       </thead>

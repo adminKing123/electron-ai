@@ -10,9 +10,9 @@
  */
 
 import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { IoChevronBackOutline } from "react-icons/io5";
-import { TbPlus, TbPower, TbRefresh, TbAlertCircle, TbX } from "react-icons/tb";
+import { TbPlus, TbPower, TbRefresh, TbAlertCircle, TbX, TbActivity } from "react-icons/tb";
 import HeaderUserProfile from "../HeaderUserProfile";
 import ROUTES from "../../router/routes";
 
@@ -310,13 +310,14 @@ export const CanvasActionBar = ({
 
 const FuseStudioHeader = ({
   name,
+  workflowId,
   onNameChange,
   onNameBlur,
   saving = false,
 }) => (
   <header id="fuse-studio-header" className="w-full flex-shrink-0">
     <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
-      {/* Left: back button + workflow name + optional webhook URL */}
+      {/* Left: back button + workflow name */}
       <div className="flex items-center gap-1.5 min-w-0 flex-1">
         <BackButton />
         <WorkflowNameInput
@@ -325,11 +326,26 @@ const FuseStudioHeader = ({
           onBlur={onNameBlur}
           saving={saving}
         />
-
       </div>
 
-      {/* Right: user profile */}
-      <HeaderUserProfile />
+      {/* Right: runs link + user profile */}
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        {workflowId && (
+          <Link
+            to={ROUTES.GET_FUSE_RUNS_URL(workflowId)}
+            title="View run history"
+            className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-medium
+              text-[#888] dark:text-[#555]
+              hover:text-[#333] dark:hover:text-[#ccc]
+              hover:bg-[#ebebeb] dark:hover:bg-[#222]
+              transition-colors"
+          >
+            <TbActivity className="w-[14px] h-[14px]" />
+            Runs
+          </Link>
+        )}
+        <HeaderUserProfile />
+      </div>
     </div>
   </header>
 );

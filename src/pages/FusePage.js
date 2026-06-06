@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { TbPlus } from "react-icons/tb";
+import React, { useState, useEffect, useCallback } from "react";
+import { TbPlus, TbChevronLeft, TbChevronRight } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { WorkflowsTable, FusePrimaryButton } from "../components/Fuse";
@@ -11,15 +11,15 @@ import {
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import ROUTES from "../router/routes";
 
-const WorkflowsHeading = ({ count, loading, creating, onCreate }) => (
-  <div className="flex items-end justify-between mb-7">
+/* Number of workflows fetched per page from the API. */
+const PAGE_SIZE = 20;
+
+const WorkflowsHeading = ({ loading, creating, onCreate }) => (
+  <div className="flex items-end justify-between mb-5 sm:mb-7">
     <div>
-      <h2 className="text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight">
+      <h2 className="text-[19px] sm:text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight">
         Workflows
       </h2>
-      <p className="text-xs text-[#aaa] dark:text-[#555] mt-1">
-        {loading ? "…" : `${count} workflow${count !== 1 ? "s" : ""}`}
-      </p>
     </div>
 
     <FusePrimaryButton
@@ -37,13 +37,14 @@ const WorkflowsSkeletonLoader = () => (
     {[...Array(3)].map((_, i) => (
       <div
         key={i}
-        className={`flex items-center gap-4 px-5 py-4
+        className={`flex items-center gap-3 px-3 sm:px-5 py-4
           ${i !== 2 ? "border-b border-[#f0f0f0] dark:border-[#1d1d1d]" : ""}`}
       >
-        <div className="w-1.5 h-1.5 rounded-full bg-[#e5e5e5] dark:bg-[#2a2a2a]" />
-        <div className="h-3 w-40 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
-        <div className="h-3 w-28 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto" />
-        <div className="h-3 w-28 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[#e5e5e5] dark:bg-[#2a2a2a] flex-shrink-0" />
+        <div className="h-3 w-32 sm:w-40 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
+        <div className="h-3 w-16 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto hidden sm:block" />
+        <div className="h-5 w-16 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
+        <div className="h-3 w-14 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
       </div>
     ))}
   </div>
@@ -52,34 +53,66 @@ const WorkflowsSkeletonLoader = () => (
 export default function FusePage() {
   const navigate = useNavigate();
   const { creating, handleCreate } = useCreateWorkflow();
-  const [workflows, setWorkflows] = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [deletingId, setDeletingId] = useState(null);
-  const [deleteTarget, setDeleteTarget] = useState(null); // workflow pending confirmation
 
-  useEffect(() => {
-    let cancelled = false;
+  // Each page is fetched independently; cursors stored per page index.
+  const [workflows,    setWorkflows]    = useState([]);
+  const [loading,      setLoading]      = useState(true);
+  const [deletingId,   setDeletingId]   = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  // Cursor-based pagination state
+  const [page,        setPage]        = useState(0);    // current 0-based page
+  const [cursors,     setCursors]     = useState([null]); // cursors[i] = next_cursor to fetch page i
+  const [hasNextPage, setHasNextPage] = useState(false);
+
+  const fetchPage = useCallback(async (pageIndex, cursorList) => {
     setLoading(true);
-    getWorkflowsAPI()
-      .then((data) => { if (!cancelled) setWorkflows(data); })
-      .catch(() => {})
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+    const cursor = cursorList[pageIndex]; // null for page 0
+    const params = { limit: PAGE_SIZE };
+    if (cursor) {
+      params.after_created_at = cursor.after_created_at;
+      params.after_id         = cursor.after_id;
+    }
+    try {
+      const { items, next_cursor } = await getWorkflowsAPI(params);
+      setWorkflows(items ?? []);
+      setHasNextPage(!!next_cursor);
+      // Store the cursor for the NEXT page if we don't have it yet
+      if (next_cursor) {
+        setCursors((prev) => {
+          const updated = [...prev];
+          updated[pageIndex + 1] = next_cursor;
+          return updated;
+        });
+      }
+    } catch {
+      setWorkflows([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // Fetch whenever the page index changes
+  useEffect(() => {
+    fetchPage(page, cursors);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
 
   /* -- Handlers -- */
   const handleEdit = (wf) => navigate(ROUTES.GET_FUSE_STUDIO_URL(wf.id));
-
-  // Step 1: open the confirmation dialog.
   const handleDelete = (wf) => setDeleteTarget(wf);
 
-  // Step 2: user confirmed — perform the actual delete.
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
     setDeletingId(deleteTarget.id);
     try {
       await deleteWorkflowAPI(deleteTarget.id);
-      setWorkflows((prev) => prev.filter((w) => w.id !== deleteTarget.id));
+      // Refresh current page after delete
+      fetchPage(page, cursors);
     } finally {
       setDeletingId(null);
       setDeleteTarget(null);
@@ -88,7 +121,7 @@ export default function FusePage() {
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
-      <Header type="fuse" />
+      <Header type="fuse" backRoute={ROUTES.LIBRARY} />
 
       {/* Confirmation dialog — rendered at root level so it overlays everything */}
       <ConfirmDialog
@@ -102,10 +135,9 @@ export default function FusePage() {
         onCancel={() => setDeleteTarget(null)}
       />
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-[860px] mx-auto px-6 py-10">
+        <div className="max-w-[860px] mx-auto px-3 py-6 sm:px-6 sm:py-10">
 
           <WorkflowsHeading
-            count={workflows.length}
             loading={loading}
             creating={creating}
             onCreate={handleCreate}
@@ -114,12 +146,43 @@ export default function FusePage() {
           {loading ? (
             <WorkflowsSkeletonLoader />
           ) : (
-            <WorkflowsTable
-              workflows={workflows}
-              deletingId={deletingId}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            <>
+              <WorkflowsTable
+                workflows={workflows}
+                deletingId={deletingId}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+              {/* Prev / Next — Firestore cursor pagination has no total count */}
+              {(page > 0 || hasNextPage) && (
+                <div className="mt-4 flex items-center justify-end gap-1">
+                  <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 0}
+                    title="Previous page"
+                    className="w-8 h-8 flex items-center justify-center rounded-lg
+                      text-[#888] dark:text-[#555]
+                      hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a]
+                      hover:text-[#111] dark:hover:text-white
+                      disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <TbChevronLeft className="w-[16px] h-[16px]" />
+                  </button>
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={!hasNextPage}
+                    title="Next page"
+                    className="w-8 h-8 flex items-center justify-center rounded-lg
+                      text-[#888] dark:text-[#555]
+                      hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a]
+                      hover:text-[#111] dark:hover:text-white
+                      disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <TbChevronRight className="w-[16px] h-[16px]" />
+                  </button>
+                </div>
+              )}
+            </>
           )}
 
         </div>
