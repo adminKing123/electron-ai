@@ -11,6 +11,7 @@ import "@xyflow/react/dist/style.css";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import useIsDark from "../../hooks/useIsDark";
 import { getNodeIcon } from "./iconRegistry";
+import { BasicLoader } from "../Loaders";
 
 // ─── FuseFlowNode ─────────────────────────────────────────────────────────────
 // Custom React Flow node rendered for every node in the Fuse canvas.
@@ -188,6 +189,7 @@ const WorkflowCanvas = ({ className = "" }) => {
   const clearSelected = useFuseStudioStore((s) => s.clearSelectedNode);
   const addFlowNode   = useFuseStudioStore((s) => s.addFlowNode);
   const setAddingNode = useFuseStudioStore((s) => s.setAddingNode);
+  const loading       = useFuseStudioStore((s) => s.loading);
   const isDark        = useIsDark();
 
   // Capture the ReactFlow instance on mount so we can call screenToFlowPosition
@@ -280,7 +282,11 @@ const WorkflowCanvas = ({ className = "" }) => {
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
-      {nodes.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center h-full text-[#c0c0c0] dark:text-[#3a3a3a]">
+          <BasicLoader />
+        </div>
+      ) : nodes.length === 0 ? (
         // ── Empty state ───────────────────────────────────────────────────
         // Rendered when no nodes have been placed yet.
         // Drag-and-drop from the starter panel still works here.
