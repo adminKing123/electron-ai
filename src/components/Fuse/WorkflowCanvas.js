@@ -3,7 +3,6 @@ import {
   ReactFlow,
   Background,
   Controls,
-  MiniMap,
   Handle,
   Position,
   BackgroundVariant,
@@ -326,13 +325,6 @@ const WorkflowCanvas = ({ className = "" }) => {
         <Controls
           showInteractive={false}
           className="!shadow-none !border !border-[#e5e5e5] dark:!border-[#2a2a2a] !rounded-xl !overflow-hidden"
-        />
-        <MiniMap
-          nodeColor={isDark ? "#252540" : "#eef0fb"}
-          maskColor={isDark ? "rgba(26,26,26,0.7)" : "rgba(247,247,247,0.7)"}
-          className="!border !border-[#e5e5e5] dark:!border-[#2a2a2a] !rounded-xl !overflow-hidden !shadow-none"
-          zoomable
-          pannable
         />
       </ReactFlow>
       )}

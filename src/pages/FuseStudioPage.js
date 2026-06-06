@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   FuseStudioHeader,
+  CanvasActionBar,
   FuseStudioSidebar,
   WorkflowCanvas,
   NodeConfigPanel,
@@ -29,14 +30,7 @@ import useFuseStudioStore from "../store/useFuseStudioStore";
  * ──────────────
  * Turn On  → activateWorkflowAPI  → backend compiles + starts execution
  * Turn Off → deactivateWorkflowAPI → backend stops execution
- * Recompile (active + dirty) → same as Turn On (activate endpoint handles it)
- *
- * Graph staleness
- * ───────────────
- * After activation the store tracks `isGraphDirty`.  Any structural graph
- * change (add/remove node, connect/disconnect edge, update config) while the
- * workflow is active sets `isGraphDirty = true`.  The header shows a
- * "Recompile" button in this state.
+ * Recompile (Save Changes) → same as Turn On (activate endpoint handles it)
  *
  * Graph auto-save
  * ───────────────
@@ -56,19 +50,12 @@ export default function FuseStudioPage() {
   const compilationErrors = useFuseStudioStore((s) => s.compilationErrors);
   const activating    = useFuseStudioStore((s) => s.activating);
   const deactivating  = useFuseStudioStore((s) => s.deactivating);
-  const isGraphDirty  = useFuseStudioStore((s) => s.isGraphDirty);
 
   // Enable header buttons only once a starter (trigger) node is on the canvas
   const hasStarterNode = nodes.some((n) => n.data?.isStarter === true);
 
   // Derive the workflow active status and webhook URL from store state
   const isActive = storeWorkflow?.status === "active";
-
-  const starterNode    = nodes.find((n) => n.data?.isStarter);
-  const isWebhookStart = starterNode?.data?.nodeType === "webhook";
-  const webhookUrl     = (isActive && isWebhookStart)
-    ? `${(CONFIG.API_BASE_URL || "").replace(/\/$/, "")}/fuse/webhook/${id}`
-    : null;
 
   // ── Store actions ────────────────────────────────────────────────────────
   const setWorkflow           = useFuseStudioStore((s) => s.setWorkflow);
@@ -206,27 +193,30 @@ export default function FuseStudioPage() {
         onNameChange={setWorkflowName}
         onNameBlur={handleNameBlur}
         saving={saving}
-        hasNodes={hasStarterNode}
-        onAddNode={() => setAddingNode(true)}
-        onActivate={handleActivate}
-        onDeactivate={handleDeactivate}
-        isActive={isActive}
-        isGraphDirty={isGraphDirty}
-        activating={activating}
-        deactivating={deactivating}
-        compilationErrors={compilationErrors}
-        webhookUrl={webhookUrl}
       />
 
       <div className="flex-1 flex overflow-hidden">
         <FuseStudioSidebar creating={creating} onCreate={handleCreate} />
         <div
-          className="flex-1 flex gap-2.5 rounded-xl p-4 mb-3 mr-3
+          className="relative flex-1 flex gap-2.5 rounded-xl p-4 mb-3 mr-3
             bg-[#f7f7f7] dark:bg-[#1a1a1a]
             border border-[#e5e5e5] dark:border-[#252525]
             shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
-          <WorkflowCanvas className="flex-1" />
+          {/* Canvas — relative container so CanvasActionBar centers within it only */}
+          <div className="relative flex-1 min-w-0">
+            <WorkflowCanvas className="h-full" />
+            <CanvasActionBar
+              hasNodes={hasStarterNode}
+              isActive={isActive}
+              activating={activating}
+              deactivating={deactivating}
+              compilationErrors={compilationErrors}
+              onAddNode={() => setAddingNode(true)}
+              onActivate={handleActivate}
+              onDeactivate={handleDeactivate}
+            />
+          </div>
           <NodeConfigPanel
             className="flex-1 rounded-xl max-w-[550px]
               bg-white dark:bg-[#212121]

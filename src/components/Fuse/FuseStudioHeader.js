@@ -6,19 +6,13 @@
  * Displays:
  *   - Back navigation
  *   - Inline-editable workflow name with autosave indicator
- *   - Webhook URL copy row (when the workflow is active + webhook-triggered)
- *   - "Add Node" button (disabled until a starter node is on canvas)
- *   - Execution control buttons that adapt to the current workflow state:
- *       inactive             → "Turn On"  (green)
- *       activating           → spinner disabled button
- *       active + clean graph → "Running" pill + "Turn Off" (red)
- *       active + dirty graph → "Running (pending)" pill + "Recompile" (green) + "Turn Off" (red)
+ *   - User profile button
  */
 
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackOutline } from "react-icons/io5";
-import { TbCopy, TbCheck, TbPlus, TbPower, TbRefresh, TbAlertCircle, TbX } from "react-icons/tb";
+import { TbPlus, TbPower, TbRefresh, TbAlertCircle, TbX } from "react-icons/tb";
 import HeaderUserProfile from "../HeaderUserProfile";
 import ROUTES from "../../router/routes";
 
@@ -72,102 +66,7 @@ const WorkflowNameInput = ({ value, onChange, onBlur, saving = false }) => {
   );
 };
 
-// ─── Webhook URL copy row ─────────────────────────────────────────────────────
-
-const WebhookUrlRow = ({ url }) => {
-  const [copied, setCopied] = React.useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  let displayUrl = url;
-  try {
-    displayUrl = new URL(url).pathname;
-  } catch (_) { /* keep full URL */ }
-
-  return (
-    <div className="flex items-center gap-1.5 min-w-0 flex-shrink-0">
-      <span className="text-[11px] text-[#888] dark:text-[#555] flex-shrink-0">Webhook:</span>
-      <code
-        className="text-[11px] font-mono text-[#555] dark:text-[#aaa]
-          bg-[#f4f4f4] dark:bg-[#272727]
-          border border-[#e5e5e5] dark:border-[#333]
-          px-2 py-0.5 rounded-md truncate max-w-[220px]"
-        title={url}
-      >
-        {displayUrl}
-      </code>
-      <button
-        type="button"
-        onClick={handleCopy}
-        className={`${iconBtnCls} !w-6 !h-6`}
-        aria-label="Copy webhook URL"
-        title={copied ? "Copied!" : "Copy webhook URL"}
-      >
-        {copied
-          ? <TbCheck className="w-[13px] h-[13px] text-green-500" />
-          : <TbCopy className="w-[13px] h-[13px]" />
-        }
-      </button>
-    </div>
-  );
-};
-
-// ─── Status pill ──────────────────────────────────────────────────────────────
-
-const StatusPill = ({ isGraphDirty }) => {
-  if (isGraphDirty) {
-    return (
-      <span
-        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11.5px] font-semibold
-          text-amber-700 dark:text-amber-400
-          bg-amber-50 dark:bg-amber-900/20
-          border border-amber-200 dark:border-amber-800"
-        title="Graph has been modified since last compilation. Click Recompile to apply changes."
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0 animate-pulse" />
-        Running · pending changes
-      </span>
-    );
-  }
-  return (
-    <span
-      className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11.5px] font-semibold
-        text-emerald-700 dark:text-emerald-400
-        bg-emerald-50 dark:bg-emerald-900/20
-        border border-emerald-200 dark:border-emerald-800"
-    >
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
-      Running
-    </span>
-  );
-};
-
-// ─── Add Node button (shared) ─────────────────────────────────────────────────
-
-const AddNodeButton = ({ hasNodes, onAddNode }) => (
-  <button
-    type="button"
-    onClick={onAddNode}
-    disabled={!hasNodes}
-    className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-semibold
-      transition-colors
-      disabled:opacity-40 disabled:cursor-not-allowed
-      text-[#444] dark:text-[#bbb]
-      bg-[#f0f0f0] dark:bg-[#272727]
-      hover:bg-[#e4e4e4] dark:hover:bg-[#303030]
-      disabled:hover:bg-[#f0f0f0] dark:disabled:hover:bg-[#272727]"
-  >
-    <TbPlus className="w-[14px] h-[14px]" />
-    Add Node
-  </button>
-);
-
-// ─── Compilation errors popup ───────────────────────────────────────────────
+// ─── Compilation errors popup (used inside CanvasActionBar) ───────────────────
 
 /**
  * Renders a red badge button that opens a popover listing all compilation
@@ -258,140 +157,166 @@ const CompilationErrorsButton = ({ errors = [] }) => {
   );
 };
 
-// ─── Execution control buttons ────────────────────────────────────────────────
+// ─── CanvasActionBar ─────────────────────────────────────────────────────────
+//
+// Floating pill bar rendered at the bottom-centre of the canvas area.
+// Mirrors the Google Studio / Zapier bottom-bar pattern.
+// Rendered as `position: absolute` inside a `position: relative` canvas wrapper.
+//
+// States:
+//   in-flight  → spinner pill ("Compiling…" or "Stopping…")
+//   active     → "Add step" | "Save changes" (dark) | "Turn off"
+//   inactive   → "Add step" | "Turn on" (dark)
+//
+// Props
+// -----
+// hasNodes     {boolean}   True when at least one starter node is on canvas
+// isActive     {boolean}   Workflow is running
+// activating   {boolean}   Activate call in-flight
+// deactivating {boolean}   Deactivate call in-flight
+// compilationErrors {string[]} Errors from last failed compile
+// onAddNode    {Function}  Open Add Node panel
+// onActivate   {Function}  Turn On / Save Changes
+// onDeactivate {Function}  Turn Off
 
-const ExecutionControls = ({
-  hasNodes,
-  isActive,
-  isGraphDirty,
-  activating,
-  deactivating,
-  compilationErrors,
+export const CanvasActionBar = ({
+  hasNodes = false,
+  isActive = false,
+  activating = false,
+  deactivating = false,
+  compilationErrors = [],
   onAddNode,
   onActivate,
   onDeactivate,
 }) => {
-  // Either an activate or deactivate call is in-flight
-  if (activating || deactivating) {
-    return (
-      <div className="flex items-center gap-2">
-        <AddNodeButton hasNodes={hasNodes} onAddNode={onAddNode} />
-        <button
-          disabled
-          className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-semibold
-            opacity-60 cursor-not-allowed
-            text-[#444] dark:text-[#bbb]
-            bg-[#f0f0f0] dark:bg-[#272727]"
-        >
-          <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          {deactivating ? "Stopping…" : "Compiling…"}
-        </button>
-      </div>
-    );
-  }
+  const inFlight = activating || deactivating;
 
-  if (isActive) {
-    return (
-      <div className="flex items-center gap-2">
-        <StatusPill isGraphDirty={isGraphDirty} />
+  return (
+    <>
+      {/* Errors badge — top-right corner of the canvas */}
+      <div className="absolute top-4 right-4 z-20">
         <CompilationErrorsButton errors={compilationErrors} />
-        <AddNodeButton hasNodes={hasNodes} onAddNode={onAddNode} />
-        {isGraphDirty && (
+      </div>
+
+    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10">
+
+      {/* ── Pill ────────────────────────────────────────────────────────── */}
+      <div
+        className="flex items-center
+          bg-white dark:bg-[#1e1e1e]
+          border border-[#e0e0e0] dark:border-[#2e2e2e]
+          rounded-full shadow-xl shadow-black/10 dark:shadow-black/50
+          overflow-hidden p-1"
+      >
+        {/* Add step — always visible (disabled when no trigger yet or in-flight) */}
+        <button
+          type="button"
+          onClick={onAddNode}
+          disabled={!hasNodes || inFlight}
+          title={!hasNodes ? "Add a trigger node first" : "Add an action node"}
+          className="flex items-center gap-1.5 px-4 h-10 text-[13px] font-medium
+            transition-colors select-none
+            text-[#444] dark:text-[#aaa]
+            hover:bg-[#f5f5f5] dark:hover:bg-[#272727]
+            disabled:opacity-40 disabled:cursor-not-allowed rounded-full"
+        >
+          <TbPlus className="w-[15px] h-[15px]" />
+          Add step
+        </button>
+
+        {/* Divider */}
+        <span className="w-px h-5 bg-[#e0e0e0] dark:bg-[#2e2e2e] flex-shrink-0" />
+
+        {inFlight ? (
+          /* Spinner button while API call is in-flight */
+          <button
+            disabled
+            className="flex items-center gap-2 px-5 h-10 text-[13px] font-semibold
+              select-none cursor-not-allowed
+              text-white bg-[#555] dark:bg-[#333] rounded-full"
+          >
+            <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            {deactivating ? "Stopping…" : "Compiling…"}
+          </button>
+        ) : isActive ? (
+          /* Save changes — primary action when running */
           <button
             type="button"
             onClick={onActivate}
-            title="Stop current execution, compile updated graph, and restart"
-            className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-semibold
-              transition-colors
-              text-[#2da44e] dark:text-[#3fb950]
-              bg-[#eafaf0] dark:bg-[#1a2d1e]
-              hover:bg-[#d6f5e3] dark:hover:bg-[#213828]"
+            title="Recompile with current graph"
+            className="flex items-center gap-2 px-5 h-10 text-[13px] font-semibold
+              transition-colors select-none
+              text-white bg-[#111] dark:bg-[#ebebeb] dark:text-[#111]
+              hover:bg-[#2a2a2a] dark:hover:bg-[#d4d4d4] rounded-full"
           >
-            <TbRefresh className="w-[14px] h-[14px]" />
-            Recompile
+            <TbRefresh className="w-[15px] h-[15px]" />
+            Save changes
+          </button>
+        ) : (
+          /* Turn on — primary action when inactive */
+          <button
+            type="button"
+            onClick={onActivate}
+            disabled={!hasNodes}
+            title={!hasNodes ? "Add a trigger node first" : "Compile and start the workflow"}
+            className="flex items-center gap-2 px-5 h-10 text-[13px] font-semibold
+              transition-colors select-none
+              text-white bg-[#111] dark:bg-[#ebebeb] dark:text-[#111]
+              hover:bg-[#2a2a2a] dark:hover:bg-[#d4d4d4] rounded-full
+              disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <TbPower className="w-[15px] h-[15px]" />
+            Turn on
           </button>
         )}
-        <button
-          type="button"
-          onClick={onDeactivate}
-          className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-semibold
-            transition-colors
-            text-red-600 dark:text-red-400
-            bg-red-50 dark:bg-red-900/20
-            hover:bg-red-100 dark:hover:bg-red-900/30"
-        >
-          <TbPower className="w-[14px] h-[14px]" />
-          Turn Off
-        </button>
-      </div>
-    );
-  }
 
-  return (
-    <div className="flex items-center gap-2">
-      <CompilationErrorsButton errors={compilationErrors} />
-      <AddNodeButton hasNodes={hasNodes} onAddNode={onAddNode} />
-      <button
-        type="button"
-        onClick={onActivate}
-        disabled={!hasNodes}
-        title={!hasNodes ? "Add a trigger node first" : "Compile and start the workflow"}
-        className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-semibold
-          transition-colors
-          disabled:opacity-40 disabled:cursor-not-allowed
-          text-[#2da44e] dark:text-[#3fb950]
-          bg-[#eafaf0] dark:bg-[#1a2d1e]
-          hover:bg-[#d6f5e3] dark:hover:bg-[#213828]
-          disabled:hover:bg-[#eafaf0] dark:disabled:hover:bg-[#1a2d1e]"
-      >
-        <TbPower className="w-[14px] h-[14px]" />
-        Turn On
-      </button>
+        {/* Turn off — only shown when active and not in-flight */}
+        {isActive && !inFlight && (
+          <>
+            <span className="w-px h-5 bg-[#e0e0e0] dark:bg-[#2e2e2e] flex-shrink-0" />
+            <button
+              type="button"
+              onClick={onDeactivate}
+              className="flex items-center gap-1.5 px-4 h-10 text-[13px] font-medium
+                transition-colors select-none
+                text-red-500 dark:text-red-400
+                hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full"
+            >
+              <TbPower className="w-[15px] h-[15px]" />
+              Turn off
+            </button>
+          </>
+        )}
+      </div>
     </div>
+    </>
   );
 };
 
 // ─── Root header ──────────────────────────────────────────────────────────────
+//
+// Slim top bar — back navigation, editable workflow name,
+// optional webhook URL pill (when running + webhook-triggered), and profile.
+// Execution controls live in CanvasActionBar (bottom of canvas), not here.
+//
+// Props
+// -----
+// name         {string}      Workflow name
+// onNameChange {Function}    Keystroke handler
+// onNameBlur   {Function}    Blur handler (triggers autosave)
+// saving       {boolean}     True while the name is persisting
+// isActive     {boolean}     Whether the workflow is running (controls webhook pill)
+// webhookUrl   {string|null} Public webhook URL (null for schedule workflows)
 
-/**
- * FuseStudioHeader
- *
- * Props
- * -----
- * name         {string}       Workflow name (controlled input value)
- * onNameChange {Function}     Called on every keystroke
- * onNameBlur   {Function}     Called on blur — triggers autosave
- * saving       {boolean}      True while the name is being saved
- * hasNodes     {boolean}      True when at least one starter node is on canvas
- * onAddNode    {Function}     Opens the Add Node panel
- * onActivate   {Function}     Compile + start (or recompile if active + dirty)
- * onDeactivate {Function}     Stop the running execution
- * isActive          {boolean}      Whether the workflow is currently active
- * isGraphDirty      {boolean}      Whether the graph changed since last compilation
- * activating        {boolean}      True while an activate (compile) call is in-flight
- * deactivating      {boolean}      True while a deactivate (stop) call is in-flight
- * compilationErrors {string[]}     List of error strings from the last failed compilation
- * webhookUrl        {string|null}  Public webhook URL, or null for schedule workflows
- */
 const FuseStudioHeader = ({
   name,
   onNameChange,
   onNameBlur,
   saving = false,
-  hasNodes = false,
-  onAddNode,
-  onActivate,
-  onDeactivate,
-  isActive = false,
-  isGraphDirty = false,
-  activating = false,
-  deactivating = false,
-  compilationErrors = [],
-  webhookUrl = null,
 }) => (
   <header id="fuse-studio-header" className="w-full flex-shrink-0">
     <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
-      {/* Left: back + name + webhook URL */}
+      {/* Left: back button + workflow name + optional webhook URL */}
       <div className="flex items-center gap-1.5 min-w-0 flex-1">
         <BackButton />
         <WorkflowNameInput
@@ -400,32 +325,14 @@ const FuseStudioHeader = ({
           onBlur={onNameBlur}
           saving={saving}
         />
-        {isActive && webhookUrl && (
-          <>
-            <span className="w-px h-4 bg-[#e0e0e0] dark:bg-[#2e2e2e] flex-shrink-0 mx-0.5" />
-            <WebhookUrlRow url={webhookUrl} />
-          </>
-        )}
+
       </div>
 
-      {/* Right: execution controls + profile */}
-      <div className="flex items-center gap-2 flex-shrink-0">
-        <ExecutionControls
-          hasNodes={hasNodes}
-          isActive={isActive}
-          isGraphDirty={isGraphDirty}
-          activating={activating}
-          deactivating={deactivating}
-          compilationErrors={compilationErrors}
-          onAddNode={onAddNode}
-          onActivate={onActivate}
-          onDeactivate={onDeactivate}
-        />
-        <span className="w-px h-5 bg-[#e0e0e0] dark:bg-[#2e2e2e] rounded-full flex-shrink-0" />
-        <HeaderUserProfile />
-      </div>
+      {/* Right: user profile */}
+      <HeaderUserProfile />
     </div>
   </header>
 );
 
 export default FuseStudioHeader;
+

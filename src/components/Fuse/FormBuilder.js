@@ -479,7 +479,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
       {field.type === "array" && (
         <div className={`${indent} flex flex-col gap-1.5 py-1.5`}>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-[#999] dark:text-[#555] whitespace-nowrap">
+            <span className="text-[11px] text-[#bbb] dark:text-[#555] whitespace-nowrap">
               Items type:
             </span>
             <div className="relative w-28">
@@ -537,13 +537,12 @@ const SchemaFieldList = ({ fields, depth, label, onChange }) => {
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <span className="text-[10.5px] font-semibold uppercase tracking-wide
-          text-[#bbb] dark:text-[#444]">
+        <span className="text-[12px] font-medium text-[#555] dark:text-[#888]">
           {label}
         </span>
       )}
       {fields.length === 0 && (
-        <p className="text-[11px] text-[#bbb] dark:text-[#444] pl-0.5 italic">
+        <p className="text-[11px] text-[#bbb] dark:text-[#555] pl-0.5">
           {depth === 0 ? "No fields defined yet." : "No properties yet."}
         </p>
       )}
@@ -559,10 +558,11 @@ const SchemaFieldList = ({ fields, depth, label, onChange }) => {
       <button
         type="button"
         onClick={addRow}
-        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[11.5px] font-medium
-          text-[#4a6cf7] dark:text-[#6b8aff]
-          border border-[#c7cfe8] dark:border-[#363660]
-          hover:bg-[#f0f3ff] dark:hover:bg-[#1a1a30]
+        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
+          border border-[#ddd] dark:border-[#2e2e2e]
+          text-[#444] dark:text-[#999]
+          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
           transition-colors"
       >
         + Add {depth === 0 ? "field" : "property"}

@@ -70,12 +70,6 @@ const useFuseStudioStore = create((set) => ({
   activating: false,
   /** True specifically while a deactivate call is in-flight (shows "Stopping…" vs "Compiling…"). */
   deactivating: false,
-  /**
-   * True when the live graph (nodes/edges) differs structurally from what was
-   * last compiled.  Reset to false after every successful activation.
-   * Set to true on any structural graph change while the workflow is active.
-   */
-  isGraphDirty: false,
 
   // --- Metadata actions ---
   setWorkflow:     (workflow) => set({ workflow }),
@@ -91,7 +85,7 @@ const useFuseStudioStore = create((set) => ({
   // --- Compilation / execution state actions ---
   /** Call after a successful activation.  Clears errors and dirty flag. */
   setActivationSuccess: ({ compiledAt }) =>
-    set({ compiledAt, compilationErrors: [], activating: false, isGraphDirty: false }),
+    set({ compiledAt, compilationErrors: [], activating: false }),
   /** Call when activation fails with validation errors. */
   setCompilationErrors: (errors) =>
     set({ compilationErrors: errors, activating: false }),
@@ -106,12 +100,10 @@ const useFuseStudioStore = create((set) => ({
     set({
       compiledAt,
       compilationErrors: [],
-      // Always start clean — dirty is only set by explicit edits in this session.
-      isGraphDirty: false,
     }),
   /** Clear compilation state (e.g. after deactivation). */
   clearCompilation: () =>
-    set({ compiledAt: null, compilationErrors: [], isGraphDirty: false, activating: false, deactivating: false }),
+    set({ compiledAt: null, compilationErrors: [], activating: false, deactivating: false }),
 
   // --- Graph load (called once on API response) ---
   setNodes: (nodes) => set({ nodes }),
@@ -124,15 +116,9 @@ const useFuseStudioStore = create((set) => ({
 
   /** Wire directly to ReactFlow onEdgesChange. */
   onEdgesChange: (changes) =>
-    set((state) => {
-      const hasStructural = changes.some((c) => c.type === "remove" || c.type === "add");
-      return {
-        edges: applyEdgeChanges(changes, state.edges),
-        isGraphDirty:
-          state.isGraphDirty ||
-          (hasStructural && state.compiledAt !== null && !state.loading),
-      };
-    }),
+    set((state) => ({
+      edges: applyEdgeChanges(changes, state.edges),
+    })),
 
   /**
    * Wire directly to ReactFlow onConnect.
@@ -158,7 +144,6 @@ const useFuseStudioStore = create((set) => ({
           { ...connection, id: `edge_${Date.now()}` },
           state.edges
         ),
-        isGraphDirty: state.compiledAt !== null,
       };
     }),
 
@@ -167,7 +152,6 @@ const useFuseStudioStore = create((set) => ({
   addFlowNode: (node) =>
     set((state) => ({
       nodes: [...state.nodes, node],
-      isGraphDirty: state.compiledAt !== null,
     })),
 
   /**
@@ -183,7 +167,7 @@ const useFuseStudioStore = create((set) => ({
         state.selectedNode?.id === nodeId
           ? { ...state.selectedNode, data: { ...state.selectedNode.data, config } }
           : state.selectedNode;
-      return { nodes, selectedNode, isGraphDirty: state.compiledAt !== null };
+      return { nodes, selectedNode };
     }),
 
   /**
@@ -198,7 +182,6 @@ const useFuseStudioStore = create((set) => ({
       ),
       selectedNode:
         state.selectedNode?.id === nodeId ? null : state.selectedNode,
-      isGraphDirty: state.compiledAt !== null,
     })),
 
   // --- Selection ---
@@ -227,7 +210,6 @@ const useFuseStudioStore = create((set) => ({
       compilationErrors: [],
       activating: false,
       deactivating: false,
-      isGraphDirty: false,
     }),
 }));
 

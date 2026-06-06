@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { TbLayoutGrid, TbTrash, TbX, TbSearch, TbCopy, TbCheck, TbLink } from "react-icons/tb";
+import { TbLayoutGrid, TbTrash, TbX, TbSearch, TbCopy, TbCheck } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { getNodeIcon } from "./iconRegistry";
 import FormBuilder from "./FormBuilder";
@@ -277,13 +277,6 @@ const AddNodePanel = () => {
             </div>
           ))
         )}
-
-        {/* Hint — only shown when nodes are loaded and results exist */}
-        {!loadingActionNodes && sections.length > 0 && (
-          <p className="text-center text-[11px] text-[#c8c8c8] dark:text-[#383838] select-none pb-1">
-            Drag a node onto the canvas to add it
-          </p>
-        )}
       </div>
     </div>
   );
@@ -305,21 +298,17 @@ const WebhookUrlDisplay = ({ workflowId }) => {
   };
 
   return (
-    <div className="flex flex-col gap-1.5 p-3 rounded-xl
-      bg-[#f5f7ff] dark:bg-[#1a1a2e]
-      border border-[#d0d8f5] dark:border-[#2a2a55]">
-      <div className="flex items-center gap-1.5">
-        <TbLink className="w-[12px] h-[12px] text-[#4a6cf7] dark:text-[#6b8aff] flex-shrink-0" />
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#4a6cf7] dark:text-[#6b8aff]">
-          Webhook URL
-        </span>
-      </div>
+    <div className="flex flex-col gap-1">
+      <label className="text-[12px] font-medium text-[#555] dark:text-[#888]">
+        Webhook URL
+      </label>
       <div className="flex items-center gap-2">
         <code
-          className="flex-1 text-[11px] font-mono text-[#333] dark:text-[#ccc]
-            bg-white dark:bg-[#141420]
-            border border-[#dce4f5] dark:border-[#30305a]
-            px-2.5 py-1.5 rounded-lg truncate"
+          className="flex-1 w-full px-3 py-2.5 rounded-lg text-[13px] font-mono
+            text-[#222] dark:text-[#d0d0d0]
+            bg-white dark:bg-[#1a1a1a]
+            border border-[#ddd] dark:border-[#2e2e2e]
+            truncate"
           title={url}
         >
           {url}
@@ -328,20 +317,21 @@ const WebhookUrlDisplay = ({ workflowId }) => {
           type="button"
           onClick={handleCopy}
           title={copied ? "Copied!" : "Copy URL"}
-          className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#4a6cf7] dark:text-[#6b8aff]
-            hover:bg-[#e8edff] dark:hover:bg-[#252550]
+          className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
+            text-[#888] dark:text-[#666]
+            hover:text-[#111] dark:hover:text-white
+            hover:bg-[#ebebeb] dark:hover:bg-[#222]
             transition-colors"
         >
           {copied
-            ? <TbCheck className="w-[14px] h-[14px] text-emerald-500" />
-            : <TbCopy className="w-[14px] h-[14px]" />
+            ? <TbCheck className="w-[15px] h-[15px] text-emerald-500" />
+            : <TbCopy className="w-[15px] h-[15px]" />
           }
         </button>
       </div>
-      <p className="text-[11px] text-[#888] dark:text-[#555] leading-relaxed">
-        Send requests to this URL to trigger the workflow. The URL is fixed — no custom path is needed.
-      </p>
+      <span className="text-[11px] text-[#bbb] dark:text-[#555]">
+        Send POST requests to this URL to trigger the workflow.
+      </span>
     </div>
   );
 };
@@ -538,13 +528,7 @@ const NodeConfigPanel = ({ className = "" }) => {
     );
   } else {
     // Nodes exist but none is selected.
-    content = (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-[12px] text-[#bbb] dark:text-[#444] select-none">
-          Select a node to configure it
-        </p>
-      </div>
-    );
+    content = <AddNodePanel />;
   }
 
   return (
