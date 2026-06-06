@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { TbLayoutGrid, TbTrash, TbX, TbSearch, TbCopy, TbCheck } from "react-icons/tb";
+import { TbLayoutGrid, TbTrash, TbX, TbSearch, TbCopy, TbCheck, TbBell, TbBellOff } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { getNodeIcon } from "./iconRegistry";
 import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
+import usePushNotification from "../../hooks/usePushNotification";
 
 const StarterNodeCard = ({ node, onPick }) => {
   const Icon = getNodeIcon(node.icon);
@@ -345,7 +346,11 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
   const { id: workflowId } = useParams();
   const Icon = getNodeIcon(nodeDef.icon);
 
-  const isWebhookStarter = node.data?.isStarter && node.data?.nodeType === "webhook";
+  const isWebhookStarter  = node.data?.isStarter && node.data?.nodeType === "webhook";
+  const isGetNotified      = node.data?.nodeType === "get_notified";
+
+  // Push permission state — only consumed for get_notified nodes.
+  const push = usePushNotification();
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -391,6 +396,56 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
         {/* Webhook URL — always shown for webhook starter nodes */}
         {isWebhookStarter && (
           <WebhookUrlDisplay workflowId={workflowId} />
+        )}
+
+        {/* Push permission banner — shown for get_notified nodes */}
+        {isGetNotified && push.supported && push.permission !== "granted" && (
+          <div className="flex flex-col gap-2.5 p-3 rounded-lg
+            border border-[#ddd] dark:border-[#2e2e2e]
+            bg-white dark:bg-[#1a1a1a]">
+            <div className="flex items-center gap-2">
+              {push.permission === "denied"
+                ? <TbBellOff className="w-[15px] h-[15px] text-[#e05c5c] flex-shrink-0" />
+                : <TbBell    className="w-[15px] h-[15px] text-[#888] flex-shrink-0" />
+              }
+              <span className="text-[12.5px] font-semibold text-[#333] dark:text-[#ccc]">
+                {push.permission === "denied"
+                  ? "Notifications blocked"
+                  : "Notification permission required"}
+              </span>
+            </div>
+            {push.permission === "denied" ? (
+              <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
+                You've blocked notifications for this site. Enable them in your browser's
+                site settings, then reload the page.
+              </p>
+            ) : (
+              <>
+                <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
+                  Allow browser notifications so AURA can deliver push alerts when this
+                  step runs.
+                </p>
+                <button
+                  type="button"
+                  onClick={push.requestPermission}
+                  disabled={push.requesting}
+                  className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium
+                    border border-[#ddd] dark:border-[#2e2e2e]
+                    text-[#444] dark:text-[#999]
+                    hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+                    hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    transition-colors"
+                >
+                  {push.requesting
+                    ? <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    : <TbBell className="w-[13px] h-[13px]" />
+                  }
+                  {push.requesting ? "Requesting…" : "Allow notifications"}
+                </button>
+              </>
+            )}
+          </div>
         )}
 
         {nodeDef.config_form ? (

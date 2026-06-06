@@ -115,3 +115,37 @@ export const deactivateWorkflowAPI = async (id) => {
   const res = await api({ method: "POST", url: ENDPOINTS.FUSE_WORKFLOW_DEACTIVATE(id) });
   return res.data;
 };
+
+// ─── Web Push ──────────────────────────────────────────────────────────────────
+
+/** GET /fuse/push/vapid-public-key — returns the server's VAPID public key. */
+export const getVapidPublicKeyAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_PUSH_VAPID_KEY });
+  return res.data.public_key;
+};
+
+/**
+ * POST /fuse/push/subscribe — saves a PushSubscription for the current user.
+ * @param {PushSubscription} subscription
+ */
+export const pushSubscribeAPI = async (subscription) => {
+  const res = await api({
+    method: "POST",
+    url: ENDPOINTS.FUSE_PUSH_SUBSCRIBE,
+    data: subscription.toJSON(),
+  });
+  return res.data;
+};
+
+/**
+ * POST /fuse/push/unsubscribe — removes a push subscription by endpoint.
+ * @param {string} endpoint
+ */
+export const pushUnsubscribeAPI = async (endpoint) => {
+  const res = await api({
+    method: "POST",
+    url: ENDPOINTS.FUSE_PUSH_UNSUBSCRIBE,
+    data: { endpoint },
+  });
+  return res.data;
+};

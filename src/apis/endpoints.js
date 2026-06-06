@@ -43,6 +43,11 @@ const ENDPOINTS = {
   FUSE_WORKFLOW_DEACTIVATE:     (id) => `/fuse/workflows/${id}/deactivate`,
   FUSE_NODES_STARTER:           "/fuse/nodes/starter",
   FUSE_NODES_ACTIONS:           "/fuse/nodes/actions",
+
+  // ── Fuse Push Notifications ─────────────────────────────────────────────────
+  FUSE_PUSH_VAPID_KEY:          "/fuse/push/vapid-public-key",
+  FUSE_PUSH_SUBSCRIBE:          "/fuse/push/subscribe",
+  FUSE_PUSH_UNSUBSCRIBE:        "/fuse/push/unsubscribe",
 };
 
 export default ENDPOINTS;
