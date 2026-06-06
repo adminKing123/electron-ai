@@ -188,6 +188,14 @@ const TimezoneSelectField = ({ value, onChange }) => {
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
     []
   );
+
+  // Persist the browser's local timezone into the node config on first render,
+  // so the backend never falls back to UTC when the user hasn't touched the field.
+  React.useEffect(() => {
+    if (!value) onChange(defaultTz);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="relative">
       <select
