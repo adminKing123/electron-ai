@@ -545,10 +545,17 @@ const NodeConfigPanel = ({ className = "" }) => {
     ancestorIds.forEach((nid) => {
       const n = nodes.find((x) => x.id === nid);
       if (!n) return;
-      const schema = n.data?.config?.body_schema;
-      if (!schema || schema.mode !== "visual") return;
-      // Use node id as the unique key: {{node_abc123.body.field}}
-      vars.push(...flattenFields(schema.fields, `${n.id}.body`, n.data.label));
+      
+      const bodySchema = n.data?.config?.body_schema;
+      const outputSchema = n.data?.config?.output_schema;
+      
+      if (bodySchema && bodySchema.mode === "visual") {
+        vars.push(...flattenFields(bodySchema.fields, `${n.id}.body`, n.data.label));
+      }
+      
+      if (outputSchema && outputSchema.mode === "visual") {
+        vars.push(...flattenFields(outputSchema.fields, `${n.id}.result`, n.data.label));
+      }
     });
 
     return vars;

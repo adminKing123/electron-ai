@@ -448,7 +448,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
 
   return (
     <div className="flex flex-col gap-1.5">
-      {/* Main row: key + type + remove */}
+      {/* Main row: key + type + description + remove */}
       <div className="flex items-center gap-2">
         <input
           type="text"
@@ -469,6 +469,24 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
           </select>
           <SelectChevron />
         </div>
+        {field.showDescription && (
+          <input
+            type="text"
+            value={field.description ?? ""}
+            placeholder="Description..."
+            onChange={(e) => onUpdate({ ...field, description: e.target.value })}
+            className={`${INPUT_BASE} flex-1 text-[12px]`}
+          />
+        )}
+        {field.showEnum && field.type === "string" && (
+          <input
+            type="text"
+            value={field.enum ?? ""}
+            placeholder="Enum (comma separated)"
+            onChange={(e) => onUpdate({ ...field, enum: e.target.value })}
+            className={`${INPUT_BASE} flex-1 text-[12px]`}
+          />
+        )}
         <button
           type="button"
           onClick={onRemove}
@@ -509,6 +527,8 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
               fields={field.items.fields ?? []}
               depth={depth + 1}
               label="Object properties"
+              showDescription={field.showDescription}
+              showEnum={field.showEnum}
               onChange={(newFields) =>
                 onUpdate({ ...field, items: { ...field.items, fields: newFields } })
               }
@@ -524,6 +544,8 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
             fields={field.fields ?? []}
             depth={depth + 1}
             label="Properties"
+            showDescription={field.showDescription}
+            showEnum={field.showEnum}
             onChange={(newFields) => onUpdate({ ...field, fields: newFields })}
           />
         </div>
@@ -536,8 +558,8 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
  * Renders a list of SchemaFieldRows with an "Add" button.
  * Used both at the root level and recursively inside nested fields.
  */
-const SchemaFieldList = ({ fields, depth, label, onChange }) => {
-  const addRow    = () => onChange([...fields, { key: "", type: "string" }]);
+const SchemaFieldList = ({ fields, depth, label, onChange, showDescription, showEnum }) => {
+  const addRow    = () => onChange([...fields, { key: "", type: "string", showDescription, showEnum }]);
   const removeRow = (i) => onChange(fields.filter((_, idx) => idx !== i));
   const updateRow = (i, updated) =>
     onChange(fields.map((f, idx) => (idx === i ? updated : f)));
@@ -557,7 +579,7 @@ const SchemaFieldList = ({ fields, depth, label, onChange }) => {
       {fields.map((f, i) => (
         <SchemaFieldRow
           key={i}
-          field={f}
+          field={{...f, showDescription, showEnum}}
           depth={depth}
           onUpdate={(updated) => updateRow(i, updated)}
           onRemove={() => removeRow(i)}
@@ -579,12 +601,14 @@ const SchemaFieldList = ({ fields, depth, label, onChange }) => {
   );
 };
 
-const BodyBuilderField = ({ value, onChange }) => {
+const BodyBuilderField = ({ field, value, onChange }) => {
   const fields = value?.fields ?? [];
   return (
     <SchemaFieldList
       fields={fields}
       depth={0}
+      showDescription={field.showDescription}
+      showEnum={field.showEnum}
       onChange={(newFields) => onChange({ mode: "visual", fields: newFields })}
     />
   );

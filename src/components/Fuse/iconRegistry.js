@@ -11,6 +11,7 @@ import {
   TbGitMerge,
   TbGitBranch,
   TbBell,
+  TbSparkles,
 } from "react-icons/tb";
 
 /**
@@ -33,6 +34,7 @@ export const ICON_REGISTRY = {
   TbGitMerge,
   TbGitBranch,
   TbBell,
+  TbSparkles,
 };
 
 /**
