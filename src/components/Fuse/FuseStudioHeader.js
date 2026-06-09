@@ -206,7 +206,7 @@ export const CanvasActionBar = ({
           bg-white dark:bg-[#1e1e1e]
           border border-[#e0e0e0] dark:border-[#2e2e2e]
           rounded-full shadow-xl shadow-black/10 dark:shadow-black/50
-          overflow-hidden p-1"
+          overflow-hidden p-1 gap-0.5"
       >
         {/* Add step — always visible (disabled when no trigger yet or in-flight) */}
         <button
@@ -223,9 +223,6 @@ export const CanvasActionBar = ({
           <TbPlus className="w-[15px] h-[15px]" />
           Add step
         </button>
-
-        {/* Divider */}
-        <span className="w-px h-5 bg-[#e0e0e0] dark:bg-[#2e2e2e] flex-shrink-0" />
 
         {inFlight ? (
           /* Spinner button while API call is in-flight */
@@ -273,7 +270,6 @@ export const CanvasActionBar = ({
         {/* Turn off — only shown when active and not in-flight */}
         {isActive && !inFlight && (
           <>
-            <span className="w-px h-5 bg-[#e0e0e0] dark:bg-[#2e2e2e] flex-shrink-0" />
             <button
               type="button"
               onClick={onDeactivate}
