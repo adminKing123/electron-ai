@@ -126,7 +126,7 @@ export default function FuseStudioPage() {
   // Updates the DB record but does NOT recompile the running execution.
   const saveTimerRef = useRef(null);
   useEffect(() => {
-    if (loading) return;
+    if (loading || !storeWorkflow) return;
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
       updateWorkflowGraphAPI(id, nodes, edges).catch(() => {});
