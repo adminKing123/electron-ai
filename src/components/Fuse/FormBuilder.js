@@ -272,11 +272,11 @@ const VariablePicker = ({ variables, onPick, onClose }) => {
               className="w-full text-left px-3 py-2 flex flex-col gap-0.5
                 hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
             >
-              <span className="text-[12px] font-mono text-[#4a6cf7] dark:text-[#6b8aff]">
-                {`{{${v.token}}}`}
-              </span>
-              <span className="text-[11px] text-[#888] dark:text-[#555] truncate">
+              <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
                 {v.label}
+              </span>
+              <span className="text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] truncate">
+                {`{{${v.token}}}`}
               </span>
             </button>
           </li>
@@ -614,6 +614,305 @@ const BodyBuilderField = ({ field, value, onChange }) => {
   );
 };
 
+// ─── JsonValueBuilderField ────────────────────────────────────────────────────
+/**
+ * Visual JSON value builder — mirrors BodyBuilderField but assigns concrete
+ * VALUES (with variable insertion) to each declared field, instead of just
+ * defining the schema type.
+ *
+ * Used for: request headers, query params, request body payload.
+ *
+ * Stored value shape:
+ * {
+ *   mode:   "visual",
+ *   fields: ValueFieldNode[],
+ * }
+ *
+ * ValueFieldNode:
+ * {
+ *   key:    string,
+ *   type:   "string" | "number" | "boolean" | "array" | "object",
+ *   value:  string,            // for primitive + array types (may contain {{vars}})
+ *   fields: ValueFieldNode[],  // when type === "object"
+ * }
+ */
+const VALUE_FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
+const JSON_VALUE_MAX_DEPTH = 4;
+
+/**
+ * Single row: [key] [type] [value-with-@] [×]
+ * For "object" type the value column is replaced by nested ValueFieldList.
+ * Defined before ValueFieldList so both can reference each other via hoisting.
+ */
+const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
+  const inputRef     = useRef(null);
+  const containerRef = useRef(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const insertVariable = useVariableInserter(
+    inputRef,
+    field.value ?? "",
+    (v) => onUpdate({ ...field, value: v }),
+  );
+
+  const handleTypeChange = (newType) => {
+    const updated = { ...field, type: newType };
+    if (newType === "object") {
+      updated.fields = field.fields ?? [];
+      delete updated.value;
+    } else {
+      if (!("value" in updated)) updated.value = "";
+    }
+    onUpdate(updated);
+  };
+
+  const canNest = depth < JSON_VALUE_MAX_DEPTH;
+  const indent  = "ml-5 pl-3 border-l border-[#e0e0e0] dark:border-[#2a2a2a]";
+
+  React.useEffect(() => {
+    if (!pickerOpen) return;
+    const outside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target))
+        setPickerOpen(false);
+    };
+    document.addEventListener("mousedown", outside);
+    return () => document.removeEventListener("mousedown", outside);
+  }, [pickerOpen]);
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      {/* Main row */}
+      <div className="flex items-center gap-2">
+        {/* Key */}
+        <input
+          type="text"
+          value={field.key ?? ""}
+          placeholder="key"
+          onChange={(e) => onUpdate({ ...field, key: e.target.value })}
+          className={`${INPUT_BASE} w-[30%] flex-shrink-0 font-mono text-[12px]`}
+        />
+
+        {/* Type */}
+        <div className="relative flex-shrink-0 w-24">
+          <select
+            value={field.type ?? "string"}
+            onChange={(e) => handleTypeChange(e.target.value)}
+            className={SELECT_BASE}
+          >
+            {VALUE_FIELD_TYPES.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <SelectChevron />
+        </div>
+
+        {/* Value — shown for all types except "object" (nested fields handle it) */}
+        {field.type !== "object" && (
+          <div ref={containerRef} className="relative flex-1 flex items-center gap-1">
+            <input
+              ref={inputRef}
+              type="text"
+              value={field.value ?? ""}
+              placeholder={
+                field.type === "boolean" ? "true / false" :
+                field.type === "array"   ? '["a","b"]  or  {{var}}' :
+                "value  or  {{var}}"
+              }
+              onChange={(e) => onUpdate({ ...field, value: e.target.value })}
+              className={`${INPUT_BASE} flex-1 text-[12px]`}
+            />
+            <button
+              type="button"
+              title="Insert variable"
+              onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
+              className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
+                text-[11px] font-mono font-bold
+                text-[#888] dark:text-[#555]
+                border border-[#ddd] dark:border-[#2e2e2e]
+                hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
+                hover:border-[#c0c8f0] dark:hover:border-[#363660]
+                hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+                transition-colors"
+            >
+              @
+            </button>
+            {pickerOpen && (
+              <VariablePicker
+                variables={variables}
+                onPick={insertVariable}
+                onClose={() => setPickerOpen(false)}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Remove */}
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label="Remove field"
+          className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
+            text-[#bbb] dark:text-[#444]
+            hover:text-[#e05c5c] dark:hover:text-[#c26060]
+            hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
+            transition-colors text-lg leading-none"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Nested properties for object type */}
+      {field.type === "object" && canNest && (
+        <div className={`${indent} py-1.5`}>
+          <ValueFieldList
+            fields={field.fields ?? []}
+            depth={depth + 1}
+            variables={variables}
+            onChange={(newFields) => onUpdate({ ...field, fields: newFields })}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+/** Renders a list of ValueFieldRows with an "Add field" button. */
+const ValueFieldList = ({ fields, depth, onChange, variables }) => {
+  const addRow    = () => onChange([...fields, { key: "", type: "string", value: "" }]);
+  const removeRow = (i) => onChange(fields.filter((_, idx) => idx !== i));
+  const updateRow = (i, updated) =>
+    onChange(fields.map((f, idx) => (idx === i ? updated : f)));
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      {fields.length === 0 && (
+        <p className="text-[11px] text-[#bbb] dark:text-[#555] pl-0.5">
+          {depth === 0 ? "No fields added yet." : "No properties yet."}
+        </p>
+      )}
+      {fields.map((f, i) => (
+        <ValueFieldRow
+          key={i}
+          field={f}
+          depth={depth}
+          variables={variables}
+          onUpdate={(updated) => updateRow(i, updated)}
+          onRemove={() => removeRow(i)}
+        />
+      ))}
+      <button
+        type="button"
+        onClick={addRow}
+        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
+          border border-[#ddd] dark:border-[#2e2e2e]
+          text-[#444] dark:text-[#999]
+          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+          transition-colors"
+      >
+        + Add {depth === 0 ? "field" : "property"}
+      </button>
+    </div>
+  );
+};
+
+/** Entry-point wrapper that reads/writes the `{ mode, fields }` envelope. */
+const JsonValueBuilderField = ({ field, value, onChange, variables }) => {
+  const fields = value?.fields ?? [];
+  return (
+    <ValueFieldList
+      fields={fields}
+      depth={0}
+      variables={variables}
+      onChange={(newFields) => onChange({ mode: "visual", fields: newFields })}
+    />
+  );
+};
+
+// ─── VariableSelectorField ───────────────────────────────────────────────────
+/**
+ * Picks a single variable from the upstream variable list.
+ * Opens the shared VariablePicker on the @ button, sets the value to
+ * the full  {{token}}  string, and shows a clear button when one is selected.
+ */
+const VariableSelectorField = ({ value, onChange, variables }) => {
+  const containerRef = useRef(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+
+  React.useEffect(() => {
+    if (!pickerOpen) return;
+    const outside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target))
+        setPickerOpen(false);
+    };
+    document.addEventListener("mousedown", outside);
+    return () => document.removeEventListener("mousedown", outside);
+  }, [pickerOpen]);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div className="flex items-center gap-1.5">
+        {/* Current selection display */}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setPickerOpen((o) => !o)}
+          onKeyDown={(e) => e.key === "Enter" && setPickerOpen((o) => !o)}
+          className={[
+            INPUT_BASE,
+            "flex-1 cursor-pointer select-none font-mono text-[12px] truncate",
+            value
+              ? "text-[#4a6cf7] dark:text-[#6b8aff]"
+              : "text-[#bbb] dark:text-[#555] italic",
+          ].join(" ")}
+        >
+          {value || "— click @ to pick a variable —"}
+        </div>
+
+        {/* Clear */}
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            aria-label="Clear variable"
+            className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
+              text-[#bbb] dark:text-[#444]
+              hover:text-[#e05c5c] dark:hover:text-[#c26060]
+              hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
+              transition-colors text-lg leading-none"
+          >
+            ×
+          </button>
+        )}
+
+        {/* Open picker */}
+        <button
+          type="button"
+          title="Pick variable"
+          onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
+          className="flex-shrink-0 w-8 h-[38px] flex items-center justify-center rounded-lg
+            text-[12px] font-mono font-bold
+            text-[#888] dark:text-[#555]
+            border border-[#ddd] dark:border-[#2e2e2e]
+            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
+            hover:border-[#c0c8f0] dark:hover:border-[#363660]
+            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            transition-colors"
+        >
+          @
+        </button>
+      </div>
+
+      {pickerOpen && (
+        <VariablePicker
+          variables={variables}
+          onPick={(token) => { onChange(`{{${token}}}`); }}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
+    </div>
+  );
+};
+
 // ─── ConditionBuilderField ────────────────────────────────────────────────────
 /**
  * Builds a single if/else condition: [variable] [operator] [value?]
@@ -658,26 +957,11 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
         <span className="text-[11px] font-medium text-[#777] dark:text-[#555]">
           Variable to check
         </span>
-        <div className="relative">
-          <select
-            value={variable}
-            onChange={(e) => update({ variable: e.target.value })}
-            className={SELECT_BASE}
-          >
-            <option value="">— select a variable —</option>
-            {(variables ?? []).map((v) => (
-              <option key={v.token} value={`{{${v.token}}}`}>
-                {v.label}
-              </option>
-            ))}
-          </select>
-          <SelectChevron />
-        </div>
-        {variable && (
-          <span className="text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] pl-0.5 truncate">
-            {variable}
-          </span>
-        )}
+        <VariableSelectorField
+          value={variable}
+          variables={variables ?? []}
+          onChange={(v) => update({ variable: v })}
+        />
       </div>
 
       {/* ── Operator selector ── */}
@@ -738,18 +1022,19 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
  */
 const FieldInput = ({ field, value, onChange, variables = [] }) => {
   switch (field.type) {
-    case "text":              return <TextField           field={field} value={value} onChange={onChange} />;
-    case "textarea":          return <TextareaField        field={field} value={value} onChange={onChange} />;
-    case "number":            return <NumberField          field={field} value={value} onChange={onChange} />;
-    case "date":              return <DateField            value={value} onChange={onChange} />;
-    case "time":              return <TimeField            value={value} onChange={onChange} />;
-    case "timezone_select":   return <TimezoneSelectField  value={value} onChange={onChange} />;
-    case "variable_text":     return <VariableTextField     field={field} value={value} onChange={onChange} variables={variables} />;
-    case "variable_textarea": return <VariableTextareaField field={field} value={value} onChange={onChange} variables={variables} />;
-    case "body_builder":      return <BodyBuilderField      field={field} value={value} onChange={onChange} />;
-    case "condition_builder": return <ConditionBuilderField field={field} value={value} onChange={onChange} variables={variables} />;
+    case "text":                return <TextField              field={field} value={value} onChange={onChange} />;
+    case "textarea":            return <TextareaField           field={field} value={value} onChange={onChange} />;
+    case "number":              return <NumberField             field={field} value={value} onChange={onChange} />;
+    case "date":                return <DateField               value={value} onChange={onChange} />;
+    case "time":                return <TimeField               value={value} onChange={onChange} />;
+    case "timezone_select":     return <TimezoneSelectField     value={value} onChange={onChange} />;
+    case "variable_text":       return <VariableTextField       field={field} value={value} onChange={onChange} variables={variables} />;
+    case "variable_textarea":   return <VariableTextareaField   field={field} value={value} onChange={onChange} variables={variables} />;
+    case "body_builder":        return <BodyBuilderField        field={field} value={value} onChange={onChange} />;
+    case "condition_builder":   return <ConditionBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
+    case "json_value_builder":  return <JsonValueBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "select":
-    default:                  return <SelectField          field={field} value={value} onChange={onChange} />;
+    default:                    return <SelectField             field={field} value={value} onChange={onChange} />;
   }
 };
 

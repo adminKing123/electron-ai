@@ -556,6 +556,22 @@ const NodeConfigPanel = ({ className = "" }) => {
       if (outputSchema && outputSchema.mode === "visual") {
         vars.push(...flattenFields(outputSchema.fields, `${n.id}.result`, n.data.label));
       }
+
+      // http_request: expose status_code, success, body + every declared
+      // response_schema field (flattened to top-level of the node output).
+      if (n.data?.nodeType === "http_request") {
+        vars.push(
+          { token: `${n.id}.status_code`, label: `${n.data.label} → status_code` },
+          { token: `${n.id}.success`,     label: `${n.data.label} → success` },
+          { token: `${n.id}.body`,        label: `${n.data.label} → body (full)` },
+        );
+        const responseSchema = n.data?.config?.response_schema;
+        if (responseSchema?.mode === "visual" && responseSchema.fields?.length) {
+          // Fields are flattened to top-level in the node output, so the token
+          // path is just  node_id.fieldKey  (no "body." prefix).
+          vars.push(...flattenFields(responseSchema.fields, n.id, n.data.label));
+        }
+      }
     });
 
     return vars;

@@ -4,6 +4,7 @@ import WebhookNode           from "./WebhookNode";
 import IfElseNode            from "./IfElseNode";
 import GetNotifiedNode       from "./GetNotifiedNode";
 import AiStructuredOutputNode from "./AiStructuredOutputNode";
+import HttpRequestNode       from "./HttpRequestNode";
 import DefaultFlowNode       from "./DefaultFlowNode";
 
 // ─── FuseFlowNode ─────────────────────────────────────────────────────────────
@@ -32,6 +33,8 @@ const FuseFlowNode = (props) => {
       return <GetNotifiedNode {...props} />;
     case "ai_structured_output":
       return <AiStructuredOutputNode {...props} />;
+    case "http_request":
+      return <HttpRequestNode {...props} />;
 
     // ── Fallback for any future / unknown node types ─────────────────────────
     default:
