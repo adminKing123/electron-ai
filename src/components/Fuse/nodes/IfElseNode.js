@@ -31,10 +31,10 @@ const IfElseNode = ({ id, data, selected }) => {
 
       {/* Header: icon + label */}
       <div className="flex items-center flex-col gap-2.5 px-3.5 pt-3 pb-2.5">
-        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
+        <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg
           bg-[#fef3c7] dark:bg-[#2a2000]">
           {Icon
-            ? <Icon className="w-[16px] h-[16px] text-[#d97706] dark:text-[#f59e0b]" />
+            ? <Icon className="w-[24px] h-[24px] text-[#d97706] dark:text-[#f59e0b]" />
             : <span className="w-3 h-3 rounded-sm bg-[#fcd34d]" />
           }
         </span>

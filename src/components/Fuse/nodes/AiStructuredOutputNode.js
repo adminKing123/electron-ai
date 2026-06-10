@@ -30,20 +30,20 @@ const AiStructuredOutputNode = ({ id, data, selected }) => {
       />
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-[#eef0fb] dark:bg-[#252540]">
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#eef0fb] dark:bg-[#252540]">
         {Icon
-          ? <Icon className="w-[16px] h-[16px] text-[#4a6cf7] dark:text-[#6b8aff]" />
+          ? <Icon className="w-[24px] h-[24px] text-[#4a6cf7] dark:text-[#6b8aff]" />
           : <span className="w-3 h-3 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
         }
       </span>
 
       {/* Label block */}
       <div className="flex flex-col min-w-0">
-        <span className="text-[9px] font-mono leading-tight text-[#d0d0d0] dark:text-[#333] truncate select-all">
-          {id}
-        </span>
         <span className="text-[13px] font-semibold leading-tight text-[#111] dark:text-[#e8e8e8] truncate">
           {data.label}
+        </span>
+        <span className="text-[9px] font-mono leading-tight text-[#d0d0d0] dark:text-[#333] truncate select-all">
+          {id}
         </span>
       </div>
 
