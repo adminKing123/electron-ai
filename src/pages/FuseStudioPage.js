@@ -194,6 +194,7 @@ export default function FuseStudioPage() {
         onNameChange={setWorkflowName}
         onNameBlur={handleNameBlur}
         saving={saving}
+        isLoading={loading}
       />
 
       <div className="flex-1 flex overflow-hidden">

@@ -36,7 +36,7 @@ export const iconBtnCls =
   );
 };
 
-const WorkflowNameInput = ({ value, onChange, onBlur, saving = false }) => {
+const WorkflowNameInput = ({ value, onChange, onBlur, placeholder = "Untitled Workflow", saving = false }) => {
   const inputRef = useRef(null);
 
   const handleKeyDown = (e) => {
@@ -54,7 +54,7 @@ const WorkflowNameInput = ({ value, onChange, onBlur, saving = false }) => {
         onBlur={onBlur}
         onKeyDown={handleKeyDown}
         spellCheck={false}
-        placeholder="Untitled Workflow"
+        placeholder={placeholder}
         style={{ textOverflow: "ellipsis" }}
         className="w-full max-w-[300px] bg-transparent px-2 py-1
           text-[14px] font-semibold tracking-tight
@@ -310,6 +310,7 @@ const FuseStudioHeader = ({
   onNameChange,
   onNameBlur,
   saving = false,
+  isLoading = false,
 }) => (
   <header id="fuse-studio-header" className="w-full flex-shrink-0">
     <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
@@ -321,6 +322,7 @@ const FuseStudioHeader = ({
           onChange={onNameChange}
           onBlur={onNameBlur}
           saving={saving}
+          placeholder={isLoading ? "" : "Untitled Workflow"}
         />
       </div>
 
