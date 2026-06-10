@@ -3,173 +3,14 @@ import {
   ReactFlow,
   Background,
   Controls,
-  Handle,
-  Position,
   BackgroundVariant,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import useIsDark from "../../hooks/useIsDark";
-import { getNodeIcon } from "./iconRegistry";
 import { BasicLoader } from "../Loaders";
-
-// ─── FuseFlowNode ─────────────────────────────────────────────────────────────
-// Custom React Flow node rendered for every node in the Fuse canvas.
-// All visual data comes from node.data — nothing is hardcoded here.
-const FuseFlowNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
-  // ── If / Else node — distinct yellow card with True / False footer ──────────
-  if (data.nodeType === "if_else") {
-    const borderCls = selected
-      ? "border-[#f59e0b] shadow-[0_0_0_3px_rgba(245,158,11,0.18)]"
-      : "border-[#fcd34d] dark:border-[#6b4c00] shadow-sm hover:border-[#f59e0b] dark:hover:border-[#b07800]";
-
-    return (
-      <div
-        className={[
-          "flex flex-col rounded-lg select-none cursor-pointer transition-colors",
-          "bg-[#fffbeb] dark:bg-[#1c1800]",
-          "border-2 min-w-[210px]",
-          borderCls,
-        ].join(" ")}
-      >
-        {/* Incoming handle */}
-        <Handle
-          type="target"
-          position={Position.Top}
-          className="!w-3 !h-3 !border-2 !border-[#fcd34d] dark:!border-[#6b4c00] !bg-[#fffbeb] dark:!bg-[#1c1800]"
-        />
-
-        {/* Header: icon + label */}
-        <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-2.5">
-          <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
-            bg-[#fef3c7] dark:bg-[#2a2000]">
-            {Icon
-              ? <Icon className="w-[16px] h-[16px] text-[#d97706] dark:text-[#f59e0b]" />
-              : <span className="w-3 h-3 rounded-sm bg-[#fcd34d]" />
-            }
-          </span>
-          <div className="flex flex-col min-w-0">
-            <span className="text-[9px] font-mono leading-tight text-[#d4a535] dark:text-[#5c3d00] truncate select-all">
-              {id}
-            </span>
-            <span className="text-[13px] font-semibold leading-tight text-[#92400e] dark:text-[#fbbf24] truncate">
-              {data.label}
-            </span>
-          </div>
-        </div>
-
-        {/* True / False branch footer */}
-        <div className="flex border-t border-[#fde68a] dark:border-[#2e2000]">
-          {/* True cell */}
-          <div className="relative flex-1 flex items-center justify-center gap-1.5 py-2">
-            <span className="w-2 h-2 rounded-full bg-[#22c55e] dark:bg-[#16a34a] flex-shrink-0" />
-            <span className="text-[11px] font-semibold text-[#16a34a] dark:text-[#4ade80]">True</span>
-            <Handle
-              type="source"
-              position={Position.Bottom}
-              id="true"
-              style={{ left: "50%", bottom: 0 }}
-              className="!w-3 !h-3 !border-2 !border-[#22c55e] dark:!border-[#16a34a] !bg-white dark:!bg-[#1c1800]"
-            />
-          </div>
-
-          {/* Divider */}
-          <div className="w-px bg-[#fde68a] dark:bg-[#2e2000]" />
-
-          {/* False cell */}
-          <div className="relative flex-1 flex items-center justify-center gap-1.5 py-2">
-            <span className="w-2 h-2 rounded-full bg-[#ef4444] dark:bg-[#dc2626] flex-shrink-0" />
-            <span className="text-[11px] font-semibold text-[#dc2626] dark:text-[#f87171]">False</span>
-            <Handle
-              type="source"
-              position={Position.Bottom}
-              id="false"
-              style={{ left: "50%", bottom: 0 }}
-              className="!w-3 !h-3 !border-2 !border-[#ef4444] dark:!border-[#dc2626] !bg-white dark:!bg-[#1c1800]"
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Default node card ───────────────────────────────────────────────────────
-  return (
-    <div
-      className={[
-        "flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl",
-        "bg-white dark:bg-[#1c1c1c]",
-        "border-2 transition-colors select-none",
-        "min-w-[190px] max-w-[260px] cursor-pointer",
-        selected
-          ? "border-[#4a6cf7] dark:border-[#6b8aff] shadow-[0_0_0_3px_rgba(74,108,247,0.15)]"
-          : "border-[#e0e0e0] dark:border-[#2a2a2a] shadow-sm hover:border-[#b0bef0] dark:hover:border-[#363660]",
-      ].join(" ")}
-    >
-      {/*
-       * Target (input) handle — hidden on starter nodes.
-       * Nothing connects INTO a workflow trigger.
-       */}
-      {!data.isStarter && (
-        <Handle
-          type="target"
-          position={Position.Top}
-          className="!w-3 !h-3 !border-2 !border-[#c0c8f0] dark:!border-[#363660] !bg-white dark:!bg-[#1c1c1c]"
-        />
-      )}
-
-      {/* Icon */}
-      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-[#eef0fb] dark:bg-[#252540]">
-        {Icon
-          ? <Icon className="w-[16px] h-[16px] text-[#4a6cf7] dark:text-[#6b8aff]" />
-          : <span className="w-3 h-3 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
-        }
-      </span>
-
-      {/* Label block */}
-      <div className="flex flex-col min-w-0">
-        <span className="text-[9px] font-mono leading-tight text-[#d0d0d0] dark:text-[#333] truncate select-all">
-          {id}
-        </span>
-        <span className="text-[13px] font-semibold leading-tight text-[#111] dark:text-[#e8e8e8] truncate">
-          {data.label}
-        </span>
-      </div>
-
-      {/* Source handle — bottom center */}
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        className="!w-3 !h-3 !border-2 !border-[#c0c8f0] dark:!border-[#363660] !bg-white dark:!bg-[#1c1c1c]"
-      />
-    </div>
-  );
-};
-
-/** Map of all custom node types registered with React Flow. */
-const NODE_TYPES = { fuse_node: FuseFlowNode };
-
-// ─── Connection limits ────────────────────────────────────────────────────────
-/**
- * Maximum number of outgoing edges allowed per node type.
- *
- * Any type NOT listed here defaults to 1 (single linear connection).
- * To enable multi-branch behaviour for a future node (e.g. "if_else"),
- * simply add an entry — no other code needs to change.
- *
- * Examples:
- *   if_else: 2   → exactly two outgoing branches (true / false)
- *   fork:    Infinity  → unlimited outgoing edges
- */
-const NODE_OUTGOING_LIMIT = {
-  if_else: 2, // true + false branch, one edge each
-};
-
-/** Returns the maximum outgoing edges allowed for the given node type. */
-const getOutgoingLimit = (nodeType) =>
-  NODE_OUTGOING_LIMIT[nodeType] ?? 1;
+import { NODE_TYPES } from "./nodes/FuseFlowNode";
+import { getOutgoingLimit } from "./nodes/connectionLimits";
 
 // ─── WorkflowCanvas ───────────────────────────────────────────────────────────
 /**
@@ -208,6 +49,7 @@ const WorkflowCanvas = ({ className = "" }) => {
    */
   const isValidConnection = useCallback(
     (connection) => {
+      // ── Outgoing limit ───────────────────────────────────────────────────────
       const sourceNode = nodes.find((n) => n.id === connection.source);
       const limit      = getOutgoingLimit(sourceNode?.data?.nodeType);
       const current    = edges.filter((e) => e.source === connection.source).length;
@@ -219,6 +61,18 @@ const WorkflowCanvas = ({ className = "" }) => {
         );
         if (handleUsed) return false;
       }
+
+      // ── Incoming limit ───────────────────────────────────────────────────────
+      // Every node accepts at most ONE incoming edge.
+      // Exception: if/else true/false handles are exempt so that both branches
+      // can converge back onto the same downstream node.
+      const isIfElseHandle =
+        connection.sourceHandle === "true" || connection.sourceHandle === "false";
+      if (!isIfElseHandle) {
+        const incomingCount = edges.filter((e) => e.target === connection.target).length;
+        if (incomingCount >= 1) return false;
+      }
+
       return true;
     },
     [nodes, edges]

@@ -139,6 +139,15 @@ const useFuseStudioStore = create((set) => ({
         );
         if (handleUsed) return {};
       }
+      // Enforce incoming limit: at most 1 edge per target node.
+      // if/else branch handles (true / false) are exempt — they can merge onto an
+      // already-connected node to allow branch convergence.
+      const isIfElseHandle =
+        connection.sourceHandle === "true" || connection.sourceHandle === "false";
+      if (!isIfElseHandle) {
+        const incomingCount = state.edges.filter((e) => e.target === connection.target).length;
+        if (incomingCount >= 1) return {};
+      }
       return {
         edges: addEdge(
           { ...connection, id: `edge_${Date.now()}` },
