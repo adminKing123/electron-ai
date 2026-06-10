@@ -10,31 +10,33 @@ import { getNodeIcon } from "../iconRegistry";
 const WebhookNode = ({ id, data, selected }) => {
   const Icon = getNodeIcon(data.icon);
 
+  const borderCls = selected
+    ? "border-[#059669] dark:border-[#34d399] shadow-[0_0_0_3px_rgba(5,150,105,0.18)]"
+    : "border-[#a7f3d0] dark:border-[#065f46] shadow-sm hover:border-[#10b981] dark:hover:border-[#047857]";
+
   return (
     <div
       className={[
         "flex items-center justify-center flex-col gap-2.5 px-3.5 py-2.5 rounded-full w-[140px] h-[140px]",
-        "bg-white dark:bg-[#1c1c1c]",
+        "bg-[#ecfdf5] dark:bg-[#062c1e]",
         "border-2 transition-colors select-none",
         "cursor-pointer",
-        selected
-          ? "border-[#4a6cf7] dark:border-[#6b8aff] shadow-[0_0_0_3px_rgba(74,108,247,0.15)]"
-          : "border-[#e0e0e0] dark:border-[#2a2a2a] shadow-sm hover:border-[#b0bef0] dark:hover:border-[#363660]",
+        borderCls,
       ].join(" ")}
     >
       {/* No target handle — webhook is always a starter node */}
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#eef0fb] dark:bg-[#252540]">
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#d1fae5] dark:bg-[#022c22]">
         {Icon
-          ? <Icon className="w-[24px] h-[24px] text-[#4a6cf7] dark:text-[#6b8aff]" />
-          : <span className="w-3 h-3 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
+          ? <Icon className="w-[24px] h-[24px] text-[#059669] dark:text-[#34d399]" />
+          : <span className="w-3 h-3 rounded-full bg-[#a7f3d0] dark:bg-[#065f46]" />
         }
       </span>
 
       {/* Label block */}
       <div className="flex flex-col min-w-0 text-center">
-        <span className="text-[13px] font-semibold leading-tight text-[#111] dark:text-[#e8e8e8] truncate">
+        <span className="text-[13px] font-semibold leading-tight text-[#064e3b] dark:text-[#6ee7b7] truncate">
           {data.label}
         </span>
       </div>
@@ -43,7 +45,7 @@ const WebhookNode = ({ id, data, selected }) => {
       <Handle
         type="source"
         position={Position.Bottom}
-        className="!w-3 !h-3 !border-2 !border-[#c0c8f0] dark:!border-[#363660] !bg-white dark:!bg-[#1c1c1c]"
+        className="!w-3 !h-3 !border-2 !border-[#a7f3d0] dark:!border-[#065f46] !bg-[#ecfdf5] dark:!bg-[#062c1e]"
       />
     </div>
   );

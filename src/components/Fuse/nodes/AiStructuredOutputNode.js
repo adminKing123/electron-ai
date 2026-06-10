@@ -10,39 +10,41 @@ import { getNodeIcon } from "../iconRegistry";
 const AiStructuredOutputNode = ({ id, data, selected }) => {
   const Icon = getNodeIcon(data.icon);
 
+  const borderCls = selected
+    ? "border-[#9333ea] dark:border-[#c084fc] shadow-[0_0_0_3px_rgba(147,51,234,0.18)]"
+    : "border-[#e9d5ff] dark:border-[#4c1d95] shadow-sm hover:border-[#a855f7] dark:hover:border-[#7e22ce]";
+
   return (
     <div
       className={[
         "flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl",
-        "bg-white dark:bg-[#1c1c1c]",
+        "bg-[#faf5ff] dark:bg-[#1f102c]",
         "border-2 transition-colors select-none",
         "min-w-[190px] max-w-[260px] cursor-pointer",
-        selected
-          ? "border-[#4a6cf7] dark:border-[#6b8aff] shadow-[0_0_0_3px_rgba(74,108,247,0.15)]"
-          : "border-[#e0e0e0] dark:border-[#2a2a2a] shadow-sm hover:border-[#b0bef0] dark:hover:border-[#363660]",
+        borderCls,
       ].join(" ")}
     >
       {/* Target (input) handle — top center */}
       <Handle
         type="target"
         position={Position.Top}
-        className="!w-3 !h-3 !border-2 !border-[#c0c8f0] dark:!border-[#363660] !bg-white dark:!bg-[#1c1c1c]"
+        className="!w-3 !h-3 !border-2 !border-[#e9d5ff] dark:!border-[#4c1d95] !bg-[#faf5ff] dark:!bg-[#1f102c] !rounded-none"
       />
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#eef0fb] dark:bg-[#252540]">
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#f3e8ff] dark:bg-[#3b0764]">
         {Icon
-          ? <Icon className="w-[24px] h-[24px] text-[#4a6cf7] dark:text-[#6b8aff]" />
-          : <span className="w-3 h-3 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
+          ? <Icon className="w-[24px] h-[24px] text-[#9333ea] dark:text-[#c084fc]" />
+          : <span className="w-3 h-3 rounded-full bg-[#e9d5ff] dark:bg-[#4c1d95]" />
         }
       </span>
 
       {/* Label block */}
       <div className="flex flex-col min-w-0">
-        <span className="text-[13px] font-semibold leading-tight text-[#111] dark:text-[#e8e8e8] truncate">
+        <span className="text-[13px] font-semibold leading-tight text-[#4c1d95] dark:text-[#d8b4fe] truncate">
           {data.label}
         </span>
-        <span className="text-[9px] font-mono leading-tight text-[#d0d0d0] dark:text-[#333] truncate select-all">
+        <span className="text-[9px] font-mono leading-tight text-[#c084fc] dark:text-[#581c87] truncate select-all">
           {id}
         </span>
       </div>
@@ -51,7 +53,7 @@ const AiStructuredOutputNode = ({ id, data, selected }) => {
       <Handle
         type="source"
         position={Position.Bottom}
-        className="!w-3 !h-3 !border-2 !border-[#c0c8f0] dark:!border-[#363660] !bg-white dark:!bg-[#1c1c1c]"
+        className="!w-3 !h-3 !border-2 !border-[#e9d5ff] dark:!border-[#4c1d95] !bg-[#faf5ff] dark:!bg-[#1f102c]"
       />
     </div>
   );
