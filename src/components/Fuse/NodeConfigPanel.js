@@ -482,6 +482,7 @@ const NodeConfigPanel = ({ className = "" }) => {
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
   const actionNodes  = useFuseStudioStore((s) => s.actionNodes);
   const addingNode   = useFuseStudioStore((s) => s.addingNode);
+  const loading       = useFuseStudioStore((s) => s.loading);
 
   const hasStarterNode = nodes.some((n) => n.data?.isStarter === true);
 
@@ -578,8 +579,12 @@ const NodeConfigPanel = ({ className = "" }) => {
   }, [selectedNode, nodes, edges]);
 
   let content;
-
-  if (nodes.length === 0 || !hasStarterNode) {
+  if (loading) {
+    content = (
+      null
+    );
+  }
+  else if (nodes.length === 0 || !hasStarterNode) {
     // No nodes placed yet — must choose a starter first.
     content = <StarterPanel />;
   } else if (addingNode) {
