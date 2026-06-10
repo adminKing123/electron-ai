@@ -16,9 +16,9 @@ const IfElseNode = ({ id, data, selected }) => {
   return (
     <div
       className={[
-        "flex flex-col rounded-lg select-none cursor-pointer transition-colors",
+        "flex flex-col rounded-b-lg rounded-t-[60px] select-none cursor-pointer transition-colors",
         "bg-[#fffbeb] dark:bg-[#1c1800]",
-        "border-2 min-w-[210px]",
+        "border-2 min-w-[160px]",
         borderCls,
       ].join(" ")}
     >
@@ -26,11 +26,11 @@ const IfElseNode = ({ id, data, selected }) => {
       <Handle
         type="target"
         position={Position.Top}
-        className="!w-3 !h-3 !border-2 !border-[#fcd34d] dark:!border-[#6b4c00] !bg-[#fffbeb] dark:!bg-[#1c1800]"
+        className="!w-3 !h-3 !border-2 !border-[#fcd34d] dark:!border-[#6b4c00] !bg-[#fffbeb] dark:!bg-[#1c1800] !rounded-none"
       />
 
       {/* Header: icon + label */}
-      <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-2.5">
+      <div className="flex items-center flex-col gap-2.5 px-3.5 pt-3 pb-2.5">
         <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
           bg-[#fef3c7] dark:bg-[#2a2000]">
           {Icon
@@ -38,12 +38,12 @@ const IfElseNode = ({ id, data, selected }) => {
             : <span className="w-3 h-3 rounded-sm bg-[#fcd34d]" />
           }
         </span>
-        <div className="flex flex-col min-w-0">
-          <span className="text-[9px] font-mono leading-tight text-[#d4a535] dark:text-[#5c3d00] truncate select-all">
-            {id}
-          </span>
+        <div className="flex flex-col min-w-0 text-center">
           <span className="text-[13px] font-semibold leading-tight text-[#92400e] dark:text-[#fbbf24] truncate">
             {data.label}
+          </span>
+          <span className="text-[9px] font-mono leading-tight text-[#d4a535] dark:text-[#5c3d00] truncate select-all">
+            {id}
           </span>
         </div>
       </div>
