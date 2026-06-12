@@ -915,16 +915,19 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
 
 // ─── ConditionBuilderField ────────────────────────────────────────────────────
 /**
- * Builds a single if/else condition: [variable] [operator] [value?]
+ * Builds compound AND/OR conditions for the if/else node.
  *
- * Operators that compare against a value: is, is not, >, <, >=, <=,
- *   contains, does not contain, starts with, does not start with,
- *   ends with, does not end with.
- * Unary operators (no value needed): is empty, is not empty,
- *   is even, is odd, is true, is false.
+ * Each condition row: [variable picker] [operator] [value?] [remove ×]
+ * An AND/OR toggle badge appears between consecutive rows.
  *
- * Stored value shape:
- * { variable: string, operator: string, value: string }
+ * Stored value shape (new):
+ * {
+ *   combinator: "and" | "or",
+ *   conditions: Array<{ variable: string, operator: string, value: string }>
+ * }
+ *
+ * Backward-compatible: old single-condition shape { variable, operator, value }
+ * is automatically migrated to the new format on first access.
  */
 const CONDITION_OPERATORS = [
   { group: "Equality",     ops: ["is", "is not"] },
@@ -936,43 +939,88 @@ const CONDITION_OPERATORS = [
   { group: "Boolean",      ops: ["is true", "is false"] },
 ];
 
-// Operators that don't need a comparison value.
+// Operators that don't require a comparison value.
 const UNARY_OPERATORS = new Set([
   "is even", "is odd", "is empty", "is not empty", "is true", "is false",
 ]);
 
-const ConditionBuilderField = ({ field, value, onChange, variables }) => {
-  const variable = value?.variable ?? "";
-  const operator = value?.operator ?? "is";
-  const val      = value?.value    ?? "";
+/** Blank condition template for new rows. */
+const EMPTY_CONDITION = { variable: "", operator: "is", value: "" };
 
-  const update = (patch) => onChange({ variable, operator, val, ...value, ...patch });
+/**
+ * Normalise stored value to the group format.
+ * Accepts both old { variable, operator, value } and new { combinator, conditions }.
+ */
+const normaliseConditionValue = (raw) => {
+  if (!raw) return { combinator: "and", conditions: [{ ...EMPTY_CONDITION }] };
 
-  const isUnary = UNARY_OPERATORS.has(operator);
+  // Old single-condition shape: has "variable" but no "conditions" array
+  if (raw.conditions === undefined && raw.variable !== undefined) {
+    return {
+      combinator: "and",
+      conditions: [{ variable: raw.variable ?? "", operator: raw.operator ?? "is", value: raw.value ?? "" }],
+    };
+  }
+
+  return {
+    combinator: raw.combinator ?? "and",
+    conditions: Array.isArray(raw.conditions) && raw.conditions.length
+      ? raw.conditions
+      : [{ ...EMPTY_CONDITION }],
+  };
+};
+
+/**
+ * Single condition row: variable picker, operator select, optional value input,
+ * and a remove button (shown only when more than one condition exists).
+ */
+const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
+  const operator = cond.operator ?? "is";
+  const isUnary  = UNARY_OPERATORS.has(operator);
+
+  const update = (patch) => onChange({ ...cond, ...patch });
 
   return (
-    <div className="flex flex-col gap-3">
-      {/* ── Variable selector ── */}
-      <div className="flex flex-col gap-1">
-        <span className="text-[11px] font-medium text-[#777] dark:text-[#555]">
-          Variable to check
-        </span>
-        <VariableSelectorField
-          value={variable}
-          variables={variables ?? []}
-          onChange={(v) => update({ variable: v })}
-        />
+    <div className="flex flex-col gap-2 p-3 rounded-xl
+      bg-[#fafafa] dark:bg-[#141414]
+      border border-[#e8e8e8] dark:border-[#272727]">
+
+      {/* Variable selector with optional remove button */}
+      <div className="flex items-center gap-1.5">
+        <div className="flex-1 min-w-0">
+          <VariableSelectorField
+            value={cond.variable ?? ""}
+            variables={variables ?? []}
+            onChange={(v) => update({ variable: v })}
+          />
+        </div>
+
+        {/* Remove button — only visible when more than one row exists */}
+        {total > 1 && (
+          <button
+            type="button"
+            onClick={onRemove}
+            title="Remove this condition"
+            className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
+              text-[#bbb] dark:text-[#444]
+              border border-[#e0e0e0] dark:border-[#2a2a2a]
+              hover:text-[#e05] hover:border-[#fcc] dark:hover:border-[#5a1a1a]
+              hover:bg-[#fff5f5] dark:hover:bg-[#1e0a0a]
+              transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
+          </button>
+        )}
       </div>
 
-      {/* ── Operator selector ── */}
-      <div className="flex flex-col gap-1">
-        <span className="text-[11px] font-medium text-[#777] dark:text-[#555]">
-          Condition
-        </span>
-        <div className="relative">
+      {/* Operator + optional comparison value */}
+      <div className="flex gap-2">
+        <div className="relative flex-1">
           <select
             value={operator}
-            onChange={(e) => update({ operator: e.target.value })}
+            onChange={(e) => update({ operator: e.target.value, value: "" })}
             className={SELECT_BASE}
           >
             {CONDITION_OPERATORS.map(({ group, ops }) => (
@@ -985,33 +1033,104 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
           </select>
           <SelectChevron />
         </div>
-      </div>
 
-      {/* ── Comparison value (hidden for unary operators) ── */}
-      {!isUnary && (
-        <div className="flex flex-col gap-1">
-          <span className="text-[11px] font-medium text-[#777] dark:text-[#555]">
-            Value
-          </span>
+        {!isUnary && (
           <input
             type="text"
-            value={val}
-            placeholder="e.g. active, 100, true …"
+            value={cond.value ?? ""}
+            placeholder="value…"
             onChange={(e) => update({ value: e.target.value })}
-            className={INPUT_BASE}
+            className={`${INPUT_BASE} flex-1`}
           />
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* ── Live preview pill ── */}
-      {variable && operator && (
-        <div className="px-3 py-2 rounded-lg bg-[#f5f7ff] dark:bg-[#1a1a30]
-          border border-[#c7cfe8] dark:border-[#2a2a50] text-[11.5px] font-mono
-          text-[#4a6cf7] dark:text-[#6b8aff] break-all leading-snug">
-          {variable} <span className="font-bold not-italic">{operator}</span>
-          {!isUnary && val ? ` "${val}"` : ""}
+      {/* Live preview */}
+      {cond.variable && operator && (
+        <div className="px-2.5 py-1.5 rounded-lg
+          bg-[#f5f7ff] dark:bg-[#1a1a30]
+          border border-[#c7cfe8] dark:border-[#2a2a50]
+          text-[11px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] break-all leading-snug">
+          {cond.variable} <span className="font-bold">{operator}</span>
+          {!isUnary && cond.value ? ` "${cond.value}"` : ""}
         </div>
       )}
+    </div>
+  );
+};
+
+const ConditionBuilderField = ({ field, value, onChange, variables }) => {
+  const group = normaliseConditionValue(value);
+
+  const updateCombinator = (c) => onChange({ ...group, combinator: c });
+
+  const updateCondition = (index, updated) => {
+    const next = group.conditions.map((c, i) => (i === index ? updated : c));
+    onChange({ ...group, conditions: next });
+  };
+
+  const addCondition = () =>
+    onChange({ ...group, conditions: [...group.conditions, { ...EMPTY_CONDITION }] });
+
+  const removeCondition = (index) => {
+    if (group.conditions.length <= 1) return;
+    onChange({ ...group, conditions: group.conditions.filter((_, i) => i !== index) });
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      {group.conditions.map((cond, idx) => (
+        <React.Fragment key={idx}>
+          {/* AND / OR toggle badge between condition rows */}
+          {idx > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-px bg-[#e8e8e8] dark:bg-[#272727]" />
+              <div className="flex rounded-lg overflow-hidden border border-[#ddd] dark:border-[#2e2e2e]">
+                {["and", "or"].map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => updateCombinator(c)}
+                    className={[
+                      "px-3 py-1 text-[10.5px] font-bold uppercase tracking-widest transition-colors",
+                      group.combinator === c
+                        ? "bg-[#4a6cf7] text-white"
+                        : "text-[#999] dark:text-[#555] hover:bg-[#f0f0f0] dark:hover:bg-[#222]",
+                    ].join(" ")}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+              <div className="flex-1 h-px bg-[#e8e8e8] dark:bg-[#272727]" />
+            </div>
+          )}
+
+          <ConditionRow
+            cond={cond}
+            total={group.conditions.length}
+            variables={variables ?? []}
+            onChange={(updated) => updateCondition(idx, updated)}
+            onRemove={() => removeCondition(idx)}
+          />
+        </React.Fragment>
+      ))}
+
+      {/* Add condition button */}
+      <button
+        type="button"
+        onClick={addCondition}
+        className="flex items-center gap-1.5 self-start mt-1 px-3 py-1.5 rounded-lg text-[12px]
+          text-[#4a6cf7] dark:text-[#6b8aff]
+          border border-[#c7cfe8] dark:border-[#2a2a50]
+          hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+          transition-colors"
+      >
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+        </svg>
+        Add condition
+      </button>
     </div>
   );
 };
