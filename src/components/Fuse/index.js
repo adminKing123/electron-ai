@@ -6,3 +6,4 @@ export { default as FusePrimaryButton } from "./FusePrimaryButton";
 export { default as WorkflowCanvas } from "./WorkflowCanvas";
 export { default as NodeConfigPanel } from "./NodeConfigPanel";
 export { default as FormBuilder } from "./FormBuilder";
+export { default as FuseAutomateInput } from "./FuseAutomateInput";

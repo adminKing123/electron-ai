@@ -1,4 +1,4 @@
-import { FuseStudioSidebar } from "../components/Fuse";
+import { FuseStudioSidebar, FuseAutomateInput } from "../components/Fuse";
 import Header from "../components/Header";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import ROUTES from "../router/routes";
@@ -16,7 +16,9 @@ const FusePage = () => {
             bg-[#f7f7f7] dark:bg-[#1a1a1a]
             border border-[#e5e5e5] dark:border-[#252525]
             shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
-        ></div>
+        >
+          <FuseAutomateInput creating={creating} onCreate={handleCreate} />
+        </div>
       </div>
     </main>
   );

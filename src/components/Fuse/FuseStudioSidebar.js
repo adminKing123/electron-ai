@@ -26,7 +26,7 @@ const SidebarNavButton = ({ icon: Icon, label, to, end = false, onClick }) => {
           "flex flex-col items-center justify-center gap-1 w-14 py-2 rounded-xl",
           "text-[10px] font-semibold select-none transition-colors",
           isActive
-            ? "text-[#4a6cf7] dark:text-[#6b8aff]"
+            ? "text-[#000000] dark:text-[#ffffff]"
             : "text-[#666] dark:text-[#999] hover:text-[#222] dark:hover:text-[#d0d0d0]",
         ].join(" ")
       }
