@@ -7,6 +7,7 @@ import CheckConfigs from "../page_layouts/CheckConfigs";
 import NewChatPage from "../pages/NewChatPage";
 import ChatPage from "../pages/ChatPage";
 import LibraryPage from "../pages/Library";
+import FusesPageListing from "../pages/FusesPageListing";
 
 const AuraRjPage          = lazy(() => import("../pages/AuraRjPage"));
 const AnalyticsPage       = lazy(() => import("../pages/AnalyticsPage"));
@@ -35,6 +36,7 @@ const AppRoutes = () => {
           <Route path={ROUTES.FUSE_STUDIO} element={<FuseStudioPage />} />
           <Route path={ROUTES.FUSE_RUNS} element={<WorkflowRunsPage />} />
           <Route path={ROUTES.FUSE_RUN_DETAIL} element={<WorkflowRunDetailPage />} />
+          <Route path={ROUTES.FUSES_LISTING} element={<FusesPageListing />} />
 
           <Route path={ROUTES.AURA_RJ} element={<AuraRjPage />} />
         </Route>

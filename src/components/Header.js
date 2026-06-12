@@ -50,10 +50,14 @@ const Header = ({ type, backRoute = "" }) => {
   return (
     <header
       id="header"
-      className="h-[56px] w-full flex items-center justify-between gap-2 px-3 border-b border-[#ebebeb] dark:border-[#1e1e1e]"
+      className={`h-[56px] w-full flex items-center justify-between gap-2 px-3 ${type === "fuse" ? "" : "border-b border-[#ebebeb] dark:border-[#1e1e1e]"}`}
     >
       <div className="flex items-center gap-1.5">
-        {isStandalone ? <BackButton route={backRoute} /> : <SidebarOpenButton />}
+        {isStandalone ? (
+          <BackButton route={backRoute} />
+        ) : (
+          <SidebarOpenButton />
+        )}
         <span className="text-[14px] font-semibold tracking-tight text-[#111] dark:text-white select-none">
           {label}
         </span>
