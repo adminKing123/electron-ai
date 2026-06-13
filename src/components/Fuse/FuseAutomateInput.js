@@ -20,7 +20,7 @@ const FuseAutomateInput = ({ creating, onCreate }) => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center pt-14 pb-10 px-6 select-none">
+    <div className="w-full flex flex-col items-center pt-8 pb-10 px-6 select-none">
       <h1 className="text-[2.4rem] font-semibold font-sans tracking-tight text-[#343434] dark:text-white text-center">
         Automate your work with{" "}
         <span className="italic text-[#ffad09] dark:text-[#ffbf3e] font-mono">Fuse</span>
