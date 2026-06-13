@@ -25,6 +25,9 @@ const ReviewQuicklySection = ({ loading, data }) => {
 
   return (
     <div className="w-full max-w-3xl mx-auto">
+      <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2">
+        Review Quickly
+      </h2>
       {loading ? (
         <ReviewQuicklySkeletons />
       ) : (
