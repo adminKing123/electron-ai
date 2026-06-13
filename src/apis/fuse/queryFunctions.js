@@ -18,6 +18,12 @@ export const getWorkflowsAPI = async (params = {}) => {
   return res.data; // { items, next_cursor }
 };
 
+/** GET /fuse/workflows/discover */
+export const discoverWorkflowsAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_DISCOVER });
+  return res.data;
+};
+
 /**
  * POST /fuse/workflows — creates a new workflow.
  * @param {{ name: string }} data
