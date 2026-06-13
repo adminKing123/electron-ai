@@ -1,18 +1,16 @@
 import { TbEdit, TbTrash } from "react-icons/tb";
+import { getNodeIcon } from "./iconRegistry";
 import WorkflowEmptyState from "./WorkflowEmptyState";
 
+/** Short date — e.g. "Jun 12, 2026" */
 const fmtDate = (iso) =>
-  new Date(iso).toLocaleString(undefined, {
-    year: "numeric",
+  new Date(iso).toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    year: "numeric",
   });
 
-const TH =
-  "px-3 sm:px-5 py-3.5 text-left text-[11px] font-semibold text-[#aaa] dark:text-[#555] uppercase tracking-widest whitespace-nowrap";
-const TD = "px-3 sm:px-5 py-4 text-[13px] text-[#555] dark:text-[#999] whitespace-nowrap";
+// ─── Sub-components ───────────────────────────────────────────────────────────
 
 const ActionBtn = ({ icon: Icon, title, onClick, disabled, hoverCls }) => (
   <button
@@ -25,7 +23,7 @@ const ActionBtn = ({ icon: Icon, title, onClick, disabled, hoverCls }) => (
       disabled:opacity-40 disabled:cursor-not-allowed
       ${hoverCls}`}
   >
-    <Icon className="w-[16px] h-[16px]" />
+    <Icon className="w-[15px] h-[15px]" />
   </button>
 );
 
@@ -33,66 +31,108 @@ const StatusBadge = ({ status }) => {
   const isActive = status === "active";
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold select-none
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold select-none
         ${
           isActive
             ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-            : "bg-[#f0f0f0] text-[#999] dark:bg-[#222] dark:text-[#555]"
+            : "bg-[#f0f0f0] text-[#999] dark:bg-[#252525] dark:text-[#555]"
         }`}
     >
       <span
-        className={`w-1.5 h-1.5 rounded-full flex-shrink-0
-          ${isActive ? "bg-emerald-500" : "bg-[#ccc] dark:bg-[#444]"}`}
+        className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+          isActive ? "bg-emerald-500" : "bg-[#ccc] dark:bg-[#444]"
+        }`}
       />
       {isActive ? "Active" : "Inactive"}
     </span>
   );
 };
 
-const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => (
-  <tr
-    className={`group transition-colors duration-100
-      hover:bg-[#fafafa] dark:hover:bg-[#1a1a1a]
-      ${!isLast ? "border-b border-[#f0f0f0] dark:border-[#1d1d1d]" : ""}`}
-  >
-    <td className={`${TD} font-medium text-[#111] dark:text-white max-w-[140px] sm:max-w-none truncate`}>
-      {workflow.name}
-    </td>
-    <td className={TD}>
-      <StatusBadge status={workflow.status} />
-    </td>
-    <td className={`${TD} hidden sm:table-cell`}>{fmtDate(workflow.created_at)}</td>
-    <td className={`${TD} hidden sm:table-cell`}>{fmtDate(workflow.updated_at)}</td>
-    <td className={`${TD} text-right`}>
-      <div className="flex items-center justify-end gap-0.5">
-        <ActionBtn
-          icon={TbEdit}
-          title="Edit workflow"
-          onClick={() => onEdit(workflow)}
-          hoverCls="hover:text-[#111] dark:hover:text-white hover:bg-[#ebebeb] dark:hover:bg-[#242424]"
-        />
-        <ActionBtn
-          icon={TbTrash}
-          title="Delete workflow"
-          onClick={() => onDelete(workflow)}
-          disabled={isDeleting}
-          hoverCls="hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/8 dark:hover:bg-red-500/10"
-        />
-      </div>
-    </td>
-  </tr>
-);
+// ─── Table constants ──────────────────────────────────────────────────────────
+
+const TH =
+  "px-4 py-3 text-left text-[11px] font-semibold text-[#aaa] dark:text-[#555] uppercase tracking-widest whitespace-nowrap";
+const TD = "px-4 py-3.5 text-[13px] text-[#555] dark:text-[#999] whitespace-nowrap";
+
+// ─── Table row ────────────────────────────────────────────────────────────────
+
+const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => {
+  const visibleNodes = workflow.nodes?.slice(0, 5) ?? [];
+  const overflow = Math.max(0, (workflow.nodes?.length ?? 0) - 5);
+
+  return (
+    <tr
+      className={`transition-colors duration-100
+        hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]
+        ${!isLast ? "border-b border-[#f0f0f0] dark:border-[#212121]" : ""}`}
+    >
+      {/* Name */}
+      <td className={`${TD} font-medium text-[#111] dark:text-white max-w-[200px] truncate`}>
+        {workflow.name}
+      </td>
+
+      {/* Status */}
+      <td className={TD}>
+        <StatusBadge status={workflow.status} />
+      </td>
+
+      {/* Node icons */}
+      <td className={`${TD} hidden sm:table-cell`}>
+        <div className="flex items-center gap-2">
+          {visibleNodes.map((node) => {
+            const Icon = getNodeIcon(node.data.icon);
+            return (
+              <Icon
+                key={node.id}
+                className="text-[#888] dark:text-[#666] text-[17px] flex-shrink-0"
+              />
+            );
+          })}
+          {overflow > 0 && (
+            <span className="text-[11px] text-[#aaa] dark:text-[#555]">+{overflow}</span>
+          )}
+        </div>
+      </td>
+
+      {/* Updated */}
+      <td className={`${TD} hidden md:table-cell text-[#aaa] dark:text-[#555]`}>
+        {fmtDate(workflow.updated_at)}
+      </td>
+
+      {/* Actions */}
+      <td className={`${TD} text-right`}>
+        <div className="flex items-center justify-end gap-0.5">
+          <ActionBtn
+            icon={TbEdit}
+            title="Edit workflow"
+            onClick={() => onEdit(workflow)}
+            hoverCls="hover:text-[#111] dark:hover:text-white hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a]"
+          />
+          <ActionBtn
+            icon={TbTrash}
+            title="Delete workflow"
+            onClick={() => onDelete(workflow)}
+            disabled={isDeleting}
+            hoverCls="hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/8 dark:hover:bg-red-500/10"
+          />
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+// ─── WorkflowsTable ───────────────────────────────────────────────────────────
 
 const WorkflowsTable = ({ workflows, deletingId, onEdit, onDelete }) => (
   <div className="overflow-x-auto rounded-2xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#1a1a1a]">
-    <table className="w-full min-w-[320px] border-collapse">
+    <table className="w-full min-w-[420px] border-collapse">
       <thead>
         <tr className="border-b border-[#ebebeb] dark:border-[#232323] bg-[#fafafa] dark:bg-[#161616]">
           <th className={TH}>Name</th>
           <th className={TH}>Status</th>
-          <th className={`${TH} hidden sm:table-cell`}>Created At</th>
-          <th className={`${TH} hidden sm:table-cell`}>Updated At</th>
-          <th className={`${TH} text-right`}></th>
+          <th className={`${TH} hidden sm:table-cell`}>Nodes</th>
+          <th className={`${TH} hidden md:table-cell`}>Updated</th>
+          <th className={`${TH} text-right`} />
         </tr>
       </thead>
       <tbody>

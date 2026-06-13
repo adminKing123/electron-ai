@@ -18,11 +18,11 @@ import ROUTES from "../router/routes";
 /* Number of workflows fetched per page from the API. */
 const PAGE_SIZE = 20;
 
-const WorkflowsHeading = ({ loading, creating, onCreate }) => (
+const WorkflowsHeading = ({ creating, onCreate }) => (
   <div className="flex items-end justify-between mb-5 sm:mb-7">
     <div>
       <h2 className="text-[19px] sm:text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight">
-        Workflows
+        Fuses
       </h2>
     </div>
 
@@ -32,21 +32,54 @@ const WorkflowsHeading = ({ loading, creating, onCreate }) => (
   </div>
 );
 
-const WorkflowsSkeletonLoader = () => (
-  <div className="rounded-2xl border border-[#ebebeb] dark:border-[#232323] overflow-hidden bg-white dark:bg-[#1a1a1a] animate-pulse">
-    {[...Array(3)].map((_, i) => (
-      <div
-        key={i}
-        className={`flex items-center gap-3 px-3 sm:px-5 py-4
-          ${i !== 2 ? "border-b border-[#f0f0f0] dark:border-[#1d1d1d]" : ""}`}
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-[#e5e5e5] dark:bg-[#2a2a2a] flex-shrink-0" />
-        <div className="h-3 w-32 sm:w-40 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
-        <div className="h-3 w-16 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto hidden sm:block" />
-        <div className="h-5 w-16 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
-        <div className="h-3 w-14 rounded-full bg-[#ebebeb] dark:bg-[#272727]" />
-      </div>
-    ))}
+/**
+ * Skeleton table — mirrors WorkflowRow layout while data loads.
+ */
+const WorkflowsSkeletonLoader = ({ count = 8 }) => (
+  <div className="overflow-x-auto rounded-2xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#1a1a1a]">
+    <table className="w-full min-w-[420px] border-collapse">
+      <thead>
+        <tr className="border-b border-[#ebebeb] dark:border-[#232323] bg-[#fafafa] dark:bg-[#161616]">
+          {["Name", "Status", "Nodes", "Updated", ""].map((h, i) => (
+            <th
+              key={i}
+              className={`px-4 py-3 text-left text-[11px] font-semibold text-[#aaa] dark:text-[#555] uppercase tracking-widest
+                ${
+                  h === "Nodes" ? "hidden sm:table-cell" :
+                  h === "Updated" ? "hidden md:table-cell" : ""
+                }`}
+            >
+              {h}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {[...Array(count)].map((_, i) => (
+          <tr
+            key={i}
+            className={i !== count - 1 ? "border-b border-[#f0f0f0] dark:border-[#212121]" : ""}
+          >
+            <td className="px-4 py-3.5"><div className="skeleton h-3.5 w-36 rounded-md" /></td>
+            <td className="px-4 py-3.5"><div className="skeleton h-5 w-16 rounded-full" /></td>
+            <td className="px-4 py-3.5 hidden sm:table-cell">
+              <div className="flex gap-2">
+                {[...Array(3)].map((_, j) => (
+                  <div key={j} className="skeleton w-5 h-5 rounded-md" />
+                ))}
+              </div>
+            </td>
+            <td className="px-4 py-3.5 hidden md:table-cell"><div className="skeleton h-3 w-24 rounded-md" /></td>
+            <td className="px-4 py-3.5">
+              <div className="flex justify-end gap-1">
+                <div className="skeleton w-7 h-7 rounded-lg" />
+                <div className="skeleton w-7 h-7 rounded-lg" />
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
 );
 
@@ -142,9 +175,11 @@ export default function FusesPageListing() {
             border border-[#e5e5e5] dark:border-[#252525]
             shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
-          <div className="max-w-[860px] mx-auto px-3 py-6 sm:px-6 sm:py-10">
+          <div className="max-w-5xl mx-auto px-3 py-6 sm:px-6 sm:py-10">
+            {/* Heading is always visible — not gated by loading */}
+            <WorkflowsHeading creating={creating} onCreate={handleCreate} />
             {loading ? (
-              <WorkflowsSkeletonLoader />
+              <WorkflowsSkeletonLoader count={6} />
             ) : (
               <>
                 <WorkflowsTable

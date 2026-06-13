@@ -5,6 +5,8 @@ import {
   FuseAutomateInput,
   ReviewCard,
   ReviewQuicklySkeletons,
+  NormalReviewCard,
+  RecentFusesSkeletons,
 } from "../components/Fuse";
 import Header from "../components/Header";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
@@ -39,6 +41,25 @@ const ReviewQuicklySection = ({ loading, data }) => {
               active={activeWorkflowId === workflow.id}
               onHover={setActiveWorkflowId}
             />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const RecentFuses = ({ loading, data }) => {
+  return (
+    <div className="w-full max-w-3xl mx-auto mt-10">
+      <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2">
+        Your Recent Fuses
+      </h2>
+      {loading ? (
+        <RecentFusesSkeletons count={6} />
+      ) : (
+        <div className="grid grid-cols-3 gap-3 cursor-pointer">
+          {data.map((workflow) => (
+            <NormalReviewCard key={workflow.id} workflow={workflow} />
           ))}
         </div>
       )}
@@ -85,6 +106,14 @@ const FusePage = () => {
             data={
               discoverData?.workflows?.items
                 ? discoverData.workflows.items.slice(0, 3)
+                : []
+            }
+          />
+          <RecentFuses
+            loading={loading}
+            data={
+              discoverData?.workflows?.items
+                ? discoverData.workflows.items.slice(3)
                 : []
             }
           />

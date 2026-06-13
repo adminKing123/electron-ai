@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getNodeIcon } from "./iconRegistry";
 import ROUTES from "../../router/routes";
 import FuseWorkflowToggle from "./FuseWorkflowToggle";
@@ -107,11 +107,15 @@ const ReviewCard = ({ workflow, onHover, active }) => {
                 <FuseWorkflowToggle
                   workflowId={workflow.id}
                   isActive={workflow.status === "active"}
-                  onDone={() => navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id))}
+                  onDone={() =>
+                    navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id))
+                  }
                 />
               ) : (
                 <OpenButton
-                  onClick={() => navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id))}
+                  onClick={() =>
+                    navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id))
+                  }
                 />
               )}
             </div>
@@ -140,6 +144,74 @@ const ReviewCard = ({ workflow, onHover, active }) => {
         </div>
       )}
     </div>
+  );
+};
+
+// ─── Recent Fuses Skeleton ───────────────────────────────────────────────────
+
+/** Skeleton placeholders shown while recent-fuse data is loading. */
+export const RecentFusesSkeletons = ({ count = 6 }) => (
+  <div className="grid grid-cols-3 gap-3">
+    {[...Array(count)].map((_, i) => (
+      <div
+        key={i}
+        className="bg-[#ffffff] dark:bg-[#202020] py-6 px-6 rounded-3xl overflow-hidden"
+      >
+        {/* Name lines */}
+        <div className="h-[42px]">
+          <div className="skeleton h-4 w-full rounded-md" />
+          <div className="skeleton mt-1 h-4 w-3/5 rounded-md" />
+        </div>
+        {/* Icons + status dot */}
+        <div className="mt-8 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            {[...Array(3)].map((_, j) => (
+              <div key={j} className="skeleton w-5 h-5 rounded-md" />
+            ))}
+          </div>
+          <div className="skeleton w-2 h-2 rounded-full" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+// ─── NormalReviewCard ─────────────────────────────────────────────────────────
+
+export const NormalReviewCard = ({ workflow }) => {
+  return (
+    <Link
+      to={ROUTES.GET_FUSE_STUDIO_URL(workflow.id)}
+      className={
+        "bg-[#ffffff] dark:bg-[#202020] py-6 px-6 rounded-3xl overflow-hidden"
+      }
+    >
+      <div className="h-[42px]">
+        <p className="text-[#666666] dark:text-[#d0d0d0] font-sans text-sm line-clamp-2">
+          {workflow.name}
+        </p>
+      </div>
+      <div className="mt-8 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          {workflow.nodes.slice(0, 4).map((node) => {
+            const Icon = getNodeIcon(node.data.icon);
+            return (
+              <div key={node.id} className="flex items-center gap-1">
+                <Icon className="text-[#555555] dark:text-white text-xl" />
+              </div>
+            );
+          })}
+          {workflow.nodes.length > 4 && (
+            <span className="text-[#555555] dark:text-white text-xs">
+              +{workflow.nodes.length - 4}
+            </span>
+          )}
+        </div>
+        <div
+          className={`w-2 h-2 rounded-full ${workflow.compiled_graph ? (workflow.status === "active" ? "bg-green-500" : "bg-red-500") : "bg-gray-500"} opacity-70`}
+        ></div>
+      </div>
+    </Link>
   );
 };
 
