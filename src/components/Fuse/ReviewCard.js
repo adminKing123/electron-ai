@@ -72,12 +72,13 @@ const ReviewCard = ({ workflow, onHover, active }) => {
 
   return (
     <div
+      className={`py-6 px-6 rounded-3xl shadow-md h-[140px] min-w-0 overflow-hidden transition-all duration-300 
+        ${
+          active
+            ? "bg-[#ffffff] dark:bg-[#262626] flex-[3]"
+            : "bg-[#fafafa] dark:bg-[#1d1d1d] flex-[1]"
+        }`}
       onMouseEnter={!active ? () => onHover?.(workflow.id) : undefined}
-      className={
-        active
-          ? "bg-[#ffffff] dark:bg-[#262626] py-6 px-6 rounded-3xl flex-1 shadow-md min-w-0 overflow-hidden"
-          : "bg-[#ffffff] dark:bg-[#202020] py-6 px-6 rounded-3xl w-[180px] shadow-md overflow-hidden"
-      }
     >
       {active ? (
         <div>
