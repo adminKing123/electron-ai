@@ -25,6 +25,8 @@ const ReviewQuicklySection = ({ loading, data }) => {
     }
   }, [data]);
 
+  if (!loading && data.length === 0) return null;
+
   return (
     <div className="w-full max-w-3xl mx-auto">
       <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2">
@@ -49,6 +51,8 @@ const ReviewQuicklySection = ({ loading, data }) => {
 };
 
 const RecentFuses = ({ loading, data }) => {
+  if (!loading && data.length === 0) return null;
+
   return (
     <div className="w-full max-w-3xl mx-auto mt-10">
       <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2">
