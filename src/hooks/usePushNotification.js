@@ -20,7 +20,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { getVapidPublicKeyAPI, pushSubscribeAPI } from "../apis/fuse/queryFunctions";
+import { getVapidPublicKeyAPI, pushSubscribeAPI, pushUnsubscribeAPI } from "../apis/fuse/queryFunctions";
 
 // Convert a base64 URL-safe string to a Uint8Array (required by
 // PushManager.subscribe for the applicationServerKey option).
@@ -89,6 +89,21 @@ export default function usePushNotification() {
       .catch(() => {});
   }, [supported, _subscribe]);
 
+  const unsubscribe = useCallback(async () => {
+    if (!swRegRef.current) return;
+    try {
+      const existing = await swRegRef.current.pushManager.getSubscription();
+      if (existing) {
+        // You could also call an API to delete it from the backend if you want
+        // await pushUnsubscribeAPI({ endpoint: existing.endpoint });
+        await existing.unsubscribe();
+      }
+      setSubscribed(false);
+    } catch (err) {
+      console.warn("[usePushNotification] unsubscribe failed:", err);
+    }
+  }, []);
+
   // Ask the user for permission, then subscribe.
   const requestPermission = useCallback(async () => {
     if (!supported || requesting) return;
@@ -109,5 +124,5 @@ export default function usePushNotification() {
     }
   }, [supported, requesting, _subscribe]);
 
-  return { supported, permission, subscribed, requesting, requestPermission };
+  return { supported, permission, subscribed, requesting, requestPermission, unsubscribe, subscribe: _subscribe };
 }
