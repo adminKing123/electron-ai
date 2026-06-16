@@ -114,6 +114,15 @@ const LoadingStateUI = ({ checks }) => {
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm">
+          {getStatusIcon(checks.db)}
+          <span className="min-w-[40px] text-[#000000] dark:text-white font-mono text-xs">
+            Database
+          </span>
+          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+            Firebase Firestore
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.cdn)}
           <span className="min-w-[40px] text-[#000000] dark:text-white font-mono text-xs">
             CDN
@@ -172,6 +181,21 @@ const ErrorStateUI = ({ checks }) => {
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm">
+          {getStatusIcon(checks.db)}
+          <span
+            className={`font-mono text-xs ${
+              checks.db === CHECK_STATES.SUCCESS
+                ? "text-green-500"
+                : "text-red-500"
+            }`}
+          >
+            Database
+          </span>
+          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+            Firebase Firestore
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.cdn)}
           <span
             className={`font-mono text-xs ${
@@ -199,6 +223,7 @@ const ServerHealthCheck = ({ children }) => {
   const [serverState, setServerState] = useState(SERVER_STATES.CONNECTING);
   const [checks, setChecks] = useState({
     api: CHECK_STATES.PENDING,
+    db: CHECK_STATES.PENDING,
     cdn: CHECK_STATES.PENDING,
   });
 

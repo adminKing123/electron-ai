@@ -3,14 +3,24 @@ import CONFIG from "../../config";
 export const checkServerHealth = async (onProgress) => {
   const apiPromise = (async () => {
     onProgress("api", "checking");
+    onProgress("db", "checking");
     try {
       const response = await fetch(`${CONFIG.API_BASE_URL}/health`);
       if (!response.ok) throw new Error("API Server not ready");
       const data = await response.json();
       onProgress("api", "success");
+      
+      if (data.database === "error") {
+        onProgress("db", "error");
+        throw new Error("Database not ready");
+      } else {
+        onProgress("db", "success");
+      }
+      
       return { success: true, data };
     } catch (error) {
       onProgress("api", "error");
+      onProgress("db", "error");
       return { success: false, error: error.message };
     }
   })();
