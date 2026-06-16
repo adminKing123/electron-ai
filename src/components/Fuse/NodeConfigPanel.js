@@ -419,10 +419,27 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
               </span>
             </div>
             {push.permission === "denied" ? (
-              <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
-                You've blocked notifications for this site. Enable them in your browser's
-                site settings, then reload the page.
-              </p>
+              <>
+                <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
+                  You've blocked notifications for this site. Please click the lock icon in your browser's address bar, change Notifications to "Allow", and then click the button below.
+                </p>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await push.requestPermission();
+                    window.location.reload();
+                  }}
+                  className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium
+                    border border-[#ddd] dark:border-[#2e2e2e]
+                    text-[#444] dark:text-[#999]
+                    hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+                    hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+                    transition-colors"
+                >
+                  <TbBell className="w-[13px] h-[13px]" />
+                  I have unblocked notifications
+                </button>
+              </>
             ) : push.subscribed ? (
               <>
                 <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
