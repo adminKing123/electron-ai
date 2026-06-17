@@ -1,5 +1,6 @@
 import React from "react";
 import { TbBell, TbBellOff } from "react-icons/tb";
+import usePushNotification from "../../hooks/usePushNotification";
 
 const NotificationHeader = ({ permission, subscribed }) => {
   const icon =
@@ -91,9 +92,10 @@ const EnableNotificationButton = ({ requesting, onEnable }) => (
 
 const NotificationSettings = ({
   nodeType,
-  push,
   visibleNodeType = "get_notified",
 }) => {
+  const push = usePushNotification();
+
   if (nodeType !== visibleNodeType || !push?.supported) {
     return null;
   }

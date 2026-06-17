@@ -381,9 +381,6 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
 
   const node_type = node.data?.nodeType;
 
-  // Push permission state — only consumed for get_notified nodes.
-  const push = usePushNotification();
-
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
@@ -432,7 +429,7 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
 
         {/* Push permission banner — shown for get_notified nodes */}
         {node_type === "get_notified" && (
-          <NotificationSettings push={push} nodeType={node_type} />
+          <NotificationSettings nodeType={node_type} />
         )}
 
         {nodeDef.config_form ? (
