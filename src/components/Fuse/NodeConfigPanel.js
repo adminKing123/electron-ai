@@ -1,11 +1,21 @@
 import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { TbLayoutGrid, TbTrash, TbX, TbSearch, TbCopy, TbCheck, TbBell, TbBellOff } from "react-icons/tb";
+import {
+  TbLayoutGrid,
+  TbTrash,
+  TbX,
+  TbSearch,
+  TbCopy,
+  TbCheck,
+  TbBell,
+  TbBellOff,
+} from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { getNodeIcon } from "./iconRegistry";
 import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
 import usePushNotification from "../../hooks/usePushNotification";
+import NotificationSettings from "./NotificationSettings";
 
 const StarterNodeCard = ({ node, onPick }) => {
   const Icon = getNodeIcon(node.icon);
@@ -14,7 +24,7 @@ const StarterNodeCard = ({ node, onPick }) => {
     // Tag the payload as a starter node so WorkflowCanvas sets isStarter correctly.
     e.dataTransfer.setData(
       "application/fuse-node",
-      JSON.stringify({ ...node, isStarter: true })
+      JSON.stringify({ ...node, isStarter: true }),
     );
     e.dataTransfer.effectAllowed = "copy";
   };
@@ -32,8 +42,10 @@ const StarterNodeCard = ({ node, onPick }) => {
         hover:border-[#c7cfe8] dark:hover:border-[#363660]
         transition-colors cursor-grab active:cursor-grabbing"
     >
-      <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
-        bg-[#eef0fb] dark:bg-[#252540]">
+      <span
+        className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
+        bg-[#eef0fb] dark:bg-[#252540]"
+      >
         {Icon ? (
           <Icon className="w-[15px] h-[15px] text-[#4a6cf7] dark:text-[#6b8aff]" />
         ) : (
@@ -50,8 +62,8 @@ const StarterNodeCard = ({ node, onPick }) => {
 const StarterPanel = () => {
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
   const loadingNodes = useFuseStudioStore((s) => s.loadingNodes);
-  const addFlowNode  = useFuseStudioStore((s) => s.addFlowNode);
-  const selectNode   = useFuseStudioStore((s) => s.selectNode);
+  const addFlowNode = useFuseStudioStore((s) => s.addFlowNode);
+  const selectNode = useFuseStudioStore((s) => s.selectNode);
 
   const handlePick = (node) => {
     // Build a React Flow-compatible node so WorkflowCanvas can render it immediately.
@@ -75,8 +87,10 @@ const StarterPanel = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="flex items-center gap-2 px-5 pt-4 pb-3.5
-        border-b border-[#ebebeb] dark:border-[#252525] flex-shrink-0">
+      <div
+        className="flex items-center gap-2 px-5 pt-4 pb-3.5
+        border-b border-[#ebebeb] dark:border-[#252525] flex-shrink-0"
+      >
         <TbLayoutGrid className="w-[18px] h-[18px] text-[#888] dark:text-[#555]" />
         <span className="text-[13px] font-semibold text-[#444] dark:text-[#bbb]">
           Choose a starter
@@ -99,7 +113,11 @@ const StarterPanel = () => {
         ) : (
           <div className="grid grid-cols-2 gap-2.5">
             {starterNodes.map((node) => (
-              <StarterNodeCard key={node.type} node={node} onPick={handlePick} />
+              <StarterNodeCard
+                key={node.type}
+                node={node}
+                onPick={handlePick}
+              />
             ))}
           </div>
         )}
@@ -134,12 +152,15 @@ const ActionNodeCard = ({ node, onPick }) => {
         hover:border-[#c7cfe8] dark:hover:border-[#363660]
         transition-colors select-none"
     >
-      <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
-        bg-[#eef0fb] dark:bg-[#252540]">
-        {Icon
-          ? <Icon className="w-[15px] h-[15px] text-[#4a6cf7] dark:text-[#6b8aff]" />
-          : <span className="w-3.5 h-3.5 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
-        }
+      <span
+        className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
+        bg-[#eef0fb] dark:bg-[#252540]"
+      >
+        {Icon ? (
+          <Icon className="w-[15px] h-[15px] text-[#4a6cf7] dark:text-[#6b8aff]" />
+        ) : (
+          <span className="w-3.5 h-3.5 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
+        )}
       </span>
       <span className="text-[12px] font-medium leading-snug text-[#222] dark:text-[#d8d8d8] truncate">
         {node.label}
@@ -153,13 +174,13 @@ const ActionNodeCard = ({ node, onPick }) => {
 // Groups action nodes by their `section` field and renders each group with a
 // section heading + 2-column grid of draggable ActionNodeCards.
 const AddNodePanel = () => {
-  const actionNodes        = useFuseStudioStore((s) => s.actionNodes);
+  const actionNodes = useFuseStudioStore((s) => s.actionNodes);
   const loadingActionNodes = useFuseStudioStore((s) => s.loadingActionNodes);
-  const setAddingNode      = useFuseStudioStore((s) => s.setAddingNode);
-  const addFlowNode        = useFuseStudioStore((s) => s.addFlowNode);
-  const selectNode         = useFuseStudioStore((s) => s.selectNode);
-  const canvasNodes        = useFuseStudioStore((s) => s.nodes);
-  const [query, setQuery]  = React.useState("");
+  const setAddingNode = useFuseStudioStore((s) => s.setAddingNode);
+  const addFlowNode = useFuseStudioStore((s) => s.addFlowNode);
+  const selectNode = useFuseStudioStore((s) => s.selectNode);
+  const canvasNodes = useFuseStudioStore((s) => s.nodes);
+  const [query, setQuery] = React.useState("");
 
   /**
    * Click-to-add: place the node at a slightly offset position so successive
@@ -173,9 +194,9 @@ const AddNodePanel = () => {
       position: { x: 350 + offset, y: 200 + offset },
       data: {
         nodeType: node.type,
-        label:    node.label,
-        icon:     node.icon ?? null,
-        config:   {},
+        label: node.label,
+        icon: node.icon ?? null,
+        config: {},
         isStarter: false,
       },
     };
@@ -191,7 +212,7 @@ const AddNodePanel = () => {
       ? actionNodes.filter(
           (n) =>
             n.label.toLowerCase().includes(q) ||
-            (n.description ?? "").toLowerCase().includes(q)
+            (n.description ?? "").toLowerCase().includes(q),
         )
       : actionNodes;
 
@@ -227,9 +248,11 @@ const AddNodePanel = () => {
           </button>
         </div>
         {/* Search */}
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg
+        <div
+          className="flex items-center gap-2 px-3 py-2 rounded-lg
           bg-[#f5f5f5] dark:bg-[#1e1e1e]
-          border border-[#e8e8e8] dark:border-[#2a2a2a]">
+          border border-[#e8e8e8] dark:border-[#2a2a2a]"
+        >
           <TbSearch className="w-[14px] h-[14px] text-[#aaa] dark:text-[#555] flex-shrink-0" />
           <input
             type="text"
@@ -252,7 +275,10 @@ const AddNodePanel = () => {
               <div className="h-3 w-24 rounded bg-[#efefef] dark:bg-[#222] animate-pulse" />
               <div className="grid grid-cols-2 gap-2">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-14 rounded-xl bg-[#f0f0f0] dark:bg-[#1e1e1e] animate-pulse" />
+                  <div
+                    key={i}
+                    className="h-14 rounded-xl bg-[#f0f0f0] dark:bg-[#1e1e1e] animate-pulse"
+                  />
                 ))}
               </div>
             </div>
@@ -265,14 +291,20 @@ const AddNodePanel = () => {
           sections.map(([title, nodes]) => (
             <div key={title} className="flex flex-col gap-2">
               {/* Section heading */}
-              <p className="text-[10.5px] font-semibold uppercase tracking-wider
-                text-[#bbb] dark:text-[#484848]">
+              <p
+                className="text-[10.5px] font-semibold uppercase tracking-wider
+                text-[#bbb] dark:text-[#484848]"
+              >
                 {title}
               </p>
               {/* 2-column grid of node cards */}
               <div className="grid grid-cols-2 gap-2">
                 {nodes.map((node) => (
-                  <ActionNodeCard key={node.type} node={node} onPick={handlePick} />
+                  <ActionNodeCard
+                    key={node.type}
+                    node={node}
+                    onPick={handlePick}
+                  />
                 ))}
               </div>
             </div>
@@ -289,7 +321,7 @@ const AddNodePanel = () => {
 const WebhookUrlDisplay = ({ workflowId }) => {
   const [copied, setCopied] = React.useState(false);
   const base = (CONFIG.API_BASE_URL || "").replace(/\/$/, "");
-  const url  = `${base}/fuse/webhook/${workflowId}`;
+  const url = `${base}/fuse/webhook/${workflowId}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(url).then(() => {
@@ -324,10 +356,11 @@ const WebhookUrlDisplay = ({ workflowId }) => {
             hover:bg-[#ebebeb] dark:hover:bg-[#222]
             transition-colors"
         >
-          {copied
-            ? <TbCheck className="w-[15px] h-[15px] text-emerald-500" />
-            : <TbCopy className="w-[15px] h-[15px]" />
-          }
+          {copied ? (
+            <TbCheck className="w-[15px] h-[15px] text-emerald-500" />
+          ) : (
+            <TbCopy className="w-[15px] h-[15px]" />
+          )}
         </button>
       </div>
       <span className="text-[11px] text-[#bbb] dark:text-[#555]">
@@ -342,12 +375,11 @@ const WebhookUrlDisplay = ({ workflowId }) => {
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
 const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
-  const removeNode       = useFuseStudioStore((s) => s.removeNode);
+  const removeNode = useFuseStudioStore((s) => s.removeNode);
   const { id: workflowId } = useParams();
   const Icon = getNodeIcon(nodeDef.icon);
 
-  const isWebhookStarter  = node.data?.isStarter && node.data?.nodeType === "webhook";
-  const isGetNotified      = node.data?.nodeType === "get_notified";
+  const node_type = node.data?.nodeType;
 
   // Push permission state — only consumed for get_notified nodes.
   const push = usePushNotification();
@@ -394,84 +426,13 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
       {/* Scrollable config form */}
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
         {/* Webhook URL — always shown for webhook starter nodes */}
-        {isWebhookStarter && (
+        {node_type === "webhook" && (
           <WebhookUrlDisplay workflowId={workflowId} />
         )}
 
         {/* Push permission banner — shown for get_notified nodes */}
-        {isGetNotified && push.supported && (
-          <div className="flex flex-col gap-2.5 p-3 rounded-lg
-            border border-[#ddd] dark:border-[#2e2e2e]
-            bg-white dark:bg-[#1a1a1a]">
-            <div className="flex items-center gap-2">
-              {push.permission === "denied"
-                ? <TbBellOff className="w-[15px] h-[15px] text-[#e05c5c] flex-shrink-0" />
-                : push.subscribed
-                  ? <TbBell className="w-[15px] h-[15px] text-[#10b981] flex-shrink-0" />
-                  : <TbBell className="w-[15px] h-[15px] text-[#888] flex-shrink-0" />
-              }
-              <span className="text-[12.5px] font-semibold text-[#333] dark:text-[#ccc]">
-                {push.permission === "denied"
-                  ? "Notifications blocked"
-                  : push.subscribed
-                    ? "Notifications enabled"
-                    : "Notification permission required"}
-              </span>
-            </div>
-            {push.subscribed ? (
-              <>
-                <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
-                  This device will receive push notifications.
-                </p>
-                <button
-                  type="button"
-                  onClick={push.unsubscribe}
-                  className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium
-                    border border-[#ddd] dark:border-[#2e2e2e]
-                    text-[#e05c5c] dark:text-[#c26060]
-                    hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
-                    hover:border-[#fca5a5] dark:hover:border-[#7f1d1d]
-                    transition-colors"
-                >
-                  <TbBellOff className="w-[13px] h-[13px]" />
-                  Turn off notifications
-                </button>
-              </>
-            ) : (
-              <>
-                <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
-                  {push.permission === "denied"
-                    ? "You've blocked notifications for this site. Enable them in your browser settings, then click below to re-sync."
-                    : "Allow browser notifications so AURA can deliver push alerts when this step runs."}
-                </p>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    if (push.permission === "granted") {
-                      const reg = await navigator.serviceWorker.ready;
-                      await push.subscribe(reg);
-                    } else {
-                      push.requestPermission();
-                    }
-                  }}
-                  disabled={push.requesting}
-                  className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium
-                    border border-[#ddd] dark:border-[#2e2e2e]
-                    text-[#444] dark:text-[#999]
-                    hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
-                    hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
-                    disabled:opacity-50 disabled:cursor-not-allowed
-                    transition-colors"
-                >
-                  {push.requesting
-                    ? <span className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                    : <TbBell className="w-[13px] h-[13px]" />
-                  }
-                  {push.requesting ? "Requesting…" : "Allow notifications"}
-                </button>
-              </>
-            )}
-          </div>
+        {node_type === "get_notified" && (
+          <NotificationSettings push={push} nodeType={node_type} />
         )}
 
         {nodeDef.config_form ? (
@@ -502,13 +463,13 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
  *   4. default                      → idle prompt    (nodes exist, none selected)
  */
 const NodeConfigPanel = ({ className = "" }) => {
-  const nodes        = useFuseStudioStore((s) => s.nodes);
-  const edges        = useFuseStudioStore((s) => s.edges);
+  const nodes = useFuseStudioStore((s) => s.nodes);
+  const edges = useFuseStudioStore((s) => s.edges);
   const selectedNode = useFuseStudioStore((s) => s.selectedNode);
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
-  const actionNodes  = useFuseStudioStore((s) => s.actionNodes);
-  const addingNode   = useFuseStudioStore((s) => s.addingNode);
-  const loading       = useFuseStudioStore((s) => s.loading);
+  const actionNodes = useFuseStudioStore((s) => s.actionNodes);
+  const addingNode = useFuseStudioStore((s) => s.addingNode);
+  const loading = useFuseStudioStore((s) => s.loading);
 
   const hasStarterNode = nodes.some((n) => n.data?.isStarter === true);
 
@@ -533,13 +494,15 @@ const NodeConfigPanel = ({ className = "" }) => {
       const result = [];
       (fields ?? []).forEach((f) => {
         if (!f.key) return;
-        const path  = `${basePath}.${f.key}`;
+        const path = `${basePath}.${f.key}`;
         const label = `${baseLabel}.${f.key}`;
         result.push({ token: path, label });
         if (f.type === "object") {
           result.push(...flattenFields(f.fields, path, label));
         } else if (f.type === "array" && f.items?.type === "object") {
-          result.push(...flattenFields(f.items.fields, `${path}[]`, `${label}[]`));
+          result.push(
+            ...flattenFields(f.items.fields, `${path}[]`, `${label}[]`),
+          );
         }
       });
       return result;
@@ -551,7 +514,7 @@ const NodeConfigPanel = ({ className = "" }) => {
      */
     const getAllAncestorIds = (startId) => {
       const visited = new Set();
-      const queue   = [startId];
+      const queue = [startId];
       while (queue.length) {
         const current = queue.shift();
         edges
@@ -572,31 +535,43 @@ const NodeConfigPanel = ({ className = "" }) => {
     ancestorIds.forEach((nid) => {
       const n = nodes.find((x) => x.id === nid);
       if (!n) return;
-      
+
       const bodySchema = n.data?.config?.body_schema;
       const outputSchema = n.data?.config?.output_schema;
-      
+
       if (bodySchema && bodySchema.mode === "visual") {
-        vars.push(...flattenFields(bodySchema.fields, `${n.id}.body`, n.data.label));
+        vars.push(
+          ...flattenFields(bodySchema.fields, `${n.id}.body`, n.data.label),
+        );
       }
-      
+
       if (outputSchema && outputSchema.mode === "visual") {
-        vars.push(...flattenFields(outputSchema.fields, `${n.id}.result`, n.data.label));
+        vars.push(
+          ...flattenFields(outputSchema.fields, `${n.id}.result`, n.data.label),
+        );
       }
 
       // http_request: expose status_code, success, body + every declared
       // response_schema field (flattened to top-level of the node output).
       if (n.data?.nodeType === "http_request") {
         vars.push(
-          { token: `${n.id}.status_code`, label: `${n.data.label} → status_code` },
-          { token: `${n.id}.success`,     label: `${n.data.label} → success` },
-          { token: `${n.id}.body`,        label: `${n.data.label} → body (full)` },
+          {
+            token: `${n.id}.status_code`,
+            label: `${n.data.label} → status_code`,
+          },
+          { token: `${n.id}.success`, label: `${n.data.label} → success` },
+          { token: `${n.id}.body`, label: `${n.data.label} → body (full)` },
         );
         const responseSchema = n.data?.config?.response_schema;
-        if (responseSchema?.mode === "visual" && responseSchema.fields?.length) {
+        if (
+          responseSchema?.mode === "visual" &&
+          responseSchema.fields?.length
+        ) {
           // Fields are flattened to top-level in the node output, so the token
           // path is just  node_id.fieldKey  (no "body." prefix).
-          vars.push(...flattenFields(responseSchema.fields, n.id, n.data.label));
+          vars.push(
+            ...flattenFields(responseSchema.fields, n.id, n.data.label),
+          );
         }
       }
     });
@@ -606,11 +581,8 @@ const NodeConfigPanel = ({ className = "" }) => {
 
   let content;
   if (loading) {
-    content = (
-      null
-    );
-  }
-  else if (nodes.length === 0 || !hasStarterNode) {
+    content = null;
+  } else if (nodes.length === 0 || !hasStarterNode) {
     // No nodes placed yet — must choose a starter first.
     content = <StarterPanel />;
   } else if (addingNode) {
@@ -618,7 +590,9 @@ const NodeConfigPanel = ({ className = "" }) => {
     content = <AddNodePanel />;
   } else if (selectedNode) {
     // A canvas node is selected — show its config form.
-    const nodeDef   = allNodeDefs.find((n) => n.type === selectedNode.data.nodeType);
+    const nodeDef = allNodeDefs.find(
+      (n) => n.type === selectedNode.data.nodeType,
+    );
     const nodeIndex = nodes.findIndex((n) => n.id === selectedNode.id);
 
     content = nodeDef ? (
@@ -648,4 +622,3 @@ const NodeConfigPanel = ({ className = "" }) => {
 };
 
 export default NodeConfigPanel;
-
