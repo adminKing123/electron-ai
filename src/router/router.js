@@ -15,6 +15,7 @@ const FusePage            = lazy(() => import("../pages/FusePage"));
 const FuseStudioPage      = lazy(() => import("../pages/FuseStudioPage"));
 const WorkflowRunsPage    = lazy(() => import("../pages/WorkflowRunsPage"));
 const WorkflowRunDetailPage = lazy(() => import("../pages/WorkflowRunDetailPage"));
+const FuseIntegrationsPage = lazy(() => import("../pages/FuseIntegrationsPage"));
 
 const AppRoutes = () => {
   return (
@@ -37,6 +38,7 @@ const AppRoutes = () => {
           <Route path={ROUTES.FUSE_RUNS} element={<WorkflowRunsPage />} />
           <Route path={ROUTES.FUSE_RUN_DETAIL} element={<WorkflowRunDetailPage />} />
           <Route path={ROUTES.FUSES_LISTING} element={<FusesPageListing />} />
+          <Route path={ROUTES.FUSE_INTEGRATIONS} element={<FuseIntegrationsPage />} />
 
           <Route path={ROUTES.AURA_RJ} element={<AuraRjPage />} />
         </Route>

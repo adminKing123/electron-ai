@@ -18,6 +18,7 @@ const ROUTES = {
   GET_FUSE_RUN_DETAIL_URL: (runId) => `/fuse/runs/${runId}`,
 
   FUSES_LISTING: "/fuse/listing",
+  FUSE_INTEGRATIONS: "/fuse/integrations",
 };
 
 export default ROUTES;

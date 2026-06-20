@@ -100,6 +100,14 @@ export const getActionNodesAPI = async () => {
   return res.data;
 };
 
+/**
+ * GET /fuse/integration — returns all available integrations.
+ */
+export const getIntegrationsAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATIONS });
+  return res.data;
+};
+
 // ─── Execution control ────────────────────────────────────────────────────────
 
 /**

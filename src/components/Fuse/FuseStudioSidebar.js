@@ -1,5 +1,5 @@
 import React from "react";
-import { TbPlus, TbCompass, TbBolt } from "react-icons/tb";
+import { TbPlus, TbCompass, TbBolt, TbPlug } from "react-icons/tb";
 import FusePrimaryButton from "./FusePrimaryButton";
 import { NavLink } from "react-router-dom";
 import ROUTES from "../../router/routes";
@@ -53,6 +53,7 @@ const FuseStudioSidebar = ({ creating, onCreate }) => (
     <div className="flex flex-col items-center gap-1 mt-2">
       <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} />
       <SidebarNavButton icon={TbBolt} label="Fuses" to={ROUTES.FUSES_LISTING} />
+      <SidebarNavButton icon={TbPlug} label="Integrations" to={ROUTES.FUSE_INTEGRATIONS} />
     </div>
   </aside>
 );
