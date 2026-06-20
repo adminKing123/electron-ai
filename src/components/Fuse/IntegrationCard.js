@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { SiGmail, SiWebex } from "react-icons/si";
+import { startGmailAuthAPI } from "../../apis/fuse/queryFunctions";
 
 const ICON_MAP = {
   SiGmail: SiGmail,
   SiWebex: SiWebex,
 };
 
-const ConfigureButton = ({ onClick }) => (
+const ConfigureButton = ({ onClick, loading }) => (
   <button
     onClick={onClick}
+    disabled={loading}
     className="px-3 py-1 rounded-full text-[11px] font-semibold select-none
       border border-[#d0d0d0] dark:border-[#3a3a3a]
       text-[#333] dark:text-[#ccc]
       hover:bg-[#f0f0f0] dark:hover:bg-[#2e2e2e]
-      active:opacity-80 transition-colors duration-150"
+      active:opacity-80 transition-colors duration-150
+      disabled:opacity-50 disabled:cursor-not-allowed"
   >
     Configure
   </button>
@@ -21,10 +24,24 @@ const ConfigureButton = ({ onClick }) => (
 
 const IntegrationCard = ({ integration }) => {
   const Icon = ICON_MAP[integration.icon] || SiGmail;
+  const [configuring, setConfiguring] = useState(false);
 
-  const handleConfigure = () => {
-    // Placeholder for configuration flow
-    console.log(`Configuring ${integration.name}`);
+  const handleConfigure = async () => {
+    if (integration.id === "gmail") {
+      setConfiguring(true);
+      try {
+        const response = await startGmailAuthAPI();
+        if (response?.auth_url) {
+          window.location.href = response.auth_url;
+        }
+      } catch (error) {
+        console.error("Failed to start Gmail auth", error);
+      } finally {
+        setConfiguring(false);
+      }
+    } else {
+      console.log(`Configuring ${integration.name}`);
+    }
   };
 
   return (
@@ -49,7 +66,7 @@ const IntegrationCard = ({ integration }) => {
             Configured
           </span>
         ) : (
-          <ConfigureButton onClick={handleConfigure} />
+          <ConfigureButton onClick={handleConfigure} loading={configuring} />
         )}
       </div>
     </div>

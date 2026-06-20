@@ -56,9 +56,12 @@ const ENDPOINTS = {
   FUSE_RUN:             (runId) => `/fuse/runs/${runId}`,
   FUSE_RUN_LOGS:        (runId) => `/fuse/runs/${runId}/logs`,
 
-  // ── Fuse Compiled Versions ───────────────────────────────────────────────────
+  // ── Fuse Compilations ───────────────────────────────────────────────────
   FUSE_WORKFLOW_VERSIONS: (id) => `/fuse/workflows/${id}/versions`,
   FUSE_VERSION:           (versionId) => `/fuse/versions/${versionId}`,
+
+  // ── Integrations ────────────────────────────────────────────────────────────
+  FUSE_INTEGRATION_GMAIL_AUTH:  "/fuse/integration/gmail/auth",
 };
 
 export default ENDPOINTS;

@@ -108,6 +108,14 @@ export const getIntegrationsAPI = async () => {
   return res.data;
 };
 
+/**
+ * GET /fuse/integration/gmail/auth — start Gmail OAuth.
+ */
+export const startGmailAuthAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GMAIL_AUTH });
+  return res.data;
+};
+
 // ─── Execution control ────────────────────────────────────────────────────────
 
 /**
