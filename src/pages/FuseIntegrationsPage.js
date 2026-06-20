@@ -3,32 +3,62 @@ import Header from "../components/Header";
 import { FuseStudioSidebar } from "../components/Fuse";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import ROUTES from "../router/routes";
-import { getIntegrationsAPI } from "../apis/fuse/queryFunctions";
+import { getIntegrationsAPI, revokeIntegrationAPI } from "../apis/fuse/queryFunctions";
 import IntegrationCard from "../components/Fuse/IntegrationCard";
+import ConfirmDialog from "../components/Common/ConfirmDialog";
 
 const FuseIntegrationsPage = () => {
   const { creating, handleCreate } = useCreateWorkflow();
   const [loading, setLoading] = useState(true);
   const [integrations, setIntegrations] = useState([]);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [revoking, setRevoking] = useState(false);
+
+  const fetchIntegrations = async () => {
+    setLoading(true);
+    try {
+      const data = await getIntegrationsAPI();
+      setIntegrations(data || []);
+    } catch (error) {
+      setIntegrations([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchIntegrations = async () => {
-      setLoading(true);
-      try {
-        const data = await getIntegrationsAPI();
-        setIntegrations(data || []);
-      } catch (error) {
-        setIntegrations([]);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchIntegrations();
   }, []);
+
+  const handleRevokeConfirm = async () => {
+    if (!deleteTarget) return;
+    setRevoking(true);
+    try {
+      await revokeIntegrationAPI(deleteTarget.id);
+      fetchIntegrations();
+    } catch (error) {
+      console.error("Failed to revoke integration", error);
+    } finally {
+      setRevoking(false);
+      setDeleteTarget(null);
+    }
+  };
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
       <Header type="fuse" backRoute={ROUTES.FUSE} />
+      
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Revoke Integration"
+        message={`Are you sure you want to revoke access to ${deleteTarget?.name}? You will need to configure it again to use it in workflows.`}
+        confirmLabel="Revoke Access"
+        variant="danger"
+        loading={revoking}
+        onConfirm={handleRevokeConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
+
       <div className="flex-1 flex overflow-hidden">
         <FuseStudioSidebar creating={creating} onCreate={handleCreate} />
         <div
@@ -61,7 +91,11 @@ const FuseIntegrationsPage = () => {
             ) : (
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 {integrations.map((integration) => (
-                  <IntegrationCard key={integration.id} integration={integration} />
+                  <IntegrationCard 
+                    key={integration.id} 
+                    integration={integration} 
+                    onRevokeClick={() => setDeleteTarget(integration)}
+                  />
                 ))}
               </div>
             )}

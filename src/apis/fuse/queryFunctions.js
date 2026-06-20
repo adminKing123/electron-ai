@@ -116,6 +116,14 @@ export const startGmailAuthAPI = async () => {
   return res.data;
 };
 
+/**
+ * DELETE /fuse/integration/:id — revoke integration.
+ */
+export const revokeIntegrationAPI = async (id) => {
+  const res = await api({ method: "DELETE", url: ENDPOINTS.FUSE_INTEGRATION_REVOKE(id) });
+  return res.data;
+};
+
 // ─── Execution control ────────────────────────────────────────────────────────
 
 /**

@@ -18,11 +18,11 @@ const ConfigureButton = ({ onClick, loading }) => (
       active:opacity-80 transition-colors duration-150
       disabled:opacity-50 disabled:cursor-not-allowed"
   >
-    Configure
+    {loading ? "Configuring..." : "Configure"}
   </button>
 );
 
-const IntegrationCard = ({ integration }) => {
+const IntegrationCard = ({ integration, onRevokeClick }) => {
   const Icon = ICON_MAP[integration.icon] || SiGmail;
   const [configuring, setConfiguring] = useState(false);
 
@@ -60,11 +60,19 @@ const IntegrationCard = ({ integration }) => {
         </div>
       </div>
 
-      <div className="mt-4 flex-shrink-0">
+      <div className="mt-4 flex-shrink-0 flex items-center gap-2">
         {integration.configured ? (
-          <span className="px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[11px] font-semibold uppercase tracking-wider">
-            Configured
-          </span>
+          <>
+            <span className="px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[11px] font-semibold uppercase tracking-wider">
+              Configured
+            </span>
+            <button
+              onClick={onRevokeClick}
+              className="text-[11px] font-medium text-red-500 hover:text-red-600 transition-colors ml-2"
+            >
+              Revoke
+            </button>
+          </>
         ) : (
           <ConfigureButton onClick={handleConfigure} loading={configuring} />
         )}
