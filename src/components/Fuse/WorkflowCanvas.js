@@ -11,6 +11,7 @@ import useIsDark from "../../hooks/useIsDark";
 import { BasicLoader } from "../Loaders";
 import { NODE_TYPES } from "./nodes/FuseFlowNode";
 import { getOutgoingLimit } from "./nodes/connectionLimits";
+import { createFuseNodeId } from "../../utils/helpers";
 
 // ─── WorkflowCanvas ───────────────────────────────────────────────────────────
 /**
@@ -101,7 +102,7 @@ const WorkflowCanvas = ({ className = "" }) => {
         : { x: 250, y: 100 };
 
       const flowNode = {
-        id:       `node_${Date.now()}`,
+        id:       `${createFuseNodeId()}`,
         type:     "fuse_node",
         position,
         data: {

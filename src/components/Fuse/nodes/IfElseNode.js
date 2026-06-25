@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
+import { getDisplayFuseNodeId } from "../../../utils/helpers";
 
 // ─── IfElseNode ───────────────────────────────────────────────────────────────
 // Distinct yellow card for the If / Else branching node.
@@ -43,7 +44,7 @@ const IfElseNode = ({ id, data, selected }) => {
             {data.label}
           </span>
           <span className="text-[9px] font-mono leading-tight text-[#d4a535] dark:text-[#5c3d00] truncate select-all">
-            {id}
+            NODE {getDisplayFuseNodeId(id)}
           </span>
         </div>
       </div>

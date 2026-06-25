@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
+import { getDisplayFuseNodeId } from "../../../utils/helpers";
 
 // ─── GetNotifiedNode ──────────────────────────────────────────────────────────
 // Canvas node for the "Get Notified" action.
@@ -45,7 +46,7 @@ const GetNotifiedNode = ({ id, data, selected }) => {
           {data.label}
         </span>
         <span className="text-[9px] font-mono leading-tight text-[#60a5fa] dark:text-[#1d4ed8] truncate select-all">
-          {id}
+          NODE {getDisplayFuseNodeId(id)}
         </span>
       </div>
 

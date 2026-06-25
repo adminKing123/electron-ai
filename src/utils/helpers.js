@@ -12,6 +12,7 @@ import {
   MdTextSnippet,
   MdVideoFile,
 } from "react-icons/md";
+import { v4 as uuidv4 } from "uuid";
 
 export const scrollToMessage = (id, duration = 100, behavior = "smooth") => {
   setTimeout(() => {
@@ -285,4 +286,13 @@ export function createSvgDataUrl(rawSvg) {
   const fixedSvg = serializer.serializeToString(svgEl);
   const blob = new Blob([fixedSvg], { type: "image/svg+xml" });
   return URL.createObjectURL(blob);
+}
+
+export function createFuseNodeId () {
+  return `${uuidv4()}`;
+}
+
+export function getDisplayFuseNodeId (nodeId) {
+  const parts = nodeId.split("-");
+  return `${parts[parts.length - 1]}`;
 }

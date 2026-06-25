@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
+import { getDisplayFuseNodeId } from "../../../utils/helpers";
 
 // ─── HttpRequestNode ───────────────────────────────────────────────────────────
 // Canvas node for the "HTTP Request" action.
@@ -45,7 +46,7 @@ const HttpRequestNode = ({ id, data, selected }) => {
           {data.label}
         </span>
         <span className="text-[9px] font-mono leading-tight text-[#2dd4bf] dark:text-[#0f766e] truncate select-all">
-          {id}
+          NODE {getDisplayFuseNodeId(id)}
         </span>
       </div>
 

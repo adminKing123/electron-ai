@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
+import { getDisplayFuseNodeId } from "../../../utils/helpers";
 
 // ─── AiStructuredOutputNode ───────────────────────────────────────────────────
 // Canvas node for the "AI Structured Output" action.
@@ -45,7 +46,7 @@ const AiStructuredOutputNode = ({ id, data, selected }) => {
           {data.label}
         </span>
         <span className="text-[9px] font-mono leading-tight text-[#c084fc] dark:text-[#581c87] truncate select-all">
-          {id}
+          NODE {getDisplayFuseNodeId(id)}
         </span>
       </div>
 

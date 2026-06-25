@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
+import { getDisplayFuseNodeId } from "../../../utils/helpers";
 
 // ─── DefaultFlowNode ──────────────────────────────────────────────────────────
 // Standard node card used for all node types that are not handled by a more
@@ -44,7 +45,7 @@ const DefaultFlowNode = ({ id, data, selected }) => {
       {/* Label block */}
       <div className="flex flex-col min-w-0">
         <span className="text-[9px] font-mono leading-tight text-[#d0d0d0] dark:text-[#333] truncate select-all">
-          {id}
+          NODE {getDisplayFuseNodeId(id)}
         </span>
         <span className="text-[13px] font-semibold leading-tight text-[#111] dark:text-[#e8e8e8] truncate">
           {data.label}

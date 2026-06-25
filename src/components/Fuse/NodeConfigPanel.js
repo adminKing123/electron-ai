@@ -16,6 +16,7 @@ import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
 import usePushNotification from "../../hooks/usePushNotification";
 import NotificationSettings from "./NotificationSettings";
+import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
 
 const StarterNodeCard = ({ node, onPick }) => {
   const Icon = getNodeIcon(node.icon);
@@ -68,7 +69,7 @@ const StarterPanel = () => {
   const handlePick = (node) => {
     // Build a React Flow-compatible node so WorkflowCanvas can render it immediately.
     const flowNode = {
-      id: `node_${Date.now()}`,
+      id: `${createFuseNodeId()}`,
       type: "fuse_node",
       position: { x: 250, y: 100 },
       data: {
@@ -189,7 +190,7 @@ const AddNodePanel = () => {
   const handlePick = (node) => {
     const offset = canvasNodes.length * 40;
     const flowNode = {
-      id: `node_${Date.now()}`,
+      id: `${createFuseNodeId()}`,
       type: "fuse_node",
       position: { x: 350 + offset, y: 200 + offset },
       data: {
@@ -373,7 +374,7 @@ const WebhookUrlDisplay = ({ workflowId }) => {
 // ─── NodeConfigView ────────────────────────────────────────────────────────────
 // Shown when a React Flow node is selected.
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
-const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
+const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
   const removeNode = useFuseStudioStore((s) => s.removeNode);
   const { id: workflowId } = useParams();
@@ -387,7 +388,7 @@ const NodeConfigView = ({ nodeIndex, node, nodeDef, variables = [] }) => {
       <div className="px-4 pt-4 pb-3.5 border-b border-[#e8e8e8] dark:border-[#2a2a2a] flex-shrink-0">
         <div className="flex items-start justify-between gap-2 mb-2">
           <p className="text-[10.5px] font-semibold uppercase tracking-widest text-[#bbb] dark:text-[#555]">
-            {node.data.isStarter ? "Starter" : "Node"} {nodeIndex + 1}
+            {node.data.isStarter ? "Starter" : "Node"} {getDisplayFuseNodeId(node.id)}
           </p>
           {/* Delete node button */}
           <button
@@ -590,11 +591,9 @@ const NodeConfigPanel = ({ className = "" }) => {
     const nodeDef = allNodeDefs.find(
       (n) => n.type === selectedNode.data.nodeType,
     );
-    const nodeIndex = nodes.findIndex((n) => n.id === selectedNode.id);
 
     content = nodeDef ? (
       <NodeConfigView
-        nodeIndex={nodeIndex}
         node={selectedNode}
         nodeDef={nodeDef}
         variables={upstreamVariables}
