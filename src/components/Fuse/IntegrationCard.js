@@ -1,11 +1,44 @@
 import React, { useState } from "react";
 import { SiGmail, SiWebex } from "react-icons/si";
 import { startGmailAuthAPI } from "../../apis/fuse/queryFunctions";
+import useIntegrationInfoModalStore from "../../store/useIntegrationInfoModalStore";
+import { IoRemoveCircleOutline } from "react-icons/io5";
+import { LuInfo } from "react-icons/lu";
 
 const ICON_MAP = {
   SiGmail: SiGmail,
   SiWebex: SiWebex,
 };
+
+const InfoButton = ({ onClick, loading = false }) => (
+  <button
+    onClick={onClick}
+    disabled={loading}
+    className="rounded-full text-[13px] font-semibold select-none
+      text-[#333] dark:text-[#ccc]
+      hover:bg-[#f0f0f0] dark:hover:bg-[#2e2e2e]
+      active:opacity-80 transition-colors duration-150
+      disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    <LuInfo />
+  </button>
+);
+
+const RevokeButton = ({ onClick, loading = false }) => (
+  <button
+    onClick={onClick}
+    disabled={loading}
+    className="py-1 rounded-full text-[11px] font-semibold select-none
+      text-red-600 dark:text-red-400
+      active:opacity-80 transition-colors duration-150
+      disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    <span>
+      <IoRemoveCircleOutline className="inline-block mr-1" />
+    </span>
+    Revoke Access
+  </button>
+);
 
 const ConfigureButton = ({ onClick, loading }) => (
   <button
@@ -25,6 +58,9 @@ const ConfigureButton = ({ onClick, loading }) => (
 const IntegrationCard = ({ integration, onRevokeClick }) => {
   const Icon = ICON_MAP[integration.icon] || SiGmail;
   const [configuring, setConfiguring] = useState(false);
+  const openInfoModal = useIntegrationInfoModalStore(
+    (state) => state.openModal,
+  );
 
   const handleConfigure = async () => {
     if (integration.id === "gmail") {
@@ -44,6 +80,10 @@ const IntegrationCard = ({ integration, onRevokeClick }) => {
     }
   };
 
+  const handleInfoClick = () => {
+    openInfoModal(integration.id);
+  };
+
   return (
     <div className="bg-[#ffffff] dark:bg-[#202020] p-6 rounded-3xl shadow-sm border border-[#e5e5e5] dark:border-[#2a2a2a] flex flex-col justify-between min-w-0">
       <div className="flex flex-col items-start gap-4">
@@ -60,18 +100,11 @@ const IntegrationCard = ({ integration, onRevokeClick }) => {
         </div>
       </div>
 
-      <div className="mt-4 flex-shrink-0 flex items-center gap-2">
+      <div className="mt-4 flex-shrink-0 flex items-center justify-between gap-2">
         {integration.configured ? (
           <>
-            <span className="px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[11px] font-semibold uppercase tracking-wider">
-              Configured
-            </span>
-            <button
-              onClick={onRevokeClick}
-              className="text-[11px] font-medium text-red-500 hover:text-red-600 transition-colors ml-2"
-            >
-              Revoke
-            </button>
+            <RevokeButton onClick={onRevokeClick} />
+            <InfoButton onClick={handleInfoClick} />
           </>
         ) : (
           <ConfigureButton onClick={handleConfigure} loading={configuring} />

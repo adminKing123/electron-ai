@@ -61,7 +61,7 @@ const ENDPOINTS = {
   FUSE_VERSION:           (versionId) => `/fuse/versions/${versionId}`,
 
   // ── Integrations ────────────────────────────────────────────────────────────
-  FUSE_INTEGRATIONS:            "/fuse/integration",
+  FUSE_INTEGRATION_GMAIL_INFO:  "/fuse/integration/gmail/info",
   FUSE_INTEGRATION_GMAIL_AUTH:  "/fuse/integration/gmail/auth",
   FUSE_INTEGRATION_REVOKE:      (id) => `/fuse/integration/${id}`,
 };

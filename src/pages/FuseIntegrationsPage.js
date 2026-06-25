@@ -6,6 +6,7 @@ import ROUTES from "../router/routes";
 import { getIntegrationsAPI, revokeIntegrationAPI } from "../apis/fuse/queryFunctions";
 import IntegrationCard from "../components/Fuse/IntegrationCard";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
+import MasterInfoModal from "../components/Fuse/MasterInfoModal";
 
 const FuseIntegrationsPage = () => {
   const { creating, handleCreate } = useCreateWorkflow();
@@ -102,6 +103,7 @@ const FuseIntegrationsPage = () => {
           </div>
         </div>
       </div>
+      <MasterInfoModal />
     </main>
   );
 };
