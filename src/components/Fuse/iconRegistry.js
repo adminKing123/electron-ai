@@ -1,3 +1,5 @@
+import { SiGmail } from "react-icons/si";
+
 import {
   TbCalendarTime,
   TbMail,
@@ -23,6 +25,7 @@ import {
  * The frontend resolves: getNodeIcon("TbCalendarTime") → <TbCalendarTime />
  */
 export const ICON_REGISTRY = {
+  SiGmail,
   TbCalendarTime,
   TbMail,
   TbWebhook,

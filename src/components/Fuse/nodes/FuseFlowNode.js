@@ -5,6 +5,7 @@ import IfElseNode            from "./IfElseNode";
 import GetNotifiedNode       from "./GetNotifiedNode";
 import AiStructuredOutputNode from "./AiStructuredOutputNode";
 import HttpRequestNode       from "./HttpRequestNode";
+import SendGmailNode         from "./SendGmailNode";
 import DefaultFlowNode       from "./DefaultFlowNode";
 
 // ─── FuseFlowNode ─────────────────────────────────────────────────────────────
@@ -35,6 +36,8 @@ const FuseFlowNode = (props) => {
       return <AiStructuredOutputNode {...props} />;
     case "http_request":
       return <HttpRequestNode {...props} />;
+    case "send_gmail":
+      return <SendGmailNode {...props} />;
 
     // ── Fallback for any future / unknown node types ─────────────────────────
     default:
