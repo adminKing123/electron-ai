@@ -51,7 +51,7 @@ const ConfigureButton = ({ onClick, loading }) => (
       active:opacity-80 transition-colors duration-150
       disabled:opacity-50 disabled:cursor-not-allowed"
   >
-    {loading ? "Configuring..." : "Configure"}
+    Configure
   </button>
 );
 

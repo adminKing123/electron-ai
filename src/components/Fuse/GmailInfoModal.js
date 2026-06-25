@@ -118,7 +118,7 @@ const GmailInfoModal = ({ isOpen, onClose }) => {
     >
       <div className="min-h-[180px]">
         {loadingInfo ? (
-          <div className="flex flex-col items-center justify-center gap-3 h-[180px]">
+          <div className="flex flex-col items-center justify-center gap-3 h-[180px] text-[#333] dark:text-[#ccc]">
             <BasicLoader />
           </div>
         ) : hasError || !gmailInfo ? (
