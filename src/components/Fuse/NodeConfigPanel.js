@@ -534,18 +534,26 @@ const NodeConfigPanel = ({ className = "" }) => {
       const n = nodes.find((x) => x.id === nid);
       if (!n) return;
 
+      const nodeMeta = {
+        nodeId: n.id,
+        nodeName: n.data.label,
+        isStarter: n.data.isStarter === true,
+      };
+
       const bodySchema = n.data?.config?.body_schema;
       const outputSchema = n.data?.config?.output_schema;
 
       if (bodySchema && bodySchema.mode === "visual") {
         vars.push(
-          ...flattenFields(bodySchema.fields, `${n.id}.body`, n.data.label),
+          ...flattenFields(bodySchema.fields, `${n.id}.body`, n.data.label)
+            .map((v) => ({ ...v, ...nodeMeta })),
         );
       }
 
       if (outputSchema && outputSchema.mode === "visual") {
         vars.push(
-          ...flattenFields(outputSchema.fields, `${n.id}.result`, n.data.label),
+          ...flattenFields(outputSchema.fields, `${n.id}.result`, n.data.label)
+            .map((v) => ({ ...v, ...nodeMeta })),
         );
       }
 
@@ -556,9 +564,18 @@ const NodeConfigPanel = ({ className = "" }) => {
           {
             token: `${n.id}.status_code`,
             label: `${n.data.label} → status_code`,
+            ...nodeMeta,
           },
-          { token: `${n.id}.success`, label: `${n.data.label} → success` },
-          { token: `${n.id}.body`, label: `${n.data.label} → body (full)` },
+          {
+            token: `${n.id}.success`,
+            label: `${n.data.label} → success`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.body`,
+            label: `${n.data.label} → body (full)`,
+            ...nodeMeta,
+          },
         );
         const responseSchema = n.data?.config?.response_schema;
         if (
@@ -568,7 +585,8 @@ const NodeConfigPanel = ({ className = "" }) => {
           // Fields are flattened to top-level in the node output, so the token
           // path is just  node_id.fieldKey  (no "body." prefix).
           vars.push(
-            ...flattenFields(responseSchema.fields, n.id, n.data.label),
+            ...flattenFields(responseSchema.fields, n.id, n.data.label)
+              .map((v) => ({ ...v, ...nodeMeta })),
           );
         }
       }

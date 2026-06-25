@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useCallback } from "react";
+import { getDisplayFuseNodeId } from "../../utils/helpers";
 
 // ─── Timezone options ──────────────────────────────────────────────────────────
 // Built once at module load from the browser's Intl API.
@@ -239,14 +240,52 @@ const useVariableInserter = (inputRef, value, onChange) =>
     [inputRef, value, onChange]
   );
 
-/** Small floating variable picker dropdown. */
+/**
+ * Strips the node name prefix from a label to get just the field path.
+ * e.g. "My Webhook.body.email"  → "body.email"
+ *      "HTTP Node → status_code" → "status_code"
+ */
+const getShortLabel = (label, nodeName) => {
+  if (nodeName && label.startsWith(nodeName + "."))
+    return label.slice(nodeName.length + 1);
+  if (nodeName && label.startsWith(nodeName + " → "))
+    return label.slice(nodeName.length + 3);
+  return label;
+};
+
+/**
+ * Two-step floating variable picker.
+ *
+ * Step 1 — node list: shows each upstream node's name + short ID
+ *           (starter nodes omit the ID).
+ * Step 2 — variable list: shows the variables belonging to the chosen node,
+ *           with a back chevron to return to step 1.
+ */
 const VariablePicker = ({ variables, onPick, onClose }) => {
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
+
+  /** Group variables by nodeId. Falls back to token prefix for legacy vars. */
+  const groups = useMemo(() => {
+    const map = new Map();
+    variables.forEach((v) => {
+      const nid      = v.nodeId   ?? v.token.split(".")[0];
+      const nname    = v.nodeName ?? nid;
+      const starter  = v.isStarter ?? false;
+      if (!map.has(nid)) map.set(nid, { nodeId: nid, nodeName: nname, isStarter: starter, vars: [] });
+      map.get(nid).vars.push(v);
+    });
+    return [...map.values()];
+  }, [variables]);
+
+  const WRAPPER =
+    "absolute z-50 right-0 top-full mt-1 w-64 rounded-xl " +
+    "bg-white dark:bg-[#1e1e1e] " +
+    "border border-[#e0e0e0] dark:border-[#2e2e2e] " +
+    "shadow-lg overflow-hidden";
+
   if (!variables.length) {
     return (
-      <div className="absolute z-50 right-0 top-full mt-1 w-52 rounded-xl
-        bg-white dark:bg-[#1e1e1e]
-        border border-[#e0e0e0] dark:border-[#2e2e2e]
-        shadow-lg p-3">
+      <div className={`${WRAPPER} p-3`}>
         <p className="text-[11.5px] text-[#bbb] dark:text-[#555] text-center select-none">
           No variables available yet.<br />
           Define fields in the webhook body.
@@ -254,30 +293,91 @@ const VariablePicker = ({ variables, onPick, onClose }) => {
       </div>
     );
   }
+
+  /* ── Step 2: variables for the selected node ── */
+  if (selectedNodeId !== null) {
+    const group = groups.find((g) => g.nodeId === selectedNodeId);
+    if (!group) { setSelectedNodeId(null); return null; }
+
+    return (
+      <div className={WRAPPER}>
+        {/* Header row with back button */}
+        <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5
+          border-b border-[#f0f0f0] dark:border-[#272727]">
+          <button
+            type="button"
+            onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedNodeId(null); }}
+            className="w-6 h-6 flex items-center justify-center rounded-md
+              text-[#aaa] dark:text-[#555]
+              hover:text-[#555] dark:hover:text-[#aaa]
+              hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a]
+              transition-colors flex-shrink-0"
+            aria-label="Back to nodes"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M7.5 2L3.5 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <span className="text-[11.5px] font-semibold text-[#333] dark:text-[#c0c0c0] truncate">
+            {group.nodeName}
+          </span>
+        </div>
+
+        <ul className="max-h-52 overflow-y-auto pb-1.5 pt-0.5">
+          {group.vars.map((v) => (
+            <li key={v.token}>
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); onPick(v.token); onClose(); }}
+                className="w-full text-left px-3 py-2 flex flex-col gap-0.5
+                  hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
+              >
+                <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
+                  {getShortLabel(v.label, group.nodeName)}
+                </span>
+                <span className="text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] truncate">
+                  {`{{${v.token}}}`}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  /* ── Step 1: node list ── */
   return (
-    <div className="absolute z-50 right-0 top-full mt-1 w-60 rounded-xl
-      bg-white dark:bg-[#1e1e1e]
-      border border-[#e0e0e0] dark:border-[#2e2e2e]
-      shadow-lg overflow-hidden">
+    <div className={WRAPPER}>
       <p className="px-3 pt-2.5 pb-1 text-[10px] font-semibold uppercase tracking-wider
         text-[#bbb] dark:text-[#484848]">
-        Variables
+        Pick a node
       </p>
-      <ul className="max-h-48 overflow-y-auto pb-1.5">
-        {variables.map((v) => (
-          <li key={v.token}>
+      <ul className="max-h-52 overflow-y-auto pb-1.5">
+        {groups.map((g) => (
+          <li key={g.nodeId}>
             <button
               type="button"
-              onMouseDown={(e) => { e.preventDefault(); onPick(v.token); onClose(); }}
-              className="w-full text-left px-3 py-2 flex flex-col gap-0.5
+              onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedNodeId(g.nodeId); }}
+              className="w-full text-left px-3 py-2 flex items-center justify-between gap-2
                 hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
             >
-              <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
-                {v.label}
-              </span>
-              <span className="text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] truncate">
-                {`{{${v.token}}}`}
-              </span>
+              <div className="flex flex-col gap-0.5 min-w-0">
+                <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
+                  {g.nodeName}
+                </span>
+                {!g.isStarter && (
+                  <span className="text-[10.5px] font-mono text-[#aaa] dark:text-[#555] truncate">
+                    {getDisplayFuseNodeId(g.nodeId)}
+                  </span>
+                )}
+              </div>
+              {/* Chevron right */}
+              <svg className="flex-shrink-0 text-[#ccc] dark:text-[#444]"
+                width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M4.5 2L8.5 6l-4 4" stroke="currentColor"
+                  strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
           </li>
         ))}
