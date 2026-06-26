@@ -759,8 +759,15 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
     if (newType === "object") {
       updated.fields = field.fields ?? [];
       delete updated.value;
+      delete updated.elements;
+    } else if (newType === "array") {
+      updated.elements = field.elements ?? [];
+      delete updated.value;
+      delete updated.fields;
     } else {
       if (!("value" in updated)) updated.value = "";
+      delete updated.fields;
+      delete updated.elements;
     }
     onUpdate(updated);
   };
@@ -780,16 +787,18 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
 
   return (
     <div className="flex flex-col gap-1.5">
-      {/* Main row */}
-      <div className="flex items-center gap-2">
-        {/* Key */}
-        <input
-          type="text"
-          value={field.key ?? ""}
-          placeholder="key"
-          onChange={(e) => onUpdate({ ...field, key: e.target.value })}
-          className={`${INPUT_BASE} w-[30%] flex-shrink-0 font-mono text-[12px]`}
-        />
+      {/* Main row: Key, Type, Remove */}
+      <div className="flex items-center gap-2 w-full">
+        {/* Key (only if not in an array) */}
+        {field.key !== undefined && (
+          <input
+            type="text"
+            value={field.key ?? ""}
+            placeholder="key"
+            onChange={(e) => onUpdate({ ...field, key: e.target.value })}
+            className={`${INPUT_BASE} flex-1 min-w-0 font-mono text-[12px]`}
+          />
+        )}
 
         {/* Type */}
         <div className="relative flex-shrink-0 w-24">
@@ -805,46 +814,6 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
           <SelectChevron />
         </div>
 
-        {/* Value — shown for all types except "object" (nested fields handle it) */}
-        {field.type !== "object" && (
-          <div ref={containerRef} className="relative flex-1 flex items-center gap-1">
-            <input
-              ref={inputRef}
-              type="text"
-              value={field.value ?? ""}
-              placeholder={
-                field.type === "boolean" ? "true / false" :
-                field.type === "array"   ? '["a","b"]  or  {{var}}' :
-                "value  or  {{var}}"
-              }
-              onChange={(e) => onUpdate({ ...field, value: e.target.value })}
-              className={`${INPUT_BASE} flex-1 text-[12px]`}
-            />
-            <button
-              type="button"
-              title="Insert variable"
-              onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
-              className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
-                text-[11px] font-mono font-bold
-                text-[#888] dark:text-[#555]
-                border border-[#ddd] dark:border-[#2e2e2e]
-                hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
-                hover:border-[#c0c8f0] dark:hover:border-[#363660]
-                hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
-                transition-colors"
-            >
-              @
-            </button>
-            {pickerOpen && (
-              <VariablePicker
-                variables={variables}
-                onPick={insertVariable}
-                onClose={() => setPickerOpen(false)}
-              />
-            )}
-          </div>
-        )}
-
         {/* Remove */}
         <button
           type="button"
@@ -854,15 +823,54 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
             text-[#bbb] dark:text-[#444]
             hover:text-[#e05c5c] dark:hover:text-[#c26060]
             hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
-            transition-colors text-lg leading-none"
+            transition-colors text-lg leading-none ml-auto"
         >
           ×
         </button>
       </div>
 
+      {/* Value row — shown for all types except "object" (nested fields handle it) */}
+      {field.type !== "object" && field.type !== "array" && (
+        <div ref={containerRef} className="relative flex items-center gap-1 w-full mt-1">
+          <input
+            ref={inputRef}
+            type="text"
+            value={field.value ?? ""}
+            placeholder={
+              field.type === "boolean" ? "true / false" :
+              "value  or  {{var}}"
+            }
+            onChange={(e) => onUpdate({ ...field, value: e.target.value })}
+            className={`${INPUT_BASE} flex-1 text-[12px]`}
+          />
+          <button
+            type="button"
+            title="Insert variable"
+            onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
+            className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
+              text-[11px] font-mono font-bold
+              text-[#888] dark:text-[#555]
+              border border-[#ddd] dark:border-[#2e2e2e]
+              hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
+              hover:border-[#c0c8f0] dark:hover:border-[#363660]
+              hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+              transition-colors"
+          >
+            @
+          </button>
+          {pickerOpen && (
+            <VariablePicker
+              variables={variables}
+              onPick={insertVariable}
+              onClose={() => setPickerOpen(false)}
+            />
+          )}
+        </div>
+      )}
+
       {/* Nested properties for object type */}
       {field.type === "object" && canNest && (
-        <div className={`${indent} py-1.5`}>
+        <div className={`${indent} py-1.5 mt-1`}>
           <ValueFieldList
             fields={field.fields ?? []}
             depth={depth + 1}
@@ -871,13 +879,26 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
           />
         </div>
       )}
+
+      {/* Nested items for array type */}
+      {field.type === "array" && canNest && (
+        <div className={`${indent} py-1.5 mt-1`}>
+          <ValueFieldList
+            fields={field.elements ?? []}
+            depth={depth + 1}
+            variables={variables}
+            isArray={true}
+            onChange={(newElements) => onUpdate({ ...field, elements: newElements })}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
 /** Renders a list of ValueFieldRows with an "Add field" button. */
-const ValueFieldList = ({ fields, depth, onChange, variables }) => {
-  const addRow    = () => onChange([...fields, { key: "", type: "string", value: "" }]);
+const ValueFieldList = ({ fields, depth, onChange, variables, isArray = false }) => {
+  const addRow    = () => onChange([...fields, isArray ? { type: "string", value: "" } : { key: "", type: "string", value: "" }]);
   const removeRow = (i) => onChange(fields.filter((_, idx) => idx !== i));
   const updateRow = (i, updated) =>
     onChange(fields.map((f, idx) => (idx === i ? updated : f)));
@@ -886,7 +907,7 @@ const ValueFieldList = ({ fields, depth, onChange, variables }) => {
     <div className="flex flex-col gap-1.5">
       {fields.length === 0 && (
         <p className="text-[11px] text-[#bbb] dark:text-[#555] pl-0.5">
-          {depth === 0 ? "No fields added yet." : "No properties yet."}
+          {isArray ? "No items added yet." : depth === 0 ? "No fields added yet." : "No properties yet."}
         </p>
       )}
       {fields.map((f, i) => (
@@ -909,7 +930,7 @@ const ValueFieldList = ({ fields, depth, onChange, variables }) => {
           hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
           transition-colors"
       >
-        + Add {depth === 0 ? "field" : "property"}
+        + Add {isArray ? "item" : depth === 0 ? "field" : "property"}
       </button>
     </div>
   );
@@ -925,6 +946,130 @@ const JsonValueBuilderField = ({ field, value, onChange, variables }) => {
       variables={variables}
       onChange={(newFields) => onChange({ mode: "visual", fields: newFields })}
     />
+  );
+};
+
+// ─── KeyValueBuilderField ──────────────────────────────────────────────────────
+/**
+ * Simple Key-Value builder for headers and query params where keys and values are always strings.
+ */
+const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
+  const inputRef = useRef(null);
+  const containerRef = useRef(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const insertVariable = useVariableInserter(
+    inputRef,
+    field.value ?? "",
+    (v) => onUpdate({ ...field, value: v }),
+  );
+
+  React.useEffect(() => {
+    if (!pickerOpen) return;
+    const outside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target))
+        setPickerOpen(false);
+    };
+    document.addEventListener("mousedown", outside);
+    return () => document.removeEventListener("mousedown", outside);
+  }, [pickerOpen]);
+
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        type="text"
+        value={field.key ?? ""}
+        placeholder="key"
+        onChange={(e) => onUpdate({ ...field, key: e.target.value })}
+        className={`${INPUT_BASE} w-[35%] flex-shrink-0 font-mono text-[12px]`}
+      />
+      <div ref={containerRef} className="relative flex-1 flex items-center gap-1">
+        <input
+          ref={inputRef}
+          type="text"
+          value={field.value ?? ""}
+          placeholder="value or {{var}}"
+          onChange={(e) => onUpdate({ ...field, value: e.target.value })}
+          className={`${INPUT_BASE} flex-1 text-[12px]`}
+        />
+        <button
+          type="button"
+          title="Insert variable"
+          onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
+          className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
+            text-[11px] font-mono font-bold
+            text-[#888] dark:text-[#555]
+            border border-[#ddd] dark:border-[#2e2e2e]
+            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
+            hover:border-[#c0c8f0] dark:hover:border-[#363660]
+            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            transition-colors"
+        >
+          @
+        </button>
+        {pickerOpen && (
+          <VariablePicker
+            variables={variables}
+            onPick={insertVariable}
+            onClose={() => setPickerOpen(false)}
+          />
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={onRemove}
+        className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
+          text-[#bbb] dark:text-[#444]
+          hover:text-[#e05c5c] dark:hover:text-[#c26060]
+          hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
+          transition-colors text-lg leading-none"
+      >
+        ×
+      </button>
+    </div>
+  );
+};
+
+const KeyValueBuilderField = ({ field, value, onChange, variables }) => {
+  const fields = value?.fields ?? [];
+  const addRow = () => onChange({ mode: "visual", fields: [...fields, { key: "", value: "" }] });
+  const updateRow = (i, updated) => {
+    const newFields = [...fields];
+    newFields[i] = updated;
+    onChange({ mode: "visual", fields: newFields });
+  };
+  const removeRow = (i) => {
+    onChange({ mode: "visual", fields: fields.filter((_, idx) => idx !== i) });
+  };
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      {fields.length === 0 && (
+        <p className="text-[11px] text-[#bbb] dark:text-[#555] pl-0.5">
+          No items added yet.
+        </p>
+      )}
+      {fields.map((f, i) => (
+        <KeyValueRow
+          key={i}
+          field={f}
+          variables={variables}
+          onUpdate={(updated) => updateRow(i, updated)}
+          onRemove={() => removeRow(i)}
+        />
+      ))}
+      <button
+        type="button"
+        onClick={addRow}
+        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
+          border border-[#ddd] dark:border-[#2e2e2e]
+          text-[#444] dark:text-[#999]
+          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+          transition-colors"
+      >
+        + Add item
+      </button>
+    </div>
   );
 };
 
@@ -1252,6 +1397,7 @@ const FieldInput = ({ field, value, onChange, variables = [] }) => {
     case "body_builder":        return <BodyBuilderField        field={field} value={value} onChange={onChange} />;
     case "condition_builder":   return <ConditionBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "json_value_builder":  return <JsonValueBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
+    case "key_value_builder":   return <KeyValueBuilderField    field={field} value={value} onChange={onChange} variables={variables} />;
     case "select":
     default:                    return <SelectField             field={field} value={value} onChange={onChange} />;
   }
