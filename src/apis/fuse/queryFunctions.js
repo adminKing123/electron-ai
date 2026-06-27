@@ -34,6 +34,15 @@ export const createWorkflowAPI = async (data) => {
 };
 
 /**
+ * POST /fuse/workflows/generate — creates a workflow from a natural-language prompt.
+ * @param {{ prompt: string }} data
+ */
+export const generateWorkflowAPI = async (data) => {
+  const res = await api({ method: "POST", url: ENDPOINTS.FUSE_WORKFLOWS_GENERATE, data });
+  return res.data;
+};
+
+/**
  * DELETE /fuse/workflows/:id — removes a workflow by ID.
  * @param {string} id
  */

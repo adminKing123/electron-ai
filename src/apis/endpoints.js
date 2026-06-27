@@ -35,6 +35,7 @@ const ENDPOINTS = {
 
   // ── Fuse Workflows ──────────────────────────────────────────────────────────
   FUSE_WORKFLOWS:               "/fuse/workflows",
+  FUSE_WORKFLOWS_GENERATE:      "/fuse/workflows/generate",
   FUSE_DISCOVER:                "/fuse/discover",
   FUSE_WORKFLOW:                (id) => `/fuse/workflows/${id}`,
   FUSE_WORKFLOW_NAME:           (id) => `/fuse/workflows/${id}/name`,

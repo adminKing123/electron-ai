@@ -75,6 +75,7 @@ const FusePage = () => {
   const { creating, handleCreate } = useCreateWorkflow();
   const [loading, setLoading] = useState(true);
   const [discoverData, setDiscoverData] = useState(null);
+  const [promptExpanded, setPromptExpanded] = useState(false);
 
   const fetchDiscoverData = async () => {
     setLoading(true);
@@ -103,24 +104,36 @@ const FusePage = () => {
             border border-[#e5e5e5] dark:border-[#252525]
             shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
-          <FuseAutomateInput creating={creating} onCreate={handleCreate} />
+          <FuseAutomateInput
+            creating={creating}
+            onCreate={handleCreate}
+            onExpandedChange={setPromptExpanded}
+          />
 
-          <ReviewQuicklySection
-            loading={loading}
-            data={
-              discoverData?.workflows?.items
-                ? discoverData.workflows.items.slice(0, 3)
-                : []
-            }
-          />
-          <RecentFuses
-            loading={loading}
-            data={
-              discoverData?.workflows?.items
-                ? discoverData.workflows.items.slice(3)
-                : []
-            }
-          />
+          <div
+            className={`transition-all duration-300 ${
+              promptExpanded
+                ? "opacity-25 dark:opacity-20 blur-[2px] pointer-events-none select-none"
+                : ""
+            }`}
+          >
+            <ReviewQuicklySection
+              loading={loading}
+              data={
+                discoverData?.workflows?.items
+                  ? discoverData.workflows.items.slice(0, 3)
+                  : []
+              }
+            />
+            <RecentFuses
+              loading={loading}
+              data={
+                discoverData?.workflows?.items
+                  ? discoverData.workflows.items.slice(3)
+                  : []
+              }
+            />
+          </div>
         </div>
       </div>
     </main>
