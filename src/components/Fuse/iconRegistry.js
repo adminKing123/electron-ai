@@ -1,4 +1,5 @@
 import { SiGmail } from "react-icons/si";
+import { HiOutlineGlobeAlt } from "react-icons/hi2";
 
 import {
   TbCalendarTime,
@@ -15,6 +16,7 @@ import {
   TbBell,
   TbSparkles,
   TbWorldWww,
+  TbWorldSearch,
 } from "react-icons/tb";
 
 /**
@@ -40,6 +42,8 @@ export const ICON_REGISTRY = {
   TbBell,
   TbSparkles,
   TbWorldWww,
+  TbWorldSearch,
+  HiOutlineGlobeAlt,
 };
 
 /**
