@@ -79,6 +79,7 @@ const ReviewCard = ({ workflow, onHover, active }) => {
             : "bg-[#fafafa] dark:bg-[#1d1d1d] flex-[1]"
         }`}
       onMouseEnter={!active ? () => onHover?.(workflow.id) : undefined}
+      onClick={() => navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id))}
     >
       {active ? (
         <div>
@@ -108,15 +109,16 @@ const ReviewCard = ({ workflow, onHover, active }) => {
                 <FuseWorkflowToggle
                   workflowId={workflow.id}
                   isActive={workflow.status === "active"}
-                  onDone={() =>
-                    navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id))
-                  }
+                  onDone={() => {
+                    navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id));
+                  }}
                 />
               ) : (
                 <OpenButton
-                  onClick={() =>
-                    navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id))
-                  }
+                  onClick={(e) => {
+                    e?.stopPropagation();
+                    navigate(ROUTES.GET_FUSE_STUDIO_URL(workflow.id));
+                  }}
                 />
               )}
             </div>

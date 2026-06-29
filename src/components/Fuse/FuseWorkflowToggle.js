@@ -14,7 +14,8 @@ import { activateWorkflowAPI, deactivateWorkflowAPI } from "../../apis/fuse/quer
 const FuseWorkflowToggle = ({ workflowId, isActive, onDone }) => {
   const [loading, setLoading] = useState(false);
 
-  const handleToggle = async () => {
+  const handleToggle = async (e) => {
+    e?.stopPropagation();
     if (loading) return;
     setLoading(true);
     try {
