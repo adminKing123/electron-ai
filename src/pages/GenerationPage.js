@@ -9,11 +9,11 @@ function GenerationPage({ chat }) {
     const scrollToBottomEle = document.getElementById("scroll-to-top");
 
     const handleScroll = () => {
-      if (container.scrollTop > 0) {
-        header.classList.add("header-shadow");
-      } else {
-        header.classList.remove("header-shadow");
-      }
+      // if (container.scrollTop > 0) {
+      //   header.classList.add("header-shadow");
+      // } else {
+      //   header.classList.remove("header-shadow");
+      // }
 
       const threshold = 100;
       const isNearBottom =
