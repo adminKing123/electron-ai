@@ -974,13 +974,13 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
   }, [pickerOpen]);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 w-full min-w-0">
       <input
         type="text"
         value={field.key ?? ""}
         placeholder="key"
         onChange={(e) => onUpdate({ ...field, key: e.target.value })}
-        className={`${INPUT_BASE} w-[35%] flex-shrink-0 font-mono text-[12px]`}
+        className={`px-3 py-2.5 rounded-lg text-[13px] text-[#222] dark:text-[#d0d0d0] bg-white dark:bg-[#1a1a1a] border border-[#ddd] dark:border-[#2e2e2e] focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a] transition-colors w-[35%] flex-shrink-0 font-mono`}
       />
       <div ref={containerRef} className="relative flex-1 flex items-center gap-1">
         <input
@@ -989,7 +989,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           value={field.value ?? ""}
           placeholder="value or {{var}}"
           onChange={(e) => onUpdate({ ...field, value: e.target.value })}
-          className={`${INPUT_BASE} flex-1 text-[12px]`}
+          className={`px-3 py-2.5 rounded-lg text-[13px] text-[#222] dark:text-[#d0d0d0] bg-white dark:bg-[#1a1a1a] border border-[#ddd] dark:border-[#2e2e2e] focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a] transition-colors flex-1`}
         />
         <button
           type="button"
