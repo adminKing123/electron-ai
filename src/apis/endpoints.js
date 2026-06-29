@@ -64,6 +64,8 @@ const ENDPOINTS = {
   // ── Integrations ────────────────────────────────────────────────────────────
   FUSE_INTEGRATION_GMAIL_INFO:  "/fuse/integration/gmail/info",
   FUSE_INTEGRATION_GMAIL_AUTH:  "/fuse/integration/gmail/auth",
+  FUSE_INTEGRATION_WEBEX_INFO:  "/fuse/integration/webex/info",
+  FUSE_INTEGRATION_WEBEX_AUTH:  "/fuse/integration/webex/auth",
   FUSE_INTEGRATION_REVOKE:      (id) => `/fuse/integration/${id}`,
 };
 

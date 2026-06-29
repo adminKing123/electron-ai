@@ -134,6 +134,22 @@ export const startGmailAuthAPI = async () => {
 };
 
 /**
+ * GET /fuse/integration/webex/info — returns Webex integration details.
+ */
+export const getWebexIntegrationInfoAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_WEBEX_INFO });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/webex/auth — start Webex OAuth.
+ */
+export const startWebexAuthAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_WEBEX_AUTH });
+  return res.data;
+};
+
+/**
  * DELETE /fuse/integration/:id — revoke integration.
  */
 export const revokeIntegrationAPI = async (id) => {

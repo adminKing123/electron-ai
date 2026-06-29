@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SiGmail, SiWebex } from "react-icons/si";
-import { startGmailAuthAPI } from "../../apis/fuse/queryFunctions";
+import { startGmailAuthAPI, startWebexAuthAPI } from "../../apis/fuse/queryFunctions";
 import useIntegrationInfoModalStore from "../../store/useIntegrationInfoModalStore";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { LuInfo } from "react-icons/lu";
@@ -63,15 +63,17 @@ const IntegrationCard = ({ integration, onRevokeClick }) => {
   );
 
   const handleConfigure = async () => {
-    if (integration.id === "gmail") {
+    if (integration.id === "gmail" || integration.id === "webex") {
       setConfiguring(true);
       try {
-        const response = await startGmailAuthAPI();
+        const startAuth =
+          integration.id === "gmail" ? startGmailAuthAPI : startWebexAuthAPI;
+        const response = await startAuth();
         if (response?.auth_url) {
           window.location.href = response.auth_url;
         }
       } catch (error) {
-        console.error("Failed to start Gmail auth", error);
+        console.error(`Failed to start ${integration.name} auth`, error);
       } finally {
         setConfiguring(false);
       }
