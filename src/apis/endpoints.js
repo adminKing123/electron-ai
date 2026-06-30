@@ -66,6 +66,8 @@ const ENDPOINTS = {
   FUSE_INTEGRATION_GMAIL_AUTH:  "/fuse/integration/gmail/auth",
   FUSE_INTEGRATION_WEBEX_INFO:  "/fuse/integration/webex/info",
   FUSE_INTEGRATION_WEBEX_AUTH:  "/fuse/integration/webex/auth",
+  FUSE_INTEGRATION_GOOGLE_SHEETS_INFO: "/fuse/integration/google_sheets/info",
+  FUSE_INTEGRATION_GOOGLE_SHEETS_AUTH: "/fuse/integration/google_sheets/auth",
   FUSE_INTEGRATION_REVOKE:      (id) => `/fuse/integration/${id}`,
 };
 

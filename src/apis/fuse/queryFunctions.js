@@ -150,6 +150,22 @@ export const startWebexAuthAPI = async () => {
 };
 
 /**
+ * GET /fuse/integration/google_sheets/info — returns Google Sheets integration details.
+ */
+export const getGoogleSheetsIntegrationInfoAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GOOGLE_SHEETS_INFO });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/google_sheets/auth — start Google Sheets OAuth.
+ */
+export const startGoogleSheetsAuthAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GOOGLE_SHEETS_AUTH });
+  return res.data;
+};
+
+/**
  * DELETE /fuse/integration/:id — revoke integration.
  */
 export const revokeIntegrationAPI = async (id) => {

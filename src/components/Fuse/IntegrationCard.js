@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import { SiGmail, SiWebex } from "react-icons/si";
-import { startGmailAuthAPI, startWebexAuthAPI } from "../../apis/fuse/queryFunctions";
+import { SiGmail, SiWebex, SiGooglesheets } from "react-icons/si";
+import {
+  startGmailAuthAPI,
+  startWebexAuthAPI,
+  startGoogleSheetsAuthAPI,
+} from "../../apis/fuse/queryFunctions";
 import useIntegrationInfoModalStore from "../../store/useIntegrationInfoModalStore";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { LuInfo } from "react-icons/lu";
@@ -8,6 +12,13 @@ import { LuInfo } from "react-icons/lu";
 const ICON_MAP = {
   SiGmail: SiGmail,
   SiWebex: SiWebex,
+  SiGooglesheets: SiGooglesheets,
+};
+
+const AUTH_START_API = {
+  gmail: startGmailAuthAPI,
+  webex: startWebexAuthAPI,
+  google_sheets: startGoogleSheetsAuthAPI,
 };
 
 const InfoButton = ({ onClick, loading = false }) => (
@@ -63,22 +74,22 @@ const IntegrationCard = ({ integration, onRevokeClick }) => {
   );
 
   const handleConfigure = async () => {
-    if (integration.id === "gmail" || integration.id === "webex") {
-      setConfiguring(true);
-      try {
-        const startAuth =
-          integration.id === "gmail" ? startGmailAuthAPI : startWebexAuthAPI;
-        const response = await startAuth();
-        if (response?.auth_url) {
-          window.location.href = response.auth_url;
-        }
-      } catch (error) {
-        console.error(`Failed to start ${integration.name} auth`, error);
-      } finally {
-        setConfiguring(false);
-      }
-    } else {
+    const startAuth = AUTH_START_API[integration.id];
+    if (!startAuth) {
       console.log(`Configuring ${integration.name}`);
+      return;
+    }
+
+    setConfiguring(true);
+    try {
+      const response = await startAuth();
+      if (response?.auth_url) {
+        window.location.href = response.auth_url;
+      }
+    } catch (error) {
+      console.error(`Failed to start ${integration.name} auth`, error);
+    } finally {
+      setConfiguring(false);
     }
   };
 

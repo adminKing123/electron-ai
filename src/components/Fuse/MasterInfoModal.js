@@ -1,6 +1,7 @@
 import React from "react";
 import GmailInfoModal from "./GmailInfoModal";
 import WebexInfoModal from "./WebexInfoModal";
+import GoogleSheetsInfoModal from "./GoogleSheetsInfoModal";
 import useIntegrationInfoModalStore from "../../store/useIntegrationInfoModalStore";
 
 function MasterInfoModal() {
@@ -11,6 +12,9 @@ function MasterInfoModal() {
   }
   if (integrationId === "webex") {
     return <WebexInfoModal isOpen={isOpen} onClose={closeModal} />;
+  }
+  if (integrationId === "google_sheets") {
+    return <GoogleSheetsInfoModal isOpen={isOpen} onClose={closeModal} />;
   }
   return null;
 }
