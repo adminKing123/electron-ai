@@ -4,7 +4,7 @@ import { getNodeIcon } from "../iconRegistry";
 import { getDisplayFuseNodeId } from "../../../utils/helpers";
 
 // ─── AiStructuredOutputNode ───────────────────────────────────────────────────
-// Canvas node for the "AI Structured Output" action.
+// Canvas node for the "Structured Output" action.
 // Has a target handle (top) to receive connections and a source handle
 // (bottom) to continue the chain.
 // Design this component however you like; no style is inherited from elsewhere.

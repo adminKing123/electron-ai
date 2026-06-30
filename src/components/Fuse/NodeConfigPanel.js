@@ -557,6 +557,14 @@ const NodeConfigPanel = ({ className = "" }) => {
         );
       }
 
+      if (n.data?.nodeType === "ai_generate_text") {
+        vars.push({
+          token: `${n.id}.text`,
+          label: `${n.data.label} → text`,
+          ...nodeMeta,
+        });
+      }
+
       // http_request: expose status_code, success, body + every declared
       // response_schema field (flattened to top-level of the node output).
       if (n.data?.nodeType === "http_request") {

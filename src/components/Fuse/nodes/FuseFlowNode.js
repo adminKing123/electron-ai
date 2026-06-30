@@ -4,7 +4,7 @@ import WebhookNode           from "./WebhookNode";
 import IfElseNode            from "./IfElseNode";
 import GetNotifiedNode       from "./GetNotifiedNode";
 import AiStructuredOutputNode from "./AiStructuredOutputNode";
-import AiWebSearchNode        from "./AiWebSearchNode";
+import AiGenerateTextNode     from "./AiGenerateTextNode";
 import HttpRequestNode       from "./HttpRequestNode";
 import SendGmailNode         from "./SendGmailNode";
 import DefaultFlowNode       from "./DefaultFlowNode";
@@ -35,8 +35,8 @@ const FuseFlowNode = (props) => {
       return <GetNotifiedNode {...props} />;
     case "ai_structured_output":
       return <AiStructuredOutputNode {...props} />;
-    case "ai_web_search":
-      return <AiWebSearchNode {...props} />;
+    case "ai_generate_text":
+      return <AiGenerateTextNode {...props} />;
     case "http_request":
       return <HttpRequestNode {...props} />;
     case "send_gmail":

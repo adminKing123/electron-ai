@@ -184,6 +184,19 @@ const SelectField = ({ field, value, onChange }) => (
   </div>
 );
 
+const CheckboxField = ({ field, value, onChange }) => (
+  <label className="inline-flex items-center cursor-pointer select-none py-0.5">
+    <input
+      type="checkbox"
+      checked={!!value}
+      onChange={(e) => onChange(e.target.checked)}
+      className="w-4 h-4 rounded border-[#ccc] dark:border-[#444]
+        text-[#2563eb] focus:ring-[#2563eb]/30
+        dark:bg-[#1a1a1a] dark:checked:bg-[#2563eb]"
+    />
+  </label>
+);
+
 const TimezoneSelectField = ({ value, onChange }) => {
   const defaultTz = useMemo(
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -1398,6 +1411,7 @@ const FieldInput = ({ field, value, onChange, variables = [] }) => {
     case "condition_builder":   return <ConditionBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "json_value_builder":  return <JsonValueBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "key_value_builder":   return <KeyValueBuilderField    field={field} value={value} onChange={onChange} variables={variables} />;
+    case "checkbox":            return <CheckboxField           field={field} value={value} onChange={onChange} />;
     case "select":
     default:                    return <SelectField             field={field} value={value} onChange={onChange} />;
   }

@@ -3,9 +3,9 @@ import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
 import { getDisplayFuseNodeId } from "../../../utils/helpers";
 
-// ─── AiWebSearchNode ──────────────────────────────────────────────────────────
-// Canvas node for the "AI Web Search" action.
-const AiWebSearchNode = ({ id, data, selected }) => {
+// ─── AiGenerateTextNode ───────────────────────────────────────────────────────
+// Canvas node for the "Generate Text" action.
+const AiGenerateTextNode = ({ id, data, selected }) => {
   const Icon = getNodeIcon(data.icon);
 
   const borderCls = selected
@@ -53,4 +53,4 @@ const AiWebSearchNode = ({ id, data, selected }) => {
   );
 };
 
-export default AiWebSearchNode;
+export default AiGenerateTextNode;

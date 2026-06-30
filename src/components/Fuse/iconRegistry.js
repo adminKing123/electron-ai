@@ -1,22 +1,13 @@
 import { SiGmail } from "react-icons/si";
-import { HiOutlineGlobeAlt } from "react-icons/hi2";
+import { RiAiGenerate } from "react-icons/ri";
 
 import {
   TbCalendarTime,
-  TbMail,
   TbWebhook,
-  TbDatabase,
-  TbCode,
-  TbBolt,
-  TbBrandSlack,
-  TbCloudUpload,
-  TbFilter,
-  TbGitMerge,
   TbGitBranch,
   TbBell,
   TbSparkles,
   TbWorldWww,
-  TbWorldSearch,
 } from "react-icons/tb";
 
 /**
@@ -28,22 +19,13 @@ import {
  */
 export const ICON_REGISTRY = {
   SiGmail,
+  RiAiGenerate,
   TbCalendarTime,
-  TbMail,
   TbWebhook,
-  TbDatabase,
-  TbCode,
-  TbBolt,
-  TbBrandSlack,
-  TbCloudUpload,
-  TbFilter,
-  TbGitMerge,
   TbGitBranch,
   TbBell,
   TbSparkles,
   TbWorldWww,
-  TbWorldSearch,
-  HiOutlineGlobeAlt,
 };
 
 /**
