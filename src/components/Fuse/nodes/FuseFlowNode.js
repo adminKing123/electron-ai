@@ -1,12 +1,14 @@
 import React from "react";
 import ScheduleNode          from "./ScheduleNode";
 import WebhookNode           from "./WebhookNode";
+import WebexMessageNode      from "./WebexMessageNode";
 import IfElseNode            from "./IfElseNode";
 import GetNotifiedNode       from "./GetNotifiedNode";
 import AiStructuredOutputNode from "./AiStructuredOutputNode";
 import AiGenerateTextNode     from "./AiGenerateTextNode";
 import HttpRequestNode       from "./HttpRequestNode";
 import SendGmailNode         from "./SendGmailNode";
+import SendWebexMessageNode  from "./SendWebexMessageNode";
 import DefaultFlowNode       from "./DefaultFlowNode";
 
 // ─── FuseFlowNode ─────────────────────────────────────────────────────────────
@@ -27,6 +29,8 @@ const FuseFlowNode = (props) => {
       return <ScheduleNode {...props} />;
     case "webhook":
       return <WebhookNode {...props} />;
+    case "webex_message":
+      return <WebexMessageNode {...props} />;
 
     // ── Action nodes ────────────────────────────────────────────────────────
     case "if_else":
@@ -41,6 +45,8 @@ const FuseFlowNode = (props) => {
       return <HttpRequestNode {...props} />;
     case "send_gmail":
       return <SendGmailNode {...props} />;
+    case "send_webex_message":
+      return <SendWebexMessageNode {...props} />;
 
     // ── Fallback for any future / unknown node types ─────────────────────────
     default:

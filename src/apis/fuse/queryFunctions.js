@@ -150,6 +150,38 @@ export const startWebexAuthAPI = async () => {
 };
 
 /**
+ * GET /fuse/integration/webex/rooms — list Webex spaces for room picker.
+ */
+export const getWebexRoomsAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_WEBEX_ROOMS });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/webex/people — list Webex people for destination picker.
+ */
+export const getWebexPeopleAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_WEBEX_PEOPLE });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/webex/webhooks — list Webex webhooks for the linked account.
+ */
+export const getWebexWebhooksAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_WEBEX_WEBHOOKS });
+  return res.data;
+};
+
+/**
+ * DELETE /fuse/integration/webex/webhooks/:id — remove a Webex webhook.
+ */
+export const deleteWebexWebhookAPI = async (webhookId) => {
+  const res = await api({ method: "DELETE", url: ENDPOINTS.FUSE_INTEGRATION_WEBEX_WEBHOOK(webhookId) });
+  return res.data;
+};
+
+/**
  * GET /fuse/integration/google_sheets/info — returns Google Sheets integration details.
  */
 export const getGoogleSheetsIntegrationInfoAPI = async () => {

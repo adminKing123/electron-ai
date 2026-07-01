@@ -1,8 +1,10 @@
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, children, size = "sm" }) => {
   if (!isOpen) return null;
+
+  const widthClass = size === "md" ? "max-w-md" : "max-w-sm";
 
   return createPortal(
     <motion.div
@@ -20,10 +22,10 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         exit={{ opacity: 0, scale: 0.96, y: 6 }}
         transition={{ duration: 0.15 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm p-5 rounded-2xl
+        className={`w-full ${widthClass} p-5 rounded-2xl
           bg-white dark:bg-[#1e1e1e]
           border border-[#e8e8e8] dark:border-[#2a2a2a]
-          shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]"
+          shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]`}
       >
         {title && (
           <h2 className="text-[15px] font-semibold text-[#111] dark:text-white mb-1">

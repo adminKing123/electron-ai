@@ -1,5 +1,6 @@
-import React, { useMemo, useRef, useState, useCallback } from "react";
+import React, { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { getDisplayFuseNodeId } from "../../utils/helpers";
+import { getWebexRoomsAPI, getWebexPeopleAPI } from "../../apis/fuse/queryFunctions";
 
 // ─── Timezone options ──────────────────────────────────────────────────────────
 // Built once at module load from the browser's Intl API.
@@ -167,22 +168,35 @@ const TimeField = ({ value, onChange }) => (
   />
 );
 
-const SelectField = ({ field, value, onChange }) => (
-  <div className="relative">
-    <select
-      value={value ?? field.options?.[0]?.value ?? ""}
-      onChange={(e) => onChange(e.target.value)}
-      className={SELECT_BASE}
-    >
-      {(field.options ?? []).map((opt) => (
-        <option key={opt.value} value={opt.value}>
-          {opt.label}
-        </option>
-      ))}
-    </select>
-    <SelectChevron />
-  </div>
-);
+const SelectField = ({ field, value, onChange }) => {
+  const defaultVal = field.options?.[0]?.value ?? "";
+
+  // Persist the first select option for required fields so the backend receives
+  // a value even when the user never touches the dropdown.
+  useEffect(() => {
+    if ((value === undefined || value === null || value === "") && field.required && defaultVal) {
+      onChange(defaultVal);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="relative">
+      <select
+        value={value ?? defaultVal}
+        onChange={(e) => onChange(e.target.value)}
+        className={SELECT_BASE}
+      >
+        {(field.options ?? []).map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+      <SelectChevron />
+    </div>
+  );
+};
 
 const CheckboxField = ({ field, value, onChange }) => (
   <label className="inline-flex items-center cursor-pointer select-none py-0.5">
@@ -196,6 +210,170 @@ const CheckboxField = ({ field, value, onChange }) => (
     />
   </label>
 );
+
+const WebexRoomSelectField = ({ field, value, onChange }) => {
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(false);
+
+    getWebexRoomsAPI()
+      .then((data) => {
+        if (!mounted) return;
+        setRooms(data.rooms ?? []);
+      })
+      .catch(() => {
+        if (mounted) setError(true);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+        Loading spaces…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <p className="text-[12px] text-red-500 dark:text-red-400">
+        Couldn&apos;t load Webex spaces. Reconnect Webex or try again.
+      </p>
+    );
+  }
+
+  if (!rooms.length) {
+    return (
+      <p className="text-[12px] text-[#888] dark:text-[#666]">
+        No Webex spaces found on your account.
+      </p>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <select
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+        className={SELECT_BASE}
+      >
+        <option value="" disabled>
+          Select a space or chat…
+        </option>
+        {rooms.map((room) => (
+          <option key={room.id} value={room.id}>
+            {room.label}
+          </option>
+        ))}
+      </select>
+      <SelectChevron />
+    </div>
+  );
+};
+
+const WebexPersonSelectField = ({ field, value, onChange }) => {
+  const valueField = field.personValue === "id" ? "id" : "email";
+  const [people, setPeople] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(false);
+
+    getWebexPeopleAPI()
+      .then((data) => {
+        if (!mounted) return;
+        setPeople(data.people ?? []);
+      })
+      .catch(() => {
+        if (mounted) setError(true);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const options = people.filter((person) => {
+    if (valueField === "email") return !!person.email;
+    return !!person.id;
+  });
+
+  if (loading) {
+    return (
+      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+        Loading people…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <p className="text-[12px] text-red-500 dark:text-red-400">
+        Couldn&apos;t load Webex people. Reconnect Webex or enter the destination manually.
+      </p>
+    );
+  }
+
+  if (!options.length) {
+    return (
+      <p className="text-[12px] text-[#888] dark:text-[#666]">
+        No people found. Switch to &ldquo;Enter manually&rdquo; or use a variable.
+      </p>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <select
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+        className={SELECT_BASE}
+      >
+        <option value="" disabled>
+          Select a person…
+        </option>
+        {options.map((person) => {
+          const optionValue = valueField === "id" ? person.id : person.email;
+          const optionLabel =
+            valueField === "id"
+              ? person.label_id
+              : (person.label_email || person.email);
+          return (
+            <option key={person.id} value={optionValue}>
+              {optionLabel}
+            </option>
+          );
+        })}
+      </select>
+      <SelectChevron />
+    </div>
+  );
+};
+
+const isFieldVisible = (field, values) => {
+  const rule = field.visibleWhen;
+  if (!rule) return true;
+  const rules = Array.isArray(rule) ? rule : [rule];
+  return rules.every((r) => values?.[r.key] === r.value);
+};
 
 const TimezoneSelectField = ({ value, onChange }) => {
   const defaultTz = useMemo(
@@ -1412,6 +1590,8 @@ const FieldInput = ({ field, value, onChange, variables = [] }) => {
     case "json_value_builder":  return <JsonValueBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "key_value_builder":   return <KeyValueBuilderField    field={field} value={value} onChange={onChange} variables={variables} />;
     case "checkbox":            return <CheckboxField           field={field} value={value} onChange={onChange} />;
+    case "webex_room_select":   return <WebexRoomSelectField     field={field} value={value} onChange={onChange} />;
+    case "webex_person_select": return <WebexPersonSelectField   field={field} value={value} onChange={onChange} />;
     case "select":
     default:                    return <SelectField             field={field} value={value} onChange={onChange} />;
   }
@@ -1453,7 +1633,15 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
   };
 
   const handleFieldChange = (key, val) => {
-    onChange({ ...values, [key]: val });
+    const next = { ...values, [key]: val };
+    if (key === "filter_type" && val !== "room") {
+      delete next.room_id;
+    }
+    if (key === "send_to" || key === "destination_source") {
+      delete next.destination_pick;
+      delete next.destination;
+    }
+    onChange(next);
   };
 
   return (
@@ -1497,8 +1685,8 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
                 : "flex flex-col gap-3"
             }
           >
-            {section.fields.map((field) => (
-              <div key={field.key} className="flex flex-col gap-1">
+            {section.fields.filter((field) => isFieldVisible(field, values)).map((field, fIdx) => (
+              <div key={`${field.key}-${field.type}-${field.label}-${fIdx}`} className="flex flex-col gap-1">
                 {/* Field label */}
                 <label className="text-[12px] font-medium text-[#555] dark:text-[#888]">
                   {field.label}

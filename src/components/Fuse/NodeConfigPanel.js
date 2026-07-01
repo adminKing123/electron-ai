@@ -18,6 +18,82 @@ import usePushNotification from "../../hooks/usePushNotification";
 import NotificationSettings from "./NotificationSettings";
 import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
 
+/** Display order for node picker sections (integration sections last). */
+const NODE_SECTION_ORDER = [
+  "General",
+  "Notifications",
+  "AI",
+  "Logic",
+  "Network",
+  "Webex",
+  "Google",
+  "Other",
+];
+
+/** Filter by search query and group nodes into ordered sections. */
+const groupNodesBySection = (nodes, query) => {
+  const q = query.trim().toLowerCase();
+  const filtered = q
+    ? nodes.filter(
+        (n) =>
+          n.label.toLowerCase().includes(q) ||
+          (n.description ?? "").toLowerCase().includes(q) ||
+          (n.section ?? "General").toLowerCase().includes(q),
+      )
+    : nodes;
+
+  const map = {};
+  filtered.forEach((node) => {
+    const key = node.section ?? "General";
+    if (!map[key]) map[key] = [];
+    map[key].push(node);
+  });
+
+  return Object.entries(map).sort(([a], [b]) => {
+    const ia = NODE_SECTION_ORDER.indexOf(a);
+    const ib = NODE_SECTION_ORDER.indexOf(b);
+    const ra = ia === -1 ? NODE_SECTION_ORDER.length : ia;
+    const rb = ib === -1 ? NODE_SECTION_ORDER.length : ib;
+    if (ra !== rb) return ra - rb;
+    return a.localeCompare(b);
+  });
+};
+
+const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes…" }) => (
+  <div
+    className="flex items-center gap-2 px-3 py-2 rounded-lg
+      bg-[#f5f5f5] dark:bg-[#1e1e1e]
+      border border-[#e8e8e8] dark:border-[#2a2a2a]"
+  >
+    <TbSearch className="w-[14px] h-[14px] text-[#aaa] dark:text-[#555] flex-shrink-0" />
+    <input
+      type="text"
+      value={query}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="flex-1 bg-transparent text-[12.5px] text-[#333] dark:text-[#ccc]
+        placeholder:text-[#bbb] dark:placeholder:text-[#444]
+        outline-none border-none"
+    />
+  </div>
+);
+
+const NodeSectionGrid = ({ title, nodes, Card, onPick }) => (
+  <div className="flex flex-col gap-2">
+    <p
+      className="text-[10.5px] font-semibold uppercase tracking-wider
+        text-[#bbb] dark:text-[#484848]"
+    >
+      {title}
+    </p>
+    <div className="grid grid-cols-2 gap-2">
+      {nodes.map((node) => (
+        <Card key={node.type} node={node} onPick={onPick} />
+      ))}
+    </div>
+  </div>
+);
+
 const StarterNodeCard = ({ node, onPick }) => {
   const Icon = getNodeIcon(node.icon);
 
@@ -65,6 +141,7 @@ const StarterPanel = () => {
   const loadingNodes = useFuseStudioStore((s) => s.loadingNodes);
   const addFlowNode = useFuseStudioStore((s) => s.addFlowNode);
   const selectNode = useFuseStudioStore((s) => s.selectNode);
+  const [query, setQuery] = React.useState("");
 
   const handlePick = (node) => {
     // Build a React Flow-compatible node so WorkflowCanvas can render it immediately.
@@ -76,7 +153,7 @@ const StarterPanel = () => {
         nodeType: node.type,
         label: node.label,
         icon: node.icon ?? null,
-        config: {},
+        config: { ...(node.defaults || {}) },
         // Mark as the workflow trigger so WorkflowCanvas and the store can
         // enforce the single-outgoing-edge rule.
         isStarter: true,
@@ -86,41 +163,51 @@ const StarterPanel = () => {
     selectNode(flowNode);
   };
 
+  const sections = React.useMemo(
+    () => groupNodesBySection(starterNodes, query),
+    [starterNodes, query],
+  );
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div
-        className="flex items-center gap-2 px-5 pt-4 pb-3.5
-        border-b border-[#ebebeb] dark:border-[#252525] flex-shrink-0"
-      >
-        <TbLayoutGrid className="w-[18px] h-[18px] text-[#888] dark:text-[#555]" />
-        <span className="text-[13px] font-semibold text-[#444] dark:text-[#bbb]">
-          Choose a starter
-        </span>
+      <div className="px-4 pt-4 pb-3 border-b border-[#ebebeb] dark:border-[#252525] flex-shrink-0">
+        <div className="flex items-center gap-2 mb-3">
+          <TbLayoutGrid className="w-[18px] h-[18px] text-[#888] dark:text-[#555]" />
+          <span className="text-[13px] font-semibold text-[#444] dark:text-[#bbb]">
+            Choose a starter
+          </span>
+        </div>
+        <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters…" />
       </div>
-      <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-5">
+      <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-5">
         {loadingNodes ? (
-          <div className="grid grid-cols-2 gap-2.5">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="h-12 rounded-xl bg-[#f0f0f0] dark:bg-[#1e1e1e] animate-pulse"
-              />
-            ))}
-          </div>
-        ) : starterNodes.length === 0 ? (
-          <p className="text-center text-[12px] text-[#bbb] dark:text-[#444] select-none">
-            No starter nodes available
+          ["General", "Webex"].map((sk) => (
+            <div key={sk} className="flex flex-col gap-2">
+              <div className="h-3 w-24 rounded bg-[#efefef] dark:bg-[#222] animate-pulse" />
+              <div className="grid grid-cols-2 gap-2">
+                {[1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="h-12 rounded-xl bg-[#f0f0f0] dark:bg-[#1e1e1e] animate-pulse"
+                  />
+                ))}
+              </div>
+            </div>
+          ))
+        ) : sections.length === 0 ? (
+          <p className="text-center text-[12px] text-[#bbb] dark:text-[#444] select-none mt-6">
+            {query ? "No starters match your search" : "No starter nodes available"}
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-2.5">
-            {starterNodes.map((node) => (
-              <StarterNodeCard
-                key={node.type}
-                node={node}
-                onPick={handlePick}
-              />
-            ))}
-          </div>
+          sections.map(([title, nodes]) => (
+            <NodeSectionGrid
+              key={title}
+              title={title}
+              nodes={nodes}
+              Card={StarterNodeCard}
+              onPick={handlePick}
+            />
+          ))
         )}
       </div>
     </div>
@@ -197,7 +284,7 @@ const AddNodePanel = () => {
         nodeType: node.type,
         label: node.label,
         icon: node.icon ?? null,
-        config: {},
+        config: { ...(node.defaults || {}) },
         isStarter: false,
       },
     };
@@ -206,26 +293,10 @@ const AddNodePanel = () => {
     setAddingNode(false);
   };
 
-  // Filter nodes by search query, then group them by `section`.
-  const sections = React.useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const filtered = q
-      ? actionNodes.filter(
-          (n) =>
-            n.label.toLowerCase().includes(q) ||
-            (n.description ?? "").toLowerCase().includes(q),
-        )
-      : actionNodes;
-
-    // Preserve insertion order of sections.
-    const map = {};
-    filtered.forEach((node) => {
-      const key = node.section ?? "Other";
-      if (!map[key]) map[key] = [];
-      map[key].push(node);
-    });
-    return Object.entries(map); // [[sectionTitle, [nodes...]], ...]
-  }, [actionNodes, query]);
+  const sections = React.useMemo(
+    () => groupNodesBySection(actionNodes, query),
+    [actionNodes, query],
+  );
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -248,30 +319,14 @@ const AddNodePanel = () => {
             <TbX className="w-[15px] h-[15px]" />
           </button>
         </div>
-        {/* Search */}
-        <div
-          className="flex items-center gap-2 px-3 py-2 rounded-lg
-          bg-[#f5f5f5] dark:bg-[#1e1e1e]
-          border border-[#e8e8e8] dark:border-[#2a2a2a]"
-        >
-          <TbSearch className="w-[14px] h-[14px] text-[#aaa] dark:text-[#555] flex-shrink-0" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search nodes…"
-            className="flex-1 bg-transparent text-[12.5px] text-[#333] dark:text-[#ccc]
-              placeholder:text-[#bbb] dark:placeholder:text-[#444]
-              outline-none border-none"
-          />
-        </div>
+        <NodePickerSearch query={query} onChange={setQuery} />
       </div>
 
       {/* Sectioned node list */}
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-5">
         {loadingActionNodes ? (
           // Loading skeleton: two mock sections
-          ["Section A", "Section B"].map((sk) => (
+          ["Webex", "General"].map((sk) => (
             <div key={sk} className="flex flex-col gap-2">
               <div className="h-3 w-24 rounded bg-[#efefef] dark:bg-[#222] animate-pulse" />
               <div className="grid grid-cols-2 gap-2">
@@ -290,25 +345,13 @@ const AddNodePanel = () => {
           </p>
         ) : (
           sections.map(([title, nodes]) => (
-            <div key={title} className="flex flex-col gap-2">
-              {/* Section heading */}
-              <p
-                className="text-[10.5px] font-semibold uppercase tracking-wider
-                text-[#bbb] dark:text-[#484848]"
-              >
-                {title}
-              </p>
-              {/* 2-column grid of node cards */}
-              <div className="grid grid-cols-2 gap-2">
-                {nodes.map((node) => (
-                  <ActionNodeCard
-                    key={node.type}
-                    node={node}
-                    onPick={handlePick}
-                  />
-                ))}
-              </div>
-            </div>
+            <NodeSectionGrid
+              key={title}
+              title={title}
+              nodes={nodes}
+              Card={ActionNodeCard}
+              onPick={handlePick}
+            />
           ))
         )}
       </div>
@@ -316,7 +359,16 @@ const AddNodePanel = () => {
   );
 };
 
-// ─── WebhookUrlDisplay ────────────────────────────────────────────────────────
+const WEBEX_MESSAGE_OUTPUT_FIELDS = [
+  { key: "message_id",   label: "message_id" },
+  { key: "text",         label: "text" },
+  { key: "person_id",    label: "person_id" },
+  { key: "person_email", label: "person_email" },
+  { key: "room_id",      label: "room_id" },
+  { key: "room_type",    label: "room_type" },
+  { key: "created",      label: "created" },
+  { key: "is_mention",   label: "is_mention" },
+];
 // Read-only row shown in the webhook node config panel, so the user can copy
 // the exact URL they need to send requests to.
 const WebhookUrlDisplay = ({ workflowId }) => {
@@ -426,6 +478,16 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
         {/* Webhook URL — always shown for webhook starter nodes */}
         {node_type === "webhook" && (
           <WebhookUrlDisplay workflowId={workflowId} />
+        )}
+
+        {/* Webex activation note — webhook is registered on Turn On */}
+        {node_type === "webex_message" && (
+          <p className="text-[11.5px] leading-relaxed text-[#888] dark:text-[#555]
+            px-3 py-2.5 rounded-lg bg-[#f0f9ff] dark:bg-[#0c1929]
+            border border-[#bae6fd] dark:border-[#0c4a6e]">
+            When you turn the workflow on, a Webex webhook is registered automatically.
+            Incoming messages matching your filters will trigger this workflow.
+          </p>
         )}
 
         {/* Push permission banner — shown for get_notified nodes */}
@@ -563,6 +625,39 @@ const NodeConfigPanel = ({ className = "" }) => {
           label: `${n.data.label} → text`,
           ...nodeMeta,
         });
+      }
+
+      if (n.data?.nodeType === "webex_message") {
+        const fields = WEBEX_MESSAGE_OUTPUT_FIELDS.filter(
+          (f) => f.key !== "text" || n.data?.config?.include_message_body,
+        );
+        fields.forEach(({ key, label }) => {
+          vars.push({
+            token: `${n.id}.${key}`,
+            label: `${n.data.label}.${label}`,
+            ...nodeMeta,
+          });
+        });
+      }
+
+      if (n.data?.nodeType === "send_webex_message") {
+        vars.push(
+          {
+            token: `${n.id}.success`,
+            label: `${n.data.label} → success`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.message_id`,
+            label: `${n.data.label} → message_id`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.room_id`,
+            label: `${n.data.label} → room_id`,
+            ...nodeMeta,
+          },
+        );
       }
 
       // http_request: expose status_code, success, body + every declared

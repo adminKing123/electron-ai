@@ -109,7 +109,7 @@ const WorkflowCanvas = ({ className = "" }) => {
           nodeType:  nodeDef.type,
           label:     nodeDef.label,
           icon:      nodeDef.icon ?? null,
-          config:    {},
+          config:    { ...(nodeDef.defaults || {}) },
           // StarterNodeCard tags the payload with isStarter:true;
           // ActionNodeCard payloads have no such flag.
           isStarter: nodeDef.isStarter === true,

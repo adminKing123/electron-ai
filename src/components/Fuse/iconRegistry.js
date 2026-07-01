@@ -1,4 +1,4 @@
-import { SiGmail } from "react-icons/si";
+import { SiGmail, SiWebex } from "react-icons/si";
 import { RiAiGenerate } from "react-icons/ri";
 
 import {
@@ -19,6 +19,7 @@ import {
  */
 export const ICON_REGISTRY = {
   SiGmail,
+  SiWebex,
   RiAiGenerate,
   TbCalendarTime,
   TbWebhook,
