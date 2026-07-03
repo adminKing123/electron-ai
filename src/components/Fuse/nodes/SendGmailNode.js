@@ -1,7 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
-import { getDisplayFuseNodeId } from "../../../utils/helpers";
+import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── SendGmailNode ──────────────────────────────────────────────────────────
 // Canvas node for the "Send Gmail" action.
@@ -18,8 +18,8 @@ const SendGmailNode = ({ id, data, selected }) => {
       className={[
         "flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl",
         "bg-[#fef2f2] dark:bg-[#2e0a0a]",
-        "border-2 transition-colors select-none",
-        "min-w-[190px] max-w-[260px] cursor-pointer",
+        "border-2 transition-colors select-none cursor-pointer",
+        FUSE_ACTION_NODE_WIDTH,
         borderCls,
       ].join(" ")}
     >
@@ -39,13 +39,15 @@ const SendGmailNode = ({ id, data, selected }) => {
       </span>
 
       {/* Label block */}
-      <div className="flex flex-col min-w-0">
-        <span className="text-[13px] font-semibold leading-tight text-[#991b1b] dark:text-[#fca5a5] truncate">
-          {data.label}
-        </span>
-        <span className="text-[9px] font-mono leading-tight text-[#f87171] dark:text-[#dc2626] truncate select-all">
-          NODE {getDisplayFuseNodeId(id)}
-        </span>
+      <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
+        <FuseNodeLabel
+          label={data.label}
+          className="text-[13px] font-semibold leading-tight text-[#991b1b] dark:text-[#fca5a5]"
+        />
+        <FuseNodeIdLabel
+          id={id}
+          className="text-[9px] font-mono leading-tight text-[#f87171] dark:text-[#dc2626]"
+        />
       </div>
 
       {/* Source handle — bottom center */}

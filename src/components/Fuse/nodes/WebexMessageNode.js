@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
+import { FUSE_STARTER_NODE_SIZE, FuseNodeLabel } from "./nodeLayout";
 
 // ─── WebexMessageNode ─────────────────────────────────────────────────────────
 // Canvas node for the "On Webex Message" starter trigger.
@@ -14,7 +15,8 @@ const WebexMessageNode = ({ id, data, selected }) => {
   return (
     <div
       className={[
-        "flex items-center justify-center flex-col gap-2.5 px-3.5 py-2.5 rounded-full w-[140px] h-[140px]",
+        "flex items-center justify-center flex-col gap-2.5 px-3.5 py-2.5 rounded-full",
+        FUSE_STARTER_NODE_SIZE,
         "bg-[#f0f9ff] dark:bg-[#0c1929]",
         "border-2 transition-colors select-none",
         "cursor-pointer",
@@ -28,10 +30,11 @@ const WebexMessageNode = ({ id, data, selected }) => {
         }
       </span>
 
-      <div className="flex flex-col min-w-0 text-center">
-        <span className="text-[13px] font-semibold leading-tight text-[#0c4a6e] dark:text-[#7dd3fc] truncate">
-          {data.label}
-        </span>
+      <div className="w-full min-w-0 overflow-hidden text-center">
+        <FuseNodeLabel
+          label={data.label}
+          className="text-[13px] font-semibold leading-tight text-[#0c4a6e] dark:text-[#7dd3fc]"
+        />
       </div>
 
       <Handle

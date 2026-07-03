@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
+import { FUSE_STARTER_NODE_SIZE, FuseNodeLabel } from "./nodeLayout";
 
 // ─── WebhookNode ──────────────────────────────────────────────────────────────
 // Canvas node for the "On Webhook" starter trigger.
@@ -17,7 +18,8 @@ const WebhookNode = ({ id, data, selected }) => {
   return (
     <div
       className={[
-        "flex items-center justify-center flex-col gap-2.5 px-3.5 py-2.5 rounded-full w-[140px] h-[140px]",
+        "flex items-center justify-center flex-col gap-2.5 px-3.5 py-2.5 rounded-full",
+        FUSE_STARTER_NODE_SIZE,
         "bg-[#ecfdf5] dark:bg-[#062c1e]",
         "border-2 transition-colors select-none",
         "cursor-pointer",
@@ -35,10 +37,11 @@ const WebhookNode = ({ id, data, selected }) => {
       </span>
 
       {/* Label block */}
-      <div className="flex flex-col min-w-0 text-center">
-        <span className="text-[13px] font-semibold leading-tight text-[#064e3b] dark:text-[#6ee7b7] truncate">
-          {data.label}
-        </span>
+      <div className="w-full min-w-0 overflow-hidden text-center">
+        <FuseNodeLabel
+          label={data.label}
+          className="text-[13px] font-semibold leading-tight text-[#064e3b] dark:text-[#6ee7b7]"
+        />
       </div>
 
       {/* Source handle — bottom center */}

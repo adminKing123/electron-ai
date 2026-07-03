@@ -1,7 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
-import { getDisplayFuseNodeId } from "../../../utils/helpers";
+import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── SendWebexMessageNode ───────────────────────────────────────────────────
 // Canvas node for the "Send Webex Message" action.
@@ -17,8 +17,8 @@ const SendWebexMessageNode = ({ id, data, selected }) => {
       className={[
         "flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl",
         "bg-[#f0f9ff] dark:bg-[#0c1929]",
-        "border-2 transition-colors select-none",
-        "min-w-[190px] max-w-[260px] cursor-pointer",
+        "border-2 transition-colors select-none cursor-pointer",
+        FUSE_ACTION_NODE_WIDTH,
         borderCls,
       ].join(" ")}
     >
@@ -35,13 +35,15 @@ const SendWebexMessageNode = ({ id, data, selected }) => {
         }
       </span>
 
-      <div className="flex flex-col min-w-0">
-        <span className="text-[13px] font-semibold leading-tight text-[#0c4a6e] dark:text-[#7dd3fc] truncate">
-          {data.label}
-        </span>
-        <span className="text-[9px] font-mono leading-tight text-[#0284c7] dark:text-[#38bdf8] truncate select-all">
-          NODE {getDisplayFuseNodeId(id)}
-        </span>
+      <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
+        <FuseNodeLabel
+          label={data.label}
+          className="text-[13px] font-semibold leading-tight text-[#0c4a6e] dark:text-[#7dd3fc]"
+        />
+        <FuseNodeIdLabel
+          id={id}
+          className="text-[9px] font-mono leading-tight text-[#0284c7] dark:text-[#38bdf8]"
+        />
       </div>
 
       <Handle

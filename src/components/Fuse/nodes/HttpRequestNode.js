@@ -1,7 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { getNodeIcon } from "../iconRegistry";
-import { getDisplayFuseNodeId } from "../../../utils/helpers";
+import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── HttpRequestNode ───────────────────────────────────────────────────────────
 // Canvas node for the "HTTP Request" action.
@@ -20,8 +20,8 @@ const HttpRequestNode = ({ id, data, selected }) => {
       className={[
         "flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl",
         "bg-[#f0fdfa] dark:bg-[#0a2020]",
-        "border-2 transition-colors select-none",
-        "min-w-[190px] max-w-[260px] cursor-pointer",
+        "border-2 transition-colors select-none cursor-pointer",
+        FUSE_ACTION_NODE_WIDTH,
         borderCls,
       ].join(" ")}
     >
@@ -41,13 +41,15 @@ const HttpRequestNode = ({ id, data, selected }) => {
       </span>
 
       {/* Label block */}
-      <div className="flex flex-col min-w-0">
-        <span className="text-[13px] font-semibold leading-tight text-[#115e59] dark:text-[#5eead4] truncate">
-          {data.label}
-        </span>
-        <span className="text-[9px] font-mono leading-tight text-[#2dd4bf] dark:text-[#0f766e] truncate select-all">
-          NODE {getDisplayFuseNodeId(id)}
-        </span>
+      <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
+        <FuseNodeLabel
+          label={data.label}
+          className="text-[13px] font-semibold leading-tight text-[#115e59] dark:text-[#5eead4]"
+        />
+        <FuseNodeIdLabel
+          id={id}
+          className="text-[9px] font-mono leading-tight text-[#2dd4bf] dark:text-[#0f766e]"
+        />
       </div>
 
       {/* Source handle — bottom center */}
