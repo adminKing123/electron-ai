@@ -712,8 +712,8 @@ const NodeConfigPanel = ({ className = "" }) => {
         );
       }
 
-      // http_request: expose status_code, success, body + every declared
-      // response_schema field (flattened to top-level of the node output).
+      // http_request: expose status_code, success, and response body fields.
+      // Response data lives under "body" only — same pattern as webhook.
       if (n.data?.nodeType === "http_request") {
         vars.push(
           {
@@ -726,23 +726,26 @@ const NodeConfigPanel = ({ className = "" }) => {
             label: `${n.data.label} → success`,
             ...nodeMeta,
           },
-          {
-            token: `${n.id}.body`,
-            label: `${n.data.label} → body (full)`,
-            ...nodeMeta,
-          },
         );
+
         const responseSchema = n.data?.config?.response_schema;
         if (
           responseSchema?.mode === "visual" &&
           responseSchema.fields?.length
         ) {
-          // Fields are flattened to top-level in the node output, so the token
-          // path is just  node_id.fieldKey  (no "body." prefix).
           vars.push(
-            ...flattenFields(responseSchema.fields, n.id, n.data.label)
-              .map((v) => ({ ...v, ...nodeMeta })),
+            ...flattenFields(
+              responseSchema.fields,
+              `${n.id}.body`,
+              n.data.label,
+            ).map((v) => ({ ...v, ...nodeMeta })),
           );
+        } else {
+          vars.push({
+            token: `${n.id}.body`,
+            label: `${n.data.label} → body`,
+            ...nodeMeta,
+          });
         }
       }
     });
