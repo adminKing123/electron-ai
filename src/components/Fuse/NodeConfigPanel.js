@@ -369,6 +369,7 @@ const WEBEX_MESSAGE_OUTPUT_FIELDS = [
   { key: "created",      label: "created" },
   { key: "is_mention",   label: "is_mention" },
 ];
+
 // Read-only row shown in the webhook node config panel, so the user can copy
 // the exact URL they need to send requests to.
 const WebhookUrlDisplay = ({ workflowId }) => {
@@ -423,16 +424,63 @@ const WebhookUrlDisplay = ({ workflowId }) => {
   );
 };
 
+/** Inline-editable node display name shown in the config panel header. */
+const NodeLabelInput = ({ value, onChange, onBlur, maxLength, typeLabel }) => {
+  const inputRef = React.useRef(null);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === "Escape") inputRef.current?.blur();
+  };
+
+  return (
+    <div className="flex flex-col gap-1 min-w-0 flex-1">
+      <input
+        ref={inputRef}
+        type="text"
+        value={value}
+        maxLength={maxLength}
+        onChange={(e) => onChange(e.target.value.slice(0, maxLength))}
+        onBlur={onBlur}
+        onKeyDown={handleKeyDown}
+        spellCheck={false}
+        placeholder={typeLabel}
+        className="w-full bg-transparent px-0 py-0.5
+          text-[15px] font-semibold
+          text-[#111] dark:text-[#e0e0e0]
+          placeholder:text-[#bbb] dark:placeholder:text-[#555]
+          border-none outline-none"
+      />
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <span className="text-[11px] text-[#aaa] dark:text-[#555] truncate">
+          {typeLabel}
+        </span>
+        <span className="text-[10px] tabular-nums text-[#ccc] dark:text-[#484848] flex-shrink-0">
+          {value.length}/{maxLength}
+        </span>
+      </div>
+    </div>
+  );
+};
+
 // ─── NodeConfigView ────────────────────────────────────────────────────────────
 // Shown when a React Flow node is selected.
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
 const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
+  const updateNodeLabel = useFuseStudioStore((s) => s.updateNodeLabel);
   const removeNode = useFuseStudioStore((s) => s.removeNode);
   const { id: workflowId } = useParams();
   const Icon = getNodeIcon(nodeDef.icon);
+  const maxLabelLength = CONFIG.MAX_NODE_LABEL_LENGTH;
 
   const node_type = node.data?.nodeType;
+  const displayLabel = node.data?.label ?? nodeDef.label;
+
+  const handleLabelBlur = () => {
+    const trimmed = displayLabel.trim();
+    const final = trimmed || nodeDef.label;
+    if (final !== displayLabel) updateNodeLabel(node.id, final);
+  };
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -456,15 +504,19 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
             Delete
           </button>
         </div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 min-w-0">
           {Icon && (
             <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-[#f3f3f3] dark:bg-[#2a2a2a]">
               <Icon className="w-[18px] h-[18px] text-[#555] dark:text-[#aaa]" />
             </span>
           )}
-          <p className="text-[15px] font-semibold text-[#111] dark:text-[#e0e0e0]">
-            {nodeDef.label}
-          </p>
+          <NodeLabelInput
+            value={displayLabel}
+            onChange={(v) => updateNodeLabel(node.id, v)}
+            onBlur={handleLabelBlur}
+            maxLength={maxLabelLength}
+            typeLabel={nodeDef.label}
+          />
         </div>
         {nodeDef.description && (
           <p className="text-[12px] text-[#5b8fc9] dark:text-[#4a7ab5] mt-2 leading-relaxed">

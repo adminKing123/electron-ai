@@ -180,6 +180,22 @@ const useFuseStudioStore = create((set) => ({
     }),
 
   /**
+   * Update the display label for a node on the canvas.
+   * Also syncs selectedNode so the config panel stays reactive.
+   */
+  updateNodeLabel: (nodeId, label) =>
+    set((state) => {
+      const nodes = state.nodes.map((n) =>
+        n.id === nodeId ? { ...n, data: { ...n.data, label } } : n
+      );
+      const selectedNode =
+        state.selectedNode?.id === nodeId
+          ? { ...state.selectedNode, data: { ...state.selectedNode.data, label } }
+          : state.selectedNode;
+      return { nodes, selectedNode };
+    }),
+
+  /**
    * Remove a node and all edges connected to it.
    * Also clears selectedNode if it was the removed node.
    */

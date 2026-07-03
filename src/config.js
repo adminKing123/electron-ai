@@ -28,6 +28,8 @@ const CONFIG = {
   NEW_CHAT_DRAFT_ID: "new_chat_draft",
   DRAFT_SAVE_DEBOUNCE_MS: 300,
   MAX_PROMPT_LENGTH: 1048576,
+  /** Max characters for a custom node display name in the workflow canvas. */
+  MAX_NODE_LABEL_LENGTH: 40,
   CHATS_PAGE_SIZE: 24,
   CHATS_SCROLL_THRESHOLD: 10,
 
