@@ -98,22 +98,26 @@ const IntegrationCard = ({ integration, onRevokeClick }) => {
   };
 
   return (
-    <div className="bg-[#ffffff] dark:bg-[#202020] p-6 rounded-3xl shadow-sm border border-[#e5e5e5] dark:border-[#2a2a2a] flex flex-col justify-between min-w-0">
-      <div className="flex flex-col items-start gap-4">
+    <div className="bg-[#ffffff] dark:bg-[#202020] rounded-3xl shadow-sm
+      border border-[#e5e5e5] dark:border-[#2a2a2a] min-w-0
+      flex flex-col items-start justify-between p-5 md:p-6">
+      {/* Icon + text */}
+      <div className="flex flex-col items-start gap-3 w-full">
         <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-[#f7f7f7] dark:bg-[#1a1a1a]">
           <Icon className="w-6 h-6 text-[#444444] dark:text-white" />
         </div>
         <div>
-          <h3 className="text-[#1a1a1a] dark:text-white font-sans text-base font-semibold truncate leading-tight">
+          <h3 className="text-[#1a1a1a] dark:text-white font-sans text-base font-semibold leading-tight">
             {integration.name}
           </h3>
-          <p className="text-[#666666] dark:text-[#d0d0d0] font-sans text-[13px] line-clamp-2 mt-1.5">
+          <p className="text-[#666666] dark:text-[#d0d0d0] font-sans text-[13px] mt-1.5">
             {integration.description}
           </p>
         </div>
       </div>
 
-      <div className="mt-4 flex-shrink-0 flex items-center justify-between gap-2">
+      {/* Actions — always at the bottom */}
+      <div className="mt-4 flex items-center justify-between gap-2 w-full">
         {integration.configured ? (
           <>
             <RevokeButton onClick={onRevokeClick} />

@@ -2,6 +2,7 @@ export { default as WorkflowsTable } from "./WorkflowsTable";
 export { default as WorkflowEmptyState } from "./WorkflowEmptyState";
 export { default as FuseStudioHeader, CanvasActionBar } from "./FuseStudioHeader";
 export { default as FuseStudioSidebar } from "./FuseStudioSidebar";
+export { default as FusePageShell } from "./FusePageShell";
 export { default as FusePrimaryButton } from "./FusePrimaryButton";
 export { default as WorkflowCanvas } from "./WorkflowCanvas";
 export { default as NodeConfigPanel } from "./NodeConfigPanel";

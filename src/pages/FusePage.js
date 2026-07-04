@@ -1,20 +1,21 @@
 ﻿import { useEffect, useState } from "react";
 import "../skeleton.css";
 import {
-  FuseStudioSidebar,
+  FusePageShell,
   FuseAutomateInput,
   ReviewCard,
   ReviewQuicklySkeletons,
   NormalReviewCard,
   RecentFusesSkeletons,
 } from "../components/Fuse";
-import Header from "../components/Header";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import ROUTES from "../router/routes";
 import { discoverWorkflowsAPI } from "../apis/fuse/queryFunctions";
 
 /**
  * ReviewQuicklySection — renders the discover carousel or its skeleton.
+ * On mobile: horizontal snap-scroll carousel (all cards visible, swipeable).
+ * On desktop: the original expand-on-hover flex layout.
  */
 const ReviewQuicklySection = ({ loading, data }) => {
   const [activeWorkflowId, setActiveWorkflowId] = useState(null);
@@ -29,13 +30,15 @@ const ReviewQuicklySection = ({ loading, data }) => {
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2">
+      <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2 px-4 md:px-0">
         Review Quickly
       </h2>
       {loading ? (
-        <ReviewQuicklySkeletons />
+        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory px-4 md:px-0">
+          <ReviewQuicklySkeletons />
+        </div>
       ) : (
-        <div className="flex gap-3 cursor-pointer">
+        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory px-4 md:px-0 md:overflow-visible">
           {data.map((workflow) => (
             <ReviewCard
               key={workflow.id}
@@ -55,13 +58,15 @@ const RecentFuses = ({ loading, data }) => {
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-10">
-      <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2">
+      <h2 className="text-xs font-semibold text-[#333] dark:text-[#ccc] mb-2 px-4 md:px-0">
         Your Recent Fuses
       </h2>
       {loading ? (
-        <RecentFusesSkeletons count={6} />
+        <div className="px-4 md:px-0">
+          <RecentFusesSkeletons count={6} />
+        </div>
       ) : (
-        <div className="grid grid-cols-3 gap-3 cursor-pointer">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 cursor-pointer px-4 md:px-0">
           {data.map((workflow) => (
             <NormalReviewCard key={workflow.id} workflow={workflow} />
           ))}
@@ -94,49 +99,38 @@ const FusePage = () => {
   }, []);
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
-      <Header type="fuse" backRoute={ROUTES.LIBRARY} />
-      <div className="flex-1 flex overflow-hidden">
-        <FuseStudioSidebar creating={creating} onCreate={handleCreate} />
-        <div
-          className="flex-1 overflow-y-auto rounded-xl p-4 mb-3 mr-3
-            bg-[#f7f7f7] dark:bg-[#1a1a1a]
-            border border-[#e5e5e5] dark:border-[#252525]
-            shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
-        >
-          <FuseAutomateInput
-            creating={creating}
-            onCreate={handleCreate}
-            onExpandedChange={setPromptExpanded}
-          />
+    <FusePageShell backRoute={ROUTES.LIBRARY} creating={creating} onCreate={handleCreate}>
+      <FuseAutomateInput
+        creating={creating}
+        onCreate={handleCreate}
+        onExpandedChange={setPromptExpanded}
+      />
 
-          <div
-            className={`transition-all duration-300 ${
-              promptExpanded
-                ? "opacity-25 dark:opacity-20 blur-[2px] pointer-events-none select-none"
-                : ""
-            }`}
-          >
-            <ReviewQuicklySection
-              loading={loading}
-              data={
-                discoverData?.workflows?.items
-                  ? discoverData.workflows.items.slice(0, 3)
-                  : []
-              }
-            />
-            <RecentFuses
-              loading={loading}
-              data={
-                discoverData?.workflows?.items
-                  ? discoverData.workflows.items.slice(3)
-                  : []
-              }
-            />
-          </div>
-        </div>
+      <div
+        className={`pb-6 transition-all duration-300 ${
+          promptExpanded
+            ? "opacity-25 dark:opacity-20 blur-[2px] pointer-events-none select-none"
+            : ""
+        }`}
+      >
+        <ReviewQuicklySection
+          loading={loading}
+          data={
+            discoverData?.workflows?.items
+              ? discoverData.workflows.items.slice(0, 3)
+              : []
+          }
+        />
+        <RecentFuses
+          loading={loading}
+          data={
+            discoverData?.workflows?.items
+              ? discoverData.workflows.items.slice(3)
+              : []
+          }
+        />
       </div>
-    </main>
+    </FusePageShell>
   );
 };
 

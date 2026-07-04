@@ -90,7 +90,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
   const canSubmit = prompt.trim().length > 0 && !creating;
 
   return (
-    <div ref={containerRef} className="relative w-full flex flex-col items-center pt-8 pb-6 px-6">
+    <div ref={containerRef} className="relative w-full flex flex-col items-center pt-5 pb-4 px-4 md:pt-8 md:pb-6 md:px-6">
       {expanded && (
         <div
           aria-hidden
@@ -102,7 +102,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
       )}
 
       <h1
-        className={`relative text-[2.4rem] font-semibold font-sans tracking-tight text-[#343434] dark:text-white text-center
+        className={`relative text-[1.7rem] md:text-[2.4rem] font-semibold font-sans tracking-tight text-[#343434] dark:text-white text-center
           transition-opacity duration-300 ${expanded ? "opacity-40 dark:opacity-30" : ""}`}
       >
         Automate your work with{" "}
@@ -113,7 +113,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
       </h1>
 
       <p
-        className={`relative text-[1.4rem] text-[#888] dark:text-[#666] text-center leading-relaxed mt-1
+        className={`relative text-[1rem] md:text-[1.4rem] text-[#888] dark:text-[#666] text-center leading-relaxed mt-1
           transition-opacity duration-300 ${expanded ? "opacity-30 dark:opacity-25" : ""}`}
       >
         Streamline and manage tasks across Workspace

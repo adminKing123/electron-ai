@@ -38,24 +38,45 @@ const SidebarNavButton = ({ icon: Icon, label, to, end = false, onClick }) => {
 };
 
 // ─── FuseStudioSidebar ────────────────────────────────────────────────────────
-const FuseStudioSidebar = ({ creating, onCreate }) => (
-  <aside className="h-full flex flex-col items-center px-3 pt-10 gap-4 flex-shrink-0">
-    {/* New workflow */}
-    <FusePrimaryButton
-      icon={TbPlus}
-      layout="square"
-      loading={creating}
-      onClick={onCreate}
-      aria-label="New workflow"
-    />
+const FuseStudioSidebar = ({ creating, onCreate, hideMobileNav = false }) => (
+  <>
+    {/* Desktop — vertical sidebar */}
+    <aside className="hidden md:flex h-full flex-col items-center px-3 pt-10 gap-4 flex-shrink-0">
+      <FusePrimaryButton
+        icon={TbPlus}
+        layout="square"
+        loading={creating}
+        onClick={onCreate}
+        aria-label="New workflow"
+      />
+      <div className="flex flex-col items-center gap-1 mt-2">
+        <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} end />
+        <SidebarNavButton icon={TbBolt} label="Fuses" to={ROUTES.FUSES_LISTING} />
+        <SidebarNavButton icon={TbPlug} label="Integrations" to={ROUTES.FUSE_INTEGRATIONS} />
+      </div>
+    </aside>
 
-    {/* Nav buttons */}
-    <div className="flex flex-col items-center gap-1 mt-2">
-      <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} />
-      <SidebarNavButton icon={TbBolt} label="Fuses" to={ROUTES.FUSES_LISTING} />
-      <SidebarNavButton icon={TbPlug} label="Integrations" to={ROUTES.FUSE_INTEGRATIONS} />
-    </div>
-  </aside>
+    {/* Mobile — fixed bottom navigation bar (hidden on pages with a custom action bar) */}
+    {!hideMobileNav && (
+      <nav
+        className="flex md:hidden fixed bottom-0 left-0 right-0 z-50
+          bg-white dark:bg-[#1a1a1a]
+          border-t border-[#e5e5e5] dark:border-[#252525]
+          px-2 py-1 justify-around items-center"
+      >
+        <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} end />
+        <FusePrimaryButton
+          icon={TbPlus}
+          layout="square"
+          loading={creating}
+          onClick={onCreate}
+          aria-label="New workflow"
+        />
+        <SidebarNavButton icon={TbBolt} label="Fuses" to={ROUTES.FUSES_LISTING} />
+        <SidebarNavButton icon={TbPlug} label="Integrations" to={ROUTES.FUSE_INTEGRATIONS} />
+      </nav>
+    )}
+  </>
 );
 
 export default FuseStudioSidebar;
