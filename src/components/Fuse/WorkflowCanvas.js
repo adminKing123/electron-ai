@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import {
   ReactFlow,
   Background,
@@ -12,14 +12,32 @@ import { BasicLoader } from "../Loaders";
 import { NODE_TYPES } from "./nodes/FuseFlowNode";
 import { getOutgoingLimit } from "./nodes/connectionLimits";
 import { createFuseNodeId } from "../../utils/helpers";
+import CanvasContextMenu from "./CanvasContextMenu";
+
+// Fallback node dimensions used before React Flow measures a rendered node
+const NODE_DIM = {
+  starter: { w: 140, h: 140 },
+  action:  { w: 220, h: 60  },
+};
+
+/** Space (flow units) added outside the tight bounding box when creating a block. */
+const BLOCK_PADDING = 30;
 
 // ─── WorkflowCanvas ───────────────────────────────────────────────────────────
 /**
  * React Flow canvas for the Fuse workflow builder.
  *
- * Reads nodes / edges and all change-handlers directly from the Zustand store —
- * no props needed for graph state.  Only `className` is passed in from the page
- * for layout positioning.
+ * Right-click on the canvas pane → context menu → "Draw Block":
+ *   1. Canvas enters draw mode (crosshair overlay)
+ *   2. User drags a selection rectangle
+ *   3. On release — if ≥1 workflow node was enclosed — a name dialog appears
+ *   4. Confirming creates a purely-visual fuse_block node behind those nodes
+ *
+ * Blocks are cosmetic overlays and do not affect workflow node data.
+ * They are cosmetic overlays that make the workflow easier to read.
+ *
+ * Clicking a block node does NOT open the side NodeConfigPanel; all editing
+ * (rename, colour, remove) happens in the block's own NodeToolbar popup.
  */
 const WorkflowCanvas = ({ className = "" }) => {
   const nodes         = useFuseStudioStore((s) => s.nodes);
@@ -31,91 +49,231 @@ const WorkflowCanvas = ({ className = "" }) => {
   const clearSelected = useFuseStudioStore((s) => s.clearSelectedNode);
   const addFlowNode   = useFuseStudioStore((s) => s.addFlowNode);
   const setAddingNode = useFuseStudioStore((s) => s.setAddingNode);
+  const addBlock      = useFuseStudioStore((s) => s.addBlock);
   const loading       = useFuseStudioStore((s) => s.loading);
   const isDark        = useIsDark();
 
-  // Capture the ReactFlow instance on mount so we can call screenToFlowPosition
-  // inside the drop handler (must be used outside the ReactFlow component tree).
   const [rfInstance, setRfInstance] = useState(null);
+  const containerRef = useRef(null);
 
-  const handleNodeClick = useCallback((_evt, node) => selectNode(node), [selectNode]);
-  const handlePaneClick = useCallback(() => clearSelected(), [clearSelected]);
+  // ── Context menu ─────────────────────────────────────────────────────────
+  const [contextMenu, setContextMenu] = useState(null); // { x, y } screen coords
+
+  // ── Draw mode ─────────────────────────────────────────────────────────────
+  const [drawMode,     setDrawMode]     = useState(false);
+  const [drawRect,     setDrawRect]     = useState(null);  // container-relative px
+  const [pendingBlock, setPendingBlock] = useState(null);  // { childIds }
+  const [blockName,    setBlockName]    = useState("");
+
+  // Mutable ref so global listeners avoid stale closures
+  const drawStateRef      = useRef({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
+  const blockNameInputRef = useRef(null);
+
+  // ── Global mouse listeners during draw mode ───────────────────────────────
+  useEffect(() => {
+    if (!drawMode) return;
+
+    const onMouseMove = (e) => {
+      if (!drawStateRef.current.active) return;
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      drawStateRef.current.endX = e.clientX - rect.left;
+      drawStateRef.current.endY = e.clientY - rect.top;
+      setDrawRect({ ...drawStateRef.current });
+    };
+
+    const onMouseUp = () => {
+      if (!drawStateRef.current.active) { setDrawMode(false); return; }
+
+      const ds = { ...drawStateRef.current };
+      drawStateRef.current = { active: false, startX: 0, startY: 0, endX: 0, endY: 0 };
+      setDrawRect(null);
+      setDrawMode(false);
+
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!containerRect || !rfInstance) return;
+
+      const minX = Math.min(ds.startX, ds.endX);
+      const minY = Math.min(ds.startY, ds.endY);
+      const maxX = Math.max(ds.startX, ds.endX);
+      const maxY = Math.max(ds.startY, ds.endY);
+      if (maxX - minX < 10 || maxY - minY < 10) return;
+
+      // Convert container-relative corners → flow coordinates
+      const tl = rfInstance.screenToFlowPosition({ x: minX + containerRect.left, y: minY + containerRect.top });
+      const br = rfInstance.screenToFlowPosition({ x: maxX + containerRect.left, y: maxY + containerRect.top });
+      const dr = { x: tl.x, y: tl.y, w: br.x - tl.x, h: br.y - tl.y };
+
+      // Use getState() so we never read stale nodes from the closure
+      const childIds = useFuseStudioStore.getState().nodes
+        .filter((n) => n.type !== "fuse_block")         // skip existing blocks
+        .filter((n) => {
+          const nw = n.measured?.width  ?? (n.data?.isStarter ? NODE_DIM.starter.w : NODE_DIM.action.w);
+          const nh = n.measured?.height ?? (n.data?.isStarter ? NODE_DIM.starter.h : NODE_DIM.action.h);
+          const cx = n.position.x + nw / 2;
+          const cy = n.position.y + nh / 2;
+          return cx >= dr.x && cx <= dr.x + dr.w && cy >= dr.y && cy <= dr.y + dr.h;
+        })
+        .map((n) => n.id);
+
+      if (childIds.length > 0) {
+        setPendingBlock({ childIds });
+        setBlockName("Block");
+      }
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup",   onMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup",   onMouseUp);
+    };
+  }, [drawMode, rfInstance]);
+
+  // Escape key cancels draw mode or the name dialog
+  useEffect(() => {
+    if (!drawMode && !pendingBlock) return;
+    const onEsc = (e) => {
+      if (e.key !== "Escape") return;
+      setDrawMode(false);
+      setDrawRect(null);
+      setPendingBlock(null);
+      setBlockName("");
+      drawStateRef.current = { active: false, startX: 0, startY: 0, endX: 0, endY: 0 };
+    };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [drawMode, pendingBlock]);
+
+  // Auto-focus name input when dialog appears
+  useEffect(() => {
+    if (pendingBlock) setTimeout(() => blockNameInputRef.current?.focus(), 50);
+  }, [pendingBlock]);
+
+  // ── Handlers ─────────────────────────────────────────────────────────────
 
   /**
-   * Visual guard called by React Flow while the user drags a new connection.
-   * Checks the outgoing-edge limit for the source node type before the mouse
-   * is released — gives instant visual feedback (handle turns red/grey).
-   *
-   * The store’s onConnect mirrors this check for defence-in-depth.
+   * Node click: blocks do NOT open the side panel — all editing is in the
+   * block's own NodeToolbar.  Regular workflow nodes go through selectNode.
    */
+  const handleNodeClick = useCallback(
+    (_evt, node) => {
+      if (node.type === "fuse_block") {
+        // Clear any previously-selected workflow node so the panel closes
+        clearSelected();
+        return;
+      }
+      selectNode(node);
+    },
+    [selectNode, clearSelected]
+  );
+
+  const handlePaneClick = useCallback(() => {
+    clearSelected();
+    setContextMenu(null);
+  }, [clearSelected]);
+
+  const handlePaneContextMenu = useCallback((e) => {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY });
+  }, []);
+
+  const handleDrawBlockStart = useCallback(() => {
+    setContextMenu(null);
+    setDrawMode(true);
+  }, []);
+
+  const handleOverlayMouseDown = useCallback((e) => {
+    e.preventDefault();
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+    drawStateRef.current = { active: true, startX: sx, startY: sy, endX: sx, endY: sy };
+    setDrawRect({ startX: sx, startY: sy, endX: sx, endY: sy });
+  }, []);
+
+  /** Compute tight bounds from the enclosed nodes and create the block. */
+  const handleConfirmBlock = useCallback(() => {
+    if (!pendingBlock) return;
+
+    const currentNodes = useFuseStudioStore.getState().nodes;
+    const childNodes   = currentNodes.filter((n) => pendingBlock.childIds.includes(n.id));
+
+    const minX = Math.min(...childNodes.map((n) => n.position.x));
+    const minY = Math.min(...childNodes.map((n) => n.position.y));
+    const maxX = Math.max(...childNodes.map((n) =>
+      n.position.x + (n.measured?.width  ?? (n.data?.isStarter ? NODE_DIM.starter.w : NODE_DIM.action.w))
+    ));
+    const maxY = Math.max(...childNodes.map((n) =>
+      n.position.y + (n.measured?.height ?? (n.data?.isStarter ? NODE_DIM.starter.h : NODE_DIM.action.h))
+    ));
+
+    addBlock({
+      id:       `block_${createFuseNodeId()}`,
+      position: { x: minX - BLOCK_PADDING, y: minY - BLOCK_PADDING },
+      width:    (maxX - minX) + BLOCK_PADDING * 2,
+      height:   (maxY - minY) + BLOCK_PADDING * 2,
+      label:    blockName.trim() || "Block",
+    });
+
+    setPendingBlock(null);
+    setBlockName("");
+  }, [pendingBlock, blockName, addBlock]);
+
+  const handleCancelBlock = useCallback(() => {
+    setPendingBlock(null);
+    setBlockName("");
+  }, []);
+
+  // ── Connection validation ─────────────────────────────────────────────────
   const isValidConnection = useCallback(
     (connection) => {
-      // ── Outgoing limit ───────────────────────────────────────────────────────
       const sourceNode = nodes.find((n) => n.id === connection.source);
       const limit      = getOutgoingLimit(sourceNode?.data?.nodeType);
       const current    = edges.filter((e) => e.source === connection.source).length;
       if (current >= limit) return false;
-      // For multi-handle nodes, also block reusing the same handle.
       if (connection.sourceHandle) {
-        const handleUsed = edges.some(
+        const used = edges.some(
           (e) => e.source === connection.source && e.sourceHandle === connection.sourceHandle
         );
-        if (handleUsed) return false;
+        if (used) return false;
       }
-
-      // ── Incoming limit ───────────────────────────────────────────────────────
-      // Every node accepts at most ONE incoming edge.
-      // Exception: if/else true/false handles are exempt so that both branches
-      // can converge back onto the same downstream node.
-      const isIfElseHandle =
+      const isIfElse =
         connection.sourceHandle === "true" || connection.sourceHandle === "false";
-      if (!isIfElseHandle) {
-        const incomingCount = edges.filter((e) => e.target === connection.target).length;
-        if (incomingCount >= 1) return false;
+      if (!isIfElse) {
+        if (edges.filter((e) => e.target === connection.target).length >= 1) return false;
       }
-
       return true;
     },
     [nodes, edges]
   );
 
-  /**
-   * Called when the user drops a dragged action node card onto the canvas.
-   * Reads the serialized node definition from dataTransfer, computes the canvas
-   * position from screen coordinates, and adds the node to the store.
-   */
+  // ── Drag-and-drop ─────────────────────────────────────────────────────────
   const handleDrop = useCallback(
     (e) => {
       e.preventDefault();
-
       const raw = e.dataTransfer.getData("application/fuse-node");
       if (!raw) return;
-
       let nodeDef;
       try { nodeDef = JSON.parse(raw); } catch { return; }
 
-      // Use the RF instance to convert screen coords → canvas coords when the
-      // graph is mounted.  Fall back to a sensible default for the empty-state
-      // drop zone (ReactFlow not yet rendered, so rfInstance is null).
       const position = rfInstance
         ? rfInstance.screenToFlowPosition({ x: e.clientX, y: e.clientY })
         : { x: 250, y: 100 };
 
       const flowNode = {
-        id:       `${createFuseNodeId()}`,
-        type:     "fuse_node",
+        id:   `${createFuseNodeId()}`,
+        type: "fuse_node",
         position,
         data: {
           nodeType:  nodeDef.type,
           label:     nodeDef.label,
           icon:      nodeDef.icon ?? null,
           config:    { ...(nodeDef.defaults || {}) },
-          // StarterNodeCard tags the payload with isStarter:true;
-          // ActionNodeCard payloads have no such flag.
           isStarter: nodeDef.isStarter === true,
         },
       };
-
       addFlowNode(flowNode);
       selectNode(flowNode);
       setAddingNode(false);
@@ -128,12 +286,21 @@ const WorkflowCanvas = ({ className = "" }) => {
     e.dataTransfer.dropEffect = "copy";
   }, []);
 
-  // ── React Flow canvas ───────────────────────────────────────────────────
-  // The drop-zone wrapper always covers the full area so starter nodes can be
-  // dragged onto the empty-state canvas before ReactFlow is mounted.
+  // ── Selection rectangle visual style ────────────────────────────────────
+  const selectionStyle = drawRect
+    ? {
+        left:   Math.min(drawRect.startX, drawRect.endX),
+        top:    Math.min(drawRect.startY, drawRect.endY),
+        width:  Math.abs(drawRect.endX - drawRect.startX),
+        height: Math.abs(drawRect.endY - drawRect.startY),
+      }
+    : null;
+
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div
-      className={`rounded-xl overflow-hidden ${className}`}
+      ref={containerRef}
+      className={`relative rounded-xl overflow-hidden ${className}`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
@@ -142,9 +309,6 @@ const WorkflowCanvas = ({ className = "" }) => {
           <BasicLoader />
         </div>
       ) : nodes.length === 0 ? (
-        // ── Empty state ───────────────────────────────────────────────────
-        // Rendered when no nodes have been placed yet.
-        // Drag-and-drop from the starter panel still works here.
         <div className="flex items-center justify-center h-full select-none">
           <div className="text-center">
             <p className="text-[14px] font-medium text-[#888] dark:text-[#555]">
@@ -165,6 +329,7 @@ const WorkflowCanvas = ({ className = "" }) => {
           onConnect={onConnect}
           onNodeClick={handleNodeClick}
           onPaneClick={handlePaneClick}
+          onPaneContextMenu={handlePaneContextMenu}
           isValidConnection={isValidConnection}
           edgesReconnectable={false}
           nodeTypes={NODE_TYPES}
@@ -177,22 +342,126 @@ const WorkflowCanvas = ({ className = "" }) => {
             animated: true,
           }}
         >
-        <Background
-          variant={BackgroundVariant.Dots}
-          gap={20}
-          size={1.5}
-          color={isDark ? "#2a2a2a" : "#e0e0e0"}
+          <Background
+            variant={BackgroundVariant.Dots}
+            gap={20}
+            size={1.5}
+            color={isDark ? "#2a2a2a" : "#e0e0e0"}
+          />
+          <Controls
+            showInteractive={false}
+            className="!shadow-none !border !border-[#e5e5e5] dark:!border-[#2a2a2a] !rounded-xl !overflow-hidden"
+          />
+        </ReactFlow>
+      )}
+
+      {/* ── Context menu ──────────────────────────────────────────────── */}
+      {contextMenu && (
+        <CanvasContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onDrawBlock={handleDrawBlockStart}
+          onClose={() => setContextMenu(null)}
         />
-        <Controls
-          showInteractive={false}
-          className="!shadow-none !border !border-[#e5e5e5] dark:!border-[#2a2a2a] !rounded-xl !overflow-hidden"
-        />
-      </ReactFlow>
+      )}
+
+      {/* ── Draw-mode overlay ─────────────────────────────────────────── */}
+      {drawMode && (
+        <div
+          className="absolute inset-0 z-10 cursor-crosshair select-none"
+          onMouseDown={handleOverlayMouseDown}
+        >
+          {selectionStyle && (
+            <div
+              className="absolute pointer-events-none rounded-md
+                border-2 border-[#4a6cf7] dark:border-[#6b8aff]
+                bg-[#4a6cf7]/10 dark:bg-[#6b8aff]/10"
+              style={selectionStyle}
+            />
+          )}
+          <div
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none
+              px-3 py-1.5 rounded-full shadow
+              bg-white/90 dark:bg-[#1e1e1e]/90
+              border border-[#e0e0e0] dark:border-[#2a2a2a]
+              text-[11px] font-medium text-[#888] dark:text-[#666] select-none"
+          >
+            Drag to draw a block &nbsp;·&nbsp; <kbd className="font-mono">Esc</kbd> to cancel
+          </div>
+        </div>
+      )}
+
+      {/* ── Block name dialog ─────────────────────────────────────────── */}
+      {pendingBlock && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/10 dark:bg-black/25"
+            onClick={handleCancelBlock}
+          />
+          <div
+            className="relative z-10 w-[280px]
+              bg-white dark:bg-[#1e1e1e]
+              border border-[#e5e5e5] dark:border-[#2a2a2a]
+              rounded-2xl shadow-2xl p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-[14px] font-semibold text-[#111] dark:text-[#e8e8e8] mb-0.5">
+              Name your block
+            </h3>
+            <p className="text-[11.5px] text-[#999] dark:text-[#555] mb-3.5">
+              {pendingBlock.childIds.length} node{pendingBlock.childIds.length !== 1 ? "s" : ""} will be grouped
+            </p>
+            <input
+              ref={blockNameInputRef}
+              type="text"
+              value={blockName}
+              onChange={(e) => setBlockName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter")  handleConfirmBlock();
+                if (e.key === "Escape") handleCancelBlock();
+              }}
+              placeholder="Block name…"
+              maxLength={48}
+              className="w-full px-3 py-2 rounded-lg mb-3
+                text-[13px] font-medium
+                bg-[#f5f5f5] dark:bg-[#252525]
+                border border-[#e0e0e0] dark:border-[#333]
+                text-[#111] dark:text-[#e0e0e0]
+                placeholder:text-[#bbb] dark:placeholder:text-[#555]
+                outline-none focus:border-[#4a6cf7] dark:focus:border-[#6b8aff]
+                transition-colors"
+            />
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={handleCancelBlock}
+                className="flex-1 py-1.5 rounded-lg
+                  text-[12px] font-medium select-none
+                  text-[#777] dark:text-[#666]
+                  border border-[#e0e0e0] dark:border-[#2a2a2a]
+                  hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+                  transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmBlock}
+                className="flex-1 py-1.5 rounded-lg
+                  text-[12px] font-semibold select-none
+                  bg-[#111] dark:bg-[#e8e8e8]
+                  text-white dark:text-[#111]
+                  hover:bg-[#333] dark:hover:bg-[#ccc]
+                  transition-colors"
+              >
+                Create Block
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
 export default WorkflowCanvas;
-
-

@@ -1,4 +1,5 @@
 import React from "react";
+import BlockNode             from "./BlockNode";
 import ScheduleNode          from "./ScheduleNode";
 import WebhookNode           from "./WebhookNode";
 import WebexMessageNode      from "./WebexMessageNode";
@@ -57,4 +58,7 @@ const FuseFlowNode = (props) => {
 export default FuseFlowNode;
 
 /** Map of all custom node types registered with React Flow. */
-export const NODE_TYPES = { fuse_node: FuseFlowNode };
+export const NODE_TYPES = {
+  fuse_node:  FuseFlowNode,
+  fuse_block: BlockNode,
+};

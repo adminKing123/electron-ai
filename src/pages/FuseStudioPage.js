@@ -117,7 +117,11 @@ export default function FuseStudioPage() {
         setWorkflowName(name);
         committedNameRef.current = name;
         setWorkflow(wf);
-        setNodes(wf.nodes ?? []);
+
+        // ── Load graph ──────────────────────────────────────────────────────
+        // wf.nodes  = workflow logic nodes
+        // wf.blocks = purely-visual block overlays (rendered first so they sit behind)
+        setNodes([...(wf.blocks ?? []), ...(wf.nodes ?? [])]);
         setEdges(wf.edges ?? []);
         // Initialise compilation state so the header shows the correct status
         // and the dirty-graph indicator is accurate on first load.
@@ -148,13 +152,17 @@ export default function FuseStudioPage() {
   }, [id]);
 
   // ── Auto-save graph (debounced 1.5 s) ───────────────────────────────────
-  // Updates the DB record but does NOT recompile the running execution.
+  // Splits the ReactFlow nodes array into workflow nodes (fuse_node) and
+  // visual block overlays (fuse_block) before calling the API so the two
+  // concerns are always stored under separate keys and never mixed.
   const saveTimerRef = useRef(null);
   useEffect(() => {
     if (loading || !storeWorkflow) return;
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
-      updateWorkflowGraphAPI(id, nodes, edges).catch(() => {});
+      const workflowNodes = nodes.filter((n) => n.type !== "fuse_block");
+      const blocks        = nodes.filter((n) => n.type === "fuse_block");
+      updateWorkflowGraphAPI(id, workflowNodes, edges, blocks).catch(() => {});
     }, 1500);
     return () => clearTimeout(saveTimerRef.current);
   // eslint-disable-next-line react-hooks/exhaustive-deps

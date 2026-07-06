@@ -72,12 +72,19 @@ export const updateWorkflowNameAPI = async (id, name) => {
 
 /**
  * PATCH /fuse/workflows/:id/graph — persists the React Flow node/edge graph.
+ *
  * @param {string} id
- * @param {Array}  nodes  React Flow node array
- * @param {Array}  edges  React Flow edge array
+ * @param {Array}  nodes   Workflow-logic nodes only (fuse_node type)
+ * @param {Array}  edges   Workflow edges
+ * @param {Array}  [blocks=[]]  Visual block overlays (fuse_block type).
+ *                              Stored separately, never compiled.
  */
-export const updateWorkflowGraphAPI = async (id, nodes, edges) => {
-  const res = await api({ method: "PATCH", url: ENDPOINTS.FUSE_WORKFLOW_GRAPH(id), data: { nodes, edges } });
+export const updateWorkflowGraphAPI = async (id, nodes, edges, blocks = []) => {
+  const res = await api({
+    method: "PATCH",
+    url: ENDPOINTS.FUSE_WORKFLOW_GRAPH(id),
+    data: { nodes, edges, blocks },
+  });
   return res.data;
 };
 

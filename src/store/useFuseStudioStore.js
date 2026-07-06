@@ -163,6 +163,41 @@ const useFuseStudioStore = create((set) => ({
       nodes: [...state.nodes, node],
     })),
 
+  /** Add a purely-visual block overlay to the canvas. */
+  addBlock: ({ id, position, width, height, label }) =>
+    set((state) => ({
+      nodes: [
+        {
+          id,
+          type:   "fuse_block",
+          position,
+          style:  { width, height },
+          data:   { label, color: "indigo" },
+          zIndex: -1,
+        },
+        ...state.nodes,
+      ],
+    })),
+
+  /** Delete a block overlay. Workflow nodes are completely unaffected. */
+  removeBlock: (blockId) =>
+    set((state) => ({
+      nodes: state.nodes.filter((n) => n.id !== blockId),
+      selectedNode:
+        state.selectedNode?.id === blockId ? null : state.selectedNode,
+    })),
+
+  /**
+   * Set the colour of a block.
+   * @param {string} color  Palette key ("indigo", "rose" …) or any CSS hex string
+   */
+  updateBlockColor: (blockId, color) =>
+    set((state) => ({
+      nodes: state.nodes.map((n) =>
+        n.id === blockId ? { ...n, data: { ...n.data, color } } : n
+      ),
+    })),
+
   /**
    * Update the config values stored inside a node's data.
    * Also syncs selectedNode so the config panel stays reactive.

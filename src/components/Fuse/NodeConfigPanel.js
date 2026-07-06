@@ -568,11 +568,15 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
 /**
  * Right panel of the workflow studio canvas.
  *
+ * Block nodes (fuse_block) never reach this panel — clicking a block clears
+ * selectedNode so the panel stays on its current / default view.
+ * All block editing (rename, colour, remove) happens in BlockNode's NodeToolbar.
+ *
  * Panel states (in priority order):
  *   1. nodes.length === 0          → StarterPanel   (no workflow started yet)
  *   2. addingNode === true          → AddNodePanel   (user clicked "Add Node")
  *   3. selectedNode !== null        → NodeConfigView (configure selected node)
- *   4. default                      → idle prompt    (nodes exist, none selected)
+ *   4. default                      → AddNodePanel   (nodes exist, none selected)
  */
 const NodeConfigPanel = ({ className = "" }) => {
   const nodes = useFuseStudioStore((s) => s.nodes);
@@ -763,11 +767,12 @@ const NodeConfigPanel = ({ className = "" }) => {
     // User opened the "Add Node" picker via the header button.
     content = <AddNodePanel />;
   } else if (selectedNode) {
-    // A canvas node is selected — show its config form.
+    // A workflow node is selected — show its config form.
+    // Block nodes (fuse_block) never reach here; WorkflowCanvas clears
+    // selectedNode before they could be set.
     const nodeDef = allNodeDefs.find(
       (n) => n.type === selectedNode.data.nodeType,
     );
-
     content = nodeDef ? (
       <NodeConfigView
         node={selectedNode}
