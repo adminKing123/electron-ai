@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { getDisplayFuseNodeId } from "../../utils/helpers";
-import { getWebexRoomsAPI, getWebexPeopleAPI } from "../../apis/fuse/queryFunctions";
+import { getWebexRoomsAPI, getWebexPeopleAPI, getSystemVariablesAPI } from "../../apis/fuse/queryFunctions";
 
 // ─── Timezone options ──────────────────────────────────────────────────────────
 // Built once at module load from the browser's Intl API.
@@ -454,6 +454,13 @@ const getShortLabel = (label, nodeName) => {
  */
 const VariablePicker = ({ variables, onPick, onClose }) => {
   const [selectedNodeId, setSelectedNodeId] = useState(null);
+  const [systemVarsOpen, setSystemVarsOpen] = useState(false);
+  const [systemVars, setSystemVars] = useState(null);
+  const [selectedTimezone, setSelectedTimezone] = useState(() =>
+    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"
+  );
+  const [selectedFormat, setSelectedFormat] = useState("iso");
+  const [customFormat, setCustomFormat] = useState("DD/MM/YYYY");
 
   /** Group variables by nodeId. Falls back to token prefix for legacy vars. */
   const groups = useMemo(() => {
@@ -472,15 +479,137 @@ const VariablePicker = ({ variables, onPick, onClose }) => {
     "absolute z-50 right-0 top-full mt-1 w-64 rounded-xl " +
     "bg-white dark:bg-[#1e1e1e] " +
     "border border-[#e0e0e0] dark:border-[#2e2e2e] " +
-    "shadow-lg overflow-hidden";
+    "shadow-lg overflow-hidden flex flex-col";
 
-  if (!variables.length) {
+  const fetchSystemVars = async () => {
+    setSystemVarsOpen(true);
+    if (!systemVars) {
+      try {
+        const data = await getSystemVariablesAPI();
+        setSystemVars(data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  /* ── System Variables Panel ── */
+  if (systemVarsOpen) {
     return (
-      <div className={`${WRAPPER} p-3`}>
-        <p className="text-[11.5px] text-[#bbb] dark:text-[#555] text-center select-none">
-          No variables available yet.<br />
-          Define fields in the webhook body.
-        </p>
+      <div className={WRAPPER}>
+        <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5 border-b border-[#f0f0f0] dark:border-[#272727]">
+          <button
+            type="button"
+            onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSystemVarsOpen(false); }}
+            className="w-6 h-6 flex items-center justify-center rounded-md
+              text-[#aaa] dark:text-[#555] hover:text-[#555] dark:hover:text-[#aaa]
+              hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors flex-shrink-0"
+            aria-label="Back to nodes"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M7.5 2L3.5 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <span className="text-[11.5px] font-semibold text-[#333] dark:text-[#c0c0c0] truncate">
+            Runtime Variables
+          </span>
+        </div>
+
+        {!systemVars ? (
+          <div className="px-3 py-6 text-center text-[12px] text-[#888] dark:text-[#666]">
+            Loading...
+          </div>
+        ) : (
+          <div className="max-h-52 overflow-y-auto pb-1.5 pt-0.5 flex flex-col">
+            <div className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[#bbb] dark:text-[#484848]">
+              Metadata
+            </div>
+            <ul>
+              {systemVars.variables.filter(v => v.group === "Metadata").map(v => (
+                <li key={v.token}>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); onPick(v.token); onClose(); }}
+                    className="w-full text-left px-3 py-1.5 hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
+                  >
+                    <span className="block text-[12px] font-medium text-[#222] dark:text-[#d0d0d0]">{v.label}</span>
+                    <span className="block text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff]">{`{{${v.token}}}`}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <div className="px-3 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[#bbb] dark:text-[#484848]">
+              Date & Time
+            </div>
+            
+            <div className="px-3 py-1.5 flex flex-col gap-2">
+              <div className="flex gap-2">
+                <div className="relative flex-[3]">
+                  <select
+                    value={selectedTimezone}
+                    onChange={(e) => setSelectedTimezone(e.target.value)}
+                    className="w-full pl-2 pr-6 py-1.5 text-[11.5px] appearance-none rounded-lg bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#e0e0e0] dark:border-[#2a2a2a] outline-none text-[#222] dark:text-[#ccc] cursor-pointer"
+                  >
+                    {TIMEZONE_OPTIONS.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                  <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#aaa] dark:text-[#555]">
+                    <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                      <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+                
+                <div className="relative flex-[2]">
+                  <select
+                    value={selectedFormat}
+                    onChange={(e) => setSelectedFormat(e.target.value)}
+                    className="w-full pl-2 pr-6 py-1.5 text-[11.5px] appearance-none rounded-lg bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#e0e0e0] dark:border-[#2a2a2a] outline-none text-[#222] dark:text-[#ccc] cursor-pointer"
+                  >
+                    <option value="iso">ISO 8601</option>
+                    <option value="date">Date (YYYY-MM-DD)</option>
+                    <option value="time">Time (HH:MM:SS)</option>
+                    <option value="unix">Unix Epoch</option>
+                    <option value="custom">Custom...</option>
+                  </select>
+                  <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#aaa] dark:text-[#555]">
+                    <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                      <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              
+              {selectedFormat === "custom" && (
+                <input
+                  type="text"
+                  value={customFormat}
+                  onChange={(e) => setCustomFormat(e.target.value)}
+                  placeholder="e.g. DD/MM/YYYY hh:mm A"
+                  className="w-full px-2 py-1.5 text-[11px] rounded-lg bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#e0e0e0] dark:border-[#2a2a2a] outline-none text-[#222] dark:text-[#ccc]"
+                />
+              )}
+
+              <button
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  const fmt = selectedFormat === "custom" ? customFormat : selectedFormat;
+                  const token = fmt === "iso"
+                    ? `system.datetime.${selectedTimezone}`
+                    : `system.datetime.${selectedTimezone}.${fmt}`;
+                  onPick(token);
+                  onClose();
+                }}
+                className="w-full text-center px-3 py-1.5 rounded-lg bg-[#f0f0f0] dark:bg-[#252540] text-[#333] dark:text-[#d0d0d0] border border-[#ddd] dark:border-[#363660] hover:bg-[#e5e5e5] dark:hover:bg-[#303050] transition-colors text-[11.5px] font-medium"
+              >
+                Insert Datetime Variable
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -540,39 +669,74 @@ const VariablePicker = ({ variables, onPick, onClose }) => {
   /* ── Step 1: node list ── */
   return (
     <div className={WRAPPER}>
-      <p className="px-3 pt-2.5 pb-1 text-[10px] font-semibold uppercase tracking-wider
-        text-[#bbb] dark:text-[#484848]">
-        Pick a node
-      </p>
-      <ul className="max-h-52 overflow-y-auto pb-1.5">
-        {groups.map((g) => (
-          <li key={g.nodeId}>
-            <button
-              type="button"
-              onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedNodeId(g.nodeId); }}
-              className="w-full text-left px-3 py-2 flex items-center justify-between gap-2
-                hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
-            >
-              <div className="flex flex-col gap-0.5 min-w-0">
-                <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
-                  {g.nodeName}
-                </span>
-                {!g.isStarter && (
-                  <span className="text-[10.5px] font-mono text-[#aaa] dark:text-[#555] truncate">
-                    {getDisplayFuseNodeId(g.nodeId)}
-                  </span>
-                )}
-              </div>
-              {/* Chevron right */}
-              <svg className="flex-shrink-0 text-[#ccc] dark:text-[#444]"
-                width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M4.5 2L8.5 6l-4 4" stroke="currentColor"
-                  strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </li>
-        ))}
-      </ul>
+      {!variables.length ? (
+        <div className="p-3 border-b border-[#f0f0f0] dark:border-[#272727]">
+          <p className="text-[11.5px] text-[#bbb] dark:text-[#555] text-center select-none">
+            No variables available yet.<br />
+            Define fields in the webhook body.
+          </p>
+        </div>
+      ) : (
+        <>
+          <p className="px-3 pt-2.5 pb-1 text-[10px] font-semibold uppercase tracking-wider
+            text-[#bbb] dark:text-[#484848]">
+            Pick a node
+          </p>
+          <ul className="max-h-52 overflow-y-auto pb-1.5">
+            {groups.map((g) => (
+              <li key={g.nodeId}>
+                <button
+                  type="button"
+                  onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedNodeId(g.nodeId); }}
+                  className="w-full text-left px-3 py-2 flex items-center justify-between gap-2
+                    hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
+                >
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
+                      {g.nodeName}
+                    </span>
+                    {!g.isStarter && (
+                      <span className="text-[10.5px] font-mono text-[#aaa] dark:text-[#555] truncate">
+                        {getDisplayFuseNodeId(g.nodeId)}
+                      </span>
+                    )}
+                  </div>
+                  {/* Chevron right */}
+                  <svg className="flex-shrink-0 text-[#ccc] dark:text-[#444]"
+                    width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M4.5 2L8.5 6l-4 4" stroke="currentColor"
+                      strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      
+      <div className="border-t border-[#f0f0f0] dark:border-[#272727] p-1.5">
+        <button
+          type="button"
+          onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); fetchSystemVars(); }}
+          className="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between gap-2
+            bg-[#f9fafb] dark:bg-[#141e30] border border-[#e0f2fe] dark:border-[#0c4a6e]
+            hover:bg-[#f0f9ff] dark:hover:bg-[#075985]/30 transition-colors"
+        >
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[12px] font-semibold text-[#0369a1] dark:text-[#38bdf8] truncate">
+              Runtime Variables
+            </span>
+            <span className="text-[10px] text-[#0ea5e9] dark:text-[#7dd3fc] truncate">
+              Datetime, Run ID, etc.
+            </span>
+          </div>
+          <svg className="flex-shrink-0 text-[#0284c7] dark:text-[#38bdf8]"
+            width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M4.5 2L8.5 6l-4 4" stroke="currentColor"
+              strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
   );
 };

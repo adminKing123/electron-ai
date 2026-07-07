@@ -116,6 +116,11 @@ export const getActionNodesAPI = async () => {
   return res.data;
 };
 
+export const getSystemVariablesAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_SYSTEM_VARIABLES });
+  return res.data;
+};
+
 /**
  * GET /fuse/integration — returns all available integrations.
  */

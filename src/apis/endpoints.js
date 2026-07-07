@@ -45,6 +45,7 @@ const ENDPOINTS = {
   FUSE_WORKFLOW_DEACTIVATE:     (id) => `/fuse/workflows/${id}/deactivate`,
   FUSE_NODES_STARTER:           "/fuse/nodes/starter",
   FUSE_NODES_ACTIONS:           "/fuse/nodes/actions",
+  FUSE_NODES_SYSTEM_VARIABLES:  "/fuse/nodes/system-variables",
   FUSE_INTEGRATIONS:            "/fuse/integration",
 
   // ── Fuse Push Notifications ─────────────────────────────────────────────────

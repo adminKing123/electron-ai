@@ -752,6 +752,16 @@ const NodeConfigPanel = ({ className = "" }) => {
           });
         }
       }
+
+      if (n.data?.nodeType === "set_variables") {
+        const variablesConfig = n.data?.config?.variables;
+        if (variablesConfig && variablesConfig.mode === "visual") {
+          vars.push(
+            ...flattenFields(variablesConfig.fields, `${n.id}`, n.data.label)
+              .map((v) => ({ ...v, ...nodeMeta }))
+          );
+        }
+      }
     });
 
     return vars;

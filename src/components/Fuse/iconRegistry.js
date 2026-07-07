@@ -1,5 +1,6 @@
 import { SiGmail, SiWebex } from "react-icons/si";
 import { RiAiGenerate } from "react-icons/ri";
+import { VscVariableGroup } from "react-icons/vsc";
 
 import {
   TbCalendarTime,
@@ -21,6 +22,7 @@ export const ICON_REGISTRY = {
   SiGmail,
   SiWebex,
   RiAiGenerate,
+  VscVariableGroup,
   TbCalendarTime,
   TbWebhook,
   TbGitBranch,
