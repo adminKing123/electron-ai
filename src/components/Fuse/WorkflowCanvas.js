@@ -13,6 +13,11 @@ import { NODE_TYPES } from "./nodes/FuseFlowNode";
 import { getOutgoingLimit } from "./nodes/connectionLimits";
 import { createFuseNodeId } from "../../utils/helpers";
 import CanvasContextMenu from "./CanvasContextMenu";
+import RemovableEdge from "./edges/RemovableEdge";
+
+const EDGE_TYPES = {
+  removable: RemovableEdge,
+};
 
 // Fallback node dimensions used before React Flow measures a rendered node
 const NODE_DIM = {
@@ -333,11 +338,13 @@ const WorkflowCanvas = ({ className = "" }) => {
           isValidConnection={isValidConnection}
           edgesReconnectable={false}
           nodeTypes={NODE_TYPES}
+          edgeTypes={EDGE_TYPES}
           colorMode={isDark ? "dark" : "light"}
           fitView
           fitViewOptions={{ padding: 0.35, maxZoom: 1 }}
           proOptions={{ hideAttribution: true }}
           defaultEdgeOptions={{
+            type: "removable",
             style: { strokeWidth: 2, stroke: "#c0c8f0" },
             animated: true,
           }}

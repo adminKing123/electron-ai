@@ -11,6 +11,7 @@ import {
   WorkflowCanvas,
   NodeConfigPanel,
 } from "../components/Fuse";
+import MobileActionBar from "../components/Fuse/MobileActionBar";
 import {
   getWorkflowByIdAPI,
   updateWorkflowNameAPI,
@@ -47,7 +48,7 @@ export default function FuseStudioPage() {
   // ── Store reads ──────────────────────────────────────────────────────────
   const workflowName  = useFuseStudioStore((s) => s.workflowName);
   const loading       = useFuseStudioStore((s) => s.loading);
-  const saving        = useFuseStudioStore((s) => s.saving);
+  const savingName        = useFuseStudioStore((s) => s.savingName);
   const storeWorkflow = useFuseStudioStore((s) => s.workflow);
   const nodes         = useFuseStudioStore((s) => s.nodes);
   const edges         = useFuseStudioStore((s) => s.edges);
@@ -86,7 +87,8 @@ export default function FuseStudioPage() {
   const setWorkflow           = useFuseStudioStore((s) => s.setWorkflow);
   const setWorkflowName       = useFuseStudioStore((s) => s.setWorkflowName);
   const setLoading            = useFuseStudioStore((s) => s.setLoading);
-  const setSaving             = useFuseStudioStore((s) => s.setSaving);
+  const setSavingName             = useFuseStudioStore((s) => s.setSavingName);
+  const setSaving                 = useFuseStudioStore((s) => s.setSaving);
   const setStarterNodes       = useFuseStudioStore((s) => s.setStarterNodes);
   const setLoadingNodes       = useFuseStudioStore((s) => s.setLoadingNodes);
   const setActionNodes        = useFuseStudioStore((s) => s.setActionNodes);
@@ -158,13 +160,19 @@ export default function FuseStudioPage() {
   const saveTimerRef = useRef(null);
   useEffect(() => {
     if (loading || !storeWorkflow) return;
+    setSaving(true);
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
       const workflowNodes = nodes.filter((n) => n.type !== "fuse_block");
       const blocks        = nodes.filter((n) => n.type === "fuse_block");
-      updateWorkflowGraphAPI(id, workflowNodes, edges, blocks).catch(() => {});
+      updateWorkflowGraphAPI(id, workflowNodes, edges, blocks)
+        .catch(() => {})
+        .finally(() => setSaving(false));
     }, 1500);
-    return () => clearTimeout(saveTimerRef.current);
+    return () => {
+      clearTimeout(saveTimerRef.current)
+      setSaving(false);
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, edges]);
 
@@ -174,7 +182,7 @@ export default function FuseStudioPage() {
     if (!workflowName.trim()) setWorkflowName("Untitled Workflow");
     if (trimmed === committedNameRef.current) return;
 
-    setSaving(true);
+    setSavingName(true);
     try {
       await updateWorkflowNameAPI(id, trimmed);
       committedNameRef.current = trimmed;
@@ -182,7 +190,7 @@ export default function FuseStudioPage() {
     } catch {
       setWorkflowName(committedNameRef.current);
     } finally {
-      setSaving(false);
+      setSavingName(false);
     }
   };
 
@@ -226,7 +234,7 @@ export default function FuseStudioPage() {
         workflowId={id}
         onNameChange={setWorkflowName}
         onNameBlur={handleNameBlur}
-        saving={saving}
+        savingName={savingName}
         isLoading={loading}
       />
 
@@ -312,95 +320,16 @@ export default function FuseStudioPage() {
       </div>
 
       {/* ── Mobile studio action bar ────────────────────────────────────── */}
-      {/* Replaces the regular bottom nav on the studio/canvas page.        */}
-      <nav
-        className="flex md:hidden fixed bottom-0 left-0 right-0 z-50
-          bg-white dark:bg-[#1a1a1a]
-          border-t border-[#e5e5e5] dark:border-[#252525]
-          px-2 py-1 justify-around items-center"
-      >
-        {/* Configure — toggles the config bottom-sheet */}
-        <button
-          onClick={() => setMobilePanelOpen((v) => !v)}
-          className={`flex flex-col items-center justify-center gap-0.5 w-14 py-2 rounded-xl
-            text-[10px] font-semibold select-none transition-colors
-            ${mobilePanelOpen
-              ? "text-[#000] dark:text-[#fff]"
-              : "text-[#666] dark:text-[#999] hover:text-[#222] dark:hover:text-[#d0d0d0]"
-            }`}
-        >
-          <TbSettings2 className="w-[20px] h-[20px]" />
-          <span>Config</span>
-        </button>
-
-        {/* Add step */}
-        <button
-          onClick={() => setAddingNode(true)}
-          disabled={!hasStarterNode || inFlight}
-          className="flex flex-col items-center justify-center gap-0.5 w-14 py-2 rounded-xl
-            text-[10px] font-semibold select-none transition-colors
-            text-[#666] dark:text-[#999]
-            hover:text-[#222] dark:hover:text-[#d0d0d0]
-            disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <TbPlus className="w-[20px] h-[20px]" />
-          <span>Add step</span>
-        </button>
-
-        {/* Primary action: Compiling/Stopping | Save changes | Turn on */}
-        {inFlight ? (
-          <button
-            disabled
-            className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
-              text-[10px] font-semibold text-[#888] dark:text-[#555] select-none"
-          >
-            <span className="w-5 h-5 flex items-center justify-center">
-              <span className="w-[14px] h-[14px] border-2 border-[#888] border-t-transparent rounded-full animate-spin" />
-            </span>
-            <span>{deactivating ? "Stopping" : "Compiling"}</span>
-          </button>
-        ) : isActive ? (
-          <button
-            onClick={handleActivate}
-            className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
-              text-[10px] font-semibold select-none transition-all active:opacity-80
-              bg-[#111] dark:bg-[#efefef]
-              text-white dark:text-[#111]"
-          >
-            <TbRefresh className="w-[20px] h-[20px]" />
-            <span>Save</span>
-          </button>
-        ) : (
-          <button
-            onClick={handleActivate}
-            disabled={!hasStarterNode}
-            className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
-              text-[10px] font-semibold select-none transition-all active:opacity-80
-              bg-[#111] dark:bg-[#efefef]
-              text-white dark:text-[#111]
-              disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <TbPower className="w-[20px] h-[20px]" />
-            <span>Turn on</span>
-          </button>
-        )}
-
-        {/* Turn off — only when active; spacer keeps layout stable otherwise */}
-        {isActive && !inFlight ? (
-          <button
-            onClick={handleDeactivate}
-            className="flex flex-col items-center justify-center gap-0.5 w-14 py-2 rounded-xl
-              text-[10px] font-semibold select-none transition-colors
-              text-red-500 dark:text-red-400
-              hover:bg-red-50 dark:hover:bg-red-900/20"
-          >
-            <TbPower className="w-[20px] h-[20px]" />
-            <span>Turn off</span>
-          </button>
-        ) : (
-          <div className="w-14" aria-hidden />
-        )}
-      </nav>
+      <MobileActionBar
+        mobilePanelOpen={mobilePanelOpen}
+        setMobilePanelOpen={setMobilePanelOpen}
+        hasStarterNode={hasStarterNode}
+        inFlight={inFlight}
+        deactivating={deactivating}
+        isActive={isActive}
+        onActivate={handleActivate}
+        onDeactivate={handleDeactivate}
+      />
     </main>
   );
 }

@@ -11,6 +11,7 @@
 
 import React, { useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import useFuseStudioStore from "../../store/useFuseStudioStore";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { TbPlus, TbPower, TbRefresh, TbAlertCircle, TbX, TbActivity } from "react-icons/tb";
 import HeaderUserProfile from "../HeaderUserProfile";
@@ -36,7 +37,7 @@ export const iconBtnCls =
   );
 };
 
-const WorkflowNameInput = ({ value, onChange, onBlur, placeholder = "Untitled Workflow", saving = false }) => {
+const WorkflowNameInput = ({ value, onChange, onBlur, placeholder = "Untitled Workflow", savingName = false }) => {
   const inputRef = useRef(null);
 
   const handleKeyDown = (e) => {
@@ -190,6 +191,7 @@ export const CanvasActionBar = ({
   onDeactivate,
 }) => {
   const inFlight = activating || deactivating;
+  const saving = useFuseStudioStore((s) => s.saving);
 
   return (
     <>
@@ -242,12 +244,14 @@ export const CanvasActionBar = ({
           <button
             type="button"
             onClick={onActivate}
+            disabled={saving}
             title="Recompile with current graph"
             className="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 h-8 md:h-10
               text-[11px] md:text-[13px] font-semibold whitespace-nowrap
               transition-colors select-none
               text-white bg-[#111] dark:bg-[#ebebeb] dark:text-[#111]
-              hover:bg-[#2a2a2a] dark:hover:bg-[#d4d4d4] rounded-full"
+              hover:bg-[#2a2a2a] dark:hover:bg-[#d4d4d4] rounded-full
+              disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <TbRefresh className="w-[13px] h-[13px] md:w-[15px] md:h-[15px] flex-shrink-0" />
             Save changes
@@ -257,7 +261,7 @@ export const CanvasActionBar = ({
           <button
             type="button"
             onClick={onActivate}
-            disabled={!hasNodes}
+            disabled={!hasNodes || saving}
             title={!hasNodes ? "Add a trigger node first" : "Compile and start the workflow"}
             className="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 h-8 md:h-10
               text-[11px] md:text-[13px] font-semibold whitespace-nowrap
@@ -305,7 +309,7 @@ export const CanvasActionBar = ({
 // name         {string}      Workflow name
 // onNameChange {Function}    Keystroke handler
 // onNameBlur   {Function}    Blur handler (triggers autosave)
-// saving       {boolean}     True while the name is persisting
+// savingName       {boolean}     True while the name is persisting
 // isActive     {boolean}     Whether the workflow is running (controls webhook pill)
 // webhookUrl   {string|null} Public webhook URL (null for schedule workflows)
 
@@ -314,7 +318,7 @@ const FuseStudioHeader = ({
   workflowId,
   onNameChange,
   onNameBlur,
-  saving = false,
+  savingName = false,
   isLoading = false,
 }) => (
   <header id="fuse-studio-header" className="w-full flex-shrink-0">
@@ -326,7 +330,7 @@ const FuseStudioHeader = ({
           value={name}
           onChange={onNameChange}
           onBlur={onNameBlur}
-          saving={saving}
+          savingName={savingName}
           placeholder={isLoading ? "" : "Untitled Workflow"}
         />
       </div>

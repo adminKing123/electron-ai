@@ -40,6 +40,7 @@ const useFuseStudioStore = create((set) => ({
   workflow: null,
   workflowName: "",
   loading: false,
+  savingName: false,
   saving: false,
 
   // --- Starter node type definitions (from API, cached) ---
@@ -75,6 +76,7 @@ const useFuseStudioStore = create((set) => ({
   setWorkflow:     (workflow) => set({ workflow }),
   setWorkflowName: (name)     => set({ workflowName: name }),
   setLoading:      (v)        => set({ loading: v }),
+  setSavingName:       (v)        => set({ savingName: v }),
   setSaving:       (v)        => set({ saving: v }),
   setStarterNodes: (nodes)    => set({ starterNodes: nodes }),
   setLoadingNodes: (v)        => set({ loadingNodes: v }),
@@ -107,7 +109,10 @@ const useFuseStudioStore = create((set) => ({
 
   // --- Graph load (called once on API response) ---
   setNodes: (nodes) => set({ nodes }),
-  setEdges: (edges) => set({ edges }),
+  setEdges: (edges) =>
+    set({
+      edges: edges.map((e) => ({ ...e, type: "removable" })),
+    }),
 
   // --- React Flow live-change handlers ---
   /** Wire directly to ReactFlow onNodesChange. Handles drag, select, remove. */
@@ -244,6 +249,12 @@ const useFuseStudioStore = create((set) => ({
         state.selectedNode?.id === nodeId ? null : state.selectedNode,
     })),
 
+  /** Remove a specific edge by ID */
+  removeEdge: (edgeId) =>
+    set((state) => ({
+      edges: state.edges.filter((e) => e.id !== edgeId),
+    })),
+
   // --- Selection ---
   // Selecting a node always closes the "Add Node" picker.
   selectNode:       (node) => set({ selectedNode: node, addingNode: false }),
@@ -256,7 +267,7 @@ const useFuseStudioStore = create((set) => ({
       workflow: null,
       workflowName: "",
       loading: false,
-      saving: false,
+      savingName: false,
       nodes: [],
       edges: [],
       selectedNode: null,
