@@ -12,6 +12,7 @@ import { applyNodeChanges, applyEdgeChanges, addEdge } from "@xyflow/react";
  */
 const NODE_OUTGOING_LIMIT = {
   if_else: 2, // true + false branch, one edge each
+  fork: Infinity,
 };
 
 const getOutgoingLimit = (nodeType) => NODE_OUTGOING_LIMIT[nodeType] ?? 1;
@@ -149,7 +150,10 @@ const useFuseStudioStore = create((set) => ({
       // already-connected node to allow branch convergence.
       const isIfElseHandle =
         connection.sourceHandle === "true" || connection.sourceHandle === "false";
-      if (!isIfElseHandle) {
+      const targetNode = state.nodes.find((n) => n.id === connection.target);
+      const isJoinTarget = targetNode?.data?.nodeType === "join";
+
+      if (!isIfElseHandle && !isJoinTarget) {
         const incomingCount = state.edges.filter((e) => e.target === connection.target).length;
         if (incomingCount >= 1) return {};
       }

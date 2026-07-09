@@ -246,7 +246,10 @@ const WorkflowCanvas = ({ className = "" }) => {
       }
       const isIfElse =
         connection.sourceHandle === "true" || connection.sourceHandle === "false";
-      if (!isIfElse) {
+      const targetNode = nodes.find((n) => n.id === connection.target);
+      const isJoinTarget = targetNode?.data?.nodeType === "join";
+
+      if (!isIfElse && !isJoinTarget) {
         if (edges.filter((e) => e.target === connection.target).length >= 1) return false;
       }
       return true;

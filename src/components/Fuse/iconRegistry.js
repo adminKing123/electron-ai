@@ -9,6 +9,8 @@ import {
   TbBell,
   TbSparkles,
   TbWorldWww,
+  TbGitFork,
+  TbGitMerge,
 } from "react-icons/tb";
 
 /**
@@ -29,6 +31,8 @@ export const ICON_REGISTRY = {
   TbBell,
   TbSparkles,
   TbWorldWww,
+  TbGitFork,
+  TbGitMerge,
 };
 
 /**
