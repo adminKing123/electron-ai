@@ -3,6 +3,7 @@ import BlockNode             from "./BlockNode";
 import ScheduleNode          from "./ScheduleNode";
 import WebhookNode           from "./WebhookNode";
 import WebexMessageNode      from "./WebexMessageNode";
+import GithubPullRequestNode from "./GithubPullRequestNode";
 import IfElseNode            from "./IfElseNode";
 import GetNotifiedNode       from "./GetNotifiedNode";
 import AiStructuredOutputNode from "./AiStructuredOutputNode";
@@ -32,6 +33,8 @@ const FuseFlowNode = (props) => {
       return <WebhookNode {...props} />;
     case "webex_message":
       return <WebexMessageNode {...props} />;
+    case "github_pull_request":
+      return <GithubPullRequestNode {...props} />;
 
     // ── Action nodes ────────────────────────────────────────────────────────
     case "if_else":

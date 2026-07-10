@@ -683,6 +683,28 @@ const NodeConfigPanel = ({ className = "" }) => {
         });
       }
 
+      if (n.data?.nodeType === "github_pull_request") {
+        const fields = [
+          { key: "pr_id", label: "PR ID" },
+          { key: "pr_number", label: "PR Number" },
+          { key: "pr_title", label: "PR Title" },
+          { key: "pr_url", label: "PR URL" },
+          { key: "event_type", label: "Event Type" },
+          { key: "event_action", label: "Event Action" },
+          { key: "user_login", label: "User Login" },
+          { key: "merged", label: "Merged (Boolean)" },
+          { key: "target_branch", label: "Target Branch" },
+          { key: "triggered_at", label: "Triggered At" }
+        ];
+        fields.forEach(({ key, label }) => {
+          vars.push({
+            token: `${n.id}.${key}`,
+            label: `${n.data.label}.${label}`,
+            ...nodeMeta,
+          });
+        });
+      }
+
       if (n.data?.nodeType === "webex_message") {
         const fields = WEBEX_MESSAGE_OUTPUT_FIELDS.filter(
           (f) => f.key !== "text" || n.data?.config?.include_message_body,

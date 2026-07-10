@@ -225,6 +225,32 @@ export const startGithubAuthAPI = async () => {
   return res.data;
 };
 
+export const getGithubReposAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GITHUB_REPOS });
+  return res.data;
+};
+
+export const getGithubBranchesAPI = async (repoName) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GITHUB_BRANCHES, params: { repo_name: repoName } });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/github/webhooks — list GitHub webhooks for the linked account.
+ */
+export const getGithubWebhooksAPI = async (repoName) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GITHUB_WEBHOOKS, params: { repo_name: repoName } });
+  return res.data;
+};
+
+/**
+ * DELETE /fuse/integration/github/webhooks/:id — remove a GitHub webhook.
+ */
+export const deleteGithubWebhookAPI = async (webhookId, repoName) => {
+  const res = await api({ method: "DELETE", url: ENDPOINTS.FUSE_INTEGRATION_GITHUB_WEBHOOK(webhookId), params: { repo_name: repoName } });
+  return res.data;
+};
+
 /**
  * DELETE /fuse/integration/:id — revoke integration.
  */

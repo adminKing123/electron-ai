@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { getDisplayFuseNodeId } from "../../utils/helpers";
-import { getWebexRoomsAPI, getWebexPeopleAPI, getSystemVariablesAPI } from "../../apis/fuse/queryFunctions";
+import { getWebexRoomsAPI, getWebexPeopleAPI, getSystemVariablesAPI, getGithubReposAPI, getGithubBranchesAPI } from "../../apis/fuse/queryFunctions";
 
 // ─── Timezone options ──────────────────────────────────────────────────────────
 // Built once at module load from the browser's Intl API.
@@ -275,6 +275,165 @@ const WebexRoomSelectField = ({ field, value, onChange }) => {
         {rooms.map((room) => (
           <option key={room.id} value={room.id}>
             {room.label}
+          </option>
+        ))}
+      </select>
+      <SelectChevron />
+    </div>
+  );
+};
+
+const GithubRepoSelectField = ({ field, value, onChange }) => {
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(false);
+
+    getGithubReposAPI()
+      .then((data) => {
+        if (!mounted) return;
+        setRepos(data.repos ?? []);
+      })
+      .catch(() => {
+        if (mounted) setError(true);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+        Loading repositories…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <p className="text-[12px] text-red-500 dark:text-red-400">
+        Couldn't load GitHub repos. Reconnect GitHub or try again.
+      </p>
+    );
+  }
+
+  if (!repos.length) {
+    return (
+      <p className="text-[12px] text-[#888] dark:text-[#666]">
+        No GitHub repositories found.
+      </p>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <select
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+        className={SELECT_BASE}
+      >
+        <option value="" disabled>
+          Select a repository…
+        </option>
+        {repos.map((repo) => (
+          <option key={repo.id} value={repo.id}>
+            {repo.label}
+          </option>
+        ))}
+      </select>
+      <SelectChevron />
+    </div>
+  );
+};
+
+const GithubBranchSelectField = ({ field, value, onChange, variables, allValues }) => {
+  const [branches, setBranches] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  
+  const repoName = allValues?.repo_name;
+
+  useEffect(() => {
+    if (!repoName) {
+        setBranches([]);
+        return;
+    }
+    
+    let mounted = true;
+    setLoading(true);
+    setError(false);
+
+    getGithubBranchesAPI(repoName)
+      .then((data) => {
+        if (!mounted) return;
+        setBranches(data.branches ?? []);
+      })
+      .catch(() => {
+        if (mounted) setError(true);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [repoName]);
+
+  if (!repoName) {
+      return (
+        <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+          Select a repository first
+        </div>
+      );
+  }
+
+  if (loading) {
+    return (
+      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+        Loading branches…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <p className="text-[12px] text-red-500 dark:text-red-400">
+        Couldn't load branches.
+      </p>
+    );
+  }
+
+  if (!branches.length) {
+    return (
+      <p className="text-[12px] text-[#888] dark:text-[#666]">
+        No branches found.
+      </p>
+    );
+  }
+
+  return (
+    <div className="relative flex gap-2">
+      <select
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+        className={SELECT_BASE}
+      >
+        <option value="">
+          -- All branches --
+        </option>
+        {branches.map((b) => (
+          <option key={b.id} value={b.id}>
+            {b.label}
           </option>
         ))}
       </select>
@@ -1739,7 +1898,7 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
  * Dispatch to the correct input component based on field.type.
  * Supported types: "date" | "time" | "select" | "timezone_select"
  */
-const FieldInput = ({ field, value, onChange, variables = [] }) => {
+const FieldInput = ({ field, value, onChange, variables = [], allValues = {} }) => {
   switch (field.type) {
     case "text":                return <TextField              field={field} value={value} onChange={onChange} />;
     case "textarea":            return <TextareaField           field={field} value={value} onChange={onChange} />;
@@ -1756,6 +1915,8 @@ const FieldInput = ({ field, value, onChange, variables = [] }) => {
     case "checkbox":            return <CheckboxField           field={field} value={value} onChange={onChange} />;
     case "webex_room_select":   return <WebexRoomSelectField     field={field} value={value} onChange={onChange} />;
     case "webex_person_select": return <WebexPersonSelectField   field={field} value={value} onChange={onChange} />;
+    case "github_repo_select":  return <GithubRepoSelectField    field={field} value={value} onChange={onChange} />;
+    case "github_branch_select":return <GithubBranchSelectField  field={field} value={value} onChange={onChange} variables={variables} allValues={allValues} />;
     case "select":
     default:                    return <SelectField             field={field} value={value} onChange={onChange} />;
   }
@@ -1804,6 +1965,13 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
     if (key === "send_to" || key === "destination_source") {
       delete next.destination_pick;
       delete next.destination;
+    }
+    if (key === "watch_target" && val !== "repo") {
+      delete next.repo_name;
+      delete next.branch_name;
+    }
+    if (key === "repo_name") {
+      delete next.branch_name;
     }
     onChange(next);
   };
@@ -1865,6 +2033,7 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
                   value={values[field.key]}
                   onChange={(val) => handleFieldChange(field.key, val)}
                   variables={variables}
+                  allValues={values}
                 />
 
                 {/* Hint below the input (e.g. "MM/DD/YYYY") */}

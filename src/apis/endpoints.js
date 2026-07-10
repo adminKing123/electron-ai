@@ -75,6 +75,10 @@ const ENDPOINTS = {
   FUSE_INTEGRATION_GOOGLE_SHEETS_AUTH: "/fuse/integration/google_sheets/auth",
   FUSE_INTEGRATION_GITHUB_INFO: "/fuse/integration/github/info",
   FUSE_INTEGRATION_GITHUB_AUTH: "/fuse/integration/github/auth",
+  FUSE_INTEGRATION_GITHUB_REPOS: "/fuse/integration/github/repos",
+  FUSE_INTEGRATION_GITHUB_BRANCHES: "/fuse/integration/github/branches",
+  FUSE_INTEGRATION_GITHUB_WEBHOOKS: "/fuse/integration/github/webhooks",
+  FUSE_INTEGRATION_GITHUB_WEBHOOK:  (id) => `/fuse/integration/github/webhooks/${id}`,
   FUSE_INTEGRATION_REVOKE:      (id) => `/fuse/integration/${id}`,
 };
 
