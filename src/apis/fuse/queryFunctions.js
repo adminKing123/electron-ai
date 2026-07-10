@@ -210,6 +210,22 @@ export const startGoogleSheetsAuthAPI = async () => {
 };
 
 /**
+ * GET /fuse/integration/github/info — returns Github integration details.
+ */
+export const getGithubIntegrationInfoAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GITHUB_INFO });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/github/auth — start Github OAuth.
+ */
+export const startGithubAuthAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_INTEGRATION_GITHUB_AUTH });
+  return res.data;
+};
+
+/**
  * DELETE /fuse/integration/:id — revoke integration.
  */
 export const revokeIntegrationAPI = async (id) => {

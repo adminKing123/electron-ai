@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { SiGmail, SiWebex, SiGooglesheets } from "react-icons/si";
+import { SiGmail, SiWebex, SiGooglesheets, SiGithub } from "react-icons/si";
 import {
   startGmailAuthAPI,
   startWebexAuthAPI,
   startGoogleSheetsAuthAPI,
+  startGithubAuthAPI,
 } from "../../apis/fuse/queryFunctions";
 import useIntegrationInfoModalStore from "../../store/useIntegrationInfoModalStore";
 import { IoRemoveCircleOutline } from "react-icons/io5";
@@ -13,12 +14,14 @@ const ICON_MAP = {
   SiGmail: SiGmail,
   SiWebex: SiWebex,
   SiGooglesheets: SiGooglesheets,
+  SiGithub: SiGithub,
 };
 
 const AUTH_START_API = {
   gmail: startGmailAuthAPI,
   webex: startWebexAuthAPI,
   google_sheets: startGoogleSheetsAuthAPI,
+  github: startGithubAuthAPI,
 };
 
 const InfoButton = ({ onClick, loading = false }) => (

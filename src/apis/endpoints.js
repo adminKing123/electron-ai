@@ -73,6 +73,8 @@ const ENDPOINTS = {
   FUSE_INTEGRATION_WEBEX_WEBHOOK:  (id) => `/fuse/integration/webex/webhooks/${id}`,
   FUSE_INTEGRATION_GOOGLE_SHEETS_INFO: "/fuse/integration/google_sheets/info",
   FUSE_INTEGRATION_GOOGLE_SHEETS_AUTH: "/fuse/integration/google_sheets/auth",
+  FUSE_INTEGRATION_GITHUB_INFO: "/fuse/integration/github/info",
+  FUSE_INTEGRATION_GITHUB_AUTH: "/fuse/integration/github/auth",
   FUSE_INTEGRATION_REVOKE:      (id) => `/fuse/integration/${id}`,
 };
 
