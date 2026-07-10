@@ -688,12 +688,21 @@ const NodeConfigPanel = ({ className = "" }) => {
           { key: "pr_id", label: "PR ID" },
           { key: "pr_number", label: "PR Number" },
           { key: "pr_title", label: "PR Title" },
+          { key: "pr_description", label: "PR Description" },
           { key: "pr_url", label: "PR URL" },
           { key: "event_type", label: "Event Type" },
           { key: "event_action", label: "Event Action" },
           { key: "user_login", label: "User Login" },
-          { key: "merged", label: "Merged (Boolean)" },
+          { key: "repository_name", label: "Repository Name" },
+          { key: "source_branch", label: "Source Branch" },
           { key: "target_branch", label: "Target Branch" },
+          { key: "pr_state", label: "PR State" },
+          { key: "merged", label: "Merged (Boolean)" },
+          { key: "additions", label: "Lines Added" },
+          { key: "deletions", label: "Lines Deleted" },
+          { key: "changed_files", label: "Changed Files" },
+          { key: "review_state", label: "Review State" },
+          { key: "review_body", label: "Review Comment" },
           { key: "triggered_at", label: "Triggered At" }
         ];
         fields.forEach(({ key, label }) => {
