@@ -210,6 +210,49 @@ export const startGoogleSheetsAuthAPI = async () => {
 };
 
 /**
+ * GET /fuse/integration/google_sheets/spreadsheets — list Google Sheets files.
+ * @param {{ limit?: number, search?: string }} params
+ * @returns {{ spreadsheets: Array<{id, label}>, total: number }}
+ */
+export const getGoogleSheetsSpreadsheetListAPI = async (params = {}) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_INTEGRATION_GOOGLE_SHEETS_SPREADSHEETS,
+    params,
+  });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/google_sheets/sheets?spreadsheet_id=... — list sheet tabs.
+ * @param {string} spreadsheetId
+ * @returns {{ sheets: Array<{id, label}>, total: number }}
+ */
+export const getGoogleSheetTabsAPI = async (spreadsheetId) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_INTEGRATION_GOOGLE_SHEETS_SHEETS,
+    params: { spreadsheet_id: spreadsheetId },
+  });
+  return res.data;
+};
+
+/**
+ * GET /fuse/integration/google_sheets/columns?spreadsheet_id=...&sheet_name=... — get header row.
+ * @param {string} spreadsheetId
+ * @param {string} sheetName
+ * @returns {{ columns: string[] }}
+ */
+export const getGoogleSheetColumnsAPI = async (spreadsheetId, sheetName) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_INTEGRATION_GOOGLE_SHEETS_COLUMNS,
+    params: { spreadsheet_id: spreadsheetId, sheet_name: sheetName },
+  });
+  return res.data;
+};
+
+/**
  * GET /fuse/integration/github/info — returns Github integration details.
  */
 export const getGithubIntegrationInfoAPI = async () => {

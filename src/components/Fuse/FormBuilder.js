@@ -1,6 +1,15 @@
 import React, { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { getDisplayFuseNodeId } from "../../utils/helpers";
-import { getWebexRoomsAPI, getWebexPeopleAPI, getSystemVariablesAPI, getGithubReposAPI, getGithubBranchesAPI } from "../../apis/fuse/queryFunctions";
+import {
+  getWebexRoomsAPI,
+  getWebexPeopleAPI,
+  getSystemVariablesAPI,
+  getGithubReposAPI,
+  getGithubBranchesAPI,
+  getGoogleSheetsSpreadsheetListAPI,
+  getGoogleSheetTabsAPI,
+  getGoogleSheetColumnsAPI,
+} from "../../apis/fuse/queryFunctions";
 
 // ─── Timezone options ──────────────────────────────────────────────────────────
 // Built once at module load from the browser's Intl API.
@@ -523,6 +532,361 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
         })}
       </select>
       <SelectChevron />
+    </div>
+  );
+};
+
+// ─── Google Sheets field components ──────────────────────────────────────────
+
+/**
+ * Searchable spreadsheet picker.
+ *
+ * On open it loads the 25 most-recently-modified spreadsheets.
+ * Typing in the search box debounces 400 ms then fires a new API call
+ * with the search term so users can find any file by name.
+ */
+const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
+  const containerRef           = useRef(null);
+  const searchRef              = useRef(null);
+  const debounceRef            = useRef(null);
+
+  const [open, setOpen]               = useState(false);
+  const [searchText, setSearchText]   = useState("");
+  const [spreadsheets, setSpreadsheets] = useState([]);
+  const [loading, setLoading]         = useState(false);
+  const [error, setError]             = useState(false);
+  const [selectedLabel, setSelectedLabel] = useState("");
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  // Focus the search input when the dropdown opens
+  useEffect(() => {
+    if (open) requestAnimationFrame(() => searchRef.current?.focus());
+  }, [open]);
+
+  // Fetch spreadsheets (initially and on search)
+  const fetchSheets = useCallback((query = "") => {
+    setLoading(true);
+    setError(false);
+    getGoogleSheetsSpreadsheetListAPI({ limit: 25, ...(query ? { search: query } : {}) })
+      .then((data) => setSpreadsheets(data.spreadsheets ?? []))
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // If a value is already saved (e.g. page refresh / reopen), load the list
+  // so we can resolve the human-readable name from the ID.
+  useEffect(() => {
+    if (value && !selectedLabel) fetchSheets();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  // Once the list loads, find and cache the label for the current value.
+  useEffect(() => {
+    if (value && !selectedLabel && spreadsheets.length > 0) {
+      const match = spreadsheets.find((s) => s.id === value);
+      if (match) setSelectedLabel(match.label);
+    }
+  }, [spreadsheets, value, selectedLabel]);
+
+  // Load on first open (if not already loaded by the label-resolution effect above)
+  useEffect(() => {
+    if (open && spreadsheets.length === 0 && !loading) fetchSheets();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const handleSearchChange = (e) => {
+    const q = e.target.value;
+    setSearchText(q);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchSheets(q), 400);
+  };
+
+  const handleSelect = (sheet) => {
+    onChange(sheet.id);
+    setSelectedLabel(sheet.label);
+    setOpen(false);
+    setSearchText("");
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* Trigger button */}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className={[
+          INPUT_BASE,
+          "w-full flex items-center justify-between gap-2 cursor-pointer text-left",
+          value ? "" : "text-[#bbb] dark:text-[#555] italic",
+        ].join(" ")}
+      >
+        <span className="truncate text-[13px]">
+          {value ? (selectedLabel || value) : "Select a spreadsheet…"}
+        </span>
+        <svg
+          className={`flex-shrink-0 text-[#aaa] dark:text-[#555] transition-transform ${open ? "rotate-180" : ""}`}
+          width="14" height="14" viewBox="0 0 14 14" fill="none"
+        >
+          <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+
+      {/* Dropdown panel */}
+      {open && (
+        <div className="absolute z-50 left-0 right-0 top-full mt-1 rounded-xl overflow-hidden
+          bg-white dark:bg-[#1e1e1e]
+          border border-[#e0e0e0] dark:border-[#2e2e2e]
+          shadow-lg flex flex-col"
+        >
+          {/* Search input */}
+          <div className="px-2 pt-2 pb-1.5 border-b border-[#f0f0f0] dark:border-[#272727]">
+            <div className="relative">
+              <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]"
+                width="13" height="13" viewBox="0 0 14 14" fill="none">
+                <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M10 10l2.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              <input
+                ref={searchRef}
+                type="text"
+                value={searchText}
+                onChange={handleSearchChange}
+                placeholder="Search spreadsheets…"
+                className="w-full pl-7 pr-3 py-1.5 rounded-lg text-[12.5px]
+                  bg-[#f5f5f5] dark:bg-[#252525]
+                  border border-[#e8e8e8] dark:border-[#2a2a2a]
+                  text-[#222] dark:text-[#d0d0d0]
+                  focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a]
+                  placeholder-[#bbb] dark:placeholder-[#555]"
+              />
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="max-h-52 overflow-y-auto">
+            {loading && (
+              <div className="px-3 py-4 text-center text-[12px] text-[#888] dark:text-[#666]">
+                Loading…
+              </div>
+            )}
+            {!loading && error && (
+              <div className="px-3 py-4 text-center">
+                <p className="text-[12px] text-red-500 dark:text-red-400 mb-2">
+                  Couldn't load spreadsheets.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => fetchSheets(searchText)}
+                  className="text-[11.5px] text-[#4a6cf7] dark:text-[#6b8aff] hover:underline"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+            {!loading && !error && spreadsheets.length === 0 && (
+              <div className="px-3 py-4 text-center text-[12px] text-[#888] dark:text-[#666]">
+                {searchText ? "No spreadsheets match your search." : "No spreadsheets found."}
+              </div>
+            )}
+            {!loading && !error && spreadsheets.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); handleSelect(s); }}
+                className={[
+                  "w-full text-left px-3 py-2.5 flex items-center gap-2.5 transition-colors",
+                  "hover:bg-[#f5f7ff] dark:hover:bg-[#252540]",
+                  value === s.id ? "bg-[#eef1ff] dark:bg-[#1a1a38]" : "",
+                ].join(" ")}
+              >
+                {/* Sheets icon */}
+                <svg className="flex-shrink-0 text-[#1a73e8]" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-8 13H7v-2h4v2zm0-4H7v-2h4v2zm0-4H7V6h4v2zm6 8h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V6h4v2z"/>
+                </svg>
+                <span className="text-[12.5px] text-[#222] dark:text-[#d0d0d0] truncate leading-snug">
+                  {s.label}
+                </span>
+                {value === s.id && (
+                  <svg className="flex-shrink-0 ml-auto text-[#4a6cf7] dark:text-[#6b8aff]"
+                    width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M2 6.5l3.5 3.5L11 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Footer hint */}
+          {!loading && !error && !searchText && spreadsheets.length > 0 && (
+            <div className="px-3 py-1.5 border-t border-[#f0f0f0] dark:border-[#272727]">
+              <p className="text-[10.5px] text-[#bbb] dark:text-[#555]">
+                Showing latest 25 · type to search all
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/** Dropdown that lists all sheet tabs inside the selected spreadsheet. */
+const GoogleSheetsSheetSelectField = ({ value, onChange, allValues }) => {
+  const spreadsheetId = allValues?.spreadsheet_id;
+  const [sheets, setSheets] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!spreadsheetId) { setSheets([]); return; }
+    let mounted = true;
+    setLoading(true);
+    setError(false);
+    getGoogleSheetTabsAPI(spreadsheetId)
+      .then((data) => { if (mounted) setSheets(data.sheets ?? []); })
+      .catch(() => { if (mounted) setError(true); })
+      .finally(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
+  }, [spreadsheetId]);
+
+  if (!spreadsheetId) return <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>Select a spreadsheet first</div>;
+  if (loading)        return <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>Loading sheets…</div>;
+  if (error)          return <p className="text-[12px] text-red-500 dark:text-red-400">Couldn't load sheet tabs. Try again.</p>;
+  if (!sheets.length) return <p className="text-[12px] text-[#888] dark:text-[#666]">No sheets found in this spreadsheet.</p>;
+
+  return (
+    <div className="relative">
+      <select value={value ?? ""} onChange={(e) => onChange(e.target.value)} className={SELECT_BASE}>
+        <option value="" disabled>Select a sheet tab…</option>
+        {sheets.map((s) => (
+          <option key={s.id} value={s.id}>{s.label}</option>
+        ))}
+      </select>
+      <SelectChevron />
+    </div>
+  );
+};
+
+/**
+ * Dynamic column builder — fetches header row from the selected sheet and renders
+ * one variable_text input per column. The stored value shape is a plain object:
+ * { "Column Name": "value or {{variable}}", ... }
+ */
+const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables }) => {
+  const spreadsheetId = allValues?.spreadsheet_id;
+  const sheetName     = allValues?.sheet_name;
+
+  const [columns, setColumns]   = useState([]);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState(false);
+  const [fetchKey, setFetchKey] = useState(0);
+
+  useEffect(() => {
+    if (!spreadsheetId || !sheetName) { setColumns([]); return; }
+    let mounted = true;
+    setLoading(true);
+    setError(false);
+    getGoogleSheetColumnsAPI(spreadsheetId, sheetName)
+      .then((data) => { if (mounted) setColumns(data.columns ?? []); })
+      .catch(() => { if (mounted) setError(true); })
+      .finally(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
+  // fetchKey lets user manually refresh without changing sheet selection
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spreadsheetId, sheetName, fetchKey]);
+
+  const handleColChange = (colName, colValue) => {
+    onChange({ ...(value || {}), [colName]: colValue });
+  };
+
+  if (!spreadsheetId || !sheetName) {
+    return (
+      <p className="text-[12px] text-[#bbb] dark:text-[#555]">
+        Select a spreadsheet and sheet tab above to load columns.
+      </p>
+    );
+  }
+
+  if (loading) {
+    return <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>Loading columns…</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-[12px] text-red-500 dark:text-red-400">
+          Couldn't load columns. Make sure the sheet has a header row.
+        </p>
+        <button
+          type="button"
+          onClick={() => setFetchKey((k) => k + 1)}
+          className="self-start px-2.5 py-1 rounded-lg text-[12px]
+            border border-[#ddd] dark:border-[#2e2e2e]
+            text-[#444] dark:text-[#999]
+            hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+            transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!columns.length) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-[12px] text-[#888] dark:text-[#666]">
+          No columns found. Make sure row 1 of the sheet contains header names.
+        </p>
+        <button
+          type="button"
+          onClick={() => setFetchKey((k) => k + 1)}
+          className="self-start px-2.5 py-1 rounded-lg text-[12px]
+            border border-[#ddd] dark:border-[#2e2e2e]
+            text-[#444] dark:text-[#999]
+            hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+            transition-colors"
+        >
+          Refresh
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      {columns.map((col) => (
+        <div key={col} className="flex flex-col gap-1">
+          <label className="text-[12px] font-medium text-[#555] dark:text-[#888]">{col}</label>
+          <VariableTextField
+            field={{ placeholder: "Enter @ to add variables" }}
+            value={(value || {})[col] ?? ""}
+            onChange={(v) => handleColChange(col, v)}
+            variables={variables}
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => setFetchKey((k) => k + 1)}
+        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[11.5px]
+          border border-[#ddd] dark:border-[#2e2e2e]
+          text-[#888] dark:text-[#666]
+          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+          transition-colors"
+      >
+        ↻ Refresh columns
+      </button>
     </div>
   );
 };
@@ -1917,6 +2281,9 @@ const FieldInput = ({ field, value, onChange, variables = [], allValues = {} }) 
     case "webex_person_select": return <WebexPersonSelectField   field={field} value={value} onChange={onChange} />;
     case "github_repo_select":  return <GithubRepoSelectField    field={field} value={value} onChange={onChange} />;
     case "github_branch_select":return <GithubBranchSelectField  field={field} value={value} onChange={onChange} variables={variables} allValues={allValues} />;
+    case "google_sheets_spreadsheet_select": return <GoogleSheetsSpreadsheetSelectField value={value} onChange={onChange} />;
+    case "google_sheets_sheet_select":       return <GoogleSheetsSheetSelectField       value={value} onChange={onChange} allValues={allValues} />;
+    case "google_sheets_column_builder":     return <GoogleSheetsColumnBuilderField     value={value} onChange={onChange} allValues={allValues} variables={variables} />;
     case "select":
     default:                    return <SelectField             field={field} value={value} onChange={onChange} />;
   }
@@ -1972,6 +2339,13 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
     }
     if (key === "repo_name") {
       delete next.branch_name;
+    }
+    if (key === "spreadsheet_id") {
+      delete next.sheet_name;
+      delete next.column_data;
+    }
+    if (key === "sheet_name") {
+      delete next.column_data;
     }
     onChange(next);
   };
