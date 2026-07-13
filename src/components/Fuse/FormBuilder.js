@@ -975,7 +975,7 @@ const getShortLabel = (label, nodeName) => {
  * Step 2 — variable list: shows the variables belonging to the chosen node,
  *           with a back chevron to return to step 1.
  */
-const VariablePicker = ({ variables, onPick, onClose }) => {
+const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) => {
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [systemVarsOpen, setSystemVarsOpen] = useState(false);
   const [systemVars, setSystemVars] = useState(null);
@@ -988,7 +988,8 @@ const VariablePicker = ({ variables, onPick, onClose }) => {
   /** Group variables by nodeId. Falls back to token prefix for legacy vars. */
   const groups = useMemo(() => {
     const map = new Map();
-    variables.forEach((v) => {
+    const src = filterArrays ? variables.filter((v) => v.isArray) : variables;
+    src.forEach((v) => {
       const nid      = v.nodeId   ?? v.token.split(".")[0];
       const nname    = v.nodeName ?? nid;
       const starter  = v.isStarter ?? false;
@@ -996,7 +997,7 @@ const VariablePicker = ({ variables, onPick, onClose }) => {
       map.get(nid).vars.push(v);
     });
     return [...map.values()];
-  }, [variables]);
+  }, [variables, filterArrays]);
 
   const WRAPPER =
     "absolute z-50 right-0 top-full mt-1 w-64 rounded-xl " +
@@ -1266,10 +1267,11 @@ const VariablePicker = ({ variables, onPick, onClose }) => {
 
 /** Text input that supports `@` variable insertion via a picker button. */
 const VariableTextField = ({ field, value, onChange, variables }) => {
-  const inputRef    = useRef(null);
+  const inputRef     = useRef(null);
   const containerRef = useRef(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const insertVariable = useVariableInserter(inputRef, value, onChange);
+  const filterArrays = field.filterArrays === true;
 
   // Close picker when user clicks outside the entire container.
   React.useEffect(() => {
@@ -1316,6 +1318,7 @@ const VariableTextField = ({ field, value, onChange, variables }) => {
           variables={variables}
           onPick={insertVariable}
           onClose={() => setPickerOpen(false)}
+          filterArrays={filterArrays}
         />
       )}
     </div>

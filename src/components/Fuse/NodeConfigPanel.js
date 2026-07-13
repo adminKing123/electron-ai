@@ -605,14 +605,14 @@ const NodeConfigPanel = ({ className = "" }) => {
   const upstreamVariables = useMemo(() => {
     if (!selectedNode) return [];
 
-    /** Recursively flatten FieldNode[] into { token, label } entries. */
+    /** Recursively flatten FieldNode[] into { token, label, isArray? } entries. */
     const flattenFields = (fields, basePath, baseLabel) => {
       const result = [];
       (fields ?? []).forEach((f) => {
         if (!f.key) return;
         const path = `${basePath}.${f.key}`;
         const label = `${baseLabel}.${f.key}`;
-        result.push({ token: path, label });
+        result.push({ token: path, label, isArray: f.type === "array" });
         if (f.type === "object") {
           result.push(...flattenFields(f.fields, path, label));
         } else if (f.type === "array" && f.items?.type === "object") {
@@ -812,6 +812,86 @@ const NodeConfigPanel = ({ className = "" }) => {
             label: `${n.data.label} → body`,
             ...nodeMeta,
           });
+        }
+      }
+
+      if (n.data?.nodeType === "for_each") {
+        // Always expose the loop iteration primitives
+        vars.push(
+          {
+            token: `${n.id}.current_item`,
+            label: `${n.data.label} → current item`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.current_index`,
+            label: `${n.data.label} → current index`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.items`,
+            label: `${n.data.label} → items (full array)`,
+            isArray: true,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.count`,
+            label: `${n.data.label} → count`,
+            ...nodeMeta,
+          },
+        );
+
+        // If the array variable points to a schema-defined array-of-objects, also
+        // expose each object field as current_item.<field> so users can pick them
+        // directly from the @ picker instead of typing the path manually.
+        const arrayVarToken = (n.data?.config?.array_variable || "").trim();
+        // Token format: {{sourceNodeId.path.to.field}}
+        const tokenMatch = arrayVarToken.match(/^\{\{([^.}]+)\.(.+?)\}\}$/);
+        if (tokenMatch) {
+          const [, srcId, srcPath] = tokenMatch;
+          const srcNode = nodes.find((x) => x.id === srcId);
+          if (srcNode) {
+            // Recursively find a field at an arbitrary dot-separated path inside a
+            // flat field list (handles nested objects like pagination.items).
+            const findFieldAtPath = (fields, parts) => {
+              if (!Array.isArray(fields) || parts.length === 0) return null;
+              const head = parts[0].replace("[]", "");
+              const rest = parts.slice(1);
+              const field = fields.find((f) => f.key === head);
+              if (!field) return null;
+              if (rest.length === 0) return field;
+              if (field.type === "object" && Array.isArray(field.fields)) {
+                return findFieldAtPath(field.fields, rest);
+              }
+              return null;
+            };
+
+            // Each schema type uses a different prefix for the variable token path.
+            // Strip the prefix, then walk the remaining path through the schema tree.
+            const schemaSets = [
+              { schema: srcNode.data?.config?.response_schema, prefix: "body." },
+              { schema: srcNode.data?.config?.body_schema,     prefix: "body." },
+              { schema: srcNode.data?.config?.output_schema,   prefix: "result." },
+              { schema: srcNode.data?.config?.variables,       prefix: "" },
+            ].filter(({ schema }) => schema?.mode === "visual" && Array.isArray(schema.fields));
+
+            for (const { schema, prefix } of schemaSets) {
+              if (prefix && !srcPath.startsWith(prefix)) continue;
+              const schemaPath = prefix ? srcPath.slice(prefix.length) : srcPath;
+              const pathParts  = schemaPath.split(".");
+
+              const arrField = findFieldAtPath(schema.fields, pathParts);
+              if (arrField?.type === "array" && arrField.items?.type === "object") {
+                // Expose every object property as current_item.<fieldName>
+                flattenFields(
+                  arrField.items.fields || [],
+                  `${n.id}.current_item`,
+                  `${n.data.label} → item`,
+                ).forEach((v) => vars.push({ ...v, ...nodeMeta }));
+                break;
+              }
+            }
+          }
         }
       }
 

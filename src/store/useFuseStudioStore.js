@@ -11,8 +11,9 @@ import { applyNodeChanges, applyEdgeChanges, addEdge } from "@xyflow/react";
  *   fork:    Infinity  → unlimited
  */
 const NODE_OUTGOING_LIMIT = {
-  if_else: 2, // true + false branch, one edge each
-  fork: Infinity,
+  if_else:  2,        // true + false branch, one edge each
+  for_each: 2,        // item (body) + done (after loop), one edge each
+  fork:     Infinity, // unlimited outgoing edges
 };
 
 const getOutgoingLimit = (nodeType) => NODE_OUTGOING_LIMIT[nodeType] ?? 1;
@@ -146,14 +147,17 @@ const useFuseStudioStore = create((set) => ({
         if (handleUsed) return {};
       }
       // Enforce incoming limit: at most 1 edge per target node.
-      // if/else branch handles (true / false) are exempt — they can merge onto an
-      // already-connected node to allow branch convergence.
-      const isIfElseHandle =
-        connection.sourceHandle === "true" || connection.sourceHandle === "false";
+      // Multi-branch handles (if_else true/false, for_each item/done) are exempt
+      // so both branches can converge on the same downstream node.
+      const isBranchHandle =
+        connection.sourceHandle === "true"  ||
+        connection.sourceHandle === "false" ||
+        connection.sourceHandle === "item"  ||
+        connection.sourceHandle === "done";
       const targetNode = state.nodes.find((n) => n.id === connection.target);
       const isJoinTarget = targetNode?.data?.nodeType === "join";
 
-      if (!isIfElseHandle && !isJoinTarget) {
+      if (!isBranchHandle && !isJoinTarget) {
         const incomingCount = state.edges.filter((e) => e.target === connection.target).length;
         if (incomingCount >= 1) return {};
       }

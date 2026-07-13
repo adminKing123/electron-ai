@@ -11,8 +11,9 @@
  *   fork:    Infinity  → unlimited outgoing edges
  */
 export const NODE_OUTGOING_LIMIT = {
-  if_else: 2, // true + false branch, one edge each
-  fork: Infinity, // unlimited outgoing edges
+  if_else:  2,        // true + false branch, one edge each
+  for_each: 2,        // item (body) + done (after loop), one edge each
+  fork:     Infinity, // unlimited outgoing edges
 };
 
 /** Returns the maximum outgoing edges allowed for the given node type. */

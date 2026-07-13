@@ -12,6 +12,7 @@ import {
   TbWorldWww,
   TbGitFork,
   TbGitMerge,
+  TbRepeat,
 } from "react-icons/tb";
 
 /**
@@ -37,6 +38,7 @@ export const ICON_REGISTRY = {
   TbWorldWww,
   TbGitFork,
   TbGitMerge,
+  TbRepeat,
 };
 
 /**

@@ -244,12 +244,15 @@ const WorkflowCanvas = ({ className = "" }) => {
         );
         if (used) return false;
       }
-      const isIfElse =
-        connection.sourceHandle === "true" || connection.sourceHandle === "false";
+      const isBranchHandle =
+        connection.sourceHandle === "true"  ||
+        connection.sourceHandle === "false" ||
+        connection.sourceHandle === "item"  ||
+        connection.sourceHandle === "done";
       const targetNode = nodes.find((n) => n.id === connection.target);
       const isJoinTarget = targetNode?.data?.nodeType === "join";
 
-      if (!isIfElse && !isJoinTarget) {
+      if (!isBranchHandle && !isJoinTarget) {
         if (edges.filter((e) => e.target === connection.target).length >= 1) return false;
       }
       return true;
