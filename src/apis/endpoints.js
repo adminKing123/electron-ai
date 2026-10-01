@@ -32,6 +32,8 @@ const ENDPOINTS = {
   GET_CONFIG: "/get-config",
 
   TTS_SPEAK: "/tts/speak",
+  STT_DEEPGRAM_LIVE_CONFIG: "/stt/deepgram/live-config",
+  STT_DEEPGRAM_TRANSCRIBE: "/stt/deepgram/transcribe",
 
   // ── Fuse Workflows ──────────────────────────────────────────────────────────
   FUSE_WORKFLOWS:               "/fuse/workflows",

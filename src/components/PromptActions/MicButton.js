@@ -1,29 +1,70 @@
 import { BsMic } from "react-icons/bs";
 import { PiCheck, PiX } from "react-icons/pi";
+import { useEffect, useRef } from "react";
 import usePromptStore, { useMicStore } from "../../store/usePromptStores";
-import { useEffect } from "react";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import api from "../../apis";
+import ENDPOINTS from "../../apis/endpoints";
+import {
+  createDeepgramLiveSession,
+  isDeepgramSttSupported,
+} from "../../utils/deepgramLiveStt";
 
 const MicButton = () => {
   const isRecording = useMicStore((state) => state.isRecording);
   const setIsRecording = useMicStore((state) => state.setIsRecording);
   const setRecordedText = useMicStore((state) => state.setRecordedText);
 
-  const { transcript, resetTranscript, browserSupportsSpeechRecognition } =
-    useSpeechRecognition();
+  const sessionRef = useRef(null);
+  const startingRef = useRef(false);
 
-  const handleStart = () => {
+  const stopSession = () => {
+    if (sessionRef.current) {
+      sessionRef.current.stop();
+      sessionRef.current = null;
+    }
+  };
+
+  const handleStart = async () => {
+    if (startingRef.current || isRecording) return;
+    startingRef.current = true;
+
     setRecordedText("");
-    resetTranscript();
-    setIsRecording(true);
-    SpeechRecognition.startListening({ continuous: true });
+    stopSession();
+
+    try {
+      const { data } = await api({
+        method: "get",
+        url: ENDPOINTS.STT_DEEPGRAM_LIVE_CONFIG,
+      });
+
+      const session = createDeepgramLiveSession({
+        listenUrl: data.listenUrl,
+        token: data.token,
+        params: data.params,
+        onTranscript: (text) => setRecordedText(text),
+        onError: (err) => {
+          console.error("[STT]", err);
+          setRecordedText("");
+          setIsRecording(false);
+          stopSession();
+        },
+      });
+
+      sessionRef.current = session;
+      setIsRecording(true);
+      await session.start();
+    } catch (error) {
+      console.error("[STT] Failed to start recording:", error);
+      setRecordedText("");
+      setIsRecording(false);
+      stopSession();
+    } finally {
+      startingRef.current = false;
+    }
   };
 
   const handleCancel = () => {
-    SpeechRecognition.stopListening();
-    resetTranscript();
+    stopSession();
     setRecordedText("");
     setIsRecording(false);
   };
@@ -32,28 +73,27 @@ const MicButton = () => {
     const recordedText = useMicStore.getState().recordedText;
     const prompt = usePromptStore.getState().prompt;
     const setPrompt = usePromptStore.getState().setPrompt;
-    setPrompt(prompt + (prompt.length > 0 && !prompt.endsWith(" ") ? " " : "") + recordedText);
-    SpeechRecognition.stopListening();
+
+    setPrompt(
+      prompt +
+        (prompt.length > 0 && !prompt.endsWith(" ") ? " " : "") +
+        recordedText,
+    );
+
+    stopSession();
     setRecordedText("");
     setIsRecording(false);
   };
 
   useEffect(() => {
-    if (isRecording && transcript) {
-      setRecordedText(transcript);
-    }
-  }, [transcript, isRecording, setRecordedText]);
-
-  useEffect(() => {
     return () => {
-      SpeechRecognition.stopListening();
-      resetTranscript();
+      stopSession();
       setRecordedText("");
       setIsRecording(false);
     };
-  }, [setRecordedText, setIsRecording, resetTranscript]);
+  }, [setRecordedText, setIsRecording]);
 
-  if (!browserSupportsSpeechRecognition) {
+  if (!isDeepgramSttSupported()) {
     return null;
   }
 
