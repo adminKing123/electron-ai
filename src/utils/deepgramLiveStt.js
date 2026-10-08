@@ -33,13 +33,16 @@ export function createDeepgramLiveSession({
   let source = null;
   let isRecording = false;
   let finalTranscript = "";
+  let sessionActive = false;
 
   const updateTranscript = (interim = "") => {
+    if (!sessionActive) return;
     const combined = (finalTranscript + interim).trim();
     onTranscript?.(combined, { final: finalTranscript.trim(), interim: interim.trim() });
   };
 
   const handleDeepgramMessage = (data) => {
+    if (!sessionActive) return;
     try {
       const response = JSON.parse(data);
       if (response.type !== "Results") return;
@@ -82,6 +85,7 @@ export function createDeepgramLiveSession({
   };
 
   const cleanup = ({ closeSocket = true } = {}) => {
+    sessionActive = false;
     isRecording = false;
 
     if (mediaStream) {
@@ -104,15 +108,21 @@ export function createDeepgramLiveSession({
       audioContext = null;
     }
 
-    if (socket && closeSocket) {
-      if (socket.readyState === WebSocket.OPEN) {
-        try {
-          socket.send(JSON.stringify({ type: "CloseStream" }));
-        } catch (err) {
-          console.warn("[STT] CloseStream failed:", err);
+    if (socket) {
+      socket.onmessage = null;
+      socket.onerror = null;
+      socket.onclose = null;
+
+      if (closeSocket) {
+        if (socket.readyState === WebSocket.OPEN) {
+          try {
+            socket.send(JSON.stringify({ type: "CloseStream" }));
+          } catch (err) {
+            console.warn("[STT] CloseStream failed:", err);
+          }
         }
+        socket.close();
       }
-      socket.close();
       socket = null;
     }
   };
@@ -122,6 +132,7 @@ export function createDeepgramLiveSession({
       throw new Error("Microphone access is not supported in this environment.");
     }
 
+    sessionActive = true;
     finalTranscript = "";
     updateTranscript("");
 
@@ -162,15 +173,18 @@ export function createDeepgramLiveSession({
   };
 
   const stop = () => {
-    cleanup({ closeSocket: true });
+    sessionActive = false;
     const text = finalTranscript.trim();
     finalTranscript = "";
+    cleanup({ closeSocket: true });
     return text;
   };
 
   const resetTranscript = () => {
     finalTranscript = "";
-    updateTranscript("");
+    if (sessionActive) {
+      updateTranscript("");
+    }
   };
 
   return {

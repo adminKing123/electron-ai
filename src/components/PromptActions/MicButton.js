@@ -28,8 +28,8 @@ const MicButton = () => {
     if (startingRef.current || isRecording) return;
     startingRef.current = true;
 
-    setRecordedText("");
     stopSession();
+    setRecordedText("");
 
     try {
       const { data } = await api({

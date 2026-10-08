@@ -5,10 +5,10 @@ const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
   const recordedText = useMicStore((state) => state.recordedText);
+  const isRecording = useMicStore((state) => state.isRecording);
 
   const handleChange = (e) => {
-    const isRecording = useMicStore.getState().isRecording;
-    if (isRecording) return;
+    if (useMicStore.getState().isRecording) return;
     setPrompt(e.target.value);
   };
 
@@ -47,7 +47,7 @@ const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
     }
   }, [recordedText]);
 
-  if (recordedText)
+  if (isRecording)
     return (
       <div
         id="recording-text-area"

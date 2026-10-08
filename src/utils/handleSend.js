@@ -25,7 +25,7 @@ export const handleSend = (chat, navigate) => {
   const { isWebSearchDisabled, isWebSearchOn } = useWebSearchStore.getState();
   const { clearFiles: clearFilesFromInputBox, attachedFiles } =
     useFileInputStore.getState();
-  const { isRecording } = useMicStore.getState();
+  const { isRecording, setRecordedText } = useMicStore.getState();
   const { generateHtml, generateCharts } = useOutputOptionsStore.getState();
 
   const files = Object.values(attachedFiles);
@@ -189,5 +189,6 @@ export const handleSend = (chat, navigate) => {
 
   handleStream(payload.id, payloadToSend, onProgress, onStart, onEnd, onError);
   setPrompt("");
+  setRecordedText("");
   clearFilesFromInputBox();
 };
