@@ -14,6 +14,30 @@ import SendGmailNode         from "./SendGmailNode";
 import SendWebexMessageNode  from "./SendWebexMessageNode";
 import DefaultFlowNode       from "./DefaultFlowNode";
 
+const FuseRunRunningBadge = () => (
+  <span
+    className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 z-[1]
+      inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+      text-[10px] font-semibold uppercase tracking-wide
+      bg-[#1a73e8] text-white dark:bg-[#8ab4f8] dark:text-[#202124]
+      shadow-sm animate-pulse"
+    aria-hidden
+  >
+    <span className="w-1.5 h-1.5 rounded-full bg-white dark:bg-[#202124] opacity-90" />
+    Running
+  </span>
+);
+
+const withRunHighlight = (node, props) => {
+  if (props.data?.runStatus !== "running") return node;
+  return (
+    <div className="relative">
+      <FuseRunRunningBadge />
+      {node}
+    </div>
+  );
+};
+
 // ─── FuseFlowNode ─────────────────────────────────────────────────────────────
 // Top-level dispatcher rendered for every node on the Fuse canvas.
 // Delegates to the node-specific component based on data.nodeType so each
@@ -26,39 +50,54 @@ import DefaultFlowNode       from "./DefaultFlowNode";
 const FuseFlowNode = (props) => {
   const { data } = props;
 
+  let inner;
   switch (data.nodeType) {
     // ── Starter nodes ───────────────────────────────────────────────────────
     case "schedule":
-      return <ScheduleNode {...props} />;
+      inner = <ScheduleNode {...props} />;
+      break;
     case "webhook":
-      return <WebhookNode {...props} />;
+      inner = <WebhookNode {...props} />;
+      break;
     case "webex_message":
-      return <WebexMessageNode {...props} />;
+      inner = <WebexMessageNode {...props} />;
+      break;
     case "github_pull_request":
-      return <GithubPullRequestNode {...props} />;
+      inner = <GithubPullRequestNode {...props} />;
+      break;
 
     // ── Action nodes ────────────────────────────────────────────────────────
     case "if_else":
-      return <IfElseNode {...props} />;
+      inner = <IfElseNode {...props} />;
+      break;
     case "for_each":
-      return <ForEachNode {...props} />;
+      inner = <ForEachNode {...props} />;
+      break;
     case "get_notified":
-      return <GetNotifiedNode {...props} />;
+      inner = <GetNotifiedNode {...props} />;
+      break;
     case "ai_structured_output":
-      return <AiStructuredOutputNode {...props} />;
+      inner = <AiStructuredOutputNode {...props} />;
+      break;
     case "ai_generate_text":
-      return <AiGenerateTextNode {...props} />;
+      inner = <AiGenerateTextNode {...props} />;
+      break;
     case "http_request":
-      return <HttpRequestNode {...props} />;
+      inner = <HttpRequestNode {...props} />;
+      break;
     case "send_gmail":
-      return <SendGmailNode {...props} />;
+      inner = <SendGmailNode {...props} />;
+      break;
     case "send_webex_message":
-      return <SendWebexMessageNode {...props} />;
+      inner = <SendWebexMessageNode {...props} />;
+      break;
 
     // ── Fallback for any future / unknown node types ─────────────────────────
     default:
-      return <DefaultFlowNode {...props} />;
+      inner = <DefaultFlowNode {...props} />;
   }
+
+  return withRunHighlight(inner, props);
 };
 
 export default FuseFlowNode;

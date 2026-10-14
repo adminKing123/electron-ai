@@ -328,14 +328,17 @@ const WorkflowCanvas = ({
       let next = n;
       if (n.type !== "fuse_block" && (runNodeStates || activeNodeId)) {
         const st = runNodeStates?.[n.id];
-        const runStatus =
-          activeNodeId === n.id || st?.status === "running"
-            ? "running"
-            : st?.status ?? undefined;
+        const isRunning =
+          activeNodeId === n.id || st?.status === "running";
+        const runStatus = isRunning ? "running" : st?.status ?? undefined;
+        const { runStatus: _drop, ...baseData } = n.data ?? {};
         next = {
           ...n,
-          data: runStatus ? { ...n.data, runStatus } : n.data,
+          data: runStatus ? { ...baseData, runStatus } : baseData,
         };
+      }
+      if (activeNodeId && n.id === activeNodeId) {
+        next = { ...next, zIndex: 1000, className: "fuse-run-node-active" };
       }
       if (selectedNodeId && n.id === selectedNodeId) {
         next = { ...next, selected: true };
@@ -346,12 +349,21 @@ const WorkflowCanvas = ({
 
   const displayEdges = useMemo(() => {
     if (!readOnly) return edges;
-    return edges.map((edge) => ({
-      ...edge,
-      type: "smoothstep",
-      animated: Boolean(activeNodeId && edge.target === activeNodeId),
-    }));
-  }, [edges, readOnly, activeNodeId]);
+    return edges.map((edge) => {
+      const toActive = Boolean(activeNodeId && edge.target === activeNodeId);
+      return {
+        ...edge,
+        type: "smoothstep",
+        animated: toActive,
+        style: toActive
+          ? {
+              stroke: isDark ? "#8ab4f8" : "#1a73e8",
+              strokeWidth: 2.5,
+            }
+          : edge.style,
+      };
+    });
+  }, [edges, readOnly, activeNodeId, isDark]);
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (

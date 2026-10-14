@@ -61,9 +61,13 @@ export default function useFuseRunLive(runId) {
             ...prev,
             [msg.log.node_id]: msg.log,
           }));
-          setActiveNodeId((current) =>
-            current === msg.log.node_id ? null : current
-          );
+          const terminal =
+            msg.log.status && msg.log.status !== "running";
+          if (terminal) {
+            setActiveNodeId((current) =>
+              current === msg.log.node_id ? null : current
+            );
+          }
         }
         break;
       default:

@@ -42,22 +42,32 @@ export const fusePickerCardClass =
   `${FUSE_NODE_ROW_SHELL} ${FUSE_PICKER_ROW} w-full text-left justify-start transition-colors duration-150 cursor-grab active:cursor-grabbing select-none`;
 
 const RUN_STATUS_RING = {
-  running: "ring-2 ring-blue-500/70 dark:ring-blue-400/60 animate-pulse",
-  success: "ring-2 ring-green-500/40 dark:ring-green-400/35",
-  error:   "ring-2 ring-red-500/50 dark:ring-red-400/45",
+  running:
+    "ring-[3px] ring-[#1a73e8] dark:ring-[#8ab4f8] shadow-[0_0_0_4px_rgba(26,115,232,0.22)] dark:shadow-[0_0_0_4px_rgba(138,180,248,0.18)]",
+  success: "ring-2 ring-green-500/45 dark:ring-green-400/40",
+  error: "ring-2 ring-red-500/50 dark:ring-red-400/45",
   skipped: "ring-2 ring-[#dadce0]/80 dark:ring-[#5f6368]/50",
 };
 
 /** Studio canvas row — same size/type as picker; optional selection + run-status ring. */
-export const fuseCanvasNodeShellClass = (selected, runStatus) =>
-  [
+export const fuseCanvasNodeShellClass = (selected, runStatus) => {
+  const parts = [
     FUSE_CANVAS_NODE_SURFACE,
-    "transition-[colors,box-shadow] duration-150",
-    runStatus ? RUN_STATUS_RING[runStatus] : "",
-    selected ? "ring-2 ring-[#1a73e8]/20 dark:ring-[#8ab4f8]/25" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+    "transition-[box-shadow,ring-color] duration-200",
+  ];
+
+  if (runStatus === "running") {
+    parts.push(RUN_STATUS_RING.running, "fuse-run-node-shell-running");
+  } else if (runStatus && RUN_STATUS_RING[runStatus]) {
+    parts.push(RUN_STATUS_RING[runStatus]);
+  }
+
+  if (selected && runStatus !== "running") {
+    parts.push("ring-2 ring-[#1a73e8]/25 dark:ring-[#8ab4f8]/30");
+  }
+
+  return parts.filter(Boolean).join(" ");
+};
 
 export const fuseCanvasNodeRowClass = (selected, runStatus) =>
   [
