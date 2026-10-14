@@ -19,6 +19,10 @@ export const FUSE_NODE_HANDLE_CONNECTED =
 export const FUSE_PICKER_ROW =
   "bg-[#f1f3f4] dark:bg-[#2d2e30] hover:bg-[#e8eaed] dark:hover:bg-[#35363a] active:bg-[#e0e3e7] dark:active:bg-[#3c4043]";
 
+/** Studio canvas nodes — white card on #f7f7f7 canvas (picker keeps FUSE_PICKER_ROW). */
+export const FUSE_CANVAS_NODE_SURFACE =
+  "bg-white dark:bg-[#2d2e30] border border-[#dadce0] dark:border-[#3c4043] hover:border-[#bdc1c6] dark:hover:border-[#5f6368] shadow-[0_1px_2px_rgba(60,64,67,0.1)] dark:shadow-none";
+
 /** One picker grid column width (keep in sync with NodeConfigPanel md:max-w-[550px] 2-col grid). */
 export const FUSE_NODE_ROW_WIDTH =
   "w-[255px] min-w-[255px] max-w-[255px] shrink-0";
@@ -38,13 +42,21 @@ export const fusePickerCardClass =
   `${FUSE_NODE_ROW_SHELL} ${FUSE_PICKER_ROW} w-full text-left justify-start transition-colors duration-150 cursor-grab active:cursor-grabbing select-none`;
 
 /** Studio canvas row — same size/type as picker; optional selection ring. */
+export const fuseCanvasNodeShellClass = (selected) =>
+  [
+    FUSE_CANVAS_NODE_SURFACE,
+    "transition-[colors,box-shadow] duration-150",
+    selected ? "ring-2 ring-[#1a73e8]/20 dark:ring-[#8ab4f8]/25" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
 export const fuseCanvasNodeRowClass = (selected) =>
   [
     FUSE_NODE_ROW_SHELL,
     FUSE_NODE_ROW_WIDTH,
-    FUSE_PICKER_ROW,
-    "transition-colors duration-150 select-none cursor-pointer",
-    selected ? "ring-2 ring-[#1a73e8]/20 dark:ring-[#8ab4f8]/25" : "",
+    fuseCanvasNodeShellClass(selected),
+    "select-none cursor-pointer",
   ]
     .filter(Boolean)
     .join(" ");

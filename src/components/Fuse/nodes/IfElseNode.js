@@ -5,7 +5,7 @@ import {
   FUSE_NODE_LABEL_MUTED,
   FUSE_NODE_ROW_INNER,
   FUSE_NODE_ROW_WIDTH,
-  FUSE_PICKER_ROW,
+  fuseCanvasNodeShellClass,
 } from "../fuseNodeTheme";
 import FuseNodeHandle from "./FuseNodeHandle";
 
@@ -14,8 +14,7 @@ const IfElseNode = ({ data, selected }) => (
     className={[
       FUSE_NODE_ROW_WIDTH,
       "rounded-2xl overflow-visible",
-      FUSE_PICKER_ROW,
-      selected ? "ring-2 ring-[#1a73e8]/20 dark:ring-[#8ab4f8]/25" : "",
+      fuseCanvasNodeShellClass(selected),
     ].join(" ")}
   >
     <div className={FUSE_NODE_ROW_INNER}>
