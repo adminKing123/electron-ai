@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { SiGmail, SiWebex, SiGooglesheets, SiGithub } from "react-icons/si";
 import {
   startGmailAuthAPI,
   startWebexAuthAPI,
@@ -9,13 +8,7 @@ import {
 import useIntegrationInfoModalStore from "../../store/useIntegrationInfoModalStore";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { LuInfo } from "react-icons/lu";
-
-const ICON_MAP = {
-  SiGmail: SiGmail,
-  SiWebex: SiWebex,
-  SiGooglesheets: SiGooglesheets,
-  SiGithub: SiGithub,
-};
+import IntegrationIconTile from "./IntegrationIconTile";
 
 const AUTH_START_API = {
   gmail: startGmailAuthAPI,
@@ -70,7 +63,6 @@ const ConfigureButton = ({ onClick, loading }) => (
 );
 
 const IntegrationCard = ({ integration, onRevokeClick }) => {
-  const Icon = ICON_MAP[integration.icon] || SiGmail;
   const [configuring, setConfiguring] = useState(false);
   const openInfoModal = useIntegrationInfoModalStore(
     (state) => state.openModal,
@@ -106,9 +98,7 @@ const IntegrationCard = ({ integration, onRevokeClick }) => {
       flex flex-col items-start justify-between p-5 md:p-6">
       {/* Icon + text */}
       <div className="flex flex-col items-start gap-3 w-full">
-        <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-[#f7f7f7] dark:bg-[#1a1a1a]">
-          <Icon className="w-6 h-6 text-[#444444] dark:text-white" />
-        </div>
+        <IntegrationIconTile iconName={integration.icon} />
         <div>
           <h3 className="text-[#1a1a1a] dark:text-white font-sans text-base font-semibold leading-tight">
             {integration.name}

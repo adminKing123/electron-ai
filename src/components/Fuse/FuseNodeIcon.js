@@ -8,6 +8,8 @@ export const FUSE_NODE_ICON_SIZES = {
   canvas: "w-[22px] h-[22px]",
   canvasLg: "w-[24px] h-[24px]",
   config: "w-[20px] h-[20px]",
+  /** Integration cards and info modals */
+  integration: "w-6 h-6",
 };
 
 /**

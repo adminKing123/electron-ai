@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "../Common/Modal";
 import { BasicLoader } from "../Loaders";
 import { getGoogleSheetsIntegrationInfoAPI } from "../../apis/fuse/queryFunctions";
-import { SiGooglesheets } from "react-icons/si";
+import IntegrationIconTile from "./IntegrationIconTile";
 import {
   HiOutlineCheckCircle,
   HiOutlineXCircle,
@@ -102,9 +102,7 @@ const GoogleSheetsInfoModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       title={
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-[#f7f7f7] dark:bg-[#1a1a1a]">
-            <SiGooglesheets className="w-6 h-6 text-[#444444] dark:text-white" />
-          </div>
+          <IntegrationIconTile iconName="SiGooglesheets" />
           <div>
             <p className="text-[15px] font-semibold text-[#222] dark:text-[#eee] leading-tight">
               Google Sheets integration
