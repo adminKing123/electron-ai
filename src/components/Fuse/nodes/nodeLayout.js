@@ -1,16 +1,13 @@
 import React from "react";
 import { getDisplayFuseNodeId } from "../../../utils/helpers";
-import { FUSE_NODE_ICON_WELL, FUSE_NODE_LABEL } from "../fuseNodeTheme";
+import { FUSE_NODE_ICON_WELL, FUSE_NODE_LABEL, FUSE_NODE_ROW_WIDTH } from "../fuseNodeTheme";
 
-/** Fixed canvas dimensions — keep in sync across all node variants. */
-export const FUSE_STARTER_NODE_SIZE =
-  "w-[156px] h-[156px] min-w-[156px] max-w-[156px] shrink-0";
-export const FUSE_ACTION_NODE_WIDTH =
-  "w-[252px] min-w-[252px] max-w-[252px] shrink-0";
-export const FUSE_IF_ELSE_NODE_WIDTH =
-  "w-[228px] min-w-[228px] max-w-[228px] shrink-0";
-export const FUSE_FOR_EACH_NODE_WIDTH =
-  "w-[236px] min-w-[236px] max-w-[236px] shrink-0";
+/** Canvas width — same as one picker panel column (see fuseNodeTheme). */
+export const FUSE_ACTION_NODE_WIDTH = FUSE_NODE_ROW_WIDTH;
+export const FUSE_IF_ELSE_NODE_WIDTH = FUSE_NODE_ROW_WIDTH;
+export const FUSE_FOR_EACH_NODE_WIDTH = FUSE_NODE_ROW_WIDTH;
+/** @deprecated Starters use horizontal row layout */
+export const FUSE_STARTER_NODE_SIZE = FUSE_NODE_ROW_WIDTH;
 
 /** Shared typography for horizontal action nodes on the canvas. */
 export const FUSE_CANVAS_LABEL_CLASS =

@@ -1,13 +1,10 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import FuseNodeRowContent from "../FuseNodeRowContent";
-import { fuseStudioRowClass, FUSE_NODE_HANDLE } from "../fuseNodeTheme";
-import { FUSE_ACTION_NODE_WIDTH } from "./nodeLayout";
+import { fuseCanvasNodeRowClass, FUSE_NODE_HANDLE } from "../fuseNodeTheme";
 
 const DefaultFlowNode = ({ data, selected }) => (
-  <div
-    className={[FUSE_ACTION_NODE_WIDTH, fuseStudioRowClass(selected)].join(" ")}
-  >
+  <div className={fuseCanvasNodeRowClass(selected)}>
     {!data.isStarter && (
       <Handle
         type="target"

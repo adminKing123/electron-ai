@@ -4,21 +4,21 @@ import FuseNodeRowContent from "../FuseNodeRowContent";
 import {
   FUSE_NODE_HANDLE,
   FUSE_NODE_LABEL_MUTED,
+  FUSE_NODE_ROW_INNER,
+  FUSE_NODE_ROW_WIDTH,
   FUSE_PICKER_ROW,
-  FUSE_STUDIO_ROW,
 } from "../fuseNodeTheme";
-import { FUSE_IF_ELSE_NODE_WIDTH } from "./nodeLayout";
 
 const IfElseNode = ({ data, selected }) => (
   <div
     className={[
-      FUSE_IF_ELSE_NODE_WIDTH,
+      FUSE_NODE_ROW_WIDTH,
       "rounded-2xl overflow-visible",
       FUSE_PICKER_ROW,
       selected ? "ring-2 ring-[#1a73e8]/20 dark:ring-[#8ab4f8]/25" : "",
     ].join(" ")}
   >
-    <div className={`${FUSE_STUDIO_ROW} relative rounded-none`}>
+    <div className={FUSE_NODE_ROW_INNER}>
       <Handle
         type="target"
         position={Position.Top}

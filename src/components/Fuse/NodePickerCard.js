@@ -1,10 +1,6 @@
 import React from "react";
-import { FUSE_PICKER_ROW, FUSE_STUDIO_ROW } from "./fuseNodeTheme";
+import { fusePickerCardClass } from "./fuseNodeTheme";
 import FuseNodeRowContent from "./FuseNodeRowContent";
-
-const ROW =
-  `${FUSE_STUDIO_ROW} ${FUSE_PICKER_ROW} ` +
-  "transition-colors duration-150 cursor-grab active:cursor-grabbing select-none w-full";
 
 const NodePickerCard = ({
   node,
@@ -26,7 +22,7 @@ const NodePickerCard = ({
       onDragStart={handleDragStart}
       onClick={() => onPick(node)}
       title={node.description ?? node.label}
-      className={ROW}
+      className={fusePickerCardClass}
       {...rest}
     >
       <FuseNodeRowContent iconName={node.icon} label={node.label} />
