@@ -7,6 +7,7 @@ import {
   TbChevronDown,
   TbChevronRight,
 } from "react-icons/tb";
+import FuseJsonViewer from "./FuseJsonViewer";
 
 export function fmtDate(iso) {
   if (!iso) return "—";
@@ -28,14 +29,6 @@ export function fmtDuration(ms) {
   if (ms == null || Number.isNaN(ms)) return "—";
   if (ms < 1000) return `${Math.round(ms)}ms`;
   return `${(ms / 1000).toFixed(2)}s`;
-}
-
-export function prettyJson(value) {
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch {
-    return String(value);
-  }
 }
 
 export const RunStatusBadge = ({ status, large = false }) => {
@@ -91,17 +84,7 @@ export const JsonBlock = ({ label, value }) => {
         {open ? <TbChevronDown className="w-3.5 h-3.5" /> : <TbChevronRight className="w-3.5 h-3.5" />}
         {label}
       </button>
-      {open && (
-        <pre
-          className="mt-2 p-3 rounded-lg text-[11.5px] font-mono leading-relaxed
-          bg-[#f7f7f7] dark:bg-[#1a1a1a]
-          border border-[#e8e8e8] dark:border-[#2a2a2a]
-          text-[#333] dark:text-[#ccc]
-          overflow-x-auto whitespace-pre-wrap break-words"
-        >
-          {prettyJson(value)}
-        </pre>
-      )}
+      {open && <FuseJsonViewer value={value} className="mt-2" />}
     </div>
   );
 };

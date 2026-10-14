@@ -126,7 +126,7 @@ const WorkflowRunDetailPage = () => {
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121] text-black dark:text-white">
-      <header className="flex-shrink-0 bg-[#ffffff] dark:bg-[#212121] border-b border-[#e5e5e5] dark:border-[#1e1e1e]">
+      <header className="w-full flex-shrink-0 bg-[#ffffff] dark:bg-[#212121]">
         <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
           <div className="flex items-center gap-1.5 min-w-0 flex-1">
             <button
@@ -178,39 +178,46 @@ const WorkflowRunDetailPage = () => {
         </div>
       )}
 
-      <div className="flex-1 flex overflow-hidden p-0 md:p-4 md:pb-3 md:pr-3 gap-0 md:gap-2.5">
-        <div
-          className="relative flex-1 min-w-0 min-h-0
-            md:rounded-xl md:border md:border-[#e5e5e5] md:dark:border-[#252525]
-            bg-[#f7f7f7] dark:bg-[#1a1a1a]
-            md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
-        >
-          <WorkflowCanvas
-            className="h-full"
-            readOnly
-            runNodeStates={nodeStates}
-            activeNodeId={activeNodeId}
-            selectedNodeId={selectedNode?.id ?? null}
-            onRunNodeSelect={handleRunNodeSelect}
-          />
+      <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+        <div className="flex-1 flex overflow-hidden min-h-0">
+          <div
+            className="relative flex-1 flex flex-col md:flex-row gap-0 md:gap-2.5 min-h-0 overflow-hidden
+              p-0 md:p-4
+              mb-0 md:mb-3 ml-0 md:ml-3 mr-0 md:mr-3
+              md:rounded-xl
+              md:border md:border-[#e5e5e5] md:dark:border-[#252525]
+              bg-[#f7f7f7] dark:bg-[#1a1a1a]
+              md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
+          >
+            <div className="relative flex-1 min-w-0 min-h-0">
+              <WorkflowCanvas
+                className="h-full"
+                readOnly
+                runNodeStates={nodeStates}
+                activeNodeId={activeNodeId}
+                selectedNodeId={selectedNode?.id ?? null}
+                onRunNodeSelect={handleRunNodeSelect}
+              />
+            </div>
+
+            <div
+              className="hidden md:flex flex-col flex-1 md:max-w-[420px] md:h-auto min-h-0 overflow-hidden
+                md:rounded-xl
+                bg-white dark:bg-[#212121]
+                border border-[#e5e5e5] dark:border-[#2a2a2a]
+                shadow-sm"
+            >
+              <FuseRunNodePanel
+                className="flex-1 min-h-0"
+                selectedNode={selectedNode}
+                nodeState={selectedNodeState}
+                isActiveNode={selectedNode?.id === activeNodeId}
+                run={run}
+              />
+            </div>
+          </div>
         </div>
 
-        <div
-          className="hidden md:flex flex-col flex-shrink-0 w-full max-w-[420px]
-            rounded-xl border border-[#e5e5e5] dark:border-[#2a2a2a]
-            bg-white dark:bg-[#212121] shadow-sm overflow-hidden"
-        >
-          <FuseRunNodePanel
-            className="flex-1 min-h-0"
-            selectedNode={selectedNode}
-            nodeState={selectedNodeState}
-            isActiveNode={selectedNode?.id === activeNodeId}
-            run={run}
-          />
-        </div>
-      </div>
-
-      {selectedNode && (
         <div className="md:hidden flex-shrink-0 max-h-[42vh] border-t border-[#e5e5e5] dark:border-[#1e1e1e] bg-white dark:bg-[#212121]">
           <FuseRunNodePanel
             className="h-full max-h-[42vh]"
@@ -220,7 +227,7 @@ const WorkflowRunDetailPage = () => {
             run={run}
           />
         </div>
-      )}
+      </div>
     </main>
   );
 };
