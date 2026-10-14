@@ -14,7 +14,7 @@ const ForEachNode = ({ data, selected }) => (
     className={[
       FUSE_NODE_ROW_WIDTH,
       "rounded-2xl overflow-visible",
-      fuseCanvasNodeShellClass(selected),
+      fuseCanvasNodeShellClass(selected, data.runStatus),
     ].join(" ")}
   >
     <div className={FUSE_NODE_ROW_INNER}>

@@ -41,21 +41,29 @@ export const FUSE_NODE_ROW_LABEL =
 export const fusePickerCardClass =
   `${FUSE_NODE_ROW_SHELL} ${FUSE_PICKER_ROW} w-full text-left justify-start transition-colors duration-150 cursor-grab active:cursor-grabbing select-none`;
 
-/** Studio canvas row — same size/type as picker; optional selection ring. */
-export const fuseCanvasNodeShellClass = (selected) =>
+const RUN_STATUS_RING = {
+  running: "ring-2 ring-blue-500/70 dark:ring-blue-400/60 animate-pulse",
+  success: "ring-2 ring-green-500/40 dark:ring-green-400/35",
+  error:   "ring-2 ring-red-500/50 dark:ring-red-400/45",
+  skipped: "ring-2 ring-[#dadce0]/80 dark:ring-[#5f6368]/50",
+};
+
+/** Studio canvas row — same size/type as picker; optional selection + run-status ring. */
+export const fuseCanvasNodeShellClass = (selected, runStatus) =>
   [
     FUSE_CANVAS_NODE_SURFACE,
     "transition-[colors,box-shadow] duration-150",
+    runStatus ? RUN_STATUS_RING[runStatus] : "",
     selected ? "ring-2 ring-[#1a73e8]/20 dark:ring-[#8ab4f8]/25" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
-export const fuseCanvasNodeRowClass = (selected) =>
+export const fuseCanvasNodeRowClass = (selected, runStatus) =>
   [
     FUSE_NODE_ROW_SHELL,
     FUSE_NODE_ROW_WIDTH,
-    fuseCanvasNodeShellClass(selected),
+    fuseCanvasNodeShellClass(selected, runStatus),
     "select-none cursor-pointer",
   ]
     .filter(Boolean)

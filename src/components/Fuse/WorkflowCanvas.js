@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -45,7 +45,14 @@ const BLOCK_PADDING = 30;
  * Clicking a block node does NOT open the side NodeConfigPanel; all editing
  * (rename, colour, remove) happens in the block's own NodeToolbar popup.
  */
-const WorkflowCanvas = ({ className = "" }) => {
+const WorkflowCanvas = ({
+  className = "",
+  readOnly = false,
+  runNodeStates = null,
+  activeNodeId = null,
+  selectedNodeId = null,
+  onRunNodeSelect = null,
+}) => {
   const nodes         = useFuseStudioStore((s) => s.nodes);
   const edges         = useFuseStudioStore((s) => s.edges);
   const onNodesChange = useFuseStudioStore((s) => s.onNodesChange);
@@ -165,19 +172,26 @@ const WorkflowCanvas = ({ className = "" }) => {
   const handleNodeClick = useCallback(
     (_evt, node) => {
       if (node.type === "fuse_block") {
-        // Clear any previously-selected workflow node so the panel closes
-        clearSelected();
+        if (!readOnly) clearSelected();
+        return;
+      }
+      if (readOnly && onRunNodeSelect) {
+        onRunNodeSelect(node);
         return;
       }
       selectNode(node);
     },
-    [selectNode, clearSelected]
+    [selectNode, clearSelected, readOnly, onRunNodeSelect]
   );
 
   const handlePaneClick = useCallback(() => {
+    if (readOnly) {
+      onRunNodeSelect?.(null);
+      return;
+    }
     clearSelected();
     setContextMenu(null);
-  }, [clearSelected]);
+  }, [clearSelected, readOnly, onRunNodeSelect]);
 
   const handlePaneContextMenu = useCallback((e) => {
     e.preventDefault();
@@ -308,44 +322,89 @@ const WorkflowCanvas = ({ className = "" }) => {
       }
     : null;
 
+  const displayNodes = useMemo(() => {
+    if (!readOnly && !runNodeStates && !selectedNodeId) return nodes;
+    return nodes.map((n) => {
+      let next = n;
+      if (n.type !== "fuse_block" && (runNodeStates || activeNodeId)) {
+        const st = runNodeStates?.[n.id];
+        const runStatus =
+          activeNodeId === n.id || st?.status === "running"
+            ? "running"
+            : st?.status ?? undefined;
+        next = {
+          ...n,
+          data: runStatus ? { ...n.data, runStatus } : n.data,
+        };
+      }
+      if (selectedNodeId && n.id === selectedNodeId) {
+        next = { ...next, selected: true };
+      }
+      return next;
+    });
+  }, [nodes, readOnly, runNodeStates, activeNodeId, selectedNodeId]);
+
+  const displayEdges = useMemo(() => {
+    if (!readOnly) return edges;
+    return edges.map((edge) => ({
+      ...edge,
+      type: "smoothstep",
+      animated: Boolean(activeNodeId && edge.target === activeNodeId),
+    }));
+  }, [edges, readOnly, activeNodeId]);
+
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div
       ref={containerRef}
       className={`relative rounded-xl overflow-hidden ${className}`}
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
+      onDrop={readOnly ? undefined : handleDrop}
+      onDragOver={readOnly ? undefined : handleDragOver}
     >
       {loading ? (
-        <div className="flex items-center justify-center h-full text-[#c0c0c0] dark:text-[#3a3a3a]">
+        <div className="flex items-center justify-center h-full min-h-[200px] text-[#c0c0c0] dark:text-[#3a3a3a]">
           <BasicLoader />
         </div>
       ) : nodes.length === 0 ? (
-        <div className="flex items-center justify-center h-full select-none">
-          <div className="text-center">
-            <p className="text-[14px] font-medium text-[#888] dark:text-[#555]">
-              Pick a starter node
-            </p>
-            <p className="text-[12px] text-[#c0c0c0] dark:text-[#404040] mt-1">
-              Click or drag a node from the right panel to begin
-            </p>
-          </div>
+        <div className="flex items-center justify-center h-full min-h-[200px] select-none">
+          {readOnly ? (
+            <div className="text-center px-4">
+              <p className="text-[14px] font-medium text-[#888] dark:text-[#555]">
+                Workflow graph unavailable
+              </p>
+              <p className="text-[12px] text-[#c0c0c0] dark:text-[#404040] mt-1">
+                Could not load the canvas for this run.
+              </p>
+            </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-[14px] font-medium text-[#888] dark:text-[#555]">
+                Pick a starter node
+              </p>
+              <p className="text-[12px] text-[#c0c0c0] dark:text-[#404040] mt-1">
+                Click or drag a node from the right panel to begin
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <ReactFlow
-          nodes={nodes}
-          edges={edges}
+          nodes={displayNodes}
+          edges={displayEdges}
           onInit={setRfInstance}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
+          onNodesChange={readOnly ? undefined : onNodesChange}
+          onEdgesChange={readOnly ? undefined : onEdgesChange}
+          onConnect={readOnly ? undefined : onConnect}
           onNodeClick={handleNodeClick}
           onPaneClick={handlePaneClick}
-          onPaneContextMenu={handlePaneContextMenu}
-          isValidConnection={isValidConnection}
+          onPaneContextMenu={readOnly ? undefined : handlePaneContextMenu}
+          isValidConnection={readOnly ? undefined : isValidConnection}
+          nodesDraggable={!readOnly}
+          nodesConnectable={!readOnly}
+          elementsSelectable
           edgesReconnectable={false}
           nodeTypes={NODE_TYPES}
-          edgeTypes={EDGE_TYPES}
+          edgeTypes={readOnly ? undefined : EDGE_TYPES}
           colorMode={isDark ? "dark" : "light"}
           fitView
           fitViewOptions={{ padding: 0.35, maxZoom: 1 }}
@@ -356,10 +415,11 @@ const WorkflowCanvas = ({ className = "" }) => {
             strokeWidth: 2,
             strokeLinecap: "round",
           }}
-          defaultEdgeOptions={{
-            type: "removable",
-            animated: false,
-          }}
+          defaultEdgeOptions={
+            readOnly
+              ? { type: "smoothstep", animated: false }
+              : { type: "removable", animated: false }
+          }
         >
           <Background
             variant={BackgroundVariant.Dots}
@@ -375,7 +435,7 @@ const WorkflowCanvas = ({ className = "" }) => {
       )}
 
       {/* ── Context menu ──────────────────────────────────────────────── */}
-      {contextMenu && (
+      {!readOnly && contextMenu && (
         <CanvasContextMenu
           x={contextMenu.x}
           y={contextMenu.y}
@@ -385,7 +445,7 @@ const WorkflowCanvas = ({ className = "" }) => {
       )}
 
       {/* ── Draw-mode overlay ─────────────────────────────────────────── */}
-      {drawMode && (
+      {!readOnly && drawMode && (
         <div
           className="absolute inset-0 z-10 cursor-crosshair select-none"
           onMouseDown={handleOverlayMouseDown}
@@ -411,7 +471,7 @@ const WorkflowCanvas = ({ className = "" }) => {
       )}
 
       {/* ── Block name dialog ─────────────────────────────────────────── */}
-      {pendingBlock && (
+      {!readOnly && pendingBlock && (
         <div className="absolute inset-0 z-20 flex items-center justify-center">
           <div
             className="absolute inset-0 bg-black/10 dark:bg-black/25"

@@ -398,6 +398,16 @@ export const getRunLogsAPI = async (runId, params = {}) => {
   return res.data; // { items, next_cursor }
 };
 
+/**
+ * GET /fuse/runs/:runId/live-config — WebSocket URL for live run streaming.
+ * @param {string} runId
+ * @returns {{ ws_url: string }}
+ */
+export const getRunLiveConfigAPI = async (runId) => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_RUN_LIVE_CONFIG(runId) });
+  return res.data;
+};
+
 // ─── Versions ──────────────────────────────────────────────────────────────────
 
 /**

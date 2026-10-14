@@ -5,7 +5,7 @@ import { fuseCanvasNodeRowClass } from "../fuseNodeTheme";
 import FuseNodeHandle from "./FuseNodeHandle";
 
 const DefaultFlowNode = ({ data, selected }) => (
-  <div className={fuseCanvasNodeRowClass(selected)}>
+  <div className={fuseCanvasNodeRowClass(selected, data.runStatus)}>
     {!data.isStarter && (
       <FuseNodeHandle type="target" position={Position.Top} />
     )}
