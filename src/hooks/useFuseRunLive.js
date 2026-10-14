@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { auth } from "../firebase/index";
+import { useCallback, useState } from "react";
 import { getRunLiveConfigAPI } from "../apis/fuse/queryFunctions";
-import { connectFuseRunSocket } from "../utils/fuseRunSocket";
+import { auth } from "../firebase/index";
+import useFuseLiveSocket from "./useFuseLiveSocket";
 
 function mergeNodeState(prev, nodeId, patch) {
   return {
@@ -24,8 +24,10 @@ export default function useFuseRunLive(runId) {
   const [connectionStatus, setConnectionStatus] = useState("idle");
   const [error, setError] = useState(null);
 
-  const disconnectRef = useRef(null);
-  const reconnectTokenRef = useRef(0);
+  const fetchWsUrl = useCallback(async () => {
+    const { ws_url: wsUrl } = await getRunLiveConfigAPI(runId);
+    return wsUrl;
+  }, [runId]);
 
   const applyEvent = useCallback((msg) => {
     switch (msg.type) {
@@ -33,6 +35,7 @@ export default function useFuseRunLive(runId) {
         setRun(msg.run ?? null);
         setNodeStates(msg.node_states ?? {});
         setActiveNodeId(msg.active_node_id ?? null);
+        setError(null);
         break;
       case "run_update":
       case "run_finished":
@@ -68,50 +71,25 @@ export default function useFuseRunLive(runId) {
     }
   }, []);
 
-  const connect = useCallback(async () => {
-    if (!runId) return;
-
-    disconnectRef.current?.();
-    disconnectRef.current = null;
-
-    const tokenGen = ++reconnectTokenRef.current;
-    setError(null);
-    setConnectionStatus("connecting");
-
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        setError("Sign in required to watch this run.");
-        setConnectionStatus("error");
-        return;
-      }
-
-      const { ws_url: wsUrl } = await getRunLiveConfigAPI(runId);
-      const token = await user.getIdToken();
-
-      if (tokenGen !== reconnectTokenRef.current) return;
-
-      disconnectRef.current = connectFuseRunSocket({
-        wsUrl,
-        token,
-        onEvent: applyEvent,
-        onConnectionChange: setConnectionStatus,
-      });
-    } catch {
-      if (tokenGen !== reconnectTokenRef.current) return;
-      setError("Could not connect to live run updates.");
-      setConnectionStatus("error");
+  const handleConnectionChange = useCallback((status) => {
+    setConnectionStatus(status);
+    if (status === "error") {
+      setError(
+        auth.currentUser
+          ? "Could not connect to live run updates."
+          : "Sign in required to watch this run."
+      );
+    } else if (status === "connected") {
+      setError(null);
     }
-  }, [runId, applyEvent]);
+  }, []);
 
-  useEffect(() => {
-    connect();
-    return () => {
-      reconnectTokenRef.current += 1;
-      disconnectRef.current?.();
-      disconnectRef.current = null;
-    };
-  }, [connect]);
+  const { reconnect } = useFuseLiveSocket({
+    enabled: Boolean(runId),
+    fetchWsUrl,
+    onEvent: applyEvent,
+    onConnectionChange: handleConnectionChange,
+  });
 
   return {
     run,
@@ -119,6 +97,6 @@ export default function useFuseRunLive(runId) {
     activeNodeId,
     connectionStatus,
     error,
-    reconnect: connect,
+    reconnect,
   };
 }

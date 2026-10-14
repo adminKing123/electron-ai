@@ -1,7 +1,6 @@
 /**
  * fuseRunSocket.js
- * Connects to a per-run WebSocket room (URL includes run_id).
- * Auth: first message is `{ type: "auth", token }` only.
+ * Low-level Fuse live WebSocket client. Returns an idempotent disconnect().
  */
 
 const AUTH_TIMEOUT_MS = 30_000;
@@ -17,26 +16,34 @@ export function connectFuseRunSocket({
   onConnectionChange,
 }) {
   let ws = null;
-  let closed = false;
+  let disposed = false;
   let authTimer = null;
 
   const setStatus = (status) => {
-    onConnectionChange?.(status);
+    if (!disposed) onConnectionChange?.(status);
   };
 
-  const cleanup = () => {
-    closed = true;
-    if (authTimer) clearTimeout(authTimer);
+  const disconnect = () => {
+    if (disposed) return;
+    disposed = true;
+
+    if (authTimer) {
+      clearTimeout(authTimer);
+      authTimer = null;
+    }
+
     if (ws) {
       ws.onopen = null;
       ws.onmessage = null;
       ws.onerror = null;
       ws.onclose = null;
       if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
-        ws.close();
+        ws.close(1000, "client disconnect");
       }
       ws = null;
     }
+
+    setStatus("disconnected");
   };
 
   try {
@@ -44,17 +51,19 @@ export function connectFuseRunSocket({
     ws = new WebSocket(wsUrl);
 
     authTimer = setTimeout(() => {
-      if (!closed) {
+      if (!disposed) {
         setStatus("error");
-        cleanup();
+        disconnect();
       }
     }, AUTH_TIMEOUT_MS);
 
     ws.onopen = () => {
+      if (disposed) return;
       ws.send(JSON.stringify({ type: "auth", token }));
     };
 
     ws.onmessage = (event) => {
+      if (disposed) return;
       try {
         const msg = JSON.parse(event.data);
         if (authTimer) {
@@ -69,17 +78,17 @@ export function connectFuseRunSocket({
     };
 
     ws.onerror = () => {
-      if (!closed) setStatus("error");
+      if (!disposed) setStatus("error");
     };
 
     ws.onclose = () => {
-      if (!closed) setStatus("disconnected");
-      cleanup();
+      if (!disposed) setStatus("disconnected");
+      disconnect();
     };
   } catch {
     setStatus("error");
-    cleanup();
+    disconnect();
   }
 
-  return cleanup;
+  return disconnect;
 }
