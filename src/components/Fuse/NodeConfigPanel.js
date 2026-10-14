@@ -7,14 +7,11 @@ import {
   TbSearch,
   TbCopy,
   TbCheck,
-  TbBell,
-  TbBellOff,
 } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
-import usePushNotification from "../../hooks/usePushNotification";
 import NotificationSettings from "./NotificationSettings";
 import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
 

@@ -70,10 +70,7 @@ const IntegrationCard = ({ integration, onRevokeClick }) => {
 
   const handleConfigure = async () => {
     const startAuth = AUTH_START_API[integration.id];
-    if (!startAuth) {
-      console.log(`Configuring ${integration.name}`);
-      return;
-    }
+    if (!startAuth) return;
 
     setConfiguring(true);
     try {
