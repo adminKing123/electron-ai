@@ -1,19 +1,18 @@
 /**
  * fuseRunSocket.js
- * Low-level WebSocket client for Fuse run live updates.
- * Connection/auth protocol is shared — pages use useFuseRunLive instead.
+ * Connects to a per-run WebSocket room (URL includes run_id).
+ * Auth: first message is `{ type: "auth", token }` only.
  */
 
 const AUTH_TIMEOUT_MS = 30_000;
 
 /**
- * @param {{ wsUrl: string, token: string, runId: string, onEvent: (msg: object) => void, onConnectionChange?: (status: string) => void }} opts
+ * @param {{ wsUrl: string, token: string, onEvent: (msg: object) => void, onConnectionChange?: (status: string) => void }} opts
  * @returns {() => void} disconnect
  */
 export function connectFuseRunSocket({
   wsUrl,
   token,
-  runId,
   onEvent,
   onConnectionChange,
 }) {
@@ -52,7 +51,7 @@ export function connectFuseRunSocket({
     }, AUTH_TIMEOUT_MS);
 
     ws.onopen = () => {
-      ws.send(JSON.stringify({ type: "auth", token, run_id: runId }));
+      ws.send(JSON.stringify({ type: "auth", token }));
     };
 
     ws.onmessage = (event) => {

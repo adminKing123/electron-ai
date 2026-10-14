@@ -94,7 +94,6 @@ export default function useFuseRunLive(runId) {
       disconnectRef.current = connectFuseRunSocket({
         wsUrl,
         token,
-        runId,
         onEvent: applyEvent,
         onConnectionChange: setConnectionStatus,
       });
