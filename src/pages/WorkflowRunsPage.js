@@ -24,6 +24,8 @@ import {
 } from "react-icons/tb";
 import { iconBtnCls } from "../components/Fuse/FuseStudioHeader";
 import { getWorkflowByIdAPI, getWorkflowRunsAPI } from "../apis/fuse/queryFunctions";
+import useLiveDuration from "../hooks/useLiveDuration";
+import useFuseWorkflowRunsLive from "../hooks/useFuseWorkflowRunsLive";
 import HeaderUserProfile from "../components/HeaderUserProfile";
 import ROUTES from "../router/routes";
 
@@ -79,6 +81,17 @@ const StatusBadge = ({ status }) => {
       <Icon className={`w-3 h-3 ${spin ? "animate-spin" : ""}`} />
       {status}
     </span>
+  );
+};
+
+const RunDurationCell = ({ run }) => {
+  const liveMs = useLiveDuration(
+    run.started_at,
+    run.status === "running",
+    run.duration_ms
+  );
+  return (
+    <span className="font-mono">{fmtDuration(liveMs)}</span>
   );
 };
 
@@ -169,6 +182,8 @@ const WorkflowRunsPage = () => {
   }, [workflowId]);
 
   useEffect(() => { fetchPage(page); }, [page, fetchPage]);
+
+  useFuseWorkflowRunsLive(workflowId, page, setRuns);
 
   const handleRefresh = () => {
     cursorsRef.current = [null];
@@ -268,8 +283,8 @@ const WorkflowRunsPage = () => {
                   <td className="px-3 sm:px-5 py-4 text-right text-[12px] text-[#666] dark:text-[#777] whitespace-nowrap hidden sm:table-cell">
                     {fmtDate(run.started_at)}
                   </td>
-                  <td className="px-3 sm:px-5 py-4 text-right text-[12px] text-[#888] dark:text-[#555] font-mono whitespace-nowrap hidden sm:table-cell">
-                    {fmtDuration(run.duration_ms)}
+                  <td className="px-3 sm:px-5 py-4 text-right text-[12px] text-[#888] dark:text-[#555] whitespace-nowrap hidden sm:table-cell">
+                    <RunDurationCell run={run} />
                   </td>
                   <td className="px-3 sm:px-5 py-4">
                     <div className="flex justify-end">

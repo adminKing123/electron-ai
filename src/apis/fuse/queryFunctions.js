@@ -408,6 +408,19 @@ export const getRunLiveConfigAPI = async (runId) => {
   return res.data;
 };
 
+/**
+ * GET /fuse/workflows/:id/runs/live-config — WebSocket URL for live run-list updates.
+ * @param {string} workflowId
+ * @returns {{ ws_url: string, workflow_id: string }}
+ */
+export const getWorkflowRunsLiveConfigAPI = async (workflowId) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_WORKFLOW_RUNS_LIVE_CONFIG(workflowId),
+  });
+  return res.data;
+};
+
 // ─── Versions ──────────────────────────────────────────────────────────────────
 
 /**

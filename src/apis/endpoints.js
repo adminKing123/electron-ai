@@ -60,6 +60,8 @@ const ENDPOINTS = {
   FUSE_RUN:             (runId) => `/fuse/runs/${runId}`,
   FUSE_RUN_LOGS:        (runId) => `/fuse/runs/${runId}/logs`,
   FUSE_RUN_LIVE_CONFIG: (runId) => `/fuse/runs/${runId}/live-config`,
+  FUSE_WORKFLOW_RUNS_LIVE_CONFIG: (workflowId) =>
+    `/fuse/workflows/${workflowId}/runs/live-config`,
 
   // ── Fuse Compiled Versions ───────────────────────────────────────────────────
   FUSE_WORKFLOW_VERSIONS: (id) => `/fuse/workflows/${id}/versions`,

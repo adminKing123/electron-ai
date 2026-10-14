@@ -57,8 +57,9 @@ export function connectFuseRunSocket({
     ws.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        if (msg.type === "snapshot") {
-          if (authTimer) clearTimeout(authTimer);
+        if (authTimer) {
+          clearTimeout(authTimer);
+          authTimer = null;
           setStatus("connected");
         }
         onEvent(msg);
