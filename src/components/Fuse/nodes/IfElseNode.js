@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_IF_ELSE_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── IfElseNode ───────────────────────────────────────────────────────────────
@@ -8,8 +8,6 @@ import { FUSE_IF_ELSE_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeL
 // Renders a True and False source handle in the footer so each branch can be
 // wired independently on the canvas.
 const IfElseNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   const borderCls = selected
     ? "border-[#f59e0b] shadow-[0_0_0_3px_rgba(245,158,11,0.18)]"
     : "border-[#fcd34d] dark:border-[#6b4c00] shadow-sm hover:border-[#f59e0b] dark:hover:border-[#b07800]";
@@ -33,12 +31,8 @@ const IfElseNode = ({ id, data, selected }) => {
 
       {/* Header: icon + label */}
       <div className="flex items-center flex-col gap-2.5 px-3.5 pt-3 pb-2.5">
-        <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg
-          bg-[#fef3c7] dark:bg-[#2a2000]">
-          {Icon
-            ? <Icon className="w-[24px] h-[24px] text-[#d97706] dark:text-[#f59e0b]" />
-            : <span className="w-3 h-3 rounded-sm bg-[#fcd34d]" />
-          }
+        <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+          <FuseNodeIcon iconName={data.icon} sizeClass={FUSE_NODE_ICON_SIZES.canvasLg} />
         </span>
         <div className="w-full min-w-0 overflow-hidden text-center">
           <FuseNodeLabel

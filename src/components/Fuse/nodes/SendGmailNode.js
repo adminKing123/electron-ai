@@ -1,14 +1,12 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── SendGmailNode ──────────────────────────────────────────────────────────
 // Canvas node for the "Send Gmail" action.
 // Red / Orange colour scheme to match the Gmail branding.
 const SendGmailNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   const borderCls = selected
     ? "border-[#ea4335] dark:border-[#f87171] shadow-[0_0_0_3px_rgba(234,67,53,0.18)]"
     : "border-[#fecaca] dark:border-[#991b1b] shadow-sm hover:border-[#ef4444] dark:hover:border-[#dc2626]";
@@ -31,11 +29,8 @@ const SendGmailNode = ({ id, data, selected }) => {
       />
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#fee2e2] dark:bg-[#450a0a]">
-        {Icon
-          ? <Icon className="w-[24px] h-[24px] text-[#ea4335] dark:text-[#f87171]" />
-          : <span className="w-3 h-3 rounded-full bg-[#fecaca] dark:bg-[#991b1b]" />
-        }
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+        <FuseNodeIcon iconName={data.icon} sizeClass={FUSE_NODE_ICON_SIZES.canvasLg} />
       </span>
 
       {/* Label block */}

@@ -11,7 +11,7 @@ import {
   TbBellOff,
 } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
-import { getNodeIcon } from "./iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
 import usePushNotification from "../../hooks/usePushNotification";
@@ -95,8 +95,6 @@ const NodeSectionGrid = ({ title, nodes, Card, onPick }) => (
 );
 
 const StarterNodeCard = ({ node, onPick }) => {
-  const Icon = getNodeIcon(node.icon);
-
   const handleDragStart = (e) => {
     // Tag the payload as a starter node so WorkflowCanvas sets isStarter correctly.
     e.dataTransfer.setData(
@@ -119,15 +117,8 @@ const StarterNodeCard = ({ node, onPick }) => {
         hover:border-[#c7cfe8] dark:hover:border-[#363660]
         transition-colors cursor-grab active:cursor-grabbing"
     >
-      <span
-        className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
-        bg-[#eef0fb] dark:bg-[#252540]"
-      >
-        {Icon ? (
-          <Icon className="w-[15px] h-[15px] text-[#4a6cf7] dark:text-[#6b8aff]" />
-        ) : (
-          <span className="w-3.5 h-3.5 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
-        )}
+      <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center">
+        <FuseNodeIcon iconName={node.icon} sizeClass={FUSE_NODE_ICON_SIZES.picker} />
       </span>
       <span className="text-[12.5px] font-medium leading-snug text-[#222] dark:text-[#d8d8d8]">
         {node.label}
@@ -219,8 +210,6 @@ const StarterPanel = () => {
 // Supports both drag-and-drop onto the canvas and a single click to add at a
 // default position (same UX as StarterNodeCard).
 const ActionNodeCard = ({ node, onPick }) => {
-  const Icon = getNodeIcon(node.icon);
-
   const handleDragStart = (e) => {
     e.dataTransfer.setData("application/fuse-node", JSON.stringify(node));
     e.dataTransfer.effectAllowed = "copy";
@@ -240,15 +229,8 @@ const ActionNodeCard = ({ node, onPick }) => {
         hover:border-[#c7cfe8] dark:hover:border-[#363660]
         transition-colors select-none"
     >
-      <span
-        className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full
-        bg-[#eef0fb] dark:bg-[#252540]"
-      >
-        {Icon ? (
-          <Icon className="w-[15px] h-[15px] text-[#4a6cf7] dark:text-[#6b8aff]" />
-        ) : (
-          <span className="w-3.5 h-3.5 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
-        )}
+      <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center">
+        <FuseNodeIcon iconName={node.icon} sizeClass={FUSE_NODE_ICON_SIZES.picker} />
       </span>
       <span className="text-[12px] font-medium leading-snug text-[#222] dark:text-[#d8d8d8] truncate">
         {node.label}
@@ -470,7 +452,6 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
   const updateNodeLabel = useFuseStudioStore((s) => s.updateNodeLabel);
   const removeNode = useFuseStudioStore((s) => s.removeNode);
   const { id: workflowId } = useParams();
-  const Icon = getNodeIcon(nodeDef.icon);
   const maxLabelLength = CONFIG.MAX_NODE_LABEL_LENGTH;
 
   const node_type = node.data?.nodeType;
@@ -505,11 +486,12 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
           </button>
         </div>
         <div className="flex items-center gap-2.5 min-w-0">
-          {Icon && (
-            <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-[#f3f3f3] dark:bg-[#2a2a2a]">
-              <Icon className="w-[18px] h-[18px] text-[#555] dark:text-[#aaa]" />
-            </span>
-          )}
+          <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+            <FuseNodeIcon
+              iconName={nodeDef.icon}
+              sizeClass={FUSE_NODE_ICON_SIZES.config}
+            />
+          </span>
           <NodeLabelInput
             value={displayLabel}
             onChange={(v) => updateNodeLabel(node.id, v)}

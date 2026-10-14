@@ -1,5 +1,5 @@
 import { TbEdit, TbTrash } from "react-icons/tb";
-import { getNodeIcon } from "./iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import WorkflowEmptyState from "./WorkflowEmptyState";
 
 /** Short date — e.g. "Jun 12, 2026" */
@@ -66,10 +66,13 @@ const WorkflowListItem = ({ workflow, isDeleting, onEdit, onDelete, isLast }) =>
           <StatusBadge status={workflow.status} />
           {visibleNodes.length > 0 && (
             <div className="flex items-center gap-1.5">
-              {visibleNodes.map((node) => {
-                const Icon = getNodeIcon(node.data.icon);
-                return <Icon key={node.id} className="text-[#888] dark:text-[#666] text-[15px] flex-shrink-0" />;
-              })}
+              {visibleNodes.map((node) => (
+                <FuseNodeIcon
+                  key={node.id}
+                  iconName={node.data.icon}
+                  sizeClass={FUSE_NODE_ICON_SIZES.picker}
+                />
+              ))}
               {overflow > 0 && <span className="text-[10px] text-[#aaa] dark:text-[#555]">+{overflow}</span>}
             </div>
           )}
@@ -102,10 +105,13 @@ const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => {
       <td className={TD}><StatusBadge status={workflow.status} /></td>
       <td className={`${TD} hidden sm:table-cell`}>
         <div className="flex items-center gap-2">
-          {visibleNodes.map((node) => {
-            const Icon = getNodeIcon(node.data.icon);
-            return <Icon key={node.id} className="text-[#888] dark:text-[#666] text-[17px] flex-shrink-0" />;
-          })}
+          {visibleNodes.map((node) => (
+            <FuseNodeIcon
+              key={node.id}
+              iconName={node.data.icon}
+              sizeClass={FUSE_NODE_ICON_SIZES.config}
+            />
+          ))}
           {overflow > 0 && <span className="text-[11px] text-[#aaa] dark:text-[#555]">+{overflow}</span>}
         </div>
       </td>

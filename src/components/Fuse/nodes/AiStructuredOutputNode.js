@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── AiStructuredOutputNode ───────────────────────────────────────────────────
@@ -9,8 +9,6 @@ import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLa
 // (bottom) to continue the chain.
 // Design this component however you like; no style is inherited from elsewhere.
 const AiStructuredOutputNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   const borderCls = selected
     ? "border-[#9333ea] dark:border-[#c084fc] shadow-[0_0_0_3px_rgba(147,51,234,0.18)]"
     : "border-[#e9d5ff] dark:border-[#4c1d95] shadow-sm hover:border-[#a855f7] dark:hover:border-[#7e22ce]";
@@ -33,11 +31,8 @@ const AiStructuredOutputNode = ({ id, data, selected }) => {
       />
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#f3e8ff] dark:bg-[#3b0764]">
-        {Icon
-          ? <Icon className="w-[24px] h-[24px] text-[#9333ea] dark:text-[#c084fc]" />
-          : <span className="w-3 h-3 rounded-full bg-[#e9d5ff] dark:bg-[#4c1d95]" />
-        }
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+        <FuseNodeIcon iconName={data.icon} sizeClass={FUSE_NODE_ICON_SIZES.canvasLg} />
       </span>
 
       {/* Label block */}

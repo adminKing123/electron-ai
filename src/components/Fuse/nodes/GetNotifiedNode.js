@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── GetNotifiedNode ──────────────────────────────────────────────────────────
@@ -9,8 +9,6 @@ import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLa
 // (bottom) to continue the chain.
 // Design this component however you like; no style is inherited from elsewhere.
 const GetNotifiedNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   const borderCls = selected
     ? "border-[#2563eb] dark:border-[#60a5fa] shadow-[0_0_0_3px_rgba(37,99,235,0.18)]"
     : "border-[#bfdbfe] dark:border-[#1e3a8a] shadow-sm hover:border-[#3b82f6] dark:hover:border-[#1d4ed8]";
@@ -33,11 +31,8 @@ const GetNotifiedNode = ({ id, data, selected }) => {
       />
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#dbeafe] dark:bg-[#172554]">
-        {Icon
-          ? <Icon className="w-[24px] h-[24px] text-[#2563eb] dark:text-[#60a5fa]" />
-          : <span className="w-3 h-3 rounded-full bg-[#bfdbfe] dark:bg-[#1e3a8a]" />
-        }
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+        <FuseNodeIcon iconName={data.icon} sizeClass={FUSE_NODE_ICON_SIZES.canvasLg} />
       </span>
 
       {/* Label block */}

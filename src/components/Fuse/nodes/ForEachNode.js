@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_FOR_EACH_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── ForEachNode ──────────────────────────────────────────────────────────────
@@ -9,8 +9,6 @@ import { FUSE_FOR_EACH_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./node
 //   • "item"  — runs once for every element in the array  (blue)
 //   • "done"  — continues after all iterations finish     (slate)
 const ForEachNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   const borderCls = selected
     ? "border-[#3b82f6] shadow-[0_0_0_3px_rgba(59,130,246,0.18)]"
     : "border-[#93c5fd] dark:border-[#1e3a5f] shadow-sm hover:border-[#3b82f6] dark:hover:border-[#2563eb]";
@@ -34,12 +32,8 @@ const ForEachNode = ({ id, data, selected }) => {
 
       {/* Header: icon + label */}
       <div className="flex items-center flex-col gap-2.5 px-3.5 pt-3 pb-2.5">
-        <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg
-          bg-[#dbeafe] dark:bg-[#1e3a5f]">
-          {Icon
-            ? <Icon className="w-[24px] h-[24px] text-[#2563eb] dark:text-[#60a5fa]" />
-            : <span className="w-3 h-3 rounded-sm bg-[#93c5fd]" />
-          }
+        <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+          <FuseNodeIcon iconName={data.icon} sizeClass={FUSE_NODE_ICON_SIZES.canvasLg} />
         </span>
         <div className="w-full min-w-0 overflow-hidden text-center">
           <FuseNodeLabel

@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── DefaultFlowNode ──────────────────────────────────────────────────────────
@@ -8,8 +8,6 @@ import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLa
 // specific component.  Visual state (selected, starter) is driven entirely by
 // node.data — nothing is hardcoded here.
 const DefaultFlowNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   return (
     <div
       className={[
@@ -35,11 +33,11 @@ const DefaultFlowNode = ({ id, data, selected }) => {
       )}
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-[#eef0fb] dark:bg-[#252540]">
-        {Icon
-          ? <Icon className="w-[16px] h-[16px] text-[#4a6cf7] dark:text-[#6b8aff]" />
-          : <span className="w-3 h-3 rounded-full bg-[#c0c8e8] dark:bg-[#444]" />
-        }
+      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+        <FuseNodeIcon
+          iconName={data.icon}
+          sizeClass={FUSE_NODE_ICON_SIZES.canvasSm}
+        />
       </span>
 
       {/* Label block */}

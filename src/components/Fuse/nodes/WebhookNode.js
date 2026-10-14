@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_STARTER_NODE_SIZE, FuseNodeLabel } from "./nodeLayout";
 
 // ─── WebhookNode ──────────────────────────────────────────────────────────────
@@ -9,8 +9,6 @@ import { FUSE_STARTER_NODE_SIZE, FuseNodeLabel } from "./nodeLayout";
 // nothing connects INTO a workflow trigger.
 // Design this component however you like; no style is inherited from elsewhere.
 const WebhookNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   const borderCls = selected
     ? "border-[#059669] dark:border-[#34d399] shadow-[0_0_0_3px_rgba(5,150,105,0.18)]"
     : "border-[#a7f3d0] dark:border-[#065f46] shadow-sm hover:border-[#10b981] dark:hover:border-[#047857]";
@@ -29,11 +27,8 @@ const WebhookNode = ({ id, data, selected }) => {
       {/* No target handle — webhook is always a starter node */}
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#d1fae5] dark:bg-[#022c22]">
-        {Icon
-          ? <Icon className="w-[24px] h-[24px] text-[#059669] dark:text-[#34d399]" />
-          : <span className="w-3 h-3 rounded-full bg-[#a7f3d0] dark:bg-[#065f46]" />
-        }
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+        <FuseNodeIcon iconName={data.icon} sizeClass={FUSE_NODE_ICON_SIZES.canvasLg} />
       </span>
 
       {/* Label block */}

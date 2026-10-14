@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { getNodeIcon } from "../iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
 
 // ─── HttpRequestNode ───────────────────────────────────────────────────────────
@@ -9,8 +9,6 @@ import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLa
 // Has a target handle (top) to accept an incoming connection and a source
 // handle (bottom) to continue the workflow chain.
 const HttpRequestNode = ({ id, data, selected }) => {
-  const Icon = getNodeIcon(data.icon);
-
   const borderCls = selected
     ? "border-[#0d9488] dark:border-[#2dd4bf] shadow-[0_0_0_3px_rgba(13,148,136,0.18)]"
     : "border-[#99f6e4] dark:border-[#134e4a] shadow-sm hover:border-[#0d9488] dark:hover:border-[#0f766e]";
@@ -33,11 +31,8 @@ const HttpRequestNode = ({ id, data, selected }) => {
       />
 
       {/* Icon */}
-      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-[#ccfbf1] dark:bg-[#134e4a]">
-        {Icon
-          ? <Icon className="w-[22px] h-[22px] text-[#0d9488] dark:text-[#2dd4bf]" />
-          : <span className="w-3 h-3 rounded-full bg-[#99f6e4] dark:bg-[#0f766e]" />
-        }
+      <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+        <FuseNodeIcon iconName={data.icon} sizeClass={FUSE_NODE_ICON_SIZES.canvas} />
       </span>
 
       {/* Label block */}

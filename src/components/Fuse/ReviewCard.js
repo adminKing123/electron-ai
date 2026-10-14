@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { getNodeIcon } from "./iconRegistry";
+import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import ROUTES from "../../router/routes";
 import FuseWorkflowToggle from "./FuseWorkflowToggle";
 
@@ -20,17 +20,20 @@ const OpenButton = ({ onClick }) => (
 
 // ─── Node icons strip — shared by both card states ────────────────────────────
 
-const NodeIcons = ({ nodes, iconCls }) => {
+const NodeIcons = ({ nodes, overflowCls }) => {
   const visible = nodes.slice(0, 4);
   const overflow = nodes.length - 4;
   return (
     <div className="flex items-center gap-2">
-      {visible.map((node) => {
-        const Icon = getNodeIcon(node.data.icon);
-        return <Icon key={node.id} className={iconCls} />;
-      })}
+      {visible.map((node) => (
+        <FuseNodeIcon
+          key={node.id}
+          iconName={node.data.icon}
+          sizeClass={FUSE_NODE_ICON_SIZES.config}
+        />
+      ))}
       {overflow > 0 && (
-        <span className={iconCls + " text-xs"}>+{overflow}</span>
+        <span className={overflowCls}>+{overflow}</span>
       )}
     </div>
   );
@@ -96,7 +99,7 @@ const ReviewCard = ({ workflow, onHover, active }) => {
           <div className="mt-7 flex items-center justify-between">
             <NodeIcons
               nodes={workflow.nodes}
-              iconCls="text-[#444444] dark:text-white text-xl"
+              overflowCls="text-[#444444] dark:text-white text-xs"
             />
             <div onClick={(e) => e.stopPropagation()}>
               {workflow.compiled_graph ? (
@@ -121,7 +124,7 @@ const ReviewCard = ({ workflow, onHover, active }) => {
           <div className="mt-8">
             <NodeIcons
               nodes={workflow.nodes}
-              iconCls="text-[#555555] dark:text-white text-xl"
+              overflowCls="text-[#555555] dark:text-white text-xs"
             />
           </div>
         </div>
@@ -166,7 +169,7 @@ export const NormalReviewCard = ({ workflow }) => (
     <div className="mt-8 flex justify-between items-center">
       <NodeIcons
         nodes={workflow.nodes}
-        iconCls="text-[#555555] dark:text-white text-xl"
+        overflowCls="text-[#555555] dark:text-white text-xs"
       />
       <div
         className={`w-2 h-2 rounded-full opacity-70 ${
