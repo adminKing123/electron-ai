@@ -1,5 +1,4 @@
 import useMessageStore from "../../store/useMessagesStore";
-import FilePreview from "../MessageRelatedActionsInPrompt/FilePreview";
 import MessageFilePreview from "./MessageFilePreview";
 
 const MessageAttachedFiles = ({ message_id }) => {

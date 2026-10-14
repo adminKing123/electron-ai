@@ -1,6 +1,5 @@
 import React from "react";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
-import { FUSE_NODE_ICON_WELL } from "./fuseNodeTheme";
 
 /**
  * Brand-colored integration icon for cards, modals, and settings.

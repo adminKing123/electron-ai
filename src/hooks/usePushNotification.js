@@ -20,7 +20,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { getVapidPublicKeyAPI, pushSubscribeAPI, pushUnsubscribeAPI } from "../apis/fuse/queryFunctions";
+import { getVapidPublicKeyAPI, pushSubscribeAPI } from "../apis/fuse/queryFunctions";
 
 // Convert a base64 URL-safe string to a Uint8Array (required by
 // PushManager.subscribe for the applicationServerKey option).

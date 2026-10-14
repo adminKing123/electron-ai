@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { NodeResizer, NodeToolbar, Position } from "@xyflow/react";
 import { TbTrash } from "react-icons/tb";
 import useFuseStudioStore from "../../../store/useFuseStudioStore";
@@ -95,58 +95,15 @@ const resolveColor = (colorKey) => {
 // ─── BlockNode ─────────────────────────────────────────────────────────────────
 /**
  * Purely-visual block overlay sitting behind workflow nodes (zIndex: -1).
- *
- * Selected state shows a floating toolbar (Figma/Linear-style) with:
- *   • Colour swatches + custom picker — floating above the card, left-aligned
- *   • Trash icon — floating above the card, right-aligned, no label
- *   • Inline-editable block title — click to edit, Enter/Escape/blur to commit
- *
+ * When selected, shows a floating delete control above the block.
  * Colour accepts a BLOCK_PALETTE key or any #rrggbb hex value.
  */
 const BlockNode = ({ id, data, selected }) => {
-  const updateNodeLabel = useFuseStudioStore((s) => s.updateNodeLabel);
-  const updateBlockColor = useFuseStudioStore((s) => s.updateBlockColor);
   const removeBlock = useFuseStudioStore((s) => s.removeBlock);
 
   const colorKey = data.color ?? DEFAULT_COLOR;
   const cc = resolveColor(colorKey);
   const label = data.label ?? "Block";
-  const isCustom = cc.isCustom;
-
-  // ── Inline editing ──────────────────────────────────────────────────────────
-  const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(label);
-  const inputRef = useRef(null);
-
-  // Keep draft in sync when an external update changes the label
-  useEffect(() => {
-    if (!isEditing) setEditValue(label);
-  }, [label, isEditing]);
-
-  // Auto-focus + select all when the input mounts
-  useEffect(() => {
-    if (isEditing) {
-      inputRef.current?.focus();
-      inputRef.current?.select();
-    }
-  }, [isEditing]);
-
-  const startEditing = () => {
-    setEditValue(label);
-    setIsEditing(true);
-  };
-
-  const commitEdit = () => {
-    const trimmed = editValue.trim();
-    if (trimmed) updateNodeLabel(id, trimmed);
-    else setEditValue(label); // keep last valid name if field was cleared
-    setIsEditing(false);
-  };
-
-  const cancelEdit = () => {
-    setEditValue(label);
-    setIsEditing(false);
-  };
 
   return (
     <>
@@ -177,101 +134,7 @@ const BlockNode = ({ id, data, selected }) => {
           onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* <div
-            className="min-w-[168px] rounded-[11px] shadow-xl
-              bg-white/96 dark:bg-[#1c1c1c]
-              border border-[#e8e8e8] dark:border-[#2d2d2d]
-              px-3 py-[9px]"
-          >
-            {isEditing ? (
-              <input
-                ref={inputRef}
-                type="text"
-                value={editValue}
-                maxLength={48}
-                onChange={(e) => setEditValue(e.target.value)}
-                onBlur={commitEdit}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    commitEdit();
-                  }
-                  if (e.key === "Escape") {
-                    e.preventDefault();
-                    cancelEdit();
-                  }
-                }}
-                className="w-full bg-transparent outline-none select-all
-                  text-[13px] font-semibold leading-snug tracking-[-0.01em]
-                  text-[#111] dark:text-[#e8e8e8]"
-              />
-            ) : (
-              <p
-                onClick={startEditing}
-                title="Click to rename"
-                className="text-[13px] font-semibold leading-snug tracking-[-0.01em]
-                  text-[#111] dark:text-[#e8e8e8]
-                  cursor-text select-none truncate
-                  rounded-[4px] px-[3px] -mx-[3px] py-px -my-px
-                  hover:bg-black/[0.05] dark:hover:bg-white/[0.06]
-                  transition-colors duration-100"
-              >
-                {label}
-              </p>
-            )}
-          </div> */}
-
           <div className="flex items-center justify-between px-0.5 gap-5">
-            {/* <div className="flex items-center gap-[5px]">
-              {Object.entries(BLOCK_PALETTE).map(([cid, c]) => (
-                <button
-                  key={cid}
-                  type="button"
-                  title={c.name}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateBlockColor(id, cid);
-                  }}
-                  className={`w-3.5 h-3.5 rounded-full flex-shrink-0 transition-all duration-150 ${
-                    !isCustom && colorKey === cid
-                      ? "scale-[1.25] ring-[1.5px] ring-offset-[1.5px] ring-white/70 dark:ring-black/50 opacity-100"
-                      : "opacity-45 hover:opacity-90 hover:scale-110"
-                  }`}
-                  style={{ background: c.dot }}
-                />
-              ))}
-
-              <label
-                title="Custom colour"
-                className={`w-3.5 h-3.5 rounded-full flex-shrink-0 cursor-pointer
-                  overflow-hidden relative transition-all duration-150
-                  hover:opacity-90 hover:scale-110
-                  ${
-                    isCustom
-                      ? "scale-[1.25] ring-[1.5px] ring-offset-[1.5px] ring-white/70 dark:ring-black/50 opacity-100"
-                      : "opacity-45"
-                  }`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <input
-                  type="color"
-                  className="sr-only"
-                  value={isCustom ? colorKey : "#818cf8"}
-                  onChange={(e) => updateBlockColor(id, e.target.value)}
-                />
-                <span
-                  className="absolute inset-0 rounded-full"
-                  style={
-                    isCustom
-                      ? { background: colorKey }
-                      : {
-                          background:
-                            "conic-gradient(from 0deg, #f87171, #fb923c, #fbbf24, #4ade80, #38bdf8, #818cf8, #f472b6, #f87171)",
-                        }
-                  }
-                />
-              </label>
-            </div> */}
             <button
               type="button"
               title="Delete Block"

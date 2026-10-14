@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import CONFIG from "../config";
 
 const usePromptStore = create((set) => ({
   prompt: "",

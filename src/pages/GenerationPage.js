@@ -5,7 +5,6 @@ import { useEffect } from "react";
 function GenerationPage({ chat }) {
   useEffect(() => {
     const container = document.getElementById("messages-container");
-    const header = document.getElementById("header");
     const scrollToBottomEle = document.getElementById("scroll-to-top");
 
     const handleScroll = () => {
