@@ -13,6 +13,8 @@ export const FUSE_NODE_LABEL = "text-[#202124] dark:text-[#e8eaed]";
 export const FUSE_NODE_LABEL_MUTED = "text-[#5f6368] dark:text-[#9aa0a6]";
 export const FUSE_NODE_HANDLE =
   "!border-[#dadce0] dark:!border-[#3c4043] !bg-white dark:!bg-[#1e1e1e]";
+export const FUSE_NODE_HANDLE_CONNECTED =
+  "!border-[#1a73e8] dark:!border-[#8ab4f8] !bg-[#e8f0fe] dark:!bg-[#174ea6]/35";
 
 export const FUSE_PICKER_ROW =
   "bg-[#f1f3f4] dark:bg-[#2d2e30] hover:bg-[#e8eaed] dark:hover:bg-[#35363a] active:bg-[#e0e3e7] dark:active:bg-[#3c4043]";
@@ -29,11 +31,11 @@ export const FUSE_NODE_ROW_ICON_SLOT =
   "flex-shrink-0 w-8 h-8 flex items-center justify-center";
 
 export const FUSE_NODE_ROW_LABEL =
-  "text-[15px] font-medium leading-[1.25] truncate min-w-0 flex-1";
+  "text-left text-[15px] font-medium leading-[1.25] truncate min-w-0 flex-1";
 
 /** Picker panel tile (full width of grid cell). */
 export const fusePickerCardClass =
-  `${FUSE_NODE_ROW_SHELL} ${FUSE_PICKER_ROW} w-full transition-colors duration-150 cursor-grab active:cursor-grabbing select-none`;
+  `${FUSE_NODE_ROW_SHELL} ${FUSE_PICKER_ROW} w-full text-left justify-start transition-colors duration-150 cursor-grab active:cursor-grabbing select-none`;
 
 /** Studio canvas row — same size/type as picker; optional selection ring. */
 export const fuseCanvasNodeRowClass = (selected) =>

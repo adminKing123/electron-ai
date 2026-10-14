@@ -1,13 +1,13 @@
 import React from "react";
-import { Handle, Position } from "@xyflow/react";
+import { Position } from "@xyflow/react";
 import FuseNodeRowContent from "../FuseNodeRowContent";
 import {
-  FUSE_NODE_HANDLE,
   FUSE_NODE_LABEL_MUTED,
   FUSE_NODE_ROW_INNER,
   FUSE_NODE_ROW_WIDTH,
   FUSE_PICKER_ROW,
 } from "../fuseNodeTheme";
+import FuseNodeHandle from "./FuseNodeHandle";
 
 const ForEachNode = ({ data, selected }) => (
   <div
@@ -19,10 +19,10 @@ const ForEachNode = ({ data, selected }) => (
     ].join(" ")}
   >
     <div className={FUSE_NODE_ROW_INNER}>
-      <Handle
+      <FuseNodeHandle
         type="target"
         position={Position.Top}
-        className={`!w-3 !h-3 !border-2 ${FUSE_NODE_HANDLE} !rounded-none`}
+        className="!rounded-none"
       />
       <FuseNodeRowContent iconName={data.icon} label={data.label} />
     </div>
@@ -33,12 +33,11 @@ const ForEachNode = ({ data, selected }) => (
         <span className={`text-[10px] font-semibold truncate ${FUSE_NODE_LABEL_MUTED}`}>
           For each item
         </span>
-        <Handle
+        <FuseNodeHandle
           type="source"
           position={Position.Bottom}
           id="item"
           style={{ left: "50%", bottom: 0 }}
-          className={`!w-3 !h-3 !border-2 ${FUSE_NODE_HANDLE}`}
         />
       </div>
       <div className="w-px bg-[#dadce0] dark:bg-[#3c4043]" />
@@ -47,12 +46,11 @@ const ForEachNode = ({ data, selected }) => (
         <span className={`text-[10px] font-semibold truncate ${FUSE_NODE_LABEL_MUTED}`}>
           Done
         </span>
-        <Handle
+        <FuseNodeHandle
           type="source"
           position={Position.Bottom}
           id="done"
           style={{ left: "50%", bottom: 0 }}
-          className={`!w-3 !h-3 !border-2 ${FUSE_NODE_HANDLE}`}
         />
       </div>
     </div>

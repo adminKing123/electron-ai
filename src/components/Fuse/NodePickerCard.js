@@ -15,14 +15,20 @@ const NodePickerCard = ({
     e.dataTransfer.effectAllowed = "copy";
   };
 
+  const isButton = Component === "button";
+
   return (
     <Component
-      type={Component === "button" ? "button" : undefined}
+      type={isButton ? "button" : undefined}
       draggable
       onDragStart={handleDragStart}
       onClick={() => onPick(node)}
       title={node.description ?? node.label}
-      className={fusePickerCardClass}
+      className={
+        isButton
+          ? `${fusePickerCardClass} border-0 font-inherit`
+          : fusePickerCardClass
+      }
       {...rest}
     >
       <FuseNodeRowContent iconName={node.icon} label={node.label} />
