@@ -45,7 +45,7 @@ const WorkflowNameInput = ({ value, onChange, onBlur, placeholder = "Untitled Wo
   };
 
   return (
-    <div className="flex items-center gap-1.5 min-w-0">
+    <div className="flex flex-1 items-center gap-1.5 min-w-0">
       <input
         ref={inputRef}
         type="text"
@@ -57,7 +57,7 @@ const WorkflowNameInput = ({ value, onChange, onBlur, placeholder = "Untitled Wo
         spellCheck={false}
         placeholder={placeholder}
         style={{ textOverflow: "ellipsis" }}
-        className="w-full max-w-[300px] bg-transparent px-2 py-1
+        className="w-full min-w-0 bg-transparent px-2 py-1
           text-[14px] font-semibold tracking-tight
           text-[#111] dark:text-white
           placeholder:text-[#aaa] dark:placeholder:text-[#555]
