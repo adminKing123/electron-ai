@@ -1,7 +1,18 @@
-import React from "react";
-import { BaseEdge, EdgeLabelRenderer, getBezierPath } from "@xyflow/react";
+import React, { useState, useMemo } from "react";
+import {
+  BaseEdge,
+  EdgeLabelRenderer,
+  getSmoothStepPath,
+} from "@xyflow/react";
 import { TbX } from "react-icons/tb";
 import useFuseStudioStore from "../../../store/useFuseStudioStore";
+import useIsDark from "../../../hooks/useIsDark";
+import {
+  FUSE_EDGE_PATH,
+  fuseEdgeHaloColor,
+  fuseEdgeMarker,
+  resolveFuseEdgeStroke,
+} from "./fuseEdgeTheme";
 
 export default function RemovableEdge({
   id,
@@ -11,44 +22,94 @@ export default function RemovableEdge({
   targetY,
   sourcePosition,
   targetPosition,
-  style = {},
-  markerEnd,
+  selected = false,
 }) {
-  const [edgePath, labelX, labelY] = getBezierPath({
+  const isDark = useIsDark();
+  const [hovered, setHovered] = useState(false);
+  const removeEdge = useFuseStudioStore((s) => s.removeEdge);
+
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
     sourcePosition,
     targetX,
     targetY,
     targetPosition,
+    borderRadius: FUSE_EDGE_PATH.borderRadius,
+    offset: FUSE_EDGE_PATH.offset,
   });
 
-  const removeEdge = useFuseStudioStore((s) => s.removeEdge);
+  const stroke = useMemo(
+    () => resolveFuseEdgeStroke(isDark, { selected, hovered }),
+    [isDark, selected, hovered]
+  );
+  const halo = fuseEdgeHaloColor(isDark);
+  const markerEnd = fuseEdgeMarker(stroke);
+  const showRemove = hovered || selected;
 
   return (
-    <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+    <g
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Halo — keeps edges readable on the dotted canvas */}
+      <BaseEdge
+        id={`${id}-halo`}
+        path={edgePath}
+        style={{
+          stroke: halo,
+          strokeWidth: 5,
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          pointerEvents: "none",
+        }}
+        interactionWidth={0}
+      />
+      <BaseEdge
+        id={id}
+        path={edgePath}
+        markerEnd={markerEnd}
+        interactionWidth={22}
+        style={{
+          stroke,
+          strokeWidth: 2,
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          transition: "stroke 150ms ease",
+        }}
+      />
       <EdgeLabelRenderer>
         <div
           style={{
             position: "absolute",
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-            pointerEvents: "all",
+            pointerEvents: showRemove ? "all" : "none",
           }}
-          className="nodrag nopan"
+          className={`nodrag nopan transition-opacity duration-150 ${
+            showRemove ? "opacity-100" : "opacity-0"
+          }`}
         >
           <button
-            className="w-5 h-5 flex items-center justify-center rounded-full bg-white dark:bg-[#2a2a2a] border border-[#e5e5e5] dark:border-[#444] text-[#888] hover:text-red-500 hover:border-red-500 hover:bg-red-50 dark:hover:text-red-400 dark:hover:border-red-400 dark:hover:bg-red-900/20 transition-colors shadow-sm cursor-pointer z-50"
+            type="button"
+            className="w-[22px] h-[22px] flex items-center justify-center rounded-full
+              bg-white dark:bg-[#2d2e30]
+              border border-[#dadce0] dark:border-[#3c4043]
+              text-[#5f6368] dark:text-[#9aa0a6]
+              hover:text-[#d93025] hover:border-[#d93025]
+              dark:hover:text-[#f28b82] dark:hover:border-[#f28b82]
+              hover:bg-[#fce8e6] dark:hover:bg-[#3c1917]
+              shadow-[0_1px_2px_rgba(60,64,67,0.15)] dark:shadow-none
+              transition-colors cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               removeEdge(id);
             }}
             title="Remove connection"
           >
-            <TbX className="w-3 h-3" />
+            <TbX className="w-3.5 h-3.5" />
           </button>
         </div>
       </EdgeLabelRenderer>
-    </>
+    </g>
   );
 }

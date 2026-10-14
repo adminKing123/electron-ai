@@ -4,6 +4,7 @@ import {
   Background,
   Controls,
   BackgroundVariant,
+  ConnectionLineType,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
@@ -349,10 +350,15 @@ const WorkflowCanvas = ({ className = "" }) => {
           fitView
           fitViewOptions={{ padding: 0.35, maxZoom: 1 }}
           proOptions={{ hideAttribution: true }}
+          connectionLineType={ConnectionLineType.SmoothStep}
+          connectionLineStyle={{
+            stroke: isDark ? "#8ab4f8" : "#1a73e8",
+            strokeWidth: 2,
+            strokeLinecap: "round",
+          }}
           defaultEdgeOptions={{
             type: "removable",
-            style: { strokeWidth: 2, stroke: "#c0c8f0" },
-            animated: true,
+            animated: false,
           }}
         >
           <Background
