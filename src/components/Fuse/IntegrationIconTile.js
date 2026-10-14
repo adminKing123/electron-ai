@@ -1,5 +1,6 @@
 import React from "react";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
+import { FUSE_NODE_ICON_WELL } from "./fuseNodeTheme";
 
 /**
  * Brand-colored integration icon for cards, modals, and settings.
@@ -19,7 +20,7 @@ const IntegrationIconTile = ({
     <FuseNodeIcon
       iconName={iconName}
       sizeClass={FUSE_NODE_ICON_SIZES.integration}
-      fallbackClassName="w-6 h-6 rounded-md bg-[#ddd] dark:bg-[#444]"
+      fallbackClassName="w-6 h-6 rounded-md bg-[#f1f3f4] dark:bg-[#2d2e30]"
     />
   </div>
 );

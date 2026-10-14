@@ -10,6 +10,8 @@ import {
 } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
+import NodePickerCard from "./NodePickerCard";
+import { FUSE_NODE_ICON_WELL, FUSE_NODE_LABEL_MUTED, FUSE_PICKER_ROW } from "./fuseNodeTheme";
 import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
 import NotificationSettings from "./NotificationSettings";
@@ -58,71 +60,39 @@ const groupNodesBySection = (nodes, query) => {
 
 const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes…" }) => (
   <div
-    className="flex items-center gap-2 px-3 py-2 rounded-lg
-      bg-[#f5f5f5] dark:bg-[#1e1e1e]
-      border border-[#e8e8e8] dark:border-[#2a2a2a]"
+    className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl transition-colors ${FUSE_PICKER_ROW}`}
   >
-    <TbSearch className="w-[14px] h-[14px] text-[#aaa] dark:text-[#555] flex-shrink-0" />
+    <TbSearch className={`w-[18px] h-[18px] flex-shrink-0 ${FUSE_NODE_LABEL_MUTED}`} />
     <input
       type="text"
       value={query}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="flex-1 bg-transparent text-[12.5px] text-[#333] dark:text-[#ccc]
-        placeholder:text-[#bbb] dark:placeholder:text-[#444]
+      className="flex-1 bg-transparent text-[15px] text-[#202124] dark:text-[#e8eaed]
+        placeholder:text-[#5f6368] dark:placeholder:text-[#9aa0a6]
         outline-none border-none"
     />
   </div>
 );
 
-const NodeSectionGrid = ({ title, nodes, Card, onPick }) => (
-  <div className="flex flex-col gap-2">
-    <p
-      className="text-[10.5px] font-semibold uppercase tracking-wider
-        text-[#bbb] dark:text-[#484848]"
-    >
+const NodeSectionGrid = ({ title, nodes, onPick, isStarter }) => (
+  <div className="flex flex-col gap-2.5">
+    <p className={`text-[14px] font-medium px-0.5 ${FUSE_NODE_LABEL_MUTED}`}>
       {title}
     </p>
     <div className="grid grid-cols-2 gap-2">
       {nodes.map((node) => (
-        <Card key={node.type} node={node} onPick={onPick} />
+        <NodePickerCard
+          key={node.type}
+          node={node}
+          onPick={onPick}
+          isStarter={isStarter}
+          as={isStarter ? "button" : "div"}
+        />
       ))}
     </div>
   </div>
 );
-
-const StarterNodeCard = ({ node, onPick }) => {
-  const handleDragStart = (e) => {
-    // Tag the payload as a starter node so WorkflowCanvas sets isStarter correctly.
-    e.dataTransfer.setData(
-      "application/fuse-node",
-      JSON.stringify({ ...node, isStarter: true }),
-    );
-    e.dataTransfer.effectAllowed = "copy";
-  };
-
-  return (
-    <button
-      type="button"
-      draggable
-      onDragStart={handleDragStart}
-      onClick={() => onPick(node)}
-      className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-left w-full
-        bg-white dark:bg-[#1c1c1c]
-        border border-[#e8e8e8] dark:border-[#272727]
-        hover:bg-[#f5f7ff] dark:hover:bg-[#202030]
-        hover:border-[#c7cfe8] dark:hover:border-[#363660]
-        transition-colors cursor-grab active:cursor-grabbing"
-    >
-      <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center">
-        <FuseNodeIcon iconName={node.icon} sizeClass={FUSE_NODE_ICON_SIZES.picker} />
-      </span>
-      <span className="text-[12.5px] font-medium leading-snug text-[#222] dark:text-[#d8d8d8]">
-        {node.label}
-      </span>
-    </button>
-  );
-};
 
 const StarterPanel = () => {
   const starterNodes = useFuseStudioStore((s) => s.starterNodes);
@@ -158,16 +128,16 @@ const StarterPanel = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="px-4 pt-4 pb-3 border-b border-[#ebebeb] dark:border-[#252525] flex-shrink-0">
+      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-[#1a1a1a]">
         <div className="flex items-center gap-2 mb-3">
-          <TbLayoutGrid className="w-[18px] h-[18px] text-[#888] dark:text-[#555]" />
-          <span className="text-[13px] font-semibold text-[#444] dark:text-[#bbb]">
+          <TbLayoutGrid className="w-[20px] h-[20px] text-[#5f6368] dark:text-[#9aa0a6]" />
+          <span className="text-[16px] font-medium text-[#202124] dark:text-[#e8eaed]">
             Choose a starter
           </span>
         </div>
         <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters…" />
       </div>
-      <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-5">
+      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-[#1a1a1a]">
         {loadingNodes ? (
           ["General", "Webex"].map((sk) => (
             <div key={sk} className="flex flex-col gap-2">
@@ -176,7 +146,7 @@ const StarterPanel = () => {
                 {[1, 2].map((i) => (
                   <div
                     key={i}
-                    className="h-12 rounded-xl bg-[#f0f0f0] dark:bg-[#1e1e1e] animate-pulse"
+                    className="h-[52px] rounded-2xl bg-[#f1f3f4] dark:bg-[#2d2e30] animate-pulse"
                   />
                 ))}
               </div>
@@ -192,46 +162,12 @@ const StarterPanel = () => {
               key={title}
               title={title}
               nodes={nodes}
-              Card={StarterNodeCard}
               onPick={handlePick}
+              isStarter
             />
           ))
         )}
       </div>
-    </div>
-  );
-};
-
-// ─── ActionNodeCard ────────────────────────────────────────────────────────────
-// Draggable card displayed inside the 2-column section grid of AddNodePanel.
-// Supports both drag-and-drop onto the canvas and a single click to add at a
-// default position (same UX as StarterNodeCard).
-const ActionNodeCard = ({ node, onPick }) => {
-  const handleDragStart = (e) => {
-    e.dataTransfer.setData("application/fuse-node", JSON.stringify(node));
-    e.dataTransfer.effectAllowed = "copy";
-  };
-
-  return (
-    <div
-      draggable
-      onDragStart={handleDragStart}
-      onClick={() => onPick(node)}
-      title={node.description ?? node.label}
-      className="flex items-center gap-2 px-3 py-3 rounded-xl
-        cursor-grab active:cursor-grabbing
-        bg-white dark:bg-[#1c1c1c]
-        border border-[#e8e8e8] dark:border-[#272727]
-        hover:bg-[#f5f7ff] dark:hover:bg-[#202030]
-        hover:border-[#c7cfe8] dark:hover:border-[#363660]
-        transition-colors select-none"
-    >
-      <span className="flex-shrink-0 w-7 h-7 flex items-center justify-center">
-        <FuseNodeIcon iconName={node.icon} sizeClass={FUSE_NODE_ICON_SIZES.picker} />
-      </span>
-      <span className="text-[12px] font-medium leading-snug text-[#222] dark:text-[#d8d8d8] truncate">
-        {node.label}
-      </span>
     </div>
   );
 };
@@ -280,29 +216,29 @@ const AddNodePanel = () => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-4 pb-3 border-b border-[#ebebeb] dark:border-[#252525] flex-shrink-0">
+      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-[#1a1a1a]">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[13px] font-semibold text-[#444] dark:text-[#bbb]">
+          <span className="text-[16px] font-medium text-[#202124] dark:text-[#e8eaed]">
             Add Node
           </span>
           <button
             type="button"
             onClick={() => setAddingNode(false)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg
-              text-[#888] dark:text-[#555]
-              hover:text-[#111] dark:hover:text-[#ddd]
-              hover:bg-[#f0f0f0] dark:hover:bg-[#272727]
+            className="w-8 h-8 flex items-center justify-center rounded-full
+              text-[#5f6368] dark:text-[#9aa0a6]
+              hover:text-[#202124] dark:hover:text-[#e8eaed]
+              hover:bg-[#f1f3f4] dark:hover:bg-[#2d2e30]
               transition-colors"
             aria-label="Close"
           >
-            <TbX className="w-[15px] h-[15px]" />
+            <TbX className="w-[18px] h-[18px]" />
           </button>
         </div>
         <NodePickerSearch query={query} onChange={setQuery} />
       </div>
 
       {/* Sectioned node list */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-5">
+      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-[#1a1a1a]">
         {loadingActionNodes ? (
           // Loading skeleton: two mock sections
           ["Webex", "General"].map((sk) => (
@@ -312,7 +248,7 @@ const AddNodePanel = () => {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="h-14 rounded-xl bg-[#f0f0f0] dark:bg-[#1e1e1e] animate-pulse"
+                    className="h-[52px] rounded-2xl bg-[#f1f3f4] dark:bg-[#2d2e30] animate-pulse"
                   />
                 ))}
               </div>
@@ -328,7 +264,6 @@ const AddNodePanel = () => {
               key={title}
               title={title}
               nodes={nodes}
-              Card={ActionNodeCard}
               onPick={handlePick}
             />
           ))
@@ -483,7 +418,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
           </button>
         </div>
         <div className="flex items-center gap-2.5 min-w-0">
-          <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+          <span className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${FUSE_NODE_ICON_WELL}`}>
             <FuseNodeIcon
               iconName={nodeDef.icon}
               sizeClass={FUSE_NODE_ICON_SIZES.config}

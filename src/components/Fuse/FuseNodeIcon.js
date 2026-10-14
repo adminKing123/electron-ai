@@ -3,11 +3,15 @@ import { getNodeIcon, getNodeIconPresentation } from "./iconRegistry";
 
 /** Shared size tokens for node icons across picker, canvas, and config panel. */
 export const FUSE_NODE_ICON_SIZES = {
-  picker: "w-[18px] h-[18px]",
-  canvasSm: "w-[16px] h-[16px]",
-  canvas: "w-[22px] h-[22px]",
-  canvasLg: "w-[24px] h-[24px]",
-  config: "w-[20px] h-[20px]",
+  picker: "w-[20px] h-[20px]",
+  pickerLg: "w-[22px] h-[22px]",
+  /** Horizontal picker rows (Gemini-style) */
+  pickerRow: "w-[26px] h-[26px]",
+  canvasSm: "w-[20px] h-[20px]",
+  canvas: "w-[24px] h-[24px]",
+  canvasLg: "w-[28px] h-[28px]",
+  canvasStarter: "w-[32px] h-[32px]",
+  config: "w-[24px] h-[24px]",
   /** Integration cards and info modals */
   integration: "w-6 h-6",
 };

@@ -1,65 +1,29 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
-import { FUSE_ACTION_NODE_WIDTH, FuseNodeIdLabel, FuseNodeLabel } from "./nodeLayout";
+import FuseNodeRowContent from "../FuseNodeRowContent";
+import { fuseStudioRowClass, FUSE_NODE_HANDLE } from "../fuseNodeTheme";
+import { FUSE_ACTION_NODE_WIDTH } from "./nodeLayout";
 
-// ─── DefaultFlowNode ──────────────────────────────────────────────────────────
-// Standard node card used for all node types that are not handled by a more
-// specific component.  Visual state (selected, starter) is driven entirely by
-// node.data — nothing is hardcoded here.
-const DefaultFlowNode = ({ id, data, selected }) => {
-  return (
-    <div
-      className={[
-        "flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl",
-        "bg-white dark:bg-[#1c1c1c]",
-        "border-2 transition-colors select-none cursor-pointer",
-        FUSE_ACTION_NODE_WIDTH,
-        selected
-          ? "border-[#4a6cf7] dark:border-[#6b8aff] shadow-[0_0_0_3px_rgba(74,108,247,0.15)]"
-          : "border-[#e0e0e0] dark:border-[#2a2a2a] shadow-sm hover:border-[#b0bef0] dark:hover:border-[#363660]",
-      ].join(" ")}
-    >
-      {/*
-       * Target (input) handle — hidden on starter nodes.
-       * Nothing connects INTO a workflow trigger.
-       */}
-      {!data.isStarter && (
-        <Handle
-          type="target"
-          position={Position.Top}
-          className="!w-3 !h-3 !border-2 !border-[#c0c8f0] dark:!border-[#363660] !bg-white dark:!bg-[#1c1c1c]"
-        />
-      )}
-
-      {/* Icon */}
-      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-        <FuseNodeIcon
-          iconName={data.icon}
-          sizeClass={FUSE_NODE_ICON_SIZES.canvasSm}
-        />
-      </span>
-
-      {/* Label block */}
-      <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
-        <FuseNodeIdLabel
-          id={id}
-          className="text-[9px] font-mono leading-tight text-[#d0d0d0] dark:text-[#333]"
-        />
-        <FuseNodeLabel
-          label={data.label}
-          className="text-[13px] font-semibold leading-tight text-[#111] dark:text-[#e8e8e8]"
-        />
-      </div>
-
-      {/* Source handle — bottom center */}
+const DefaultFlowNode = ({ data, selected }) => (
+  <div
+    className={[FUSE_ACTION_NODE_WIDTH, fuseStudioRowClass(selected)].join(" ")}
+  >
+    {!data.isStarter && (
       <Handle
-        type="source"
-        position={Position.Bottom}
-        className="!w-3 !h-3 !border-2 !border-[#c0c8f0] dark:!border-[#363660] !bg-white dark:!bg-[#1c1c1c]"
+        type="target"
+        position={Position.Top}
+        className={`!w-3 !h-3 !border-2 ${FUSE_NODE_HANDLE}`}
       />
-    </div>
-  );
-};
+    )}
+
+    <FuseNodeRowContent iconName={data.icon} label={data.label} />
+
+    <Handle
+      type="source"
+      position={Position.Bottom}
+      className={`!w-3 !h-3 !border-2 ${FUSE_NODE_HANDLE}`}
+    />
+  </div>
+);
 
 export default DefaultFlowNode;
