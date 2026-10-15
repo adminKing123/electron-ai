@@ -115,7 +115,7 @@ const WorkflowRunDetailPage = () => {
   }, []);
 
   useEffect(() => {
-    if (run) setMobilePanelOpen(true);
+    if (run?.run_id) setMobilePanelOpen(true);
   }, [run?.run_id]);
 
   const selectedNodeState = useMemo(() => {
