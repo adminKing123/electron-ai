@@ -15,6 +15,12 @@ import { getOutgoingLimit } from "./nodes/connectionLimits";
 import { createFuseNodeId } from "../../utils/helpers";
 import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
+import {
+  buildNodeLookup,
+  isRunEdgeTraversed,
+  nodeHasRunActivity,
+  runVisualsActive,
+} from "../../utils/fuseRunCanvasVisual";
 
 const EDGE_TYPES = {
   removable: RemovableEdge,
@@ -322,6 +328,9 @@ const WorkflowCanvas = ({
       }
     : null;
 
+  const runCanvasActive = readOnly && runVisualsActive(runNodeStates, activeNodeId);
+  const nodeById = useMemo(() => buildNodeLookup(nodes), [nodes]);
+
   const displayNodes = useMemo(() => {
     if (!readOnly && !runNodeStates && !selectedNodeId) return nodes;
     return nodes.map((n) => {
@@ -331,39 +340,77 @@ const WorkflowCanvas = ({
         const isRunning =
           activeNodeId === n.id || st?.status === "running";
         const runStatus = isRunning ? "running" : st?.status ?? undefined;
-        const { runStatus: _drop, ...baseData } = n.data ?? {};
+        const { runStatus: _drop, runMuted: _m, ...baseData } = n.data ?? {};
         next = {
           ...n,
           data: runStatus ? { ...baseData, runStatus } : baseData,
         };
       }
+      if (runCanvasActive && n.type !== "fuse_block") {
+        const ran = nodeHasRunActivity(n.id, runNodeStates, activeNodeId);
+        if (!ran) {
+          next = {
+            ...next,
+            style: {
+              ...(next.style ?? {}),
+              opacity: 0.28,
+              filter: "saturate(0.45)",
+            },
+          };
+        }
+      }
       if (activeNodeId && n.id === activeNodeId) {
-        next = { ...next, zIndex: 1000, className: "fuse-run-node-active" };
+        next = {
+          ...next,
+          zIndex: 1000,
+          className: "fuse-run-node-active",
+          style: { ...(next.style ?? {}), opacity: 1, filter: "none" },
+        };
       }
       if (selectedNodeId && n.id === selectedNodeId) {
         next = { ...next, selected: true };
       }
       return next;
     });
-  }, [nodes, readOnly, runNodeStates, activeNodeId, selectedNodeId]);
+  }, [nodes, readOnly, runNodeStates, activeNodeId, selectedNodeId, runCanvasActive]);
 
   const displayEdges = useMemo(() => {
     if (!readOnly) return edges;
+
+    const traversedStroke = isDark ? "#8ab4f8" : "#1a73e8";
+    const idleStroke = isDark ? "#3c4043" : "#dadce0";
+
     return edges.map((edge) => {
+      const traversed = runCanvasActive
+        ? isRunEdgeTraversed(edge, runNodeStates, activeNodeId, nodeById)
+        : false;
       const toActive = Boolean(activeNodeId && edge.target === activeNodeId);
+
+      if (traversed) {
+        return {
+          ...edge,
+          type: "smoothstep",
+          animated: toActive,
+          style: {
+            stroke: traversedStroke,
+            strokeWidth: toActive ? 2.75 : 2.25,
+            opacity: 1,
+          },
+        };
+      }
+
       return {
         ...edge,
         type: "smoothstep",
-        animated: toActive,
-        style: toActive
-          ? {
-              stroke: isDark ? "#8ab4f8" : "#1a73e8",
-              strokeWidth: 2.5,
-            }
-          : edge.style,
+        animated: false,
+        style: {
+          stroke: idleStroke,
+          strokeWidth: 1.25,
+          opacity: runCanvasActive ? 0.22 : 0.45,
+        },
       };
     });
-  }, [edges, readOnly, activeNodeId, isDark]);
+  }, [edges, readOnly, activeNodeId, isDark, runCanvasActive, runNodeStates, nodeById]);
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
