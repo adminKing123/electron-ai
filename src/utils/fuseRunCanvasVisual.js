@@ -2,14 +2,31 @@
  * Run-detail canvas: which nodes ran and which edges were taken.
  */
 
-export function nodeHasRunActivity(nodeId, nodeStates, activeNodeId) {
-  if (!nodeId) return false;
-  if (nodeId === activeNodeId) return true;
-  return Boolean(nodeStates?.[nodeId]);
+/** All nodes currently in-flight (parallel fork branches, etc.). */
+export function collectRunningNodeIds(nodeStates, activeNodeIds = null) {
+  const ids = new Set();
+  if (Array.isArray(activeNodeIds)) {
+    activeNodeIds.forEach((id) => {
+      if (id) ids.add(id);
+    });
+  }
+  for (const [id, st] of Object.entries(nodeStates ?? {})) {
+    if (st?.status === "running") ids.add(id);
+  }
+  return ids;
 }
 
-export function runVisualsActive(nodeStates, activeNodeId) {
-  return Boolean(activeNodeId) || Object.keys(nodeStates ?? {}).length > 0;
+export function nodeHasRunActivity(nodeId, nodeStates, runningNodeIds) {
+  if (!nodeId) return false;
+  if (runningNodeIds?.has?.(nodeId)) return true;
+  const st = nodeStates?.[nodeId];
+  if (st?.status === "running") return true;
+  return Boolean(st);
+}
+
+export function runVisualsActive(nodeStates, runningNodeIds) {
+  if (runningNodeIds?.size > 0) return true;
+  return Object.keys(nodeStates ?? {}).length > 0;
 }
 
 function parseOutput(output) {
@@ -59,34 +76,35 @@ function sourceAllowsEdge(edge, sourceNode, sourceState) {
 /**
  * Edge was on the execution path (source finished or is running into target).
  */
-export function isRunEdgeTraversed(edge, nodeStates, activeNodeId, nodeById) {
+export function isRunEdgeTraversed(edge, nodeStates, runningNodeIds, nodeById) {
   const { source, target } = edge;
-  if (!nodeHasRunActivity(target, nodeStates, activeNodeId)) return false;
+  if (!nodeHasRunActivity(target, nodeStates, runningNodeIds)) return false;
 
   const sourceState = nodeStates?.[source];
-  const sourceIsActive = source === activeNodeId;
   const sourceRunning =
-    sourceIsActive || sourceState?.status === "running";
+    runningNodeIds?.has(source) || sourceState?.status === "running";
+  const targetRunning =
+    runningNodeIds?.has(target) || nodeStates?.[target]?.status === "running";
 
   const sourceNode = nodeById?.[source];
 
   if (sourceRunning) {
-    if (target === activeNodeId) return true;
+    if (targetRunning) return true;
     if (
       sourceNode?.data?.nodeType === "for_each" &&
       edge.sourceHandle === "item" &&
-      nodeHasRunActivity(target, nodeStates, activeNodeId)
+      nodeHasRunActivity(target, nodeStates, runningNodeIds)
     ) {
       return true;
     }
     return false;
   }
 
-  if (!sourceState && !sourceIsActive) return false;
+  if (!sourceState && !sourceRunning) return false;
 
   if (!sourceAllowsEdge(edge, sourceNode, sourceState)) return false;
 
-  return nodeHasRunActivity(target, nodeStates, activeNodeId);
+  return nodeHasRunActivity(target, nodeStates, runningNodeIds);
 }
 
 export function buildNodeLookup(nodes) {

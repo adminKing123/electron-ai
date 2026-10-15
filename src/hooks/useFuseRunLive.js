@@ -21,6 +21,7 @@ export default function useFuseRunLive(runId) {
   const [run, setRun] = useState(null);
   const [nodeStates, setNodeStates] = useState({});
   const [activeNodeId, setActiveNodeId] = useState(null);
+  const [activeNodeIds, setActiveNodeIds] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState("idle");
   const [error, setError] = useState(null);
 
@@ -31,19 +32,42 @@ export default function useFuseRunLive(runId) {
 
   const applyEvent = useCallback((msg) => {
     switch (msg.type) {
-      case "snapshot":
+      case "snapshot": {
         setRun(msg.run ?? null);
-        setNodeStates(msg.node_states ?? {});
-        setActiveNodeId(msg.active_node_id ?? null);
+        const ids = Array.isArray(msg.active_node_ids)
+          ? msg.active_node_ids
+          : msg.active_node_id
+            ? [msg.active_node_id]
+            : [];
+        const states = { ...(msg.node_states ?? {}) };
+        for (const id of ids) {
+          if (!states[id] || states[id].status === "running") {
+            states[id] = {
+              ...(states[id] || {}),
+              node_id: id,
+              status: "running",
+            };
+          }
+        }
+        setNodeStates(states);
+        setActiveNodeId(msg.active_node_id ?? ids[ids.length - 1] ?? null);
+        setActiveNodeIds(ids);
         setError(null);
         break;
+      }
       case "run_update":
       case "run_finished":
         if (msg.run) setRun(msg.run);
-        if (msg.type === "run_finished") setActiveNodeId(null);
+        if (msg.type === "run_finished") {
+          setActiveNodeId(null);
+          setActiveNodeIds([]);
+        }
         break;
       case "node_started":
         setActiveNodeId(msg.node_id);
+        setActiveNodeIds((prev) =>
+          prev.includes(msg.node_id) ? prev : [...prev, msg.node_id]
+        );
         setNodeStates((prev) =>
           mergeNodeState(prev, msg.node_id, {
             node_type: msg.node_type,
@@ -66,6 +90,9 @@ export default function useFuseRunLive(runId) {
           const terminal =
             msg.log.status && msg.log.status !== "running";
           if (terminal) {
+            setActiveNodeIds((prev) =>
+              prev.filter((id) => id !== msg.log.node_id)
+            );
             setActiveNodeId((current) =>
               current === msg.log.node_id ? null : current
             );
@@ -101,6 +128,7 @@ export default function useFuseRunLive(runId) {
     run,
     nodeStates,
     activeNodeId,
+    activeNodeIds,
     connectionStatus,
     error,
     reconnect,

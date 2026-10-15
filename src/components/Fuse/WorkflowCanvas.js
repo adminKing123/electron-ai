@@ -17,6 +17,7 @@ import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
 import {
   buildNodeLookup,
+  collectRunningNodeIds,
   isRunEdgeTraversed,
   nodeHasRunActivity,
   runVisualsActive,
@@ -56,6 +57,7 @@ const WorkflowCanvas = ({
   readOnly = false,
   runNodeStates = null,
   activeNodeId = null,
+  activeNodeIds = null,
   selectedNodeId = null,
   onRunNodeSelect = null,
 }) => {
@@ -327,17 +329,22 @@ const WorkflowCanvas = ({
       }
     : null;
 
-  const runCanvasActive = readOnly && runVisualsActive(runNodeStates, activeNodeId);
+  const runningNodeIds = useMemo(
+    () => collectRunningNodeIds(runNodeStates, activeNodeIds),
+    [runNodeStates, activeNodeIds]
+  );
+
+  const runCanvasActive = readOnly && runVisualsActive(runNodeStates, runningNodeIds);
   const nodeById = useMemo(() => buildNodeLookup(nodes), [nodes]);
 
   const displayNodes = useMemo(() => {
     if (!readOnly && !runNodeStates && !selectedNodeId) return nodes;
     return nodes.map((n) => {
       let next = n;
-      if (n.type !== "fuse_block" && (runNodeStates || activeNodeId)) {
+      if (n.type !== "fuse_block" && (runNodeStates || runningNodeIds.size > 0)) {
         const st = runNodeStates?.[n.id];
         const isRunning =
-          activeNodeId === n.id || st?.status === "running";
+          runningNodeIds.has(n.id) || st?.status === "running";
         const runStatus = isRunning ? "running" : st?.status ?? undefined;
         const { runStatus: _drop, runMuted: _m, ...baseData } = n.data ?? {};
         next = {
@@ -346,7 +353,7 @@ const WorkflowCanvas = ({
         };
       }
       if (runCanvasActive && n.type !== "fuse_block") {
-        const ran = nodeHasRunActivity(n.id, runNodeStates, activeNodeId);
+        const ran = nodeHasRunActivity(n.id, runNodeStates, runningNodeIds);
         if (!ran) {
           next = {
             ...next,
@@ -358,7 +365,7 @@ const WorkflowCanvas = ({
           };
         }
       }
-      if (activeNodeId && n.id === activeNodeId) {
+      if (runningNodeIds.has(n.id)) {
         next = {
           ...next,
           zIndex: 1000,
@@ -371,7 +378,7 @@ const WorkflowCanvas = ({
       }
       return next;
     });
-  }, [nodes, readOnly, runNodeStates, activeNodeId, selectedNodeId, runCanvasActive]);
+  }, [nodes, readOnly, runNodeStates, runningNodeIds, selectedNodeId, runCanvasActive]);
 
   const displayEdges = useMemo(() => {
     if (!readOnly) return edges;
@@ -381,9 +388,9 @@ const WorkflowCanvas = ({
 
     return edges.map((edge) => {
       const traversed = runCanvasActive
-        ? isRunEdgeTraversed(edge, runNodeStates, activeNodeId, nodeById)
+        ? isRunEdgeTraversed(edge, runNodeStates, runningNodeIds, nodeById)
         : false;
-      const toActive = Boolean(activeNodeId && edge.target === activeNodeId);
+      const toActive = runningNodeIds.has(edge.target);
 
       if (traversed) {
         return {
@@ -409,7 +416,7 @@ const WorkflowCanvas = ({
         },
       };
     });
-  }, [edges, readOnly, activeNodeId, isDark, runCanvasActive, runNodeStates, nodeById]);
+  }, [edges, readOnly, runningNodeIds, isDark, runCanvasActive, runNodeStates, nodeById]);
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (

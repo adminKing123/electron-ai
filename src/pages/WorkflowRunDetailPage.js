@@ -61,6 +61,7 @@ const WorkflowRunDetailPage = () => {
     run,
     nodeStates,
     activeNodeId,
+    activeNodeIds,
     connectionStatus,
     error: liveError,
     reconnect,
@@ -206,6 +207,7 @@ const WorkflowRunDetailPage = () => {
               readOnly
               runNodeStates={nodeStates}
               activeNodeId={activeNodeId}
+              activeNodeIds={activeNodeIds}
               selectedNodeId={selectedNode?.id ?? null}
               onRunNodeSelect={handleRunNodeSelect}
             />
@@ -256,7 +258,10 @@ const WorkflowRunDetailPage = () => {
               selectedNode={selectedNode}
               nodeState={selectedNodeState}
               nodeStates={nodeStates}
-              isActiveNode={selectedNode?.id === activeNodeId}
+              isActiveNode={
+                selectedNode?.id === activeNodeId ||
+                selectedNodeState?.status === "running"
+              }
               run={run}
             />
           </div>
