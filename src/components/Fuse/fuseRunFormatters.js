@@ -70,21 +70,178 @@ export const NodeStatusIcon = ({ status }) => {
   return <TbMinus className="w-[15px] h-[15px] text-[#bbb] dark:text-[#555] flex-shrink-0" />;
 };
 
-export const JsonBlock = ({ label, value }) => {
-  const [open, setOpen] = useState(false);
-  if (!value || (typeof value === "object" && Object.keys(value).length === 0)) return null;
+function isEmptyValue(value) {
+  if (value == null) return true;
+  if (typeof value === "object" && !Array.isArray(value)) {
+    return Object.keys(value).length === 0;
+  }
+  return false;
+}
+
+/** Shared run-panel accordion row (inside RunAccordionGroup). */
+function RunAccordionSection({
+  label,
+  badge,
+  open,
+  onToggle,
+  children,
+  empty = false,
+  emptyMessage = "No data",
+}) {
   return (
-    <div className="mt-3">
+    <div className="border-b border-[#ebebeb] dark:border-[#2a2a2a] last:border-b-0">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 text-[11.5px] font-medium text-[#888] dark:text-[#555]
-          hover:text-[#555] dark:hover:text-[#888] transition-colors"
+        onClick={onToggle}
+        className="w-full flex items-center gap-2 px-3 py-2.5 text-left
+          hover:bg-[#f8f9fa] dark:hover:bg-[#1e1e1e] transition-colors"
       >
-        {open ? <TbChevronDown className="w-3.5 h-3.5" /> : <TbChevronRight className="w-3.5 h-3.5" />}
-        {label}
+        {open ? (
+          <TbChevronDown className="w-4 h-4 flex-shrink-0 text-[#888] dark:text-[#666]" />
+        ) : (
+          <TbChevronRight className="w-4 h-4 flex-shrink-0 text-[#888] dark:text-[#666]" />
+        )}
+        <span className="text-[12px] font-medium text-[#202124] dark:text-[#e8eaed]">
+          {label}
+        </span>
+        {badge != null && (
+          <span className="ml-auto text-[10px] font-mono text-[#9aa0a6] dark:text-[#5f6368]">
+            {badge}
+          </span>
+        )}
       </button>
-      {open && <FuseJsonViewer value={value} className="mt-2" />}
+      {open && (
+        <div className="px-3 pb-3 pt-0">
+          {empty ? (
+            <p className="text-[12px] text-[#9aa0a6] dark:text-[#5f6368] py-1">{emptyMessage}</p>
+          ) : (
+            children
+          )}
+        </div>
+      )}
     </div>
   );
+}
+
+export function RunAccordionGroup({ children, className = "" }) {
+  return (
+    <div
+      className={`rounded-xl border border-[#ebebeb] dark:border-[#2a2a2a]
+        bg-[#fafafa] dark:bg-[#171717] overflow-hidden ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+const JSON_BODY_CLASS =
+  "max-h-[min(280px,38vh)] overflow-y-auto overscroll-y-contain";
+
+export const JsonBlock = ({
+  label,
+  value,
+  showWhenEmpty = false,
+  defaultOpen = false,
+  grouped = false,
+}) => {
+  const [open, setOpen] = useState(defaultOpen);
+  const empty = isEmptyValue(value);
+  if (!showWhenEmpty && empty) return null;
+
+  const body = empty ? null : (
+    <div className={JSON_BODY_CLASS}>
+      <FuseJsonViewer value={value} />
+    </div>
+  );
+
+  if (grouped) {
+    return (
+      <RunAccordionSection
+        label={label}
+        open={open}
+        onToggle={() => setOpen((v) => !v)}
+        empty={empty}
+      >
+        {body}
+      </RunAccordionSection>
+    );
+  }
+
+  return (
+    <RunAccordionGroup>
+      <RunAccordionSection
+        label={label}
+        open={open}
+        onToggle={() => setOpen((v) => !v)}
+        empty={empty}
+      >
+        {body}
+      </RunAccordionSection>
+    </RunAccordionGroup>
+  );
+};
+
+function formatVariableValue(value) {
+  if (value == null) return "null";
+  if (typeof value === "object") {
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
+  }
+  return String(value);
+}
+
+export const VariablesBlock = ({
+  variables,
+  showWhenEmpty = true,
+  defaultOpen = false,
+  grouped = false,
+}) => {
+  const [open, setOpen] = useState(defaultOpen);
+  const entries =
+    variables && typeof variables === "object" && !Array.isArray(variables)
+      ? Object.entries(variables)
+      : [];
+  const empty = entries.length === 0;
+  if (!showWhenEmpty && empty) return null;
+
+  const list = (
+    <ul
+      className={
+        empty ? "" : "max-h-[min(280px,38vh)] overflow-y-auto overscroll-y-contain"
+      }
+    >
+      {entries.map(([name, val]) => (
+        <li
+          key={name}
+          className="py-2.5 flex flex-col gap-0.5 min-w-0 border-b border-[#ebebeb] dark:border-[#2a2a2a] last:border-b-0"
+        >
+          <span className="text-[11px] font-mono text-[#1a73e8] dark:text-[#8ab4f8] break-all">
+            {name}
+          </span>
+          <span className="text-[11.5px] font-mono text-[#444] dark:text-[#999] break-all whitespace-pre-wrap">
+            {formatVariableValue(val)}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+
+  const section = (
+    <RunAccordionSection
+      label="Variables"
+      badge={empty ? null : entries.length}
+      open={open}
+      onToggle={() => setOpen((v) => !v)}
+      empty={empty}
+      emptyMessage="No variables referenced in this node's config."
+    >
+      {list}
+    </RunAccordionSection>
+  );
+
+  if (grouped) return section;
+  return <RunAccordionGroup>{section}</RunAccordionGroup>;
 };

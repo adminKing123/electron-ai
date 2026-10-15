@@ -52,6 +52,8 @@ export default function useFuseRunLive(runId) {
             started_at: msg.started_at,
             finished_at: null,
             duration_ms: null,
+            ...(msg.config != null ? { config: msg.config } : {}),
+            ...(msg.variables != null ? { variables: msg.variables } : {}),
           })
         );
         break;

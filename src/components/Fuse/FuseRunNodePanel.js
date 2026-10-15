@@ -8,8 +8,11 @@ import {
   fmtDuration,
   JsonBlock,
   NodeStatusIcon,
+  RunAccordionGroup,
   RunStatusBadge,
+  VariablesBlock,
 } from "./fuseRunFormatters";
+import { resolveVariablesFromConfig } from "../../utils/fuseRunNodeInspect";
 
 function Metric({ label, value, highlight = false }) {
   return (
@@ -62,7 +65,7 @@ function FuseRunOverview({ run, className = "" }) {
   }
 
   return (
-    <div className={`min-h-0 overflow-y-auto px-4 py-4 flex flex-col gap-4 ${className}`}>
+    <div className="min-h-0 flex flex-col gap-4">
       <div>
         <p className="text-[11px] font-semibold uppercase tracking-widest text-[#aaa] dark:text-[#555]">
           Workflow run
@@ -115,9 +118,9 @@ function FuseRunOverview({ run, className = "" }) {
 }
 
 function FuseRunNodeDetail({
-  className = "",
   selectedNode,
   nodeState,
+  nodeStates,
   isActiveNode,
   run,
 }) {
@@ -138,8 +141,16 @@ function FuseRunNodeDetail({
     run?.duration_ms
   );
 
+  const nodeConfig =
+    nodeState?.config ?? selectedNode?.data?.config ?? null;
+  const variablesValue =
+    nodeState?.variables ??
+    (nodeConfig && nodeStates
+      ? resolveVariablesFromConfig(nodeConfig, nodeStates)
+      : null);
+
   return (
-    <div className={`min-h-0 overflow-y-auto px-4 py-4 flex flex-col gap-4 ${className}`}>
+    <div className="min-h-0 flex flex-col gap-4">
       <div className="flex items-start gap-3 pb-4 border-b border-[#ebebeb] dark:border-[#232323]">
         <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-[#f1f3f4] dark:bg-[#2d2e30]">
           <FuseNodeIcon iconName={iconName} sizeClass={FUSE_NODE_ICON_SIZES.pickerRow} />
@@ -189,11 +200,29 @@ function FuseRunNodeDetail({
         </div>
       )}
 
-      <JsonBlock label="Output" value={nodeState?.output} />
+      <RunAccordionGroup>
+        <VariablesBlock variables={variablesValue} grouped />
+        <JsonBlock label="Config" value={nodeConfig} showWhenEmpty grouped />
+        <JsonBlock label="Output" value={nodeState?.output} grouped />
+        {run?.trigger_data && selectedNode?.data?.isStarter && (
+          <JsonBlock label="Trigger data" value={run.trigger_data} grouped />
+        )}
+      </RunAccordionGroup>
+    </div>
+  );
+}
 
-      {run?.trigger_data && selectedNode?.data?.isStarter && (
-        <JsonBlock label="Trigger data" value={run.trigger_data} />
-      )}
+function FuseRunPanelScroll({ children, className = "" }) {
+  return (
+    <div
+      className={`flex flex-col flex-1 min-h-0 h-full overflow-hidden ${className}`}
+    >
+      <div
+        className="flex-1 min-h-0 overflow-y-auto overscroll-y-contain px-4 py-4
+          [scrollbar-gutter:stable]"
+      >
+        <div className="flex flex-col gap-4 pb-2">{children}</div>
+      </div>
     </div>
   );
 }
@@ -202,8 +231,14 @@ function FuseRunNodeDetail({
  * Right-hand panel on the run detail page — run overview or live node execution info.
  */
 export default function FuseRunNodePanel(props) {
-  if (!props.selectedNode) {
-    return <FuseRunOverview run={props.run} className={props.className} />;
-  }
-  return <FuseRunNodeDetail {...props} />;
+  const { className = "", ...rest } = props;
+  return (
+    <FuseRunPanelScroll className={className}>
+      {!rest.selectedNode ? (
+        <FuseRunOverview run={rest.run} />
+      ) : (
+        <FuseRunNodeDetail {...rest} />
+      )}
+    </FuseRunPanelScroll>
+  );
 }

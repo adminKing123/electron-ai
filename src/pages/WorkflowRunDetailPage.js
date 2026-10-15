@@ -201,16 +201,16 @@ const WorkflowRunDetailPage = () => {
             </div>
 
             <div
-              className="hidden md:flex flex-col flex-1 md:max-w-[420px] md:h-auto min-h-0 overflow-hidden
+              className="hidden md:flex flex-col flex-1 md:max-w-[420px] min-h-0 overflow-hidden
                 md:rounded-xl
                 bg-white dark:bg-[#212121]
                 border border-[#e5e5e5] dark:border-[#2a2a2a]
                 shadow-sm"
             >
               <FuseRunNodePanel
-                className="flex-1 min-h-0"
                 selectedNode={selectedNode}
                 nodeState={selectedNodeState}
+                nodeStates={nodeStates}
                 isActiveNode={selectedNode?.id === activeNodeId}
                 run={run}
               />
@@ -218,11 +218,11 @@ const WorkflowRunDetailPage = () => {
           </div>
         </div>
 
-        <div className="md:hidden flex-shrink-0 max-h-[42vh] border-t border-[#e5e5e5] dark:border-[#1e1e1e] bg-white dark:bg-[#212121]">
+        <div className="md:hidden flex-shrink-0 h-[42vh] min-h-[200px] border-t border-[#e5e5e5] dark:border-[#1e1e1e] bg-white dark:bg-[#212121] overflow-hidden">
           <FuseRunNodePanel
-            className="h-full max-h-[42vh]"
             selectedNode={selectedNode}
             nodeState={selectedNodeState}
+            nodeStates={nodeStates}
             isActiveNode={selectedNode?.id === activeNodeId}
             run={run}
           />
