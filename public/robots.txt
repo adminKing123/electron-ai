@@ -1,2 +1,4 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://aura-ai-hypen.netlify.app/sitemap.xml
