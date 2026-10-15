@@ -19,7 +19,7 @@ const SidebarChatButton = ({ chat, ...props }) => {
     <NavLink
       to={ROUTES.GET_CHAT_PAGE_URL(chat.id)}
       className={({ isActive }) =>
-        `group flex items-center w-full rounded-lg text-[13px] font-medium
+        `group relative flex items-center w-full min-w-0 rounded-lg text-[13px] font-medium
         transition-colors duration-100 outline-none
         text-[#333] dark:text-[#ccc]
         ${
@@ -30,7 +30,13 @@ const SidebarChatButton = ({ chat, ...props }) => {
       }
       {...props}
     >
-      <span className="truncate px-3 py-[7px] flex-grow">{chat.title}</span>
+      <span
+        className="min-w-0 flex-1 truncate px-3 py-[7px] pr-3
+          transition-[padding] duration-100
+          group-hover:pr-9 group-has-[[data-state=open]]:pr-9"
+      >
+        {chat.title}
+      </span>
       <SidebarChatMenu chat={chat} />
     </NavLink>
   );

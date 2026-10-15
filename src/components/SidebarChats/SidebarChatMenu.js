@@ -33,15 +33,16 @@ const SidebarChatMenu = ({ chat }) => {
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
           }}
-          className="flex-shrink-0 w-7 h-7 mr-1.5 flex items-center justify-center rounded-md
+          className="absolute right-1 top-1/2 z-[1] -translate-y-1/2
+            flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-md
             opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100
             text-[#888] dark:text-[#666]
             hover:text-[#111] dark:hover:text-white
-            
             transition-opacity"
         >
           <SlOptions className="w-[11px] h-[11px]" />
