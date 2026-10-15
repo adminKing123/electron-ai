@@ -5,6 +5,7 @@ import WebhookNode           from "./WebhookNode";
 import WebexMessageNode      from "./WebexMessageNode";
 import GithubPullRequestNode from "./GithubPullRequestNode";
 import IfElseNode            from "./IfElseNode";
+import SwitchNode              from "./SwitchNode";
 import ForEachNode           from "./ForEachNode";
 import GetNotifiedNode       from "./GetNotifiedNode";
 import AiStructuredOutputNode from "./AiStructuredOutputNode";
@@ -40,6 +41,8 @@ const FuseFlowNode = (props) => {
     // ── Action nodes ────────────────────────────────────────────────────────
     case "if_else":
       return <IfElseNode {...props} />;
+    case "switch":
+      return <SwitchNode {...props} />;
     case "for_each":
       return <ForEachNode {...props} />;
     case "get_notified":

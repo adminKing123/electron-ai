@@ -1,22 +1,10 @@
 import { create } from "zustand";
 import { applyNodeChanges, applyEdgeChanges, addEdge } from "@xyflow/react";
 
-// ─── Connection limits ─────────────────────────────────────────────────────────
-/**
- * Maximum outgoing edges per node type. Defaults to 1 for any type not listed.
- * To unlock multiple branches for a future node type (e.g. "if_else"),
- * add an entry here — no other code needs to change.
- *
- *   if_else: 2   → true / false branches
- *   fork:    Infinity  → unlimited
- */
-const NODE_OUTGOING_LIMIT = {
-  if_else:  2,        // true + false branch, one edge each
-  for_each: 2,        // item (body) + done (after loop), one edge each
-  fork:     Infinity, // unlimited outgoing edges
-};
-
-const getOutgoingLimit = (nodeType) => NODE_OUTGOING_LIMIT[nodeType] ?? 1;
+import {
+  getOutgoingLimit,
+  isFuseBranchSourceHandle,
+} from "../components/Fuse/nodes/connectionLimits";
 
 /**
  * Zustand store for the Fuse Studio (workflow builder) page.
@@ -149,11 +137,10 @@ const useFuseStudioStore = create((set) => ({
       // Enforce incoming limit: at most 1 edge per target node.
       // Multi-branch handles (if_else true/false, for_each item/done) are exempt
       // so both branches can converge on the same downstream node.
-      const isBranchHandle =
-        connection.sourceHandle === "true"  ||
-        connection.sourceHandle === "false" ||
-        connection.sourceHandle === "item"  ||
-        connection.sourceHandle === "done";
+      const isBranchHandle = isFuseBranchSourceHandle(
+        connection.sourceHandle,
+        sourceNode?.data?.nodeType
+      );
       const targetNode = state.nodes.find((n) => n.id === connection.target);
       const isJoinTarget = targetNode?.data?.nodeType === "join";
 

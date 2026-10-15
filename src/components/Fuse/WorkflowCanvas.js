@@ -11,7 +11,7 @@ import useFuseStudioStore from "../../store/useFuseStudioStore";
 import useIsDark from "../../hooks/useIsDark";
 import { BasicLoader } from "../Loaders";
 import { NODE_TYPES } from "./nodes/FuseFlowNode";
-import { getOutgoingLimit } from "./nodes/connectionLimits";
+import { getOutgoingLimit, isFuseBranchSourceHandle } from "./nodes/connectionLimits";
 import { createFuseNodeId } from "../../utils/helpers";
 import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
@@ -265,11 +265,10 @@ const WorkflowCanvas = ({
         );
         if (used) return false;
       }
-      const isBranchHandle =
-        connection.sourceHandle === "true"  ||
-        connection.sourceHandle === "false" ||
-        connection.sourceHandle === "item"  ||
-        connection.sourceHandle === "done";
+      const isBranchHandle = isFuseBranchSourceHandle(
+        connection.sourceHandle,
+        sourceNode?.data?.nodeType
+      );
       const targetNode = nodes.find((n) => n.id === connection.target);
       const isJoinTarget = targetNode?.data?.nodeType === "join";
 

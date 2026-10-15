@@ -2185,6 +2185,124 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
   );
 };
 
+const DEFAULT_SWITCH_CASE = (index) => ({
+  id: `case_${index}`,
+  label: `Case ${index + 1}`,
+  condition: normaliseConditionValue(null),
+});
+
+const normaliseSwitchCases = (raw) => {
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return [DEFAULT_SWITCH_CASE(0), DEFAULT_SWITCH_CASE(1)];
+  }
+  return raw.map((c, index) => ({
+    id: c.id || `case_${index}`,
+    label: c.label || `Case ${index + 1}`,
+    condition: normaliseConditionValue(c.condition),
+  }));
+};
+
+const nextSwitchCaseId = (cases) => {
+  let max = -1;
+  for (const c of cases) {
+    const match = /^case_(\d+)$/.exec(c.id || "");
+    if (match) max = Math.max(max, parseInt(match[1], 10));
+  }
+  return `case_${max + 1}`;
+};
+
+const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
+  const cases = normaliseSwitchCases(value);
+
+  const setCases = (next) => onChange(next);
+
+  const updateCase = (index, patch) => {
+    setCases(cases.map((c, i) => (i === index ? { ...c, ...patch } : c)));
+  };
+
+  const addCase = () => {
+    const id = nextSwitchCaseId(cases);
+    setCases([
+      ...cases,
+      {
+        id,
+        label: `Case ${cases.length + 1}`,
+        condition: normaliseConditionValue(null),
+      },
+    ]);
+  };
+
+  const removeCase = (index) => {
+    if (cases.length <= 1) return;
+    setCases(cases.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      {cases.map((c, index) => (
+        <div
+          key={c.id}
+          className="rounded-xl border border-[#e8e8e8] dark:border-[#272727]
+            bg-[#fafafa] dark:bg-[#141414] p-3 flex flex-col gap-2"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#999] dark:text-[#555] flex-shrink-0">
+              Case {index + 1}
+            </span>
+            <input
+              type="text"
+              value={c.label}
+              onChange={(e) => updateCase(index, { label: e.target.value })}
+              placeholder="Branch label"
+              className={`${INPUT_BASE} flex-1 min-w-0 text-[13px]`}
+            />
+            {cases.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeCase(index)}
+                title="Remove case"
+                className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
+                  text-[#bbb] hover:text-[#e05] border border-[#e0e0e0] dark:border-[#2a2a2a]
+                  hover:border-[#fcc] transition-colors"
+              >
+                ×
+              </button>
+            )}
+          </div>
+          <p className="text-[10px] font-mono text-[#aaa] dark:text-[#555]">
+            Output handle: <span className="text-[#1a73e8] dark:text-[#8ab4f8]">{c.id}</span>
+          </p>
+          <ConditionBuilderField
+            field={{ ...field, label: "When" }}
+            value={c.condition}
+            onChange={(cond) => updateCase(index, { condition: cond })}
+            variables={variables}
+          />
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={addCase}
+        className="flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg text-[12px]
+          text-[#4a6cf7] dark:text-[#6b8aff]
+          border border-[#c7cfe8] dark:border-[#2a2a50]
+          hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30] transition-colors"
+      >
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+        </svg>
+        Add case
+      </button>
+
+      <p className="text-[11px] text-[#999] dark:text-[#555] leading-snug">
+        Cases run top to bottom; the first match routes the workflow. Connect the{" "}
+        <span className="font-medium">Default</span> handle when no case matches.
+      </p>
+    </div>
+  );
+};
+
 const ConditionBuilderField = ({ field, value, onChange, variables }) => {
   const group = normaliseConditionValue(value);
 
@@ -2277,6 +2395,8 @@ const FieldInput = ({ field, value, onChange, variables = [], allValues = {} }) 
     case "variable_textarea":   return <VariableTextareaField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "body_builder":        return <BodyBuilderField        field={field} value={value} onChange={onChange} />;
     case "condition_builder":   return <ConditionBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
+    case "switch_cases_builder":
+      return <SwitchCasesBuilderField field={field} value={value} onChange={onChange} variables={variables} />;
     case "json_value_builder":  return <JsonValueBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "key_value_builder":   return <KeyValueBuilderField    field={field} value={value} onChange={onChange} variables={variables} />;
     case "checkbox":            return <CheckboxField           field={field} value={value} onChange={onChange} />;

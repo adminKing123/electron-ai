@@ -37,6 +37,13 @@ function sourceAllowsEdge(edge, sourceNode, sourceState) {
     return handle === taken;
   }
 
+  if (nodeType === "switch") {
+    if (!sourceState || sourceState.status === "running") return false;
+    const out = parseOutput(sourceState.output);
+    const taken = out?.matched_handle ?? "default";
+    return handle === taken;
+  }
+
   if (nodeType === "for_each") {
     if (handle === "done") {
       return Boolean(sourceState && sourceState.status !== "running");
