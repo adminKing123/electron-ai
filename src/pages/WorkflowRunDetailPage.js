@@ -15,6 +15,8 @@ import {
   TbWebhook,
   TbWifi,
   TbWifiOff,
+  TbChevronDown,
+  TbListDetails,
 } from "react-icons/tb";
 import { iconBtnCls } from "../components/Fuse/FuseStudioHeader";
 import { WorkflowCanvas } from "../components/Fuse";
@@ -71,6 +73,7 @@ const WorkflowRunDetailPage = () => {
 
   const [selectedNode, setSelectedNode] = useState(null);
   const [reconnecting, setReconnecting] = useState(false);
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
 
   useEffect(() => {
     resetStudio();
@@ -108,12 +111,21 @@ const WorkflowRunDetailPage = () => {
 
   const handleRunNodeSelect = useCallback((node) => {
     setSelectedNode(node);
+    setMobilePanelOpen(true);
   }, []);
+
+  useEffect(() => {
+    if (run) setMobilePanelOpen(true);
+  }, [run?.run_id]);
 
   const selectedNodeState = useMemo(() => {
     if (!selectedNode) return null;
     return nodeStates[selectedNode.id] ?? null;
   }, [selectedNode, nodeStates]);
+
+  const mobilePanelTitle = selectedNode
+    ? selectedNode.data?.label ?? selectedNodeState?.node_label ?? "Node"
+    : "Workflow run";
 
   const handleReconnect = async () => {
     setReconnecting(true);
@@ -178,56 +190,108 @@ const WorkflowRunDetailPage = () => {
         </div>
       )}
 
-      <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-        <div className="flex-1 flex overflow-hidden min-h-0">
+      <div className="flex-1 flex overflow-hidden min-h-0">
+        <div
+          className="relative flex-1 flex flex-col md:flex-row gap-0 md:gap-2.5 min-h-0 overflow-hidden
+            p-0 md:p-4
+            mb-16 md:mb-3 ml-0 md:ml-3 mr-0 md:mr-3
+            md:rounded-xl
+            md:border md:border-[#e5e5e5] md:dark:border-[#252525]
+            bg-[#f7f7f7] dark:bg-[#1a1a1a]
+            md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
+        >
+          <div className="relative flex-1 min-w-0 min-h-0">
+            <WorkflowCanvas
+              className="h-full"
+              readOnly
+              runNodeStates={nodeStates}
+              activeNodeId={activeNodeId}
+              selectedNodeId={selectedNode?.id ?? null}
+              onRunNodeSelect={handleRunNodeSelect}
+            />
+          </div>
+
+          {/* Run panel — side on desktop, bottom sheet on mobile (matches Fuse Studio) */}
           <div
-            className="relative flex-1 flex flex-col md:flex-row gap-0 md:gap-2.5 min-h-0 overflow-hidden
-              p-0 md:p-4
-              mb-0 md:mb-3 ml-0 md:ml-3 mr-0 md:mr-3
-              md:rounded-xl
-              md:border md:border-[#e5e5e5] md:dark:border-[#252525]
-              bg-[#f7f7f7] dark:bg-[#1a1a1a]
-              md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
+            className={`
+              flex flex-col
+              absolute inset-x-0 bottom-0 z-30 h-[64vh]
+              md:relative md:flex-1 md:max-w-[420px] md:h-auto md:min-h-0 md:translate-y-0
+              transition-transform duration-300 ease-in-out
+              ${mobilePanelOpen ? "translate-y-0" : "translate-y-[calc(100%+4rem)]"}
+            `}
           >
-            <div className="relative flex-1 min-w-0 min-h-0">
-              <WorkflowCanvas
-                className="h-full"
-                readOnly
-                runNodeStates={nodeStates}
-                activeNodeId={activeNodeId}
-                selectedNodeId={selectedNode?.id ?? null}
-                onRunNodeSelect={handleRunNodeSelect}
-              />
+            <div
+              className="flex md:hidden items-center justify-between px-4 py-2.5 flex-shrink-0
+                bg-white dark:bg-[#212121] rounded-t-2xl
+                border-t border-x border-[#e5e5e5] dark:border-[#2a2a2a]
+                shadow-[0_-6px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_-6px_24px_rgba(0,0,0,0.35)]"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <TbListDetails className="w-4 h-4 flex-shrink-0 text-[#888] dark:text-[#666]" />
+                <span className="text-[12px] font-semibold text-[#444] dark:text-[#bbb] truncate">
+                  {mobilePanelTitle}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobilePanelOpen(false)}
+                className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0
+                  text-[#888] dark:text-[#666]
+                  hover:text-[#333] dark:hover:text-white
+                  hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a]
+                  transition-colors"
+                aria-label="Close panel"
+              >
+                <TbChevronDown className="w-4 h-4" />
+              </button>
             </div>
 
-            <div
-              className="hidden md:flex flex-col flex-1 md:max-w-[420px] min-h-0 overflow-hidden
-                md:rounded-xl
+            <FuseRunNodePanel
+              className="flex-1 min-h-0 md:rounded-xl rounded-none
+                border-t-0 md:border-t
                 bg-white dark:bg-[#212121]
                 border border-[#e5e5e5] dark:border-[#2a2a2a]
-                shadow-sm"
-            >
-              <FuseRunNodePanel
-                selectedNode={selectedNode}
-                nodeState={selectedNodeState}
-                nodeStates={nodeStates}
-                isActiveNode={selectedNode?.id === activeNodeId}
-                run={run}
-              />
-            </div>
+                shadow-sm overflow-hidden"
+              selectedNode={selectedNode}
+              nodeState={selectedNodeState}
+              nodeStates={nodeStates}
+              isActiveNode={selectedNode?.id === activeNodeId}
+              run={run}
+            />
           </div>
-        </div>
 
-        <div className="md:hidden flex-shrink-0 h-[42vh] min-h-[200px] border-t border-[#e5e5e5] dark:border-[#1e1e1e] bg-white dark:bg-[#212121] overflow-hidden">
-          <FuseRunNodePanel
-            selectedNode={selectedNode}
-            nodeState={selectedNodeState}
-            nodeStates={nodeStates}
-            isActiveNode={selectedNode?.id === activeNodeId}
-            run={run}
-          />
+          {mobilePanelOpen && (
+            <div
+              className="absolute inset-0 z-20 bg-black/20 dark:bg-black/40 md:hidden"
+              onClick={() => setMobilePanelOpen(false)}
+              aria-hidden
+            />
+          )}
         </div>
       </div>
+
+      <nav
+        className="flex md:hidden fixed bottom-0 left-0 right-0 z-50
+          bg-white dark:bg-[#1a1a1a]
+          border-t border-[#e5e5e5] dark:border-[#252525]
+          px-2 py-1 justify-center items-center"
+      >
+        <button
+          type="button"
+          onClick={() => setMobilePanelOpen((v) => !v)}
+          className={`flex flex-col items-center justify-center gap-0.5 w-20 py-2 rounded-xl
+            text-[10px] font-semibold select-none transition-colors
+            ${
+              mobilePanelOpen
+                ? "text-[#000] dark:text-[#fff]"
+                : "text-[#666] dark:text-[#999] hover:text-[#222] dark:hover:text-[#d0d0d0]"
+            }`}
+        >
+          <TbListDetails className="w-[20px] h-[20px]" />
+          <span>Details</span>
+        </button>
+      </nav>
     </main>
   );
 };
