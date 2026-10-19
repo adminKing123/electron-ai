@@ -16,7 +16,7 @@ const APPS = [
   },
   {
     Icon: FaRadio,
-    name: "Aura RJ",
+    name: "Comet RJ",
     description: "AI Driven Radio",
     to: ROUTES.AURA_RJ,
     color: "#7c3aed",

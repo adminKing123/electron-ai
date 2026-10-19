@@ -139,7 +139,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               onFocus={handleExpand}
-              placeholder="Describe a task for Aura Fuse…"
+              placeholder="Describe a task for Comet Fuse…"
               disabled={creating}
               className="flex-1 min-w-0 bg-transparent text-[13px]
                 text-[#333] dark:text-[#ccc]

@@ -13,7 +13,7 @@ const AuthorizationHeader = () => {
       {/* Brand mark */}
       <div className="flex items-center gap-2 text-[#111] dark:text-white">
         <TbGalaxy className="w-[18px] h-[18px]" />
-        <span className="text-[14px] font-semibold tracking-tight">AURA</span>
+        <span className="text-[14px] font-semibold tracking-tight">Comet AI</span>
       </div>
 
       {/* Theme toggle */}

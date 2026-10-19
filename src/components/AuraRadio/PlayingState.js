@@ -81,7 +81,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
     : null;
 
   const statusLabel = isIntroPlaying
-    ? "Aura is speaking"
+    ? "Comet is speaking"
     : isSongPlaying
     ? "Now playing"
     : "Buffering…";
@@ -138,7 +138,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
         {/* ── Track info ── */}
         <div className="text-center max-w-xs">
           <p className="text-base font-semibold text-black dark:text-white leading-snug">
-            {isSongPlaying ? currentTrack.metadata.original_name : "Aura RJ"}
+            {isSongPlaying ? currentTrack.metadata.original_name : "Comet RJ"}
           </p>
 
           {isSongPlaying ? (

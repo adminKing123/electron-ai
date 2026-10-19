@@ -76,7 +76,7 @@ const HeaderUserProfile = () => {
 
             <DropdownMenu.Item className={itemCls}>
               <LuSettings2 className="w-[14px] h-[14px] opacity-60 flex-shrink-0" />
-              <span>Customize AURA</span>
+              <span>Customize Comet AI</span>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item className={itemCls}>

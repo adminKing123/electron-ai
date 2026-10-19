@@ -22,10 +22,10 @@ self.addEventListener("push", (event) => {
   try {
     data = event.data ? event.data.json() : {};
   } catch {
-    data = { title: "AURA", body: event.data ? event.data.text() : "" };
+    data = { title: "Comet AI", body: event.data ? event.data.text() : "" };
   }
 
-  const title   = data.title   || "AURA";
+  const title   = data.title   || "Comet AI";
   const options = {
     body:               data.body               || "",
     icon:               data.icon               || "/android-chrome-192x192.png",

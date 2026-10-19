@@ -52,7 +52,7 @@ const AuthorizationPage = () => {
           {/* Headline */}
           <motion.div variants={itemVariants} className="text-center mb-2">
             <h1 className="text-[26px] font-semibold tracking-tight text-[#111] dark:text-white leading-tight">
-              Welcome to AURA
+              Welcome to Comet AI
             </h1>
           </motion.div>
 

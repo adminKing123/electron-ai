@@ -8,6 +8,7 @@ import NewChatPage from "../pages/NewChatPage";
 import ChatPage from "../pages/ChatPage";
 import LibraryPage from "../pages/Library";
 import FusesPageListing from "../pages/FusesPageListing";
+import PageSeo from "../seo/usePageSeo";
 
 const AuraRjPage          = lazy(() => import("../pages/AuraRjPage"));
 const AnalyticsPage       = lazy(() => import("../pages/AnalyticsPage"));
@@ -20,6 +21,7 @@ const FuseIntegrationsPage = lazy(() => import("../pages/FuseIntegrationsPage"))
 const AppRoutes = () => {
   return (
     <BrowserRouter>
+      <PageSeo />
       <Routes>
         <Route element={<CheckConfigs />}>
           <Route path={ROUTES.AUTH} element={<AuthorizationPage />} />

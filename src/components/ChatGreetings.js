@@ -9,7 +9,7 @@ function ChatGreetings() {
   const greets = [
     "What can I help with?",
     "Ready to help today!",
-    "Ask AURA anything :)",
+    "Ask Comet AI anything :)",
     "What's on your mind?",
     "I'm here 👀",
   ];

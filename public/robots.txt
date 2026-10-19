@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aura-ai-hypen.netlify.app/sitemap.xml
+# User-specific or editor URLs — keep out of crawl budget (use noindex in-app too).
+Disallow: /c/
+Disallow: /fuse/studio/
+Disallow: /fuse/runs/
+Disallow: /fuse/listing
+
+Sitemap: https://comet-hypen-ai.netlify.app/sitemap.xml

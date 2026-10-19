@@ -34,7 +34,7 @@ const NotificationDescription = ({ permission, subscribed }) => {
     ? "This device will receive push notifications."
     : permission === "denied"
       ? "You've blocked notifications for this site. Enable them in your browser settings, then click below to re-sync."
-      : "Allow browser notifications so AURA can deliver push alerts when this step runs.";
+      : "Allow browser notifications so Comet AI can deliver push alerts when this step runs.";
 
   return (
     <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">

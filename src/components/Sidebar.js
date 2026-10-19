@@ -48,7 +48,7 @@ const SidebarHeader = ({ toggleSidebar }) => {
       <div className="flex items-center gap-2.5">
         <TbGalaxy className="text-[#111] dark:text-white w-[18px] h-[18px]" />
         <span className="font-semibold text-[14px] text-[#111] dark:text-white tracking-tight">
-          AURA
+          Comet AI
         </span>
       </div>
       <div className="flex items-center gap-0.5">
