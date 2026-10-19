@@ -27,10 +27,13 @@
   <meta name="msapplication-navbutton-color" content="#212121" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-  <!-- Favicons -->
+  <!-- Favicons (Google Search uses a single stable icon — see developers.google.com/search/docs/appearance/favicon-in-search) -->
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="192x192" href="%PUBLIC_URL%/android-chrome-192x192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="%PUBLIC_URL%/android-chrome-512x512.png" />
   <link rel="icon" href="%PUBLIC_URL%/favicon-light.ico" media="(prefers-color-scheme: light)" />
   <link rel="icon" href="%PUBLIC_URL%/favicon-dark.ico" media="(prefers-color-scheme: dark)" />
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
   <!-- Open Graph: Social Sharing -->
@@ -42,7 +45,7 @@
     content="Chat with AI, automate workflows, connect MCP tools, and build AI-powered applications with Comet AI."
   />
   <meta property="og:url" content="https://comet-hypen-ai.netlify.app/" />
-  <meta property="og:image" content="https://comet-hypen-ai.netlify.app/favicon-32x32.png" />
+  <meta property="og:image" content="https://comet-hypen-ai.netlify.app/android-chrome-512x512.png" />
   <meta property="og:locale" content="en_US" />
 
   <!-- Twitter / X Sharing -->
@@ -52,26 +55,16 @@
     name="twitter:description"
     content="AI chat, workflow automation, MCP connections, and AI app building in one platform."
   />
-  <meta name="twitter:image" content="https://comet-hypen-ai.netlify.app/favicon-32x32.png" />
+  <meta name="twitter:image" content="https://comet-hypen-ai.netlify.app/android-chrome-512x512.png" />
 
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Comet AI",
+      "alternateName": ["Comet", "Comet Hypen AI"],
       "url": "https://comet-hypen-ai.netlify.app/",
       "description": "Comet AI is an all-in-one AI platform to chat with AI, automate workflows, connect MCP servers and tools, and build AI-powered applications."
-    }
-  </script>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Comet AI",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "url": "https://comet-hypen-ai.netlify.app/",
-      "description": "AI chat, Comet Fuse workflow automation, MCP integrations, and Comet RJ AI radio."
     }
   </script>
 

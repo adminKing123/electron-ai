@@ -14,3 +14,13 @@
   [headers.values]
     Content-Type = "text/plain; charset=utf-8"
     Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/android-chrome-*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
