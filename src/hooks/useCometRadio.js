@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useGetTrack } from "../apis/aura_rj/queryHooks";
+import { useGetTrack } from "../apis/comet_rj/queryHooks";
 
 const base64ToUrl = (base64) => {
   const arr = base64.split(",");
@@ -24,7 +24,7 @@ export const STATUS = {
   ERROR: "ERROR",
 };
 
-export const useAuraRadio = () => {
+export const useCometRadio = () => {
   const [status, setStatus] = useState(STATUS.IDLE);
   const [errorMessage, setErrorMessage] = useState("");
   const [started, setStarted] = useState(false);
@@ -51,7 +51,6 @@ export const useAuraRadio = () => {
       audioRef.current = null;
     }
 
-    // Revoke blob URLs to free memory
     queueRef.current.forEach((item) => {
       if (item.url.startsWith("blob:")) {
         URL.revokeObjectURL(item.url);
@@ -98,7 +97,6 @@ export const useAuraRadio = () => {
       setStatus(STATUS.LOADING);
       const data = await fetchNext();
 
-      // Add RJ intro audio
       const introUrl = base64ToUrl(data.audio_base64);
       queueRef.current.push({
         url: introUrl,
@@ -106,14 +104,12 @@ export const useAuraRadio = () => {
         metadata: null,
       });
 
-      // Add song with metadata
       queueRef.current.push({
         url: data.song_download_url,
         type: "song",
         metadata: data.song_metadata,
       });
 
-      // Wake waiting playback promises
       waitersRef.current.forEach((resolve) => resolve());
       waitersRef.current = [];
 
@@ -124,7 +120,6 @@ export const useAuraRadio = () => {
       console.error("Fetch failed:", err);
       setStatus(STATUS.ERROR);
       setErrorMessage(err.message || "Failed to load track");
-      // Retry after delay
       setTimeout(() => {
         if (!isCleanedUp.current) {
           addNextToQueue();
@@ -138,7 +133,6 @@ export const useAuraRadio = () => {
   const playNext = useCallback(async () => {
     if (isCleanedUp.current) return;
 
-    // Wait if buffer is empty
     if (queueRef.current.length === 0) {
       setStatus(STATUS.BUFFERING);
       await new Promise((resolve) => waitersRef.current.push(resolve));
@@ -159,7 +153,6 @@ export const useAuraRadio = () => {
       setErrorMessage("Failed to play audio");
     }
 
-    // Maintain buffer (2 tracks = 4 items: 2 intros + 2 songs)
     if (queueRef.current.length < 4 && !isCleanedUp.current) {
       addNextToQueue();
     }
@@ -173,11 +166,9 @@ export const useAuraRadio = () => {
     isCleanedUp.current = false;
 
     try {
-      // Initialize audio element
       audioRef.current = new Audio();
       audioRef.current.onended = playNext;
 
-      // Preload 2 tracks before starting
       await addNextToQueue();
       await playNext();
       await addNextToQueue();

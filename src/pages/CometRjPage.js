@@ -1,20 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuraRadio, STATUS } from "../hooks/useAuraRadio";
-import { PlayingState, ErrorState } from "../components/AuraRadio";
+import { useCometRadio, STATUS } from "../hooks/useCometRadio";
+import { PlayingState, ErrorState } from "../components/CometRadio";
 
-export default function AuraRjPage() {
-  const { status, errorMessage, currentTrack, started, start, stop } = useAuraRadio();
+export default function CometRjPage() {
+  const { status, errorMessage, currentTrack, started, start, stop } = useCometRadio();
   const navigate      = useNavigate();
   const hasStartedRef = useRef(false);
 
-  /* Start the radio automatically when the page mounts. */
   useEffect(() => {
     start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* Navigate back when stop() finishes (started flips false after being true). */
   useEffect(() => {
     if (started) {
       hasStartedRef.current = true;

@@ -10,7 +10,7 @@ import LibraryPage from "../pages/Library";
 import FusesPageListing from "../pages/FusesPageListing";
 import PageSeo from "../seo/usePageSeo";
 
-const AuraRjPage          = lazy(() => import("../pages/AuraRjPage"));
+const CometRjPage         = lazy(() => import("../pages/CometRjPage"));
 const AnalyticsPage       = lazy(() => import("../pages/AnalyticsPage"));
 const FusePage            = lazy(() => import("../pages/FusePage"));
 const FuseStudioPage      = lazy(() => import("../pages/FuseStudioPage"));
@@ -34,7 +34,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.ANALYTICS} element={<AnalyticsPage />} />
           </Route>
 
-          {/* Fuse — standalone layout, mirrors AuraRJ pattern */}
+          {/* Fuse — standalone layout, mirrors Comet RJ pattern */}
           <Route path={ROUTES.FUSE} element={<FusePage />} />
           <Route path={ROUTES.FUSE_STUDIO} element={<FuseStudioPage />} />
           <Route path={ROUTES.FUSE_RUNS} element={<WorkflowRunsPage />} />
@@ -42,7 +42,7 @@ const AppRoutes = () => {
           <Route path={ROUTES.FUSES_LISTING} element={<FusesPageListing />} />
           <Route path={ROUTES.FUSE_INTEGRATIONS} element={<FuseIntegrationsPage />} />
 
-          <Route path={ROUTES.AURA_RJ} element={<AuraRjPage />} />
+          <Route path={ROUTES.COMET_RJ} element={<CometRjPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

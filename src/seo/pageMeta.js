@@ -45,7 +45,7 @@ const ROUTE_META = [
     },
   },
   {
-    test: (p) => p === "/aura-rj",
+    test: (p) => p === "/comet-rj",
     meta: {
       title: `Comet RJ – AI Radio | ${SITE_NAME}`,
       description: "Listen to Comet RJ, an AI-driven radio experience powered by Comet AI.",

@@ -1,23 +1,16 @@
 import React from "react";
 import { IoStop } from "react-icons/io5";
 import { FaRadio } from "react-icons/fa6";
-import { STATUS } from "../../hooks/useAuraRadio";
+import { STATUS } from "../../hooks/useCometRadio";
 import Header from "../Header";
 
-/* Artwork circle diameter in px. */
 const ALBUM_SIZE  = 200;
-/* SVG container is slightly larger to fit the decorative tick ring. */
 const RING_SIZE   = 232;
 const RING_CENTER = RING_SIZE / 2;
-/* Ring sits just outside the artwork border. */
 const RING_RADIUS = ALBUM_SIZE / 2 + 12;
 const TICK_COUNT  = 72;
-const TICK_HALF   = 4; /* half-length of each tick in px */
+const TICK_HALF   = 4;
 
-/**
- * Decorative static ring of mini tick marks rendered as SVG lines.
- * Purely presentational — no canvas, no animation loop.
- */
 function MiniRing() {
   return (
     <svg
@@ -52,11 +45,10 @@ export default function PlayingState({ status, currentTrack, onStop }) {
   const isIntroPlaying = currentTrack?.type === "intro";
   const isPlaying      = status === STATUS.PLAYING; // eslint-disable-line no-unused-vars
 
-  /* ── Initial load: no track arrived yet ── */
   if (!currentTrack) {
     return (
       <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-[#0d0d0d]">
-        <Header type="aura-rj" />
+        <Header type="comet-rj" />
         <div className="flex-1 flex flex-col items-center justify-center gap-3">
           <div className="flex items-center gap-1.5">
             {[0, 0.15, 0.3].map((delay) => (
@@ -92,11 +84,10 @@ export default function PlayingState({ status, currentTrack, onStop }) {
 
   return (
     <main className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-[#0d0d0d]">
-      <Header type="aura-rj" />
+      <Header type="comet-rj" />
 
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-5 pb-4">
 
-        {/* ── Live badge + status ── */}
         <div className="flex items-center gap-2.5">
           <div className="flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
@@ -110,14 +101,12 @@ export default function PlayingState({ status, currentTrack, onStop }) {
           </span>
         </div>
 
-        {/* ── Artwork + decorative mini tick ring ── */}
         <div
           className="relative flex-shrink-0 flex items-center justify-center"
           style={{ width: RING_SIZE, height: RING_SIZE }}
         >
           <MiniRing />
 
-          {/* Artwork centered inside the ring */}
           {isSongPlaying ? (
             <img
               src={albumThumbnail}
@@ -135,7 +124,6 @@ export default function PlayingState({ status, currentTrack, onStop }) {
           )}
         </div>
 
-        {/* ── Track info ── */}
         <div className="text-center max-w-xs">
           <p className="text-base font-semibold text-black dark:text-white leading-snug">
             {isSongPlaying ? currentTrack.metadata.original_name : "Comet RJ"}
@@ -157,7 +145,6 @@ export default function PlayingState({ status, currentTrack, onStop }) {
           )}
         </div>
 
-        {/* ── Stop button ── */}
         <button
           onClick={onStop}
           aria-label="Stop radio"

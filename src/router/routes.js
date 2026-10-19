@@ -6,7 +6,7 @@ const ROUTES = {
   LIBRARY: "/library",
   ANALYTICS: "/analytics",
 
-  AURA_RJ: "/aura-rj",
+  COMET_RJ: "/comet-rj",
 
   FUSE: "/fuse/discover",
   FUSE_STUDIO: "/fuse/studio/:id",

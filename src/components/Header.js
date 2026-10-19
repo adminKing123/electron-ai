@@ -39,12 +39,12 @@ const SidebarOpenButton = () => {
 
 /** Page-specific header labels — keyed by `type`. Falls back to "Comet AI". */
 const PAGE_LABELS = {
-  "aura-rj": "Comet RJ",
+  "comet-rj": "Comet RJ",
   fuse: "Fuse",
 };
 
 const Header = ({ type, backRoute = "" }) => {
-  const isStandalone = type === "aura-rj" || type === "fuse";
+  const isStandalone = type === "comet-rj" || type === "fuse";
   const label = PAGE_LABELS[type] ?? "Comet AI";
 
   return (

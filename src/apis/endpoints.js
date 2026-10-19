@@ -27,7 +27,7 @@ const ENDPOINTS = {
     return download_path;
   },
 
-  AURA_RJ_GET_TRACK: "/aura-rj/get-track",
+  COMET_RJ_GET_TRACK: "/comet-rj/get-track",
 
   GET_CONFIG: "/get-config",
 

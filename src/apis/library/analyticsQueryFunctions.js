@@ -48,7 +48,7 @@ export const fetchUserUsageRaw = async () => {
     const tokens = data.total_tokens ?? {};
 
     // Convert the Firestore by_model map (safe keys with dots→underscores) back
-    // to real AURA model IDs using the stored model_id field on each entry.
+    // to real Comet model IDs using the stored model_id field on each entry.
     const rawByModel = data.by_model ?? {};
     const byModel = {};
     Object.entries(rawByModel).forEach(([, stats]) => {
@@ -92,7 +92,7 @@ export const fetchUserUsageRaw = async () => {
  * @param {Array}        rawUsage             - Output of fetchUserUsageRaw()
  * @param {object}       options
  * @param {number}       options.days         - Last N calendar days; 0 = all time
- * @param {string|null}  options.model        - AURA model ID filter; null = all models
+ * @param {string|null}  options.model        - Comet model ID filter; null = all models
  * @returns {{
  *   totalChats: number,
  *   inputTokens: number,

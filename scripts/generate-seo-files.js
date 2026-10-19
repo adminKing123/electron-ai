@@ -24,7 +24,7 @@ const SITEMAP_ENTRIES = [
   { loc: "/auth", changefreq: "monthly", priority: "0.7" },
   { loc: "/library", changefreq: "weekly", priority: "0.8" },
   { loc: "/analytics", changefreq: "weekly", priority: "0.7" },
-  { loc: "/aura-rj", changefreq: "weekly", priority: "0.8" },
+  { loc: "/comet-rj", changefreq: "weekly", priority: "0.8" },
   { loc: "/fuse/discover", changefreq: "weekly", priority: "0.9" },
   { loc: "/fuse/integrations", changefreq: "monthly", priority: "0.7" },
 ];
