@@ -16,6 +16,37 @@ import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
 import NotificationSettings from "./NotificationSettings";
 import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
+import { fuseSaveOutputEnabled } from "../../utils/fuseNodeConfig";
+
+const SaveOutputSetting = ({ config, onChange }) => {
+  const checked = fuseSaveOutputEnabled(config);
+
+  return (
+    <div className="flex flex-col gap-1 pt-1 border-t border-[#ebebeb] dark:border-[#2a2a2a]">
+      <label className="inline-flex items-start gap-2.5 cursor-pointer select-none py-0.5">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) =>
+            onChange({ ...(config ?? {}), save_output: e.target.checked })
+          }
+          className="mt-0.5 w-4 h-4 rounded border-[#ccc] dark:border-[#444]
+            text-[#2563eb] focus:ring-[#2563eb]/30
+            dark:bg-[#1a1a1a] dark:checked:bg-[#2563eb]"
+        />
+        <span className="flex flex-col gap-0.5 min-w-0">
+          <span className="text-[12px] font-medium text-[#555] dark:text-[#888]">
+            Save output
+          </span>
+          <span className="text-[11px] text-[#bbb] dark:text-[#555] leading-relaxed">
+            When enabled, this node&apos;s output is stored in run history. When off,
+            the workflow still uses the output internally, but it is not saved to the database.
+          </span>
+        </span>
+      </label>
+    </div>
+  );
+};
 
 /** Display order for node picker sections (integration sections last). */
 const NODE_SECTION_ORDER = [
@@ -111,7 +142,7 @@ const StarterPanel = () => {
         nodeType: node.type,
         label: node.label,
         icon: node.icon ?? null,
-        config: { ...(node.defaults || {}) },
+        config: { ...(node.defaults || {}), save_output: true },
         // Mark as the workflow trigger so WorkflowCanvas and the store can
         // enforce the single-outgoing-edge rule.
         isStarter: true,
@@ -199,7 +230,7 @@ const AddNodePanel = () => {
         nodeType: node.type,
         label: node.label,
         icon: node.icon ?? null,
-        config: { ...(node.defaults || {}) },
+        config: { ...(node.defaults || {}), save_output: true },
         isStarter: false,
       },
     };
@@ -473,6 +504,11 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
             No configuration required for this node.
           </p>
         )}
+
+        <SaveOutputSetting
+          config={node.data.config ?? {}}
+          onChange={(next) => updateNodeConfig(node.id, next)}
+        />
       </div>
     </div>
   );

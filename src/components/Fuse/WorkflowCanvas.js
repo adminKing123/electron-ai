@@ -303,7 +303,7 @@ const WorkflowCanvas = ({
           nodeType:  nodeDef.type,
           label:     nodeDef.label,
           icon:      nodeDef.icon ?? null,
-          config:    { ...(nodeDef.defaults || {}) },
+          config:    { ...(nodeDef.defaults || {}), save_output: true },
           isStarter: nodeDef.isStarter === true,
         },
       };

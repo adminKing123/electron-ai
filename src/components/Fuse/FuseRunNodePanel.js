@@ -13,6 +13,7 @@ import {
   VariablesBlock,
 } from "./fuseRunFormatters";
 import { resolveVariablesFromConfig } from "../../utils/fuseRunNodeInspect";
+import { fuseSaveOutputEnabled } from "../../utils/fuseNodeConfig";
 
 function Metric({ label, value, highlight = false }) {
   return (
@@ -203,7 +204,18 @@ function FuseRunNodeDetail({
       <RunAccordionGroup>
         <VariablesBlock variables={variablesValue} grouped />
         <JsonBlock label="Config" value={nodeConfig} showWhenEmpty grouped />
-        <JsonBlock label="Output" value={nodeState?.output} grouped />
+        {!fuseSaveOutputEnabled(nodeConfig) && nodeState?.output == null ? (
+          <div className="rounded-xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#171717] px-3 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] mb-1">
+              Output
+            </p>
+            <p className="text-[12px] text-[#888] dark:text-[#666]">
+              Output was not saved for this node (Save output is disabled).
+            </p>
+          </div>
+        ) : (
+          <JsonBlock label="Output" value={nodeState?.output} grouped />
+        )}
         {run?.trigger_data && selectedNode?.data?.isStarter && (
           <JsonBlock label="Trigger data" value={run.trigger_data} grouped />
         )}
