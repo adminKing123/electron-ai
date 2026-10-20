@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRunLogFieldDisplay } from "../../utils/fuseRunLogOffload";
 import {
   TbCircleCheck,
   TbCircleX,
@@ -137,6 +138,34 @@ export function RunAccordionGroup({ children, className = "" }) {
 const JSON_BODY_CLASS =
   "max-h-[min(280px,38vh)] overflow-y-auto overscroll-y-contain";
 
+function RunLogOffloadBanner({ meta, truncatedInline }) {
+  if (!meta && !truncatedInline) return null;
+  return (
+    <div className="mb-2 text-[11px] text-[#888] dark:text-[#666] space-y-1">
+      {meta?.url && (
+        <p>
+          Full payload is stored on the CDN
+          {meta.size_bytes != null
+            ? ` (${Number(meta.size_bytes).toLocaleString()} bytes)`
+            : ""}
+          . Preview is not shown here.{" "}
+          <a
+            href={meta.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#1a73e8] dark:text-[#8ab4f8] underline"
+          >
+            Open file
+          </a>
+        </p>
+      )}
+      {truncatedInline && !meta?.url && (
+        <p>Preview truncated in the panel. Use Open file when a CDN link is available.</p>
+      )}
+    </div>
+  );
+}
+
 export const JsonBlock = ({
   label,
   value,
@@ -145,12 +174,15 @@ export const JsonBlock = ({
   grouped = false,
 }) => {
   const [open, setOpen] = useState(defaultOpen);
-  const empty = isEmptyValue(value);
+  const { displayValue, offloaded, offloadMeta, truncated } =
+    useRunLogFieldDisplay(value);
+  const empty = isEmptyValue(value) && !offloaded;
   if (!showWhenEmpty && empty) return null;
 
   const body = empty ? null : (
     <div className={JSON_BODY_CLASS}>
-      <FuseJsonViewer value={value} />
+      <RunLogOffloadBanner meta={offloadMeta} truncatedInline={truncated && !offloaded} />
+      {offloaded ? null : <FuseJsonViewer value={displayValue} />}
     </div>
   );
 
@@ -200,11 +232,13 @@ export const VariablesBlock = ({
   grouped = false,
 }) => {
   const [open, setOpen] = useState(defaultOpen);
+  const { displayValue, offloaded, offloadMeta, truncated } =
+    useRunLogFieldDisplay(variables);
   const entries =
-    variables && typeof variables === "object" && !Array.isArray(variables)
-      ? Object.entries(variables)
+    displayValue && typeof displayValue === "object" && !Array.isArray(displayValue)
+      ? Object.entries(displayValue)
       : [];
-  const empty = entries.length === 0;
+  const empty = entries.length === 0 && !offloaded && !truncated;
   if (!showWhenEmpty && empty) return null;
 
   const list = (
@@ -213,19 +247,31 @@ export const VariablesBlock = ({
         empty ? "" : "max-h-[min(280px,38vh)] overflow-y-auto overscroll-y-contain"
       }
     >
-      {entries.map(([name, val]) => (
-        <li
-          key={name}
-          className="py-2.5 flex flex-col gap-0.5 min-w-0 border-b border-[#ebebeb] dark:border-[#2a2a2a] last:border-b-0"
-        >
-          <span className="text-[11px] font-mono text-[#1a73e8] dark:text-[#8ab4f8] break-all">
-            {name}
-          </span>
-          <span className="text-[11.5px] font-mono text-[#444] dark:text-[#999] break-all whitespace-pre-wrap">
-            {formatVariableValue(val)}
-          </span>
+      {(offloaded || truncated) && (
+        <li className="pb-2">
+          <RunLogOffloadBanner meta={offloadMeta} truncatedInline={truncated && !offloaded} />
         </li>
-      ))}
+      )}
+      {!offloaded && typeof displayValue === "string" && truncated && (
+        <li className="py-2 text-[11.5px] font-mono text-[#444] dark:text-[#999] whitespace-pre-wrap break-all">
+          {displayValue}
+        </li>
+      )}
+      {!offloaded &&
+        typeof displayValue !== "string" &&
+        entries.map(([name, val]) => (
+          <li
+            key={name}
+            className="py-2.5 flex flex-col gap-0.5 min-w-0 border-b border-[#ebebeb] dark:border-[#2a2a2a] last:border-b-0"
+          >
+            <span className="text-[11px] font-mono text-[#1a73e8] dark:text-[#8ab4f8] break-all">
+              {name}
+            </span>
+            <span className="text-[11.5px] font-mono text-[#444] dark:text-[#999] break-all whitespace-pre-wrap">
+              {formatVariableValue(val)}
+            </span>
+          </li>
+        ))}
     </ul>
   );
 

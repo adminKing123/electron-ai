@@ -13,7 +13,7 @@ import {
   VariablesBlock,
 } from "./fuseRunFormatters";
 import { resolveVariablesFromConfig } from "../../utils/fuseRunNodeInspect";
-import { fuseSaveOutputEnabled } from "../../utils/fuseNodeConfig";
+import { fuseRunLogSaveEnabled } from "../../utils/fuseNodeConfig";
 
 function Metric({ label, value, highlight = false }) {
   return (
@@ -118,6 +118,19 @@ function FuseRunOverview({ run, className = "" }) {
   );
 }
 
+function RunLogFieldSkipped({ label, saveKey }) {
+  return (
+    <div className="rounded-xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#171717] px-3 py-3">
+      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] mb-1">
+        {label}
+      </p>
+      <p className="text-[12px] text-[#888] dark:text-[#666]">
+        {label} was not saved for this node ({saveKey} is disabled in run history settings).
+      </p>
+    </div>
+  );
+}
+
 function FuseRunNodeDetail({
   selectedNode,
   nodeState,
@@ -142,13 +155,22 @@ function FuseRunNodeDetail({
     run?.duration_ms
   );
 
-  const nodeConfig =
-    nodeState?.config ?? selectedNode?.data?.config ?? null;
-  const variablesValue =
-    nodeState?.variables ??
-    (nodeConfig && nodeStates
-      ? resolveVariablesFromConfig(nodeConfig, nodeStates)
-      : null);
+  const settingsConfig = selectedNode?.data?.config ?? null;
+
+  const nodeConfig = fuseRunLogSaveEnabled(settingsConfig, "save_config")
+    ? nodeState?.config ?? settingsConfig
+    : nodeState?.config ?? null;
+
+  const variablesValue = fuseRunLogSaveEnabled(settingsConfig, "save_variables")
+    ? nodeState?.variables ??
+      (nodeConfig && nodeStates
+        ? resolveVariablesFromConfig(nodeConfig, nodeStates)
+        : null)
+    : nodeState?.variables ?? null;
+
+  const inputValue = fuseRunLogSaveEnabled(settingsConfig, "save_input")
+    ? nodeState?.input ?? null
+    : null;
 
   return (
     <div className="min-h-0 flex flex-col gap-4">
@@ -202,17 +224,25 @@ function FuseRunNodeDetail({
       )}
 
       <RunAccordionGroup>
-        <VariablesBlock variables={variablesValue} grouped />
-        <JsonBlock label="Config" value={nodeConfig} showWhenEmpty grouped />
-        {!fuseSaveOutputEnabled(nodeConfig) && nodeState?.output == null ? (
-          <div className="rounded-xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#171717] px-3 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] mb-1">
-              Output
-            </p>
-            <p className="text-[12px] text-[#888] dark:text-[#666]">
-              Output was not saved for this node (Save output is disabled).
-            </p>
-          </div>
+        {!fuseRunLogSaveEnabled(settingsConfig, "save_variables") &&
+        variablesValue == null ? (
+          <RunLogFieldSkipped label="Variables" saveKey="Save variables" />
+        ) : (
+          <VariablesBlock variables={variablesValue} grouped />
+        )}
+        {!fuseRunLogSaveEnabled(settingsConfig, "save_input") && inputValue == null ? (
+          <RunLogFieldSkipped label="Input" saveKey="Save input" />
+        ) : (
+          <JsonBlock label="Input" value={inputValue} grouped />
+        )}
+        {!fuseRunLogSaveEnabled(settingsConfig, "save_config") && nodeConfig == null ? (
+          <RunLogFieldSkipped label="Config" saveKey="Save config" />
+        ) : (
+          <JsonBlock label="Config" value={nodeConfig} showWhenEmpty grouped />
+        )}
+        {!fuseRunLogSaveEnabled(settingsConfig, "save_output") &&
+        nodeState?.output == null ? (
+          <RunLogFieldSkipped label="Output" saveKey="Save output" />
         ) : (
           <JsonBlock label="Output" value={nodeState?.output} grouped />
         )}

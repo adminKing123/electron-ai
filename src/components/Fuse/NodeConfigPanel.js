@@ -16,19 +16,49 @@ import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
 import NotificationSettings from "./NotificationSettings";
 import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
-import { fuseSaveOutputEnabled } from "../../utils/fuseNodeConfig";
+import {
+  FUSE_DEFAULT_RUN_LOG_SAVE,
+  fuseRunLogSaveEnabled,
+} from "../../utils/fuseNodeConfig";
 
-const SaveOutputSetting = ({ config, onChange }) => {
-  const checked = fuseSaveOutputEnabled(config);
+const RUN_LOG_SAVE_FIELDS = [
+  {
+    key: "save_output",
+    label: "Save output",
+    hint: "Store this node's output in run history (execution still uses it internally).",
+  },
+  {
+    key: "save_input",
+    label: "Save input",
+    hint: "Store upstream node outputs snapshot used when this step ran.",
+  },
+  {
+    key: "save_config",
+    label: "Save config",
+    hint: "Store this node's configuration as it was at run time.",
+  },
+  {
+    key: "save_variables",
+    label: "Save variables",
+    hint: "Store resolved {{variable}} values for this step.",
+  },
+];
 
-  return (
-    <div className="flex flex-col gap-1 pt-1 border-t border-[#ebebeb] dark:border-[#2a2a2a]">
-      <label className="inline-flex items-start gap-2.5 cursor-pointer select-none py-0.5">
+const RunLogSaveSettings = ({ config, onChange }) => (
+  <div className="flex flex-col gap-3 pt-1 border-t border-[#ebebeb] dark:border-[#2a2a2a]">
+    <p className="text-[10.5px] font-semibold uppercase tracking-widest text-[#bbb] dark:text-[#555]">
+      Run history
+    </p>
+    {RUN_LOG_SAVE_FIELDS.map(({ key, label, hint }) => (
+      <label
+        key={key}
+        className="inline-flex items-start gap-2.5 cursor-pointer select-none py-0.5"
+      >
         <input
           type="checkbox"
-          checked={checked}
+          checked={fuseRunLogSaveEnabled(config, key)}
           onChange={(e) =>
-            onChange({ ...(config ?? {}), save_output: e.target.checked })
+            onChange({ ...(config ?? {}), [key]: e.target.checked })
           }
           className="mt-0.5 w-4 h-4 rounded border-[#ccc] dark:border-[#444]
             text-[#2563eb] focus:ring-[#2563eb]/30
@@ -36,17 +66,16 @@ const SaveOutputSetting = ({ config, onChange }) => {
         />
         <span className="flex flex-col gap-0.5 min-w-0">
           <span className="text-[12px] font-medium text-[#555] dark:text-[#888]">
-            Save output
+            {label}
           </span>
           <span className="text-[11px] text-[#bbb] dark:text-[#555] leading-relaxed">
-            When enabled, this node&apos;s output is stored in run history. When off,
-            the workflow still uses the output internally, but it is not saved to the database.
+            {hint}
           </span>
         </span>
       </label>
-    </div>
-  );
-};
+    ))}
+  </div>
+);
 
 /** Display order for node picker sections (integration sections last). */
 const NODE_SECTION_ORDER = [
@@ -57,6 +86,7 @@ const NODE_SECTION_ORDER = [
   "Network",
   "Webex",
   "Google",
+  "Handle Files",
   "Other",
 ];
 
@@ -142,7 +172,7 @@ const StarterPanel = () => {
         nodeType: node.type,
         label: node.label,
         icon: node.icon ?? null,
-        config: { ...(node.defaults || {}), save_output: true },
+        config: { ...(node.defaults || {}), ...FUSE_DEFAULT_RUN_LOG_SAVE },
         // Mark as the workflow trigger so WorkflowCanvas and the store can
         // enforce the single-outgoing-edge rule.
         isStarter: true,
@@ -230,7 +260,7 @@ const AddNodePanel = () => {
         nodeType: node.type,
         label: node.label,
         icon: node.icon ?? null,
-        config: { ...(node.defaults || {}), save_output: true },
+        config: { ...(node.defaults || {}), ...FUSE_DEFAULT_RUN_LOG_SAVE },
         isStarter: false,
       },
     };
@@ -505,7 +535,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
           </p>
         )}
 
-        <SaveOutputSetting
+        <RunLogSaveSettings
           config={node.data.config ?? {}}
           onChange={(next) => updateNodeConfig(node.id, next)}
         />
@@ -723,6 +753,46 @@ const NodeConfigPanel = ({ className = "" }) => {
           {
             token: `${n.id}.room_id`,
             label: `${n.data.label} → room_id`,
+            ...nodeMeta,
+          },
+        );
+      }
+
+      if (n.data?.nodeType === "create_json_file") {
+        vars.push(
+          {
+            token: `${n.id}.url`,
+            label: `${n.data.label} → url`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.filename`,
+            label: `${n.data.label} → filename`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.path`,
+            label: `${n.data.label} → path`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.size_bytes`,
+            label: `${n.data.label} → size_bytes`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.content_type`,
+            label: `${n.data.label} → content_type`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.original_name`,
+            label: `${n.data.label} → original_name`,
+            ...nodeMeta,
+          },
+          {
+            token: `${n.id}.success`,
+            label: `${n.data.label} → success`,
             ...nodeMeta,
           },
         );

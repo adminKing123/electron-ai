@@ -14,6 +14,7 @@ import {
   TbGitFork,
   TbGitMerge,
   TbRepeat,
+  TbFileCode,
 } from "react-icons/tb";
 
 /**
@@ -42,6 +43,7 @@ export const ICON_REGISTRY = {
   TbGitFork,
   TbGitMerge,
   TbRepeat,
+  TbFileCode,
 };
 
 /**
@@ -79,6 +81,7 @@ const ICON_PRESENTATION = {
   TbGitFork: { className: "text-[#6366f1] dark:text-[#818cf8]" },
   TbGitMerge: { className: "text-[#6366f1] dark:text-[#818cf8]" },
   VscVariableGroup: { className: "text-[#64748b] dark:text-[#94a3b8]" },
+  TbFileCode: { className: "text-[#0d9488] dark:text-[#2dd4bf]" },
 };
 
 /**

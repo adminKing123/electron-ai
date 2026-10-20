@@ -13,6 +13,7 @@ import { BasicLoader } from "../Loaders";
 import { NODE_TYPES } from "./nodes/FuseFlowNode";
 import { getOutgoingLimit, isFuseBranchSourceHandle } from "./nodes/connectionLimits";
 import { createFuseNodeId } from "../../utils/helpers";
+import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
 import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
 import {
@@ -303,7 +304,7 @@ const WorkflowCanvas = ({
           nodeType:  nodeDef.type,
           label:     nodeDef.label,
           icon:      nodeDef.icon ?? null,
-          config:    { ...(nodeDef.defaults || {}), save_output: true },
+          config:    { ...(nodeDef.defaults || {}), ...FUSE_DEFAULT_RUN_LOG_SAVE },
           isStarter: nodeDef.isStarter === true,
         },
       };
