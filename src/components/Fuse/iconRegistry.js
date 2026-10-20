@@ -15,6 +15,7 @@ import {
   TbGitMerge,
   TbRepeat,
   TbFileCode,
+  TbMail,
 } from "react-icons/tb";
 
 /**
@@ -44,6 +45,7 @@ export const ICON_REGISTRY = {
   TbGitMerge,
   TbRepeat,
   TbFileCode,
+  TbMail,
 };
 
 /**
@@ -82,6 +84,7 @@ const ICON_PRESENTATION = {
   TbGitMerge: { className: "text-[#6366f1] dark:text-[#818cf8]" },
   VscVariableGroup: { className: "text-[#64748b] dark:text-[#94a3b8]" },
   TbFileCode: { className: "text-[#0d9488] dark:text-[#2dd4bf]" },
+  TbMail: { className: "text-[#2563eb] dark:text-[#60a5fa]" },
 };
 
 /**

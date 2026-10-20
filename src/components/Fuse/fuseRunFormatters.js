@@ -42,6 +42,10 @@ export const RunStatusBadge = ({ status, large = false }) => {
       icon: TbCircleX,
       cls: "text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
     },
+    error: {
+      icon: TbCircleX,
+      cls: "text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
+    },
     running: {
       icon: TbLoader2,
       cls: "text-blue-500 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",

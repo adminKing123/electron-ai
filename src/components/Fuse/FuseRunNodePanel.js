@@ -7,7 +7,6 @@ import {
   fmtDate,
   fmtDuration,
   JsonBlock,
-  NodeStatusIcon,
   RunAccordionGroup,
   RunStatusBadge,
   VariablesBlock,
@@ -186,13 +185,7 @@ function FuseRunNodeDetail({
             {nodeType}
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            {status && (
-              <span className="inline-flex items-center gap-1.5 text-[12px] text-[#666] dark:text-[#999]">
-                <NodeStatusIcon status={status} />
-                {status}
-              </span>
-            )}
-            {run && <RunStatusBadge status={run.status} />}
+            {status && <RunStatusBadge status={status} />}
           </div>
         </div>
       </div>
