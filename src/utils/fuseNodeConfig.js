@@ -10,8 +10,3 @@ export const FUSE_DEFAULT_RUN_LOG_SAVE = {
 export function fuseRunLogSaveEnabled(config, field) {
   return config?.[field] !== false;
 }
-
-/** @deprecated use fuseRunLogSaveEnabled(config, "save_output") */
-export function fuseSaveOutputEnabled(config) {
-  return fuseRunLogSaveEnabled(config, "save_output");
-}

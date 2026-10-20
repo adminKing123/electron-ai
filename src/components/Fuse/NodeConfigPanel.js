@@ -16,66 +16,8 @@ import FormBuilder from "./FormBuilder";
 import CONFIG from "../../config";
 import NotificationSettings from "./NotificationSettings";
 import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
-import {
-  FUSE_DEFAULT_RUN_LOG_SAVE,
-  fuseRunLogSaveEnabled,
-} from "../../utils/fuseNodeConfig";
-
-const RUN_LOG_SAVE_FIELDS = [
-  {
-    key: "save_output",
-    label: "Save output",
-    hint: "Store this node's output in run history (execution still uses it internally).",
-  },
-  {
-    key: "save_input",
-    label: "Save input",
-    hint: "Store upstream node outputs snapshot used when this step ran.",
-  },
-  {
-    key: "save_config",
-    label: "Save config",
-    hint: "Store this node's configuration as it was at run time.",
-  },
-  {
-    key: "save_variables",
-    label: "Save variables",
-    hint: "Store resolved {{variable}} values for this step.",
-  },
-];
-
-const RunLogSaveSettings = ({ config, onChange }) => (
-  <div className="flex flex-col gap-3 pt-1 border-t border-[#ebebeb] dark:border-[#2a2a2a]">
-    <p className="text-[10.5px] font-semibold uppercase tracking-widest text-[#bbb] dark:text-[#555]">
-      Run history
-    </p>
-    {RUN_LOG_SAVE_FIELDS.map(({ key, label, hint }) => (
-      <label
-        key={key}
-        className="inline-flex items-start gap-2.5 cursor-pointer select-none py-0.5"
-      >
-        <input
-          type="checkbox"
-          checked={fuseRunLogSaveEnabled(config, key)}
-          onChange={(e) =>
-            onChange({ ...(config ?? {}), [key]: e.target.checked })
-          }
-          className="mt-0.5 w-4 h-4 rounded border-[#ccc] dark:border-[#444]
-            text-[#2563eb] focus:ring-[#2563eb]/30
-            dark:bg-[#1a1a1a] dark:checked:bg-[#2563eb]"
-        />
-        <span className="flex flex-col gap-0.5 min-w-0">
-          <span className="text-[12px] font-medium text-[#555] dark:text-[#888]">
-            {label}
-          </span>
-          <span className="text-[11px] text-[#bbb] dark:text-[#555] leading-relaxed">
-            {hint}
-          </span>
-        </span>
-      </label>
-    ))}
-  </div>
-);
+import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
+import RunLogSaveSettings from "./RunLogSaveSettings";
 
 /** Display order for node picker sections (integration sections last). */
 const NODE_SECTION_ORDER = [

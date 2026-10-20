@@ -1,7 +1,7 @@
 /** Max characters rendered inline in run panels; full data via CDN "Open file". */
 export const RUN_LOG_INLINE_PREVIEW_MAX_CHARS = 8_000;
 
-export function isRunLogOffloaded(value) {
+function isRunLogOffloaded(value) {
   return (
     value &&
     typeof value === "object" &&
@@ -24,7 +24,7 @@ function toPreviewString(value) {
  * Truncate serialized JSON/text for in-panel preview.
  * Returns { preview, truncated, totalChars }.
  */
-export function truncateRunLogPreview(value, maxChars = RUN_LOG_INLINE_PREVIEW_MAX_CHARS) {
+function truncateRunLogPreview(value, maxChars = RUN_LOG_INLINE_PREVIEW_MAX_CHARS) {
   const full = toPreviewString(value);
   if (full.length <= maxChars) {
     return { preview: value, truncated: false, totalChars: full.length };
@@ -49,25 +49,16 @@ export function useRunLogFieldDisplay(value, maxChars = RUN_LOG_INLINE_PREVIEW_M
       offloaded: true,
       offloadMeta: value,
       truncated: true,
-      loading: false,
-      fetchError: null,
     };
   }
 
   const { preview, truncated, totalChars } = truncateRunLogPreview(value, maxChars);
 
   return {
-    displayValue: typeof preview === "string" && truncated ? preview : preview,
+    displayValue: preview,
     offloaded: false,
     offloadMeta: null,
     truncated,
     totalChars,
-    loading: false,
-    fetchError: null,
   };
-}
-
-/** @deprecated use useRunLogFieldDisplay — no longer fetches CDN payloads into the panel */
-export function useResolvedRunLogValue(value) {
-  return useRunLogFieldDisplay(value);
 }

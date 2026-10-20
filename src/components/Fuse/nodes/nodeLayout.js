@@ -6,8 +6,6 @@ import { FUSE_NODE_ICON_WELL, FUSE_NODE_LABEL, FUSE_NODE_ROW_WIDTH } from "../fu
 export const FUSE_ACTION_NODE_WIDTH = FUSE_NODE_ROW_WIDTH;
 export const FUSE_IF_ELSE_NODE_WIDTH = FUSE_NODE_ROW_WIDTH;
 export const FUSE_FOR_EACH_NODE_WIDTH = FUSE_NODE_ROW_WIDTH;
-/** @deprecated Starters use horizontal row layout */
-export const FUSE_STARTER_NODE_SIZE = FUSE_NODE_ROW_WIDTH;
 
 /** Shared typography for horizontal action nodes on the canvas. */
 export const FUSE_CANVAS_LABEL_CLASS =

@@ -125,7 +125,7 @@ function RunLogFieldSkipped({ label, saveKey }) {
         {label}
       </p>
       <p className="text-[12px] text-[#888] dark:text-[#666]">
-        {label} was not saved for this node ({saveKey} is disabled in run history settings).
+        {label} was not saved for this step (enable {saveKey} under Run history on this node).
       </p>
     </div>
   );
@@ -226,23 +226,23 @@ function FuseRunNodeDetail({
       <RunAccordionGroup>
         {!fuseRunLogSaveEnabled(settingsConfig, "save_variables") &&
         variablesValue == null ? (
-          <RunLogFieldSkipped label="Variables" saveKey="Save variables" />
+          <RunLogFieldSkipped label="Variables" saveKey="Variables" />
         ) : (
           <VariablesBlock variables={variablesValue} grouped />
         )}
         {!fuseRunLogSaveEnabled(settingsConfig, "save_input") && inputValue == null ? (
-          <RunLogFieldSkipped label="Input" saveKey="Save input" />
+          <RunLogFieldSkipped label="Input" saveKey="Input" />
         ) : (
           <JsonBlock label="Input" value={inputValue} grouped />
         )}
         {!fuseRunLogSaveEnabled(settingsConfig, "save_config") && nodeConfig == null ? (
-          <RunLogFieldSkipped label="Config" saveKey="Save config" />
+          <RunLogFieldSkipped label="Config" saveKey="Config" />
         ) : (
           <JsonBlock label="Config" value={nodeConfig} showWhenEmpty grouped />
         )}
         {!fuseRunLogSaveEnabled(settingsConfig, "save_output") &&
         nodeState?.output == null ? (
-          <RunLogFieldSkipped label="Output" saveKey="Save output" />
+          <RunLogFieldSkipped label="Output" saveKey="Output" />
         ) : (
           <JsonBlock label="Output" value={nodeState?.output} grouped />
         )}
