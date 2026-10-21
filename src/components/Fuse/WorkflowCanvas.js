@@ -495,7 +495,18 @@ const WorkflowCanvas = ({
           />
           <Controls
             showInteractive={false}
-            className="!shadow-none !border !border-[#e5e5e5] dark:!border-[#2a2a2a] !rounded-xl !overflow-hidden"
+            className="!shadow-none !border !border-[#e5e5e5] dark:!border-[#2a2a2a] !rounded-xl !overflow-hidden !bg-white dark:!bg-[#2b2b2b]"
+            style={
+              isDark
+                ? undefined
+                : {
+                    "--xy-controls-button-color-default": "#444444",
+                    "--xy-controls-button-color-hover-default": "#111111",
+                    "--xy-controls-button-background-color-default": "#ffffff",
+                    "--xy-controls-button-background-color-hover-default": "#f5f5f5",
+                    "--xy-controls-button-border-color-default": "#e5e5e5",
+                  }
+            }
           />
         </ReactFlow>
       )}

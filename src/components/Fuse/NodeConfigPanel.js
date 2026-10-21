@@ -18,6 +18,7 @@ import NotificationSettings from "./NotificationSettings";
 import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
 import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
 import RunLogSaveSettings from "./RunLogSaveSettings";
+import useUserStore from "../../store/useUserStore";
 
 /** Display order for node picker sections (integration sections last). */
 const NODE_SECTION_ORDER = [
@@ -386,6 +387,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
   const updateNodeLabel = useFuseStudioStore((s) => s.updateNodeLabel);
   const removeNode = useFuseStudioStore((s) => s.removeNode);
+  const accountEmail = useUserStore((s) => s.user?.email ?? "");
   const { id: workflowId } = useParams();
   const maxLabelLength = CONFIG.MAX_NODE_LABEL_LENGTH;
 
@@ -462,6 +464,23 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
         {/* Push permission banner — shown for get_notified nodes */}
         {node_type === "get_notified" && (
           <NotificationSettings nodeType={node_type} />
+        )}
+
+        {node_type === "get_notified_email" && (
+          <div
+            className="rounded-xl border border-[#ebebeb] dark:border-[#232323]
+              bg-white dark:bg-[#171717] px-3 py-3"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] mb-1">
+              To
+            </p>
+            <p className="text-[13px] font-medium text-[#111] dark:text-[#e8eaed] break-all">
+              {accountEmail || "Your signed-in email"}
+            </p>
+            <p className="text-[11px] text-[#888] dark:text-[#666] mt-1.5 leading-relaxed">
+              Always sent to your account email. This cannot be changed.
+            </p>
+          </div>
         )}
 
         {nodeDef.config_form ? (
