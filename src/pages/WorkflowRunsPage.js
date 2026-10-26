@@ -12,9 +12,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { IoChevronBackOutline } from "react-icons/io5";
 import {
   TbRefresh,
-  TbCircleCheck,
-  TbCircleX,
-  TbLoader2,
   TbBolt,
   TbCalendarTime,
   TbWebhook,
@@ -28,61 +25,24 @@ import useLiveDuration from "../hooks/useLiveDuration";
 import useFuseWorkflowRunsLive from "../hooks/useFuseWorkflowRunsLive";
 import HeaderUserProfile from "../components/HeaderUserProfile";
 import ROUTES from "../router/routes";
+import {
+  FUSE_LIST_TABLE_WRAP,
+  FUSE_LIST_TH,
+  FUSE_LIST_TD,
+  FUSE_LIST_ROW,
+  FUSE_LIST_LINK,
+  fmtListingTime,
+  fmtListingDuration,
+  fmtRunIdLink,
+  FuseListingStatusDot,
+  FuseListingViewLink,
+  FuseListingTableFooter,
+  FuseListingTableHead,
+} from "../components/Fuse/fuseListingTable";
 
 const PAGE_SIZE = 20;
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
-/** Format an ISO-8601 string as a human-readable local date + time. */
-function fmtDate(iso) {
-  if (!iso) return "—";
-  try {
-    return new Date(iso).toLocaleString(undefined, {
-      month:  "short",
-      day:    "numeric",
-      year:   "numeric",
-      hour:   "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-  } catch {
-    return iso;
-  }
-}
-
-/** Format duration_ms into a readable string. */
-function fmtDuration(ms) {
-  if (ms == null) return "—";
-  if (ms < 1000) return `${ms}ms`;
-  return `${(ms / 1000).toFixed(2)}s`;
-}
-
 // ─── Sub-components ────────────────────────────────────────────────────────────
-
-const StatusBadge = ({ status }) => {
-  const map = {
-    success: {
-      icon: TbCircleCheck,
-      cls: "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800",
-    },
-    failed: {
-      icon: TbCircleX,
-      cls: "text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
-    },
-    running: {
-      icon: TbLoader2,
-      cls: "text-blue-500 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",
-      spin: true,
-    },
-  };
-  const { icon: Icon, cls, spin } = map[status] ?? map.failed;
-  return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${cls}`}>
-      <Icon className={`w-3 h-3 ${spin ? "animate-spin" : ""}`} />
-      {status}
-    </span>
-  );
-};
 
 const RunDurationCell = ({ run }) => {
   const liveMs = useLiveDuration(
@@ -91,7 +51,7 @@ const RunDurationCell = ({ run }) => {
     run.duration_ms
   );
   return (
-    <span className="font-mono">{fmtDuration(liveMs)}</span>
+    <span className="text-[#6b7280] dark:text-[#888] tabular-nums">{fmtListingDuration(liveMs)}</span>
   );
 };
 
@@ -111,12 +71,14 @@ const TriggerBadge = ({ type }) => {
 };
 
 const SkeletonRow = () => (
-  <tr className="animate-pulse border-b border-[#f0f0f0] dark:border-[#1d1d1d]">
-    <td className="px-3 sm:px-5 py-4"><div className="h-3 w-20 sm:w-24 rounded-full bg-[#ebebeb] dark:bg-[#272727]" /></td>
-    <td className="px-3 sm:px-5 py-4"><div className="h-3 w-14 sm:w-16 rounded-full bg-[#ebebeb] dark:bg-[#272727]" /></td>
-    <td className="px-3 sm:px-5 py-4 hidden sm:table-cell"><div className="h-3 w-36 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto" /></td>
-    <td className="px-3 sm:px-5 py-4 hidden sm:table-cell"><div className="h-3 w-14 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto" /></td>
-    <td className="px-3 sm:px-5 py-4"><div className="h-3 w-14 sm:w-16 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto" /></td>
+  <tr className={`animate-pulse ${FUSE_LIST_ROW}`}>
+    <td className={FUSE_LIST_TD}><div className="h-3 w-12 rounded bg-[#ebebeb] dark:bg-[#272727]" /></td>
+    <td className={FUSE_LIST_TD}><div className="h-3 w-24 rounded bg-[#ebebeb] dark:bg-[#272727]" /></td>
+    <td className={`${FUSE_LIST_TD} hidden sm:table-cell`}><div className="h-3 w-20 rounded bg-[#ebebeb] dark:bg-[#272727]" /></td>
+    <td className={`${FUSE_LIST_TD} hidden md:table-cell`}><div className="h-3 w-32 rounded bg-[#ebebeb] dark:bg-[#272727]" /></td>
+    <td className={`${FUSE_LIST_TD} text-right`}><div className="h-3 w-12 rounded bg-[#ebebeb] dark:bg-[#272727] ml-auto" /></td>
+    <td className={`${FUSE_LIST_TD} text-right`}><div className="h-2.5 w-2.5 rounded-full bg-[#ebebeb] dark:bg-[#272727] ml-auto" /></td>
+    <td className={`${FUSE_LIST_TD} text-right`}><div className="h-3 w-10 rounded bg-[#ebebeb] dark:bg-[#272727] ml-auto" /></td>
   </tr>
 );
 
@@ -235,8 +197,8 @@ const WorkflowRunsPage = () => {
       </header>
 
       {/* ── Content ── */}
-      <div className="flex-1 overflow-y-auto">
-      <div className="px-3 py-4 sm:px-6 sm:py-6 max-w-5xl mx-auto">
+      <div className="flex-1 overflow-y-auto bg-[#f7f7f7] dark:bg-[#1a1a1a]">
+      <div className="px-3 py-4 sm:px-6 sm:py-6 max-w-6xl mx-auto">
         {error && (
           <div className="mb-4 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20
             border border-red-200 dark:border-red-800
@@ -245,56 +207,75 @@ const WorkflowRunsPage = () => {
           </div>
         )}
 
-        {/* Table */}
-        <div className="overflow-x-auto rounded-2xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#171717]">
-          <table className="w-full min-w-[320px] border-collapse">
-            <thead>
-              <tr className="border-b border-[#f0f0f0] dark:border-[#1d1d1d] bg-[#fafafa] dark:bg-[#1a1a1a]">
-                <th className="px-3 sm:px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] whitespace-nowrap">Run ID</th>
-                <th className="px-3 sm:px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] whitespace-nowrap">Trigger</th>
-                <th className="px-3 sm:px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] whitespace-nowrap hidden sm:table-cell">Started</th>
-                <th className="px-3 sm:px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] whitespace-nowrap hidden sm:table-cell">Duration</th>
-                <th className="px-3 sm:px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] whitespace-nowrap">Status</th>
-              </tr>
-            </thead>
+        {/* Table — send-logs style reference */}
+        <div className={FUSE_LIST_TABLE_WRAP}>
+          <table className="w-full min-w-[640px] border-collapse">
+            <FuseListingTableHead>
+              <th className={FUSE_LIST_TH}>ID</th>
+              <th className={FUSE_LIST_TH}>Time</th>
+              <th className={`${FUSE_LIST_TH} hidden sm:table-cell`}>Trigger</th>
+              <th className={`${FUSE_LIST_TH} hidden md:table-cell`}>Subject</th>
+              <th className={`${FUSE_LIST_TH} text-right hidden sm:table-cell`}>Duration</th>
+              <th className={`${FUSE_LIST_TH} text-right`}>Status</th>
+              <th className={`${FUSE_LIST_TH} text-right w-[72px]`} />
+            </FuseListingTableHead>
             <tbody>
               {loading && [...Array(5)].map((_, i) => <SkeletonRow key={i} />)}
 
               {!loading && runs.length === 0 && (
                 <tr>
-                  <td colSpan={5}><EmptyState /></td>
+                  <td colSpan={7}><EmptyState /></td>
                 </tr>
               )}
 
-              {!loading && runs.map((run) => (
-                <tr
-                  key={run.run_id}
-                  onClick={() => navigate(ROUTES.GET_FUSE_RUN_DETAIL_URL(run.run_id))}
-                  className="border-b border-[#f6f6f6] dark:border-[#1c1c1c] last:border-b-0
-                    hover:bg-[#fafafa] dark:hover:bg-[#1e1e1e]
-                    transition-colors cursor-pointer"
-                >
-                  <td className="px-3 sm:px-5 py-4 font-mono text-[12px] text-[#555] dark:text-[#888] max-w-[90px] sm:max-w-[120px]">
-                    <span title={run.run_id}>{run.run_id.slice(0, 8)}…</span>
-                  </td>
-                  <td className="px-3 sm:px-5 py-4">
-                    <TriggerBadge type={run.trigger_type} />
-                  </td>
-                  <td className="px-3 sm:px-5 py-4 text-right text-[12px] text-[#666] dark:text-[#777] whitespace-nowrap hidden sm:table-cell">
-                    {fmtDate(run.started_at)}
-                  </td>
-                  <td className="px-3 sm:px-5 py-4 text-right text-[12px] text-[#888] dark:text-[#555] whitespace-nowrap hidden sm:table-cell">
-                    <RunDurationCell run={run} />
-                  </td>
-                  <td className="px-3 sm:px-5 py-4">
-                    <div className="flex justify-end">
-                      <StatusBadge status={run.status} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {!loading && runs.map((run) => {
+                const openRun = () => navigate(ROUTES.GET_FUSE_RUN_DETAIL_URL(run.run_id));
+                const subject =
+                  run.error_message?.trim() ||
+                  (run.status === "failed" ? "Workflow run failed" : workflow?.name || "Workflow run");
+
+                return (
+                  <tr key={run.run_id} className={FUSE_LIST_ROW}>
+                    <td className={FUSE_LIST_TD}>
+                      <button
+                        type="button"
+                        className={FUSE_LIST_LINK}
+                        title={run.run_id}
+                        onClick={openRun}
+                      >
+                        {fmtRunIdLink(run.run_id)}
+                      </button>
+                    </td>
+                    <td className={`${FUSE_LIST_TD} text-[#6b7280] dark:text-[#888] tabular-nums whitespace-nowrap`}>
+                      {fmtListingTime(run.started_at)}
+                    </td>
+                    <td className={`${FUSE_LIST_TD} hidden sm:table-cell`}>
+                      <TriggerBadge type={run.trigger_type} />
+                    </td>
+                    <td className={`${FUSE_LIST_TD} hidden md:table-cell max-w-[240px]`}>
+                      <span className="font-semibold text-[#111] dark:text-white truncate block" title={subject}>
+                        {subject}
+                      </span>
+                    </td>
+                    <td className={`${FUSE_LIST_TD} text-right hidden sm:table-cell`}>
+                      <RunDurationCell run={run} />
+                    </td>
+                    <td className={`${FUSE_LIST_TD} text-right`}>
+                      <div className="flex justify-end">
+                        <FuseListingStatusDot status={run.status} />
+                      </div>
+                    </td>
+                    <td className={`${FUSE_LIST_TD} text-right`}>
+                      <FuseListingViewLink onClick={openRun} />
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
+          {!loading && runs.length > 0 && (
+            <FuseListingTableFooter count={runs.length} singular="run" plural="runs" />
+          )}
         </div>
 
         {/* Prev / Next — cursor pagination, no total count available */}

@@ -30,7 +30,7 @@ const WorkflowsHeading = ({ creating, onCreate }) => (
 
 /** Skeleton loader — card list on mobile, table on desktop. */
 const WorkflowsSkeletonLoader = ({ count = 6 }) => (
-  <div className="rounded-2xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#1a1a1a]">
+  <div className="rounded-lg border border-[#e3e5e8] dark:border-[#2a2a2a] bg-white dark:bg-[#171717]">
     {/* Mobile card skeletons */}
     <div className="md:hidden">
       {[...Array(count)].map((_, i) => (
@@ -59,12 +59,12 @@ const WorkflowsSkeletonLoader = ({ count = 6 }) => (
     <div className="hidden md:block overflow-x-auto">
       <table className="w-full min-w-[420px] border-collapse">
         <thead>
-          <tr className="border-b border-[#ebebeb] dark:border-[#232323] bg-[#fafafa] dark:bg-[#161616]">
-            {["Name", "Status", "Nodes", "Updated", ""].map((h, i) => (
+          <tr className="border-b border-[#eef0f2] dark:border-[#252525] bg-[#f8f9fb] dark:bg-[#1a1a1a]">
+            {["Name", "Time", "Nodes", "Status", ""].map((h, i) => (
               <th
                 key={i}
-                className={`px-4 py-3 text-left text-[11px] font-semibold text-[#aaa] dark:text-[#555] uppercase tracking-widest
-                  ${h === "Nodes" ? "hidden sm:table-cell" : h === "Updated" ? "hidden md:table-cell" : ""}`}
+                className={`px-4 py-2.5 text-left text-[11px] font-semibold text-[#9ca3af] dark:text-[#666] uppercase tracking-wide
+                  ${h === "Nodes" ? "hidden md:table-cell" : h === "Time" ? "hidden sm:table-cell" : h === "Status" ? "text-right" : h === "" ? "text-right w-[120px]" : ""}`}
               >
                 {h}
               </th>
@@ -73,18 +73,18 @@ const WorkflowsSkeletonLoader = ({ count = 6 }) => (
         </thead>
         <tbody>
           {[...Array(count)].map((_, i) => (
-            <tr key={i} className={i !== count - 1 ? "border-b border-[#f0f0f0] dark:border-[#212121]" : ""}>
-              <td className="px-4 py-3.5"><div className="skeleton h-3.5 w-36 rounded-md" /></td>
-              <td className="px-4 py-3.5"><div className="skeleton h-5 w-16 rounded-full" /></td>
-              <td className="px-4 py-3.5 hidden sm:table-cell">
+            <tr key={i} className={i !== count - 1 ? "border-b border-[#eef0f2] dark:border-[#252525]" : ""}>
+              <td className="px-4 py-2.5"><div className="skeleton h-3.5 w-36 rounded-md" /></td>
+              <td className="px-4 py-2.5 hidden sm:table-cell"><div className="skeleton h-3 w-24 rounded-md" /></td>
+              <td className="px-4 py-3.5 hidden md:table-cell">
                 <div className="flex gap-2">
                   {[...Array(3)].map((_, j) => <div key={j} className="skeleton w-5 h-5 rounded-md" />)}
                 </div>
               </td>
-              <td className="px-4 py-3.5 hidden md:table-cell"><div className="skeleton h-3 w-24 rounded-md" /></td>
-              <td className="px-4 py-3.5">
-                <div className="flex justify-end gap-1">
-                  <div className="skeleton w-7 h-7 rounded-lg" />
+              <td className="px-4 py-2.5 text-right"><div className="skeleton h-2.5 w-2.5 rounded-full ml-auto" /></td>
+              <td className="px-4 py-2.5">
+                <div className="flex justify-end gap-2">
+                  <div className="skeleton h-3 w-10 rounded-md" />
                   <div className="skeleton w-7 h-7 rounded-lg" />
                 </div>
               </td>
