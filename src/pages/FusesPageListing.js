@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { TbPlus, TbChevronLeft, TbChevronRight } from "react-icons/tb";
+import { TbPlus } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import {
   WorkflowsTable,
@@ -185,35 +185,11 @@ export default function FusesPageListing() {
               deletingId={deletingId}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              page={page}
+              hasNextPage={hasNextPage}
+              onPrevPage={() => setPage((p) => p - 1)}
+              onNextPage={() => setPage((p) => p + 1)}
             />
-            {(page > 0 || hasNextPage) && (
-              <div className="mt-4 flex items-center justify-end gap-1">
-                <button
-                  onClick={() => setPage((p) => p - 1)}
-                  disabled={page === 0}
-                  title="Previous page"
-                  className="w-8 h-8 flex items-center justify-center rounded-lg
-                    text-[#888] dark:text-[#555]
-                    hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a]
-                    hover:text-[#111] dark:hover:text-white
-                    disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                >
-                  <TbChevronLeft className="w-[16px] h-[16px]" />
-                </button>
-                <button
-                  onClick={() => setPage((p) => p + 1)}
-                  disabled={!hasNextPage}
-                  title="Next page"
-                  className="w-8 h-8 flex items-center justify-center rounded-lg
-                    text-[#888] dark:text-[#555]
-                    hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a]
-                    hover:text-[#111] dark:hover:text-white
-                    disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                >
-                  <TbChevronRight className="w-[16px] h-[16px]" />
-                </button>
-              </div>
-            )}
           </>
         )}
       </div>

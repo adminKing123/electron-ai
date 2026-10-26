@@ -16,8 +16,6 @@ import {
   TbCalendarTime,
   TbWebhook,
   TbActivity,
-  TbChevronLeft,
-  TbChevronRight,
 } from "react-icons/tb";
 import { iconBtnCls } from "../components/Fuse/FuseStudioHeader";
 import { getWorkflowByIdAPI, getWorkflowRunsAPI } from "../apis/fuse/queryFunctions";
@@ -273,40 +271,18 @@ const WorkflowRunsPage = () => {
               })}
             </tbody>
           </table>
-          {!loading && runs.length > 0 && (
-            <FuseListingTableFooter count={runs.length} singular="run" plural="runs" />
+          {!loading && (runs.length > 0 || page > 0 || hasNextPage) && (
+            <FuseListingTableFooter
+              count={runs.length}
+              singular="run"
+              plural="runs"
+              page={page}
+              hasNextPage={hasNextPage}
+              onPrev={() => setPage((p) => p - 1)}
+              onNext={() => setPage((p) => p + 1)}
+            />
           )}
         </div>
-
-        {/* Prev / Next — cursor pagination, no total count available */}
-        {!loading && (page > 0 || hasNextPage) && (
-          <div className="mt-4 flex items-center justify-end gap-1">
-            <button
-              onClick={() => setPage((p) => p - 1)}
-              disabled={page === 0}
-              title="Previous page"
-              className="w-8 h-8 flex items-center justify-center rounded-lg
-                text-[#888] dark:text-[#555]
-                hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a]
-                hover:text-[#111] dark:hover:text-white
-                disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            >
-              <TbChevronLeft className="w-[16px] h-[16px]" />
-            </button>
-            <button
-              onClick={() => setPage((p) => p + 1)}
-              disabled={!hasNextPage}
-              title="Next page"
-              className="w-8 h-8 flex items-center justify-center rounded-lg
-                text-[#888] dark:text-[#555]
-                hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a]
-                hover:text-[#111] dark:hover:text-white
-                disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            >
-              <TbChevronRight className="w-[16px] h-[16px]" />
-            </button>
-          </div>
-        )}
       </div>
       </div>
     </main>

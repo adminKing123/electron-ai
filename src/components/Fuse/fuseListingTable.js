@@ -1,4 +1,5 @@
 import React from "react";
+import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
 
 /** Shared list-table chrome (send-logs style reference). */
 
@@ -63,29 +64,98 @@ export function FuseListingStatusDot({ status }) {
   );
 }
 
-export function FuseListingViewLink({ onClick, href, children = "View" }) {
-  const cls = FUSE_LIST_LINK;
+export function FuseListingViewLink({ onClick, href, children = "View", disabled = false }) {
+  const cls = `${FUSE_LIST_LINK}${disabled ? " opacity-50 cursor-not-allowed pointer-events-none" : ""}`;
   if (href) {
     return (
-      <a href={href} className={cls} onClick={onClick}>
+      <a href={href} className={cls} onClick={onClick} aria-disabled={disabled}>
         {children}
       </a>
     );
   }
   return (
-    <button type="button" className={cls} onClick={onClick}>
+    <button type="button" className={cls} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
 }
 
-export function FuseListingTableFooter({ count, singular, plural }) {
-  const word = count === 1 ? singular : plural ?? `${singular}s`;
+export const FUSE_LIST_TABLE_FOOTER =
+  "px-4 py-2.5 border-t border-[#eef0f2] dark:border-[#252525] bg-[#fafbfc] dark:bg-[#141414]";
+
+const PAGINATION_BTN =
+  "w-8 h-8 flex items-center justify-center rounded-lg text-[#888] dark:text-[#555] hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a] hover:text-[#111] dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors";
+
+export function FuseListingTablePagination({
+  page = 0,
+  hasNextPage = false,
+  onPrev,
+  onNext,
+}) {
+  if (page === 0 && !hasNextPage) return null;
+
   return (
-    <div className="px-4 py-2.5 border-t border-[#eef0f2] dark:border-[#252525] bg-[#fafbfc] dark:bg-[#141414]">
-      <p className="text-[12px] text-[#6b7280] dark:text-[#888]">
-        <span className="font-semibold text-[#374151] dark:text-[#bbb]">{count}</span> {word}
-      </p>
+    <div className="flex items-center gap-1">
+      <button
+        type="button"
+        onClick={onPrev}
+        disabled={page === 0}
+        title="Previous page"
+        className={PAGINATION_BTN}
+      >
+        <TbChevronLeft className="w-[16px] h-[16px]" />
+      </button>
+      <button
+        type="button"
+        onClick={onNext}
+        disabled={!hasNextPage}
+        title="Next page"
+        className={PAGINATION_BTN}
+      >
+        <TbChevronRight className="w-[16px] h-[16px]" />
+      </button>
+    </div>
+  );
+}
+
+export function FuseListingTableFooter({
+  count,
+  singular,
+  plural,
+  page,
+  hasNextPage,
+  onPrev,
+  onNext,
+}) {
+  const word = count === 1 ? singular : plural ?? `${singular}s`;
+  const showCount = count != null && count > 0;
+  const showPagination =
+    onPrev != null &&
+    onNext != null &&
+    (page > 0 || hasNextPage);
+
+  if (!showCount && !showPagination) return null;
+
+  return (
+    <div className={FUSE_LIST_TABLE_FOOTER}>
+      <div className="flex items-center justify-between gap-3 min-h-[32px]">
+        <div className="flex items-center">
+          {showPagination && (
+            <FuseListingTablePagination
+              page={page}
+              hasNextPage={hasNextPage}
+              onPrev={onPrev}
+              onNext={onNext}
+            />
+          )}
+        </div>
+        {showCount && (
+          <p className="text-[12px] text-[#6b7280] dark:text-[#888] shrink-0">
+            <span className="font-semibold text-[#374151] dark:text-[#bbb]">{count}</span>{" "}
+            {word}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

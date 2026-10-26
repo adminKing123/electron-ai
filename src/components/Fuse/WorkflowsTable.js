@@ -125,7 +125,16 @@ const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete }) => {
 
 // ─── WorkflowsTable ───────────────────────────────────────────────────────────
 
-const WorkflowsTable = ({ workflows, deletingId, onEdit, onDelete }) => (
+const WorkflowsTable = ({
+  workflows,
+  deletingId,
+  onEdit,
+  onDelete,
+  page = 0,
+  hasNextPage = false,
+  onPrevPage,
+  onNextPage,
+}) => (
   <div className={FUSE_LIST_TABLE_WRAP}>
     {/* Mobile — card list */}
     <div className="md:hidden">
@@ -177,8 +186,16 @@ const WorkflowsTable = ({ workflows, deletingId, onEdit, onDelete }) => (
       </table>
     </div>
 
-    {workflows.length > 0 && (
-      <FuseListingTableFooter count={workflows.length} singular="fuse" plural="fuses" />
+    {(workflows.length > 0 || page > 0 || hasNextPage) && (
+      <FuseListingTableFooter
+        count={workflows.length}
+        singular="fuse"
+        plural="fuses"
+        page={page}
+        hasNextPage={hasNextPage}
+        onPrev={onPrevPage}
+        onNext={onNextPage}
+      />
     )}
   </div>
 );
