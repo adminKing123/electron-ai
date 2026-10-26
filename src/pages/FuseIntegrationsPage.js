@@ -3,9 +3,29 @@ import { FusePageShell } from "../components/Fuse";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import ROUTES from "../router/routes";
 import { getIntegrationsAPI, revokeIntegrationAPI } from "../apis/fuse/queryFunctions";
-import IntegrationsTable, { IntegrationsTableSkeleton } from "../components/Fuse/IntegrationsTable";
+import IntegrationCard, {
+  IntegrationRowSkeleton,
+  INTEGRATION_SKELETON_ROW_COUNT,
+} from "../components/Fuse/IntegrationCard";
 import ConfirmDialog from "../components/Common/ConfirmDialog";
 import MasterInfoModal from "../components/Fuse/MasterInfoModal";
+import { FUSE_LIST_TABLE_WRAP } from "../components/Fuse/fuseListingTable";
+
+const IntegrationsList = ({ loading, integrations, onRevokeClick }) => (
+  <div className={`${FUSE_LIST_TABLE_WRAP} divide-y divide-[#eef0f2] dark:divide-[#252525]`}>
+    {loading
+      ? [...Array(INTEGRATION_SKELETON_ROW_COUNT)].map((_, i) => (
+          <IntegrationRowSkeleton key={i} />
+        ))
+      : integrations.map((integration) => (
+          <IntegrationCard
+            key={integration.id}
+            integration={integration}
+            onRevokeClick={() => onRevokeClick(integration)}
+          />
+        ))}
+  </div>
+);
 
 const FuseIntegrationsPage = () => {
   const { creating, handleCreate } = useCreateWorkflow();
@@ -63,18 +83,20 @@ const FuseIntegrationsPage = () => {
       }
       footer={<MasterInfoModal />}
     >
-      <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 sm:py-10">
-        <h2 className="text-[19px] sm:text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight mb-5 sm:mb-7">
-          Integrations
-        </h2>
-        {loading ? (
-          <IntegrationsTableSkeleton count={4} />
-        ) : (
-          <IntegrationsTable
-            integrations={integrations}
-            onRevokeClick={setDeleteTarget}
-          />
-        )}
+      <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 sm:py-10">
+        <div className="mb-5 sm:mb-6">
+          <h2 className="text-[19px] sm:text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight">
+            Integrations
+          </h2>
+          <p className="text-[13px] text-[#6b7280] dark:text-[#888] mt-1.5">
+            Connect accounts used by workflow steps.
+          </p>
+        </div>
+        <IntegrationsList
+          loading={loading}
+          integrations={integrations}
+          onRevokeClick={setDeleteTarget}
+        />
       </div>
     </FusePageShell>
   );
