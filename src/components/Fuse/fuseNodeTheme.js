@@ -57,7 +57,11 @@ export const fuseCanvasNodeShellClass = (selected, runStatus) => {
   ];
 
   if (runStatus === "running") {
-    parts.push(RUN_STATUS_RING.running, "fuse-run-node-shell-running");
+    parts.push(
+      RUN_STATUS_RING.running,
+      "fuse-run-node-shell-running",
+      "relative overflow-visible",
+    );
   } else if (runStatus && RUN_STATUS_RING[runStatus]) {
     parts.push(RUN_STATUS_RING[runStatus]);
   }

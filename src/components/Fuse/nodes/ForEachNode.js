@@ -8,6 +8,7 @@ import {
   fuseCanvasNodeShellClass,
 } from "../fuseNodeTheme";
 import FuseNodeHandle from "./FuseNodeHandle";
+import FuseRunNodeGalaxySpinner from "../FuseRunNodeGalaxySpinner";
 
 const ForEachNode = ({ data, selected }) => (
   <div
@@ -17,6 +18,7 @@ const ForEachNode = ({ data, selected }) => (
       fuseCanvasNodeShellClass(selected, data.runStatus),
     ].join(" ")}
   >
+    {data.runStatus === "running" && <FuseRunNodeGalaxySpinner />}
     <div className={FUSE_NODE_ROW_INNER}>
       <FuseNodeHandle
         type="target"

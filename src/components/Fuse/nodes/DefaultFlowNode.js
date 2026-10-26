@@ -3,9 +3,11 @@ import { Position } from "@xyflow/react";
 import FuseNodeRowContent from "../FuseNodeRowContent";
 import { fuseCanvasNodeRowClass } from "../fuseNodeTheme";
 import FuseNodeHandle from "./FuseNodeHandle";
+import FuseRunNodeGalaxySpinner from "../FuseRunNodeGalaxySpinner";
 
 const DefaultFlowNode = ({ data, selected }) => (
   <div className={fuseCanvasNodeRowClass(selected, data.runStatus)}>
+    {data.runStatus === "running" && <FuseRunNodeGalaxySpinner />}
     {!data.isStarter && (
       <FuseNodeHandle type="target" position={Position.Top} />
     )}

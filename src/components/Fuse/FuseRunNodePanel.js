@@ -1,5 +1,6 @@
 import React from "react";
 import { TbAlertCircle } from "react-icons/tb";
+import FuseRunNodeGalaxySpinner from "./FuseRunNodeGalaxySpinner";
 import { BasicLoader } from "../Loaders";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import useLiveDuration from "../../hooks/useLiveDuration";
@@ -174,8 +175,11 @@ function FuseRunNodeDetail({
   return (
     <div className="min-h-0 flex flex-col gap-4">
       <div className="flex items-start gap-3 pb-4 border-b border-[#ebebeb] dark:border-[#232323]">
-        <span className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-[#f1f3f4] dark:bg-[#2d2e30]">
+        <span className="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-[#f1f3f4] dark:bg-[#2d2e30]">
           <FuseNodeIcon iconName={iconName} sizeClass={FUSE_NODE_ICON_SIZES.pickerRow} />
+          {status === "running" && (
+            <FuseRunNodeGalaxySpinner className="top-0 right-0" />
+          )}
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-semibold text-[#111] dark:text-[#e8eaed] truncate">
@@ -185,7 +189,7 @@ function FuseRunNodeDetail({
             {nodeType}
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            {status && <RunStatusBadge status={status} />}
+            {status && status !== "running" && <RunStatusBadge status={status} />}
           </div>
         </div>
       </div>
