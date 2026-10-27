@@ -23,6 +23,20 @@ export const FUSE_PICKER_ROW =
 export const FUSE_CANVAS_NODE_SURFACE =
   "bg-white dark:bg-ink-775 border border-ink-200 dark:border-ink-725 hover:border-ink-300 dark:hover:border-ink-600 shadow-[0_1px_2px_rgba(60,64,67,0.1)] dark:shadow-none";
 
+/** n8n-style caption under the icon tile. */
+export const FUSE_CANVAS_LABEL_CLASS =
+  "text-[13px] font-medium leading-snug tracking-tight";
+
+/** Icon tile on canvas (96×96 — n8n DEFAULT_NODE_SIZE). */
+export const FUSE_CANVAS_NODE_BOX =
+  "w-[96px] h-[96px] min-w-[96px] min-h-[96px] box-border";
+
+/** Trigger/starter nodes — rounded left “pill” (n8n --trigger-node--radius). */
+export const FUSE_CANVAS_TRIGGER_SHAPE =
+  "rounded-l-[36px] rounded-r-xl";
+
+export const FUSE_CANVAS_DEFAULT_SHAPE = "rounded-xl";
+
 /** One picker grid column width (keep in sync with NodeConfigPanel md:max-w-[550px] 2-col grid). */
 export const FUSE_NODE_ROW_WIDTH =
   "w-[255px] min-w-[255px] max-w-[255px] shrink-0";
@@ -68,6 +82,53 @@ export const fuseCanvasNodeShellClass = (selected, runStatus) => {
 
   if (selected && runStatus !== "running") {
     parts.push("ring-2 ring-brand-600/25 dark:ring-brand-400/30");
+  }
+
+  return parts.filter(Boolean).join(" ");
+};
+
+/** n8n-style icon tile shell (96×96) with optional trigger shape. */
+export const fuseCanvasNodeBoxClass = (
+  selected,
+  runStatus,
+  isStarter,
+  { dynamicSize = false } = {},
+) => {
+  const parts = [
+    dynamicSize ? "min-w-[96px] min-h-[96px] box-border" : FUSE_CANVAS_NODE_BOX,
+    FUSE_CANVAS_NODE_SURFACE,
+    isStarter ? FUSE_CANVAS_TRIGGER_SHAPE : FUSE_CANVAS_DEFAULT_SHAPE,
+    "transition-[box-shadow,border-color] duration-150 overflow-visible relative",
+  ];
+
+  if (runStatus === "running") {
+    parts.push(
+      RUN_STATUS_RING.running,
+      "fuse-canvas-node-running",
+    );
+  } else if (runStatus === "success") {
+    parts.push(
+      "border-emerald-500/70 dark:border-emerald-400/65",
+      "ring-2 ring-emerald-500/25 dark:ring-emerald-400/20",
+      "fuse-canvas-node-success",
+    );
+  } else if (runStatus === "error") {
+    parts.push(
+      "border-red-500/75 dark:border-red-400/70",
+      "ring-2 ring-red-500/30 dark:ring-red-400/25",
+      "fuse-canvas-node-error",
+    );
+  } else if (runStatus === "skipped") {
+    parts.push(
+      "border-ink-300/80 dark:border-ink-600/70 opacity-90",
+      "ring-1 ring-ink-200/60 dark:ring-ink-700/50",
+    );
+  }
+
+  if (selected && runStatus !== "running") {
+    parts.push(
+      "ring-2 ring-brand-600/30 dark:ring-brand-400/35 border-brand-500/40 dark:border-brand-400/45",
+    );
   }
 
   return parts.filter(Boolean).join(" ");

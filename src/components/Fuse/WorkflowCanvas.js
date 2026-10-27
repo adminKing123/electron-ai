@@ -16,6 +16,7 @@ import { createFuseNodeId } from "../../utils/helpers";
 import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
 import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
+import { FUSE_EDGE_PATH } from "./edges/fuseEdgeTheme";
 import {
   buildNodeLookup,
   collectRunningNodeIds,
@@ -30,8 +31,8 @@ const EDGE_TYPES = {
 
 // Fallback node dimensions used before React Flow measures a rendered node
 const NODE_DIM = {
-  starter: { w: 140, h: 140 },
-  action:  { w: 220, h: 60  },
+  starter: { w: 96, h: 128 },
+  action:  { w: 96, h: 128 },
 };
 
 /** Space (flow units) added outside the tight bounding box when creating a block. */
@@ -393,10 +394,16 @@ const WorkflowCanvas = ({
         : false;
       const toActive = runningNodeIds.has(edge.target);
 
+      const pathOptions = {
+        borderRadius: FUSE_EDGE_PATH.borderRadius,
+        offset: FUSE_EDGE_PATH.offset,
+      };
+
       if (traversed) {
         return {
           ...edge,
           type: "smoothstep",
+          pathOptions,
           animated: toActive,
           style: {
             stroke: traversedStroke,
@@ -409,6 +416,7 @@ const WorkflowCanvas = ({
       return {
         ...edge,
         type: "smoothstep",
+        pathOptions,
         animated: false,
         style: {
           stroke: idleStroke,
@@ -483,7 +491,14 @@ const WorkflowCanvas = ({
           }}
           defaultEdgeOptions={
             readOnly
-              ? { type: "smoothstep", animated: false }
+              ? {
+                  type: "smoothstep",
+                  animated: false,
+                  pathOptions: {
+                    borderRadius: FUSE_EDGE_PATH.borderRadius,
+                    offset: FUSE_EDGE_PATH.offset,
+                  },
+                }
               : { type: "removable", animated: false }
           }
         >

@@ -16,8 +16,8 @@ export const FUSE_EDGE_THEME = {
 
 export const FUSE_EDGE_PATH = {
   borderRadius: 12,
-  /** Offset from handle center so the line clears the node border. */
-  offset: 2,
+  /** Offset from handle center so the line clears the node border and output labels. */
+  offset: 12,
 };
 
 export const fuseEdgeMarker = (color) => ({

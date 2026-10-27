@@ -15,7 +15,7 @@ const FuseNodeHandle = ({ type, position, id, className = "", style }) => {
       id={id}
       style={style}
       className={[
-        "!w-3 !h-3 !border-2 transition-colors duration-150",
+        "!w-[10px] !h-[10px] !border-2 !rounded-[2px] transition-colors duration-150",
         connected ? FUSE_NODE_HANDLE_CONNECTED : FUSE_NODE_HANDLE,
         className,
       ]
