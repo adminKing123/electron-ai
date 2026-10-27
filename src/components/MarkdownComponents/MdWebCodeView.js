@@ -136,17 +136,17 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
       className={`my-4 ${
         view === VIEWS.PREVIEW
           ? "rounded-2xl overflow-hidden"
-          : "bg-[#f8f8f8] dark:bg-[#161616] border border-[#e8e8e8] dark:border-[#2a2a2a] rounded-2xl overflow-hidden"
+          : "bg-ink-25 dark:bg-ink-850 border border-ink-100 dark:border-ink-800 rounded-2xl overflow-hidden"
       }`}
     >
       <div
         className={`px-4 py-2.5 flex justify-between items-center ${
           view === VIEWS.CODE
-            ? "bg-[#f0f0f0] dark:bg-[#1e1e1e] border-b border-[#e8e8e8] dark:border-[#2a2a2a]"
+            ? "bg-ink-75 dark:bg-ink-825 border-b border-ink-100 dark:border-ink-800"
             : ""
         }`}
       >
-        <div className="text-[12px] font-medium text-[#888] dark:text-[#555] tracking-wide flex items-center gap-2">
+        <div className="text-[12px] font-medium text-ink-500 dark:text-ink-550 tracking-wide flex items-center gap-2">
           {isLoading ? <BasicLoader /> : <IoCode className="w-[13px] h-[13px]" />}
           HTML
         </div>
@@ -155,9 +155,9 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
             onClick={handleCopy}
             className="flex items-center gap-1.5 px-2 py-1 rounded-md
               text-[11px] font-medium
-              text-[#888] dark:text-[#666]
-              hover:text-[#333] dark:hover:text-[#ccc]
-              hover:bg-[#e4e4e4] dark:hover:bg-[#2a2a2a]
+              text-ink-500 dark:text-ink-600
+              hover:text-ink-750 dark:hover:text-ink-300
+              hover:bg-ink-150 dark:hover:bg-ink-800
               transition-colors"
             title="Copy code"
           >
@@ -181,16 +181,16 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
                 setView(value);
               }
             }}
-            className="flex items-center bg-[#e4e4e4] dark:bg-[#252525] rounded-full p-0.5"
+            className="flex items-center bg-ink-150 dark:bg-ink-825 rounded-full p-0.5"
           >
             <ToggleGroup.Item
               value={VIEWS.CODE}
               className="p-1.5 rounded-full transition-colors
-                data-[state=on]:bg-white dark:data-[state=on]:bg-[#1e1e1e]
+                data-[state=on]:bg-white dark:data-[state=on]:bg-ink-900
                 data-[state=on]:shadow-sm
                 data-[state=off]:bg-transparent
-                text-[#888] dark:text-[#555]
-                data-[state=on]:text-[#111] dark:data-[state=on]:text-white"
+                text-ink-500 dark:text-ink-550
+                data-[state=on]:text-ink-975 dark:data-[state=on]:text-white"
               title="View code"
             >
               <IoCodeSlash size={14} />
@@ -198,11 +198,11 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
             <ToggleGroup.Item
               value={VIEWS.PREVIEW}
               className={`p-1.5 rounded-full transition-colors
-                data-[state=on]:bg-white dark:data-[state=on]:bg-[#1e1e1e]
+                data-[state=on]:bg-white dark:data-[state=on]:bg-ink-900
                 data-[state=on]:shadow-sm
                 data-[state=off]:bg-transparent
-                text-[#888] dark:text-[#555]
-                data-[state=on]:text-[#111] dark:data-[state=on]:text-white
+                text-ink-500 dark:text-ink-550
+                data-[state=on]:text-ink-975 dark:data-[state=on]:text-white
                 ${ isLoading ? "opacity-40 cursor-not-allowed" : "" }`}
               title={isLoading ? "Loading..." : "Preview"}
               disabled={isLoading}

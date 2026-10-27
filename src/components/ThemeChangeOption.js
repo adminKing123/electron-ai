@@ -10,7 +10,7 @@ const themeOptions = [
 
 /** Segmented 3-icon toggle — reused in both standalone (header) and menu-item (sidebar) contexts. */
 const ThemeToggle = ({ theme, setTheme, Icons }) => (
-  <div className="flex items-center gap-0.5 bg-[#e8e8e8] dark:bg-[#2a2a2a] rounded-lg p-0.5">
+  <div className="flex items-center gap-0.5 bg-ink-100 dark:bg-ink-875 border border-ink-150 dark:border-ink-750 rounded-lg p-0.5">
     {themeOptions.map((option) => {
       const isActive = theme === option;
       return (
@@ -20,8 +20,8 @@ const ThemeToggle = ({ theme, setTheme, Icons }) => (
           title={option.charAt(0).toUpperCase() + option.slice(1)}
           className={`w-6 h-6 flex items-center justify-center rounded-md transition-colors ${
             isActive
-              ? "bg-white dark:bg-[#1e1e1e] text-[#111] dark:text-white shadow-sm"
-              : "text-[#aaa] dark:text-[#555] hover:text-[#555] dark:hover:text-[#aaa]"
+              ? "bg-white dark:bg-ink-725 text-brand-600 dark:text-brand-300 shadow-sm"
+              : "text-ink-450 dark:text-ink-500 hover:text-ink-750 dark:hover:text-ink-200"
           }`}
         >
           <span className="w-[13px] h-[13px] flex items-center justify-center">
@@ -52,7 +52,7 @@ const ThemeChangeOption = ({ standalone = false }) => {
   }
 
   return (
-    <div className="flex items-center gap-2.5 w-full px-2.5 py-[7px] text-[13px] rounded-xl text-[#333] dark:text-[#ccc] hover:bg-[#f4f4f4] dark:hover:bg-[#363636] transition-colors">
+    <div className="flex items-center gap-2.5 w-full px-2.5 py-[7px] text-[13px] rounded-xl text-ink-750 dark:text-ink-300 hover:bg-ink-50 dark:hover:bg-ink-750 transition-colors">
       <div className="flex-grow flex items-center justify-between">
         <span>Theme</span>
         <ThemeToggle theme={theme} setTheme={setTheme} Icons={Icons} />

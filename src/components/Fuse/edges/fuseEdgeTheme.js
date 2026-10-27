@@ -1,16 +1,16 @@
 import { MarkerType } from "@xyflow/react";
 
-/** Edge stroke tokens — aligned with connected handles (#1a73e8 / #8ab4f8). */
+/** Edge stroke tokens — aligned with connected handles (#7c3aed / #a78bfa). */
 export const FUSE_EDGE_THEME = {
   light: {
-    stroke: "#80868b",
-    strokeActive: "#1a73e8",
-    halo: "#f7f7f7",
+    stroke: "#8681a0",
+    strokeActive: "#7c3aed",
+    halo: "#f9f9fc",
   },
   dark: {
-    stroke: "#9aa0a6",
-    strokeActive: "#8ab4f8",
-    halo: "#1a1a1a",
+    stroke: "#9894ae",
+    strokeActive: "#a78bfa",
+    halo: "#101010",
   },
 };
 

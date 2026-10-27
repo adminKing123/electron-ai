@@ -10,10 +10,10 @@ import useIsDark from "../../hooks/useIsDark";
 const TokenSplitChart = ({ inputTokens = 0, outputTokens = 0 }) => {
   const isDark = useIsDark();
 
-  const tooltipBg = isDark ? "#1e1e1e" : "#ffffff";
-  const tooltipBorder = isDark ? "#333" : "#e5e5e5";
-  const tooltipText = isDark ? "#e0e0e0" : "#333";
-  const legendColor = isDark ? "#888" : "#666";
+  const tooltipBg = isDark ? "#161616" : "#ffffff";
+  const tooltipBorder = isDark ? "#2e2e2e" : "#e5e2f0";
+  const tooltipText = isDark ? "#e5e2f0" : "#2e2e2e";
+  const legendColor = isDark ? "#8681a0" : "#635e7d";
 
   const total = inputTokens + outputTokens;
 
@@ -30,9 +30,9 @@ const TokenSplitChart = ({ inputTokens = 0, outputTokens = 0 }) => {
         // If there's no data yet, render a muted placeholder slice.
         data: total > 0 ? [inputTokens, outputTokens] : [1, 0],
         backgroundColor: total > 0
-          ? ["rgba(99,102,241,0.75)", "rgba(16,185,129,0.75)"]
-          : [isDark ? "#2a2a2a" : "#e8e8e8", "transparent"],
-        borderColor: total > 0 ? ["#6366f1", "#10b981"] : ["transparent", "transparent"],
+          ? ["rgba(139,92,246,0.75)", "rgba(16,185,129,0.75)"]
+          : [isDark ? "#1f1f1f" : "#ebe9f4", "transparent"],
+        borderColor: total > 0 ? ["#8b5cf6", "#10b981"] : ["transparent", "transparent"],
         borderWidth: total > 0 ? 1.5 : 0,
         hoverOffset: 4,
       },
@@ -79,7 +79,7 @@ const TokenSplitChart = ({ inputTokens = 0, outputTokens = 0 }) => {
   };
 
   return (
-    <div className="relative w-full h-[200px]">
+    <div className="relative w-full h-[240px]">
       <Doughnut data={chartData} options={options} />
 
       {/* Centre label */}
@@ -89,13 +89,13 @@ const TokenSplitChart = ({ inputTokens = 0, outputTokens = 0 }) => {
       >
         {total > 0 ? (
           <>
-            <p className="text-[10px] text-[#aaa] dark:text-[#666] leading-none">Total</p>
-            <p className="text-sm font-semibold text-black dark:text-white mt-0.5">
+            <p className="text-[11px] text-ink-400 dark:text-ink-600 leading-none">Total</p>
+            <p className="text-[18px] font-bold tracking-tight text-ink-975 dark:text-white mt-1 tabular-nums">
               {fmt(total)}
             </p>
           </>
         ) : (
-          <p className="text-[11px] text-[#ccc] dark:text-[#555]">No data</p>
+          <p className="text-[11px] text-ink-400 dark:text-ink-550">No data</p>
         )}
       </div>
     </div>

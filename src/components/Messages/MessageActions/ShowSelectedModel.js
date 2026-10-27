@@ -14,7 +14,7 @@ const IdentifySearch = ({ message }) => {
 
 const ShowSelectedModel = ({ message }) => {
   return (
-    <div className="flex items-center gap-1.5 text-[11px] text-[#aaa] dark:text-[#666] select-none">
+    <div className="flex items-center gap-1.5 text-[11px] text-ink-400 dark:text-ink-600 select-none">
       <IdentifySearch message={message} />
       <span>{message.model.name}</span>
     </div>

@@ -11,7 +11,7 @@ const AuthorizationHeader = () => {
       className="w-full flex items-center justify-between gap-2 p-4 flex-shrink-0"
     >
       {/* Brand mark */}
-      <div className="flex items-center gap-2 text-[#111] dark:text-white">
+      <div className="flex items-center gap-2.5 text-ink-975 dark:text-white">
         <TbGalaxy className="w-[28px] h-[28px]" />
         <span className="text-[24px] font-semibold tracking-tight">Comet AI</span>
       </div>

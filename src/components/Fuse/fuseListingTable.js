@@ -4,19 +4,19 @@ import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
 /** Shared list-table chrome (send-logs style reference). */
 
 export const FUSE_LIST_TABLE_WRAP =
-  "overflow-x-auto rounded-lg border border-[#e3e5e8] dark:border-[#2a2a2a] bg-white dark:bg-[#171717] shadow-sm";
+  "overflow-x-auto rounded-2xl border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850";
 
 export const FUSE_LIST_TH =
-  "px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-[#9ca3af] dark:text-[#666] whitespace-nowrap";
+  "px-5 py-3 text-left text-[12px] font-medium text-ink-500 dark:text-ink-500 whitespace-nowrap";
 
 export const FUSE_LIST_TD =
-  "px-4 py-2.5 text-[13px] text-[#374151] dark:text-[#ccc] align-middle";
+  "px-5 py-3.5 text-[13px] text-ink-725 dark:text-ink-300 align-middle";
 
 export const FUSE_LIST_ROW =
-  "border-b border-[#eef0f2] dark:border-[#252525] last:border-b-0 hover:bg-[#fafbfc] dark:hover:bg-[#1c1c1c] transition-colors";
+  "border-b border-ink-100 dark:border-ink-800 last:border-b-0 hover:bg-ink-25 dark:hover:bg-ink-825 transition-colors";
 
 export const FUSE_LIST_LINK =
-  "text-[13px] font-medium text-[#2563eb] dark:text-[#60a5fa] hover:underline bg-transparent border-0 p-0 cursor-pointer";
+  "text-[13px] font-medium text-brand-600 dark:text-brand-400 hover:underline bg-transparent border-0 p-0 cursor-pointer";
 
 export function fmtListingTime(iso) {
   if (!iso) return "—";
@@ -52,8 +52,8 @@ export function FuseListingStatusDot({ status }) {
     active: "bg-emerald-500",
     failed: "bg-red-500",
     error: "bg-red-500",
-    running: "bg-blue-500 animate-pulse",
-    inactive: "bg-[#c4c4c4] dark:bg-[#555]",
+    running: "bg-brand-500 animate-pulse",
+    inactive: "bg-ink-300 dark:bg-ink-650",
   };
   return (
     <span
@@ -81,10 +81,10 @@ export function FuseListingViewLink({ onClick, href, children = "View", disabled
 }
 
 export const FUSE_LIST_TABLE_FOOTER =
-  "px-4 py-2.5 border-t border-[#eef0f2] dark:border-[#252525] bg-[#fafbfc] dark:bg-[#141414]";
+  "px-5 py-3 border-t border-ink-100 dark:border-ink-800 bg-ink-25/60 dark:bg-ink-850";
 
 const PAGINATION_BTN =
-  "w-8 h-8 flex items-center justify-center rounded-lg text-[#888] dark:text-[#555] hover:bg-[#ebebeb] dark:hover:bg-[#2a2a2a] hover:text-[#111] dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors";
+  "w-8 h-8 flex items-center justify-center rounded-lg text-ink-500 dark:text-ink-550 hover:bg-ink-100 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors";
 
 export function FuseListingTablePagination({
   page = 0,
@@ -150,8 +150,8 @@ export function FuseListingTableFooter({
           )}
         </div>
         {showCount && (
-          <p className="text-[12px] text-[#6b7280] dark:text-[#888] shrink-0">
-            <span className="font-semibold text-[#374151] dark:text-[#bbb]">{count}</span>{" "}
+          <p className="text-[12px] text-ink-600 dark:text-ink-500 shrink-0">
+            <span className="font-semibold text-ink-725 dark:text-ink-350">{count}</span>{" "}
             {word}
           </p>
         )}
@@ -163,7 +163,7 @@ export function FuseListingTableFooter({
 export function FuseListingTableHead({ children }) {
   return (
     <thead>
-      <tr className="border-b border-[#eef0f2] dark:border-[#252525] bg-[#f8f9fb] dark:bg-[#1a1a1a]">
+      <tr className="border-b border-ink-100 dark:border-ink-800 bg-ink-25/60 dark:bg-ink-850">
         {children}
       </tr>
     </thead>

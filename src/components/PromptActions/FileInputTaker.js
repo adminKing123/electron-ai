@@ -78,9 +78,9 @@ const FileInputTaker = ({ inputRef, disabled, chat }) => {
         htmlFor="file-upload"
         title="Attach File"
         className="flex items-center gap-1.5 px-2 py-1.5 rounded-full cursor-pointer
-          bg-[#f4f4f4] dark:bg-[#3a3a3a]
-          hover:bg-[#e9e9e9] dark:hover:bg-[#444444]
-          text-black dark:text-white
+          bg-ink-50 dark:bg-ink-725
+          hover:bg-ink-100 dark:hover:bg-ink-700
+          text-ink-950 dark:text-white
           transition-colors duration-150"
       >
         <IoIosAttach className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />

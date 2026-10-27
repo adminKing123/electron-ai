@@ -57,15 +57,15 @@ const RenameChatModal = ({ data }) => {
         transition={{ duration: 0.15 }}
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm p-5 rounded-2xl
-          bg-white dark:bg-[#1e1e1e]
-          border border-[#e8e8e8] dark:border-[#2a2a2a]
+          bg-white dark:bg-ink-825
+          border border-ink-100 dark:border-ink-800
           shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]"
       >
         {/* Title */}
-        <h2 className="text-[15px] font-semibold text-[#111] dark:text-white mb-1">
+        <h2 className="text-[15px] font-semibold text-ink-975 dark:text-white mb-1">
           Rename chat
         </h2>
-        <p className="text-[12px] text-[#aaa] dark:text-[#555] mb-4">
+        <p className="text-[12px] text-ink-400 dark:text-ink-550 mb-4">
           Current: {data?.payload.chat?.title}
         </p>
 
@@ -79,11 +79,11 @@ const RenameChatModal = ({ data }) => {
           autoFocus
           disabled={isLoading}
           className="w-full px-3.5 py-2.5 mb-5 text-[13px] rounded-xl
-            bg-[#f5f5f5] dark:bg-[#252525]
-            border border-[#e8e8e8] dark:border-[#2a2a2a]
-            text-[#111] dark:text-white
-            placeholder:text-[#bbb] dark:placeholder:text-[#444]
-            focus:outline-none focus:border-[#ccc] dark:focus:border-[#444]
+            bg-ink-50 dark:bg-ink-825
+            border border-ink-100 dark:border-ink-800
+            text-ink-975 dark:text-white
+            placeholder:text-ink-450 dark:placeholder:text-ink-600
+            focus:outline-none focus:border-ink-300 dark:focus:border-ink-700
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-colors"
         />
@@ -94,10 +94,10 @@ const RenameChatModal = ({ data }) => {
             onClick={close}
             disabled={isLoading}
             className="px-4 py-1.5 rounded-full text-[13px] font-medium
-              bg-[#f4f4f4] dark:bg-[#2a2a2a]
-              text-[#333] dark:text-[#ccc]
-              hover:bg-[#ebebeb] dark:hover:bg-[#333]
-              border border-[#e8e8e8] dark:border-[#333]
+              bg-ink-50 dark:bg-ink-800
+              text-ink-750 dark:text-ink-300
+              hover:bg-ink-100 dark:hover:bg-ink-750
+              border border-ink-100 dark:border-ink-750
               transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Cancel
@@ -106,9 +106,9 @@ const RenameChatModal = ({ data }) => {
             onClick={handleRenameChat}
             disabled={isLoading}
             className="px-4 py-1.5 rounded-full text-[13px] font-medium
-              bg-[#111] dark:bg-white
-              text-white dark:text-[#111]
-              hover:opacity-85 transition-opacity
+              bg-brand-600 dark:bg-brand-500 shadow-glow
+              text-white
+              hover:bg-brand-700 dark:hover:bg-brand-400 transition-colors
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {isLoading ? "Renaming…" : "Rename"}

@@ -51,7 +51,7 @@ const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
     return (
       <div
         id="recording-text-area"
-        className="w-full bg-white dark:bg-[#252525] resize-none outline-none text-[#111] dark:text-white text-[14px] min-h-[30px] max-h-[240px] overflow-y-auto text-wrap break-words pb-2"
+        className="w-full bg-white dark:bg-ink-825 resize-none outline-none text-ink-975 dark:text-white text-[14px] min-h-[30px] max-h-[240px] overflow-y-auto text-wrap break-words pb-2"
       >
         {prompt}
         {prompt.length > 0 && !prompt.endsWith(" ") ? " " : ""}
@@ -63,9 +63,9 @@ const TextArea = ({ textareaRef, handleSend, shouldAutoFocus }) => {
     <textarea
       id="prompt-textarea"
       ref={textareaRef}
-      className="w-full bg-white dark:bg-[#252525] resize-none outline-none
-        text-[#111] dark:text-white text-[14px]
-        placeholder:text-[#bbb] dark:placeholder:text-[#444]
+      className="w-full bg-white dark:bg-ink-825 resize-none outline-none
+        text-ink-975 dark:text-white text-[14px]
+        placeholder:text-ink-450 dark:placeholder:text-ink-600
         min-h-[30px] max-h-[240px] overflow-y-auto"
       autoFocus={shouldAutoFocus}
       placeholder="Ask anything"

@@ -46,16 +46,16 @@ const Answer = ({ message_id, chat }) => {
         return (
           <div
             key={part?.id}
-            className="my-3 bg-[#f5f5f5] dark:bg-[#161616] border border-[#e8e8e8] dark:border-[#2a2a2a] rounded-2xl overflow-hidden"
+            className="my-3 bg-ink-50 dark:bg-ink-850 border border-ink-100 dark:border-ink-800 rounded-2xl overflow-hidden"
           >
-            <div className="px-4 py-2 bg-[#efefef] dark:bg-[#1e1e1e] border-b border-[#e8e8e8] dark:border-[#2a2a2a] flex justify-between items-center">
-              <span className="text-[11px] font-medium text-[#888] dark:text-[#555]">
+            <div className="px-4 py-2 bg-ink-75 dark:bg-ink-825 border-b border-ink-100 dark:border-ink-800 flex justify-between items-center">
+              <span className="text-[11px] font-medium text-ink-500 dark:text-ink-550">
                 {part.type}
               </span>
             </div>
             <div className="p-4 overflow-auto">
               <pre className="!m-0">
-                <code className="text-nowrap text-[11px] text-[#555] dark:text-[#888]">
+                <code className="text-nowrap text-[11px] text-ink-650 dark:text-ink-500">
                   {JSON.stringify(part.data, null, 2)}
                 </code>
               </pre>

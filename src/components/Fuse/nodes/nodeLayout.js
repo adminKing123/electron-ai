@@ -11,7 +11,7 @@ export const FUSE_FOR_EACH_NODE_WIDTH = FUSE_NODE_ROW_WIDTH;
 export const FUSE_CANVAS_LABEL_CLASS =
   "text-[14px] font-semibold leading-snug tracking-tight";
 export const FUSE_CANVAS_ID_CLASS =
-  "text-[10px] font-mono leading-tight uppercase tracking-wide";
+  "text-[11px] font-mono leading-tight uppercase tracking-wide";
 
 /** Outer shell padding / shape for row-style canvas nodes. */
 export const FUSE_CANVAS_ROW_SHELL =

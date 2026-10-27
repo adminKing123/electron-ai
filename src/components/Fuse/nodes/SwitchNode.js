@@ -47,18 +47,18 @@ const SwitchNode = ({ data, selected }) => {
         <FuseNodeRowContent iconName={data.icon} label={data.label} />
       </div>
 
-      <div className="flex flex-col border-t border-[#dadce0] dark:border-[#3c4043] overflow-visible">
+      <div className="flex flex-col border-t border-ink-200 dark:border-ink-725 overflow-visible">
         {cases.map((c, index) => (
           <div
             key={c.id ?? `case_${index}`}
             className={[
               "flex items-center gap-2 min-h-[40px] py-2 pl-3 pr-2 min-w-0",
-              index > 0 ? "border-t border-[#dadce0] dark:border-[#3c4043]" : "",
+              index > 0 ? "border-t border-ink-200 dark:border-ink-725" : "",
             ].join(" ")}
           >
-            <span className="w-2 h-2 rounded-full bg-[#1a73e8] flex-shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-brand-600 flex-shrink-0" />
             <span
-              className={`text-[10px] font-semibold truncate flex-1 ${FUSE_NODE_LABEL_MUTED}`}
+              className={`text-[11px] font-semibold truncate flex-1 ${FUSE_NODE_LABEL_MUTED}`}
               title={c.label || c.id}
             >
               {c.label || c.id}
@@ -68,10 +68,10 @@ const SwitchNode = ({ data, selected }) => {
 
         <div
           className="flex items-center gap-2 min-h-[40px] py-2 pl-3 pr-2 min-w-0
-            border-t border-[#dadce0] dark:border-[#3c4043]"
+            border-t border-ink-200 dark:border-ink-725"
         >
-          <span className="w-2 h-2 rounded-full bg-[#9aa0a6] flex-shrink-0" />
-          <span className={`text-[10px] font-semibold flex-1 ${FUSE_NODE_LABEL_MUTED}`}>
+          <span className="w-2 h-2 rounded-full bg-ink-450 flex-shrink-0" />
+          <span className={`text-[11px] font-semibold flex-1 ${FUSE_NODE_LABEL_MUTED}`}>
             Default
           </span>
         </div>

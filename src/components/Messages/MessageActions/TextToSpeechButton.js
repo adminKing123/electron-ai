@@ -111,9 +111,9 @@ const TextToSpeechButton = ({ message }) => {
       disabled={status === "loading"}
       title={status === "playing" ? "Stop speaking" : "Read aloud"}
       className="w-7 h-7 flex items-center justify-center rounded-lg
-        text-[#888] dark:text-[#888]
-        hover:text-[#111] dark:hover:text-white
-        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        text-ink-500 dark:text-ink-500
+        hover:text-ink-975 dark:hover:text-white
+        hover:bg-ink-100 dark:hover:bg-ink-875
         transition-colors disabled:opacity-40"
     >
       {status === "loading" ? (

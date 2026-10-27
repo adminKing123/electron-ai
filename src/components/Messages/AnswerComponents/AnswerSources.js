@@ -16,9 +16,9 @@ const AnswerSources = ({ sources, message_id }) => {
       <button
         onClick={handleClick}
         className="flex items-center gap-2 px-3 py-1.5 rounded-full
-          border border-[#e0e0e0] dark:border-[#2a2a2a]
-          bg-white dark:bg-[#1e1e1e]
-          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+          border border-ink-150 dark:border-ink-800
+          bg-white dark:bg-ink-825
+          hover:bg-ink-50 dark:hover:bg-ink-800
           transition-colors"
       >
         <div className="flex flex-row-reverse">
@@ -27,7 +27,7 @@ const AnswerSources = ({ sources, message_id }) => {
             .map((source, index) => (
               <div
                 key={index}
-                className="w-4 h-4 overflow-hidden rounded-full border-2 border-white dark:border-[#1e1e1e] -ml-1"
+                className="w-4 h-4 overflow-hidden rounded-full border-2 border-white dark:border-ink-900 -ml-1"
               >
                 <img
                   alt={source.domain}
@@ -37,7 +37,7 @@ const AnswerSources = ({ sources, message_id }) => {
               </div>
             ))}
         </div>
-        <span className="text-[12px] font-medium text-[#555] dark:text-[#aaa]">
+        <span className="text-[12px] font-medium text-ink-650 dark:text-ink-400">
           {sources.length} {sources.length === 1 ? "source" : "sources"}
         </span>
       </button>

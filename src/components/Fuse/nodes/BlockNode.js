@@ -143,7 +143,7 @@ const BlockNode = ({ id, data, selected }) => {
                 removeBlock(id);
               }}
               className="w-5 h-5 flex items-center justify-center rounded-md
-                text-[#aaa] dark:text-[#555]
+                text-ink-400 dark:text-ink-550
                 hover:text-red-500 dark:hover:text-red-400
                 transition-colors duration-150"
             >
@@ -166,7 +166,7 @@ const BlockNode = ({ id, data, selected }) => {
             style={{ background: cc.dot }}
           />
           <span
-            className={`text-[10.5px] font-semibold leading-tight truncate max-w-[180px] ${cc.textClass}`}
+            className={`text-[11px] font-semibold leading-tight truncate max-w-[180px] ${cc.textClass}`}
             style={cc.textStyle}
             title={label}
           >

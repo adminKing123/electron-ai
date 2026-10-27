@@ -7,7 +7,7 @@ const ChartLoader = () => {
         viewBox="0 0 160 100"
         fill="none"
         stroke="currentColor"
-        className="text-[#bbb] dark:text-[#444]"
+        className="text-ink-450 dark:text-ink-600"
         style={{ strokeWidth: 2 }}
       >
         <line x1="10" y1="90" x2="150" y2="90" stroke="currentColor" />
@@ -24,7 +24,7 @@ const ChartLoader = () => {
         />
       </svg>
 
-      <span className="text-[#aaa] dark:text-[#555] font-medium text-[11px] animate-pulse">
+      <span className="text-ink-400 dark:text-ink-550 font-medium text-[11px] animate-pulse">
         Generating chart...
       </span>
 

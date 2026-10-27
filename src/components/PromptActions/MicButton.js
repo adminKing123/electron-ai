@@ -104,9 +104,9 @@ const MicButton = () => {
           onClick={handleCancel}
           title="Cancel"
           className="w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#888] dark:text-[#888]
+            text-ink-500 dark:text-ink-500
             hover:text-red-500 dark:hover:text-red-400
-            hover:bg-[#ebebeb] dark:hover:bg-[#222]
+            hover:bg-ink-100 dark:hover:bg-ink-875
             transition-colors"
         >
           <PiX className="w-[14px] h-[14px]" />
@@ -115,9 +115,9 @@ const MicButton = () => {
           onClick={handlePass}
           title="Apply transcription"
           className="w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#888] dark:text-[#888]
-            hover:text-[#111] dark:hover:text-white
-            hover:bg-[#ebebeb] dark:hover:bg-[#222]
+            text-ink-500 dark:text-ink-500
+            hover:text-ink-975 dark:hover:text-white
+            hover:bg-ink-100 dark:hover:bg-ink-875
             transition-colors"
         >
           <PiCheck className="w-[14px] h-[14px]" />
@@ -131,9 +131,9 @@ const MicButton = () => {
       onClick={handleStart}
       title="Speak"
       className="w-7 h-7 flex items-center justify-center rounded-lg
-        text-[#888] dark:text-[#888]
-        hover:text-[#111] dark:hover:text-white
-        hover:bg-[#ebebeb] dark:hover:bg-[#222]
+        text-ink-500 dark:text-ink-500
+        hover:text-ink-975 dark:hover:text-white
+        hover:bg-ink-100 dark:hover:bg-ink-875
         transition-colors"
     >
       <BsMic className="w-[14px] h-[14px]" />

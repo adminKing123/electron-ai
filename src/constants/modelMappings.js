@@ -11,8 +11,8 @@ export const MODEL_META = {
   "noney-1.0-fast-20241001": {
     name: "Comet 1.0 Fast",
     geminiModel: "gemini-2.5-flash",
-    color: "#6366f1",
-    colorAlpha: "rgba(99,102,241,0.15)",
+    color: "#8b5cf6",
+    colorAlpha: "rgba(139,92,246,0.15)",
   },
   "noney-1.0-twinkle-20241001": {
     name: "Comet 1.0 Twinkle",
@@ -62,7 +62,7 @@ export const MODEL_META = {
 export const UNKNOWN_MODEL_META = {
   name: "Unknown Model",
   geminiModel: "",
-  color: "#9ca3af",
+  color: "#9894ae",
   colorAlpha: "rgba(156,163,175,0.15)",
 };
 

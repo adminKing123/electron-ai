@@ -26,9 +26,10 @@ const PromptBox = ({ prompt }) => {
       <div
         ref={contentRef}
         className={`relative max-w-[80%] sm:max-w-[68%] font-sans text-[14px] leading-[1.55]
-          text-[#111] dark:text-[#e8e8e8]
+          text-ink-975 dark:text-ink-50
           px-4 py-2.5
-          bg-[#efefef] dark:bg-[#252525]
+          bg-brand-50 dark:bg-brand-950
+          border border-brand-100 dark:border-brand-900
           rounded-2xl rounded-tr-[4px]
           w-fit break-words whitespace-pre-wrap
           ${collapsed && shouldShowButton ? "max-h-[160px] overflow-hidden" : ""}
@@ -36,7 +37,7 @@ const PromptBox = ({ prompt }) => {
       >
         {prompt}
         {collapsed && shouldShowButton && (
-          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-[#efefef] dark:from-[#252525] to-transparent pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-brand-50 dark:from-brand-950 to-transparent pointer-events-none" />
         )}
       </div>
 
@@ -45,8 +46,8 @@ const PromptBox = ({ prompt }) => {
         <button
           onClick={() => setCollapsed((prev) => !prev)}
           className="flex items-center gap-1 text-[11px] font-medium
-            text-[#aaa] dark:text-[#555]
-            hover:text-[#555] dark:hover:text-[#888]
+            text-ink-400 dark:text-ink-550
+            hover:text-ink-650 dark:hover:text-ink-500
             transition-colors"
         >
           <FaAngleDown

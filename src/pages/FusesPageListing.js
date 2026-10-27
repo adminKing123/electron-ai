@@ -18,53 +18,58 @@ import ROUTES from "../router/routes";
 const PAGE_SIZE = 20;
 
 const WorkflowsHeading = ({ creating, onCreate }) => (
-  <div className="flex items-end justify-between mb-5 sm:mb-7">
-    <h2 className="text-[19px] sm:text-[22px] font-semibold text-black dark:text-white tracking-tight leading-tight">
-      Fuses
-    </h2>
-    <FusePrimaryButton icon={TbPlus} loading={creating} onClick={onCreate}>
+  <div className="pb-6 mb-6 border-b border-ink-100 dark:border-ink-800 flex items-end justify-between gap-4 flex-wrap">
+    <div>
+      <h1 className="text-[24px] md:text-[28px] font-bold tracking-tight text-ink-975 dark:text-white leading-tight">
+        Fuses
+      </h1>
+      <p className="text-[14px] text-ink-500 dark:text-ink-500 mt-1">
+        Create, manage and monitor your automations
+      </p>
+    </div>
+    <FusePrimaryButton icon={TbPlus} loading={creating} onClick={onCreate} className="h-10">
       Create New
     </FusePrimaryButton>
   </div>
 );
 
-/** Skeleton loader — card list on mobile, table on desktop. */
+/** Skeleton loader � card list on mobile, table on desktop. */
 const WorkflowsSkeletonLoader = ({ count = 6 }) => (
-  <div className="rounded-lg border border-[#e3e5e8] dark:border-[#2a2a2a] bg-white dark:bg-[#171717]">
+  <div className="rounded-2xl border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850 overflow-hidden">
     {/* Mobile card skeletons */}
     <div className="md:hidden">
       {[...Array(count)].map((_, i) => (
         <div
           key={i}
-          className={`flex items-center gap-3 px-4 py-3.5 ${i !== count - 1 ? "border-b border-[#f0f0f0] dark:border-[#212121]" : ""}`}
+          className={`flex items-center gap-3 px-4 py-3.5 ${i !== count - 1 ? "border-b border-ink-100 dark:border-ink-800" : ""}`}
         >
           <div className="flex-1">
             <div className="skeleton h-3.5 w-40 rounded-md" />
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-2.5 mt-2">
               <div className="skeleton h-5 w-16 rounded-full" />
-              <div className="flex gap-1.5">
-                {[...Array(3)].map((_, j) => <div key={j} className="skeleton w-4 h-4 rounded-md" />)}
-              </div>
+              {[...Array(3)].map((_, j) => <div key={j} className="skeleton w-5 h-5 rounded-md" />)}
             </div>
           </div>
-          <div className="flex gap-1 flex-shrink-0">
-            <div className="skeleton w-7 h-7 rounded-lg" />
-            <div className="skeleton w-7 h-7 rounded-lg" />
-          </div>
+          <div className="skeleton w-8 h-8 rounded-lg flex-shrink-0" />
         </div>
       ))}
     </div>
 
     {/* Desktop table skeleton */}
     <div className="hidden md:block overflow-x-auto">
-      <table className="w-full min-w-[420px] border-collapse">
+      <table className="w-full min-w-[640px] border-collapse">
         <thead>
-          <tr className="border-b border-[#eef0f2] dark:border-[#252525] bg-[#f8f9fb] dark:bg-[#1a1a1a]">
-            {["Name", "Time", "Nodes", "Status", ""].map((h, i) => (
+          <tr className="border-b border-ink-100 dark:border-ink-800 bg-ink-25/60 dark:bg-ink-850">
+            {[
+              ["Name", ""],
+              ["Steps", "w-[200px]"],
+              ["Last updated", "w-[140px]"],
+              ["Status", "w-[120px]"],
+              ["", "w-[130px]"],
+            ].map(([h, w], i) => (
               <th
                 key={i}
-                className={`px-4 py-2.5 text-left text-[11px] font-semibold text-[#9ca3af] dark:text-[#666] uppercase tracking-wide
-                  ${h === "Nodes" ? "hidden md:table-cell" : h === "Time" ? "hidden sm:table-cell" : h === "Status" ? "text-right" : h === "" ? "text-right w-[120px]" : ""}`}
+                className={`px-5 py-3 text-left text-[12px] font-medium text-ink-500 dark:text-ink-500 whitespace-nowrap ${w}`}
               >
                 {h}
               </th>
@@ -73,19 +78,21 @@ const WorkflowsSkeletonLoader = ({ count = 6 }) => (
         </thead>
         <tbody>
           {[...Array(count)].map((_, i) => (
-            <tr key={i} className={i !== count - 1 ? "border-b border-[#eef0f2] dark:border-[#252525]" : ""}>
-              <td className="px-4 py-2.5"><div className="skeleton h-3.5 w-36 rounded-md" /></td>
-              <td className="px-4 py-2.5 hidden sm:table-cell"><div className="skeleton h-3 w-24 rounded-md" /></td>
-              <td className="px-4 py-3.5 hidden md:table-cell">
+            <tr key={i} className={i !== count - 1 ? "border-b border-ink-100 dark:border-ink-800" : ""}>
+              <td className="px-5 py-3.5">
+                <div className="skeleton h-3.5 w-44 rounded-md" />
+              </td>
+              <td className="px-5 py-3.5">
                 <div className="flex gap-2">
                   {[...Array(3)].map((_, j) => <div key={j} className="skeleton w-5 h-5 rounded-md" />)}
                 </div>
               </td>
-              <td className="px-4 py-2.5 text-right"><div className="skeleton h-2.5 w-2.5 rounded-full ml-auto" /></td>
-              <td className="px-4 py-2.5">
-                <div className="flex justify-end gap-2">
-                  <div className="skeleton h-3 w-10 rounded-md" />
-                  <div className="skeleton w-7 h-7 rounded-lg" />
+              <td className="px-5 py-3.5"><div className="skeleton h-3 w-20 rounded-md" /></td>
+              <td className="px-5 py-3.5"><div className="skeleton h-5 w-16 rounded-full" /></td>
+              <td className="px-5 py-3.5">
+                <div className="flex justify-end gap-1.5">
+                  <div className="skeleton h-8 w-16 rounded-lg" />
+                  <div className="skeleton w-8 h-8 rounded-lg" />
                 </div>
               </td>
             </tr>
@@ -174,7 +181,7 @@ export default function FusesPageListing() {
         />
       }
     >
-      <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-10">
+      <div className="max-w-[1080px] mx-auto px-4 pt-6 pb-12 sm:px-8 sm:pt-10">
         <WorkflowsHeading creating={creating} onCreate={handleCreate} />
         {loading ? (
           <WorkflowsSkeletonLoader count={6} />

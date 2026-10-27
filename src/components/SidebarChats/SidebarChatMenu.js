@@ -41,8 +41,8 @@ const SidebarChatMenu = ({ chat }) => {
           className="absolute right-1 top-1/2 z-[1] -translate-y-1/2
             flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-md
             opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100
-            text-[#888] dark:text-[#666]
-            hover:text-[#111] dark:hover:text-white
+            text-ink-500 dark:text-ink-600
+            hover:text-ink-975 dark:hover:text-white
             transition-opacity"
         >
           <SlOptions className="w-[11px] h-[11px]" />
@@ -54,13 +54,13 @@ const SidebarChatMenu = ({ chat }) => {
           side="bottom"
           align="start"
           className="min-w-[150px] p-1 rounded-xl z-50
-            bg-white dark:bg-[#252525]
-            border border-[#e8e8e8] dark:border-[#2e2e2e]
+            bg-white dark:bg-ink-825
+            border border-ink-100 dark:border-ink-775
             shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
         >
           <DropdownMenuButton onClick={handleClick} icon={PiShareBold} label="Share" />
           <DropdownMenuButton onClick={handleRename} icon={FiEdit2} label="Rename" />
-          <DropdownMenu.Separator className="h-px my-1 bg-[#ebebeb] dark:bg-[#2e2e2e]" />
+          <DropdownMenu.Separator className="h-px my-1 bg-ink-100 dark:bg-ink-775" />
           <DropdownMenuButton
             onClick={handleDelete}
             icon={AiOutlineDelete}

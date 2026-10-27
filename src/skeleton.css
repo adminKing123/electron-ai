@@ -5,16 +5,16 @@
 }
 
 :root {
-  --skeleton-bg-color: #f8f8f8;
-  --skeleton-highlight-color: #e4e4e4;
+  --skeleton-bg-color: #f9f9fc;
+  --skeleton-highlight-color: #e5e2f0;
   --skeleton-animation-duration: 1.5s;
   --skeleton-animation-direction: normal;
   --skeleton-pseudo-element-display: block;
 }
 
 .dark {
-  --skeleton-bg-color: #252525;
-  --skeleton-highlight-color: #383838;
+  --skeleton-bg-color: #161616;
+  --skeleton-highlight-color: #363636;
   --skeleton-animation-duration: 1.5s;
   --skeleton-animation-direction: normal;
   --skeleton-pseudo-element-display: block;

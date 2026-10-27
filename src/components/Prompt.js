@@ -25,9 +25,9 @@ const Prompt = ({ chat }) => {
       {chat.is_new ? <ChatGreetings /> : null}
       <div
         id="inner-prompt-box"
-        className="bg-white dark:bg-[#252525] rounded-3xl
-          border border-[#e4e4e4] dark:border-[#2e2e2e]
-          shadow-[0_2px_16px_rgba(0,0,0,0.07)] dark:shadow-[0_2px_16px_rgba(0,0,0,0.35)]"
+        className="bg-white dark:bg-ink-825 rounded-[22px]
+          border border-ink-150 dark:border-ink-750
+          shadow-glow-lg dark:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)]"
       >
         <MessageRelatedActionsInPrompt fileInputRef={fileInputRef} />
         <div className="px-5 py-[15px]">

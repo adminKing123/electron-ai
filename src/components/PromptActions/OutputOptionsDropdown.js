@@ -44,9 +44,9 @@ const OutputOptionsDropdown = () => {
         <button
           title="Output options"
           className="relative flex items-center gap-1.5 px-2 py-1.5 sm:px-3 rounded-full
-            bg-[#f4f4f4] dark:bg-[#3a3a3a]
-            hover:bg-[#e9e9e9] dark:hover:bg-[#444444]
-            text-[13px] font-medium text-black dark:text-white
+            bg-ink-50 dark:bg-ink-725
+            hover:bg-ink-100 dark:hover:bg-ink-700
+            text-[13px] font-medium text-ink-950 dark:text-white
             transition-colors duration-150 outline-none"
         >
           <MdOutlineAutoAwesome className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
@@ -54,11 +54,11 @@ const OutputOptionsDropdown = () => {
           {/* Active count badge — number on sm+, dot on xs */}
           {hasActiveOption && (
             <>
-              <span className="sm:hidden w-2 h-2 rounded-full bg-[#111] dark:bg-white" />
+              <span className="sm:hidden w-2 h-2 rounded-full bg-brand-600 dark:bg-brand-500" />
               <span className="hidden sm:flex items-center justify-center w-4 h-4 rounded-full
-                bg-[#111] dark:bg-white
-                text-white dark:text-black
-                text-[10px] font-bold leading-none">
+                bg-brand-600 dark:bg-brand-500
+                text-white
+                text-[11px] font-bold leading-none">
                 {activeCount}
               </span>
             </>
@@ -70,8 +70,8 @@ const OutputOptionsDropdown = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className="p-1.5 min-w-[230px] rounded-2xl
-            border border-[#e5e5e5] dark:border-[#3a3a3a]
-            bg-white dark:bg-[#2a2a2a]
+            border border-ink-150 dark:border-ink-725
+            bg-white dark:bg-ink-800
             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]
             z-10"
           sideOffset={8}
@@ -86,19 +86,19 @@ const OutputOptionsDropdown = () => {
                   setters[key](!isActive);
                 }}
                 className="flex items-center gap-2 px-2.5 py-[7px] rounded-xl outline-none cursor-pointer
-                  text-[#333] dark:text-[#ccc]
-                  hover:bg-[#f4f4f4] dark:hover:bg-[#363636]
+                  text-ink-750 dark:text-ink-300
+                  hover:bg-ink-50 dark:hover:bg-ink-750
                   transition-colors duration-100"
               >
                 <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />
                 <div className="flex-1 min-w-0">
                   <p className="text-[13px] font-medium leading-snug">{label}</p>
-                  <p className="text-[11px] text-[#aaa] dark:text-[#666] leading-snug">
+                  <p className="text-[11px] text-ink-400 dark:text-ink-600 leading-snug">
                     {description}
                   </p>
                 </div>
                 {isActive && (
-                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-[#333] dark:text-[#ccc] opacity-70" />
+                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-brand-600 dark:text-brand-400" />
                 )}
               </DropdownMenu.Item>
             );

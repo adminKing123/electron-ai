@@ -72,8 +72,8 @@ const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes…" }) 
       value={query}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="flex-1 bg-transparent text-[15px] text-[#202124] dark:text-[#e8eaed]
-        placeholder:text-[#5f6368] dark:placeholder:text-[#9aa0a6]
+      className="flex-1 bg-transparent text-[15px] text-ink-875 dark:text-ink-100
+        placeholder:text-ink-600 dark:placeholder:text-ink-450
         outline-none border-none"
     />
   </div>
@@ -132,32 +132,32 @@ const StarterPanel = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-[#1a1a1a]">
+      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-ink-850">
         <div className="flex items-center gap-2 mb-3">
-          <TbLayoutGrid className="w-[20px] h-[20px] text-[#5f6368] dark:text-[#9aa0a6]" />
-          <span className="text-[16px] font-medium text-[#202124] dark:text-[#e8eaed]">
+          <TbLayoutGrid className="w-[20px] h-[20px] text-ink-600 dark:text-ink-450" />
+          <span className="text-[16px] font-medium text-ink-875 dark:text-ink-100">
             Choose a starter
           </span>
         </div>
         <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters…" />
       </div>
-      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-[#1a1a1a]">
+      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-ink-850">
         {loadingNodes ? (
           ["General", "Webex"].map((sk) => (
             <div key={sk} className="flex flex-col gap-2">
-              <div className="h-3 w-24 rounded bg-[#efefef] dark:bg-[#222] animate-pulse" />
+              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-ink-875 animate-pulse" />
               <div className="grid grid-cols-2 gap-2">
                 {[1, 2].map((i) => (
                   <div
                     key={i}
-                    className="h-[52px] rounded-2xl bg-[#f1f3f4] dark:bg-[#2d2e30] animate-pulse"
+                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-ink-775 animate-pulse"
                   />
                 ))}
               </div>
             </div>
           ))
         ) : sections.length === 0 ? (
-          <p className="text-center text-[12px] text-[#bbb] dark:text-[#444] select-none mt-6">
+          <p className="text-center text-[12px] text-ink-450 dark:text-ink-600 select-none mt-6">
             {query ? "No starters match your search" : "No starter nodes available"}
           </p>
         ) : (
@@ -220,46 +220,34 @@ const AddNodePanel = () => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-[#1a1a1a]">
+      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-ink-850">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[16px] font-medium text-[#202124] dark:text-[#e8eaed]">
+          <span className="text-[16px] font-medium text-ink-875 dark:text-ink-100">
             Add Node
           </span>
-          <button
-            type="button"
-            onClick={() => setAddingNode(false)}
-            className="w-8 h-8 flex items-center justify-center rounded-full
-              text-[#5f6368] dark:text-[#9aa0a6]
-              hover:text-[#202124] dark:hover:text-[#e8eaed]
-              hover:bg-[#f1f3f4] dark:hover:bg-[#2d2e30]
-              transition-colors"
-            aria-label="Close"
-          >
-            <TbX className="w-[18px] h-[18px]" />
-          </button>
         </div>
         <NodePickerSearch query={query} onChange={setQuery} />
       </div>
 
       {/* Sectioned node list */}
-      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-[#1a1a1a]">
+      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-ink-850">
         {loadingActionNodes ? (
           // Loading skeleton: two mock sections
           ["Webex", "General"].map((sk) => (
             <div key={sk} className="flex flex-col gap-2">
-              <div className="h-3 w-24 rounded bg-[#efefef] dark:bg-[#222] animate-pulse" />
+              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-ink-875 animate-pulse" />
               <div className="grid grid-cols-2 gap-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="h-[52px] rounded-2xl bg-[#f1f3f4] dark:bg-[#2d2e30] animate-pulse"
+                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-ink-775 animate-pulse"
                   />
                 ))}
               </div>
             </div>
           ))
         ) : sections.length === 0 ? (
-          <p className="text-center text-[12px] text-[#bbb] dark:text-[#444] select-none mt-6">
+          <p className="text-center text-[12px] text-ink-450 dark:text-ink-600 select-none mt-6">
             {query ? "No nodes match your search" : "No action nodes available"}
           </p>
         ) : (
@@ -304,15 +292,15 @@ const WebhookUrlDisplay = ({ workflowId }) => {
 
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-[12px] font-medium text-[#555] dark:text-[#888]">
+      <label className="text-[12px] font-medium text-ink-650 dark:text-ink-500">
         Webhook URL
       </label>
       <div className="flex items-center gap-2">
         <code
           className="flex-1 w-full px-3 py-2.5 rounded-lg text-[13px] font-mono
-            text-[#222] dark:text-[#d0d0d0]
-            bg-white dark:bg-[#1a1a1a]
-            border border-[#ddd] dark:border-[#2e2e2e]
+            text-ink-875 dark:text-ink-200
+            bg-white dark:bg-ink-850
+            border border-ink-200 dark:border-ink-775
             truncate"
           title={url}
         >
@@ -323,9 +311,9 @@ const WebhookUrlDisplay = ({ workflowId }) => {
           onClick={handleCopy}
           title={copied ? "Copied!" : "Copy URL"}
           className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
-            text-[#888] dark:text-[#666]
-            hover:text-[#111] dark:hover:text-white
-            hover:bg-[#ebebeb] dark:hover:bg-[#222]
+            text-ink-500 dark:text-ink-600
+            hover:text-ink-975 dark:hover:text-white
+            hover:bg-ink-100 dark:hover:bg-ink-875
             transition-colors"
         >
           {copied ? (
@@ -335,7 +323,7 @@ const WebhookUrlDisplay = ({ workflowId }) => {
           )}
         </button>
       </div>
-      <span className="text-[11px] text-[#bbb] dark:text-[#555]">
+      <span className="text-[11px] text-ink-450 dark:text-ink-550">
         Send POST requests to this URL to trigger the workflow.
       </span>
     </div>
@@ -364,15 +352,15 @@ const NodeLabelInput = ({ value, onChange, onBlur, maxLength, typeLabel }) => {
         placeholder={typeLabel}
         className="w-full bg-transparent px-0 py-0.5
           text-[15px] font-semibold
-          text-[#111] dark:text-[#e0e0e0]
-          placeholder:text-[#bbb] dark:placeholder:text-[#555]
+          text-ink-975 dark:text-ink-150
+          placeholder:text-ink-450 dark:placeholder:text-ink-550
           border-none outline-none"
       />
       <div className="flex items-center justify-between gap-2 min-w-0">
-        <span className="text-[11px] text-[#aaa] dark:text-[#555] truncate">
+        <span className="text-[11px] text-ink-400 dark:text-ink-550 truncate">
           {typeLabel}
         </span>
-        <span className="text-[10px] tabular-nums text-[#ccc] dark:text-[#484848] flex-shrink-0">
+        <span className="text-[11px] tabular-nums text-ink-400 dark:text-ink-600 flex-shrink-0">
           {value.length}/{maxLength}
         </span>
       </div>
@@ -403,9 +391,9 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-4 pb-3.5 border-b border-[#e8e8e8] dark:border-[#2a2a2a] flex-shrink-0">
+      <div className="px-4 pt-4 pb-3.5 border-b border-ink-100 dark:border-ink-800 flex-shrink-0">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <p className="text-[10.5px] font-semibold uppercase tracking-widest text-[#bbb] dark:text-[#555]">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-450 dark:text-ink-550">
             {node.data.isStarter ? "Starter" : "Node"} {getDisplayFuseNodeId(node.id)}
           </p>
           {/* Delete node button */}
@@ -438,7 +426,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
           />
         </div>
         {nodeDef.description && (
-          <p className="text-[12px] text-[#5b8fc9] dark:text-[#4a7ab5] mt-2 leading-relaxed">
+          <p className="text-[12px] text-brand-500 dark:text-brand-400 mt-2 leading-relaxed">
             {nodeDef.description}
           </p>
         )}
@@ -453,7 +441,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
 
         {/* Webex activation note — webhook is registered on Turn On */}
         {node_type === "webex_message" && (
-          <p className="text-[11.5px] leading-relaxed text-[#888] dark:text-[#555]
+          <p className="text-[12px] leading-relaxed text-ink-500 dark:text-ink-550
             px-3 py-2.5 rounded-lg bg-[#f0f9ff] dark:bg-[#0c1929]
             border border-[#bae6fd] dark:border-[#0c4a6e]">
             When you turn the workflow on, a Webex webhook is registered automatically.
@@ -468,16 +456,16 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
 
         {node_type === "get_notified_email" && (
           <div
-            className="rounded-xl border border-[#ebebeb] dark:border-[#232323]
-              bg-white dark:bg-[#171717] px-3 py-3"
+            className="rounded-xl border border-ink-100 dark:border-ink-850
+              bg-white dark:bg-ink-850 px-3 py-3"
           >
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] mb-1">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-550 mb-1">
               To
             </p>
-            <p className="text-[13px] font-medium text-[#111] dark:text-[#e8eaed] break-all">
+            <p className="text-[13px] font-medium text-ink-975 dark:text-ink-100 break-all">
               {accountEmail || "Your signed-in email"}
             </p>
-            <p className="text-[11px] text-[#888] dark:text-[#666] mt-1.5 leading-relaxed">
+            <p className="text-[11px] text-ink-500 dark:text-ink-600 mt-1.5 leading-relaxed">
               Always sent to your account email. This cannot be changed.
             </p>
           </div>
@@ -491,7 +479,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
             variables={variables}
           />
         ) : (
-          <p className="text-[12px] text-[#bbb] dark:text-[#444]">
+          <p className="text-[12px] text-ink-450 dark:text-ink-600">
             No configuration required for this node.
           </p>
         )}
@@ -914,7 +902,7 @@ const NodeConfigPanel = ({ className = "" }) => {
       />
     ) : (
       <div className="flex items-center justify-center h-full">
-        <p className="text-[12px] text-[#bbb] dark:text-[#444] select-none">
+        <p className="text-[12px] text-ink-450 dark:text-ink-600 select-none">
           Unknown node type: {selectedNode.data?.nodeType}
         </p>
       </div>

@@ -22,16 +22,16 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
     
     // Show active sort icon
     return sortState.order === "asc" ? (
-      <MdArrowUpward className="inline ml-1 h-3 w-3 text-blue-600 dark:text-blue-400" />
+      <MdArrowUpward className="inline ml-1 h-3 w-3 text-brand-600 dark:text-brand-400" />
     ) : (
-      <MdArrowDownward className="inline ml-1 h-3 w-3 text-blue-600 dark:text-blue-400" />
+      <MdArrowDownward className="inline ml-1 h-3 w-3 text-brand-600 dark:text-brand-400" />
     );
   };
 
   return (
     <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
       <table className="hidden sm:table w-full text-xs">
-        <thead className="bg-[#f8f8f8] dark:bg-[#1a1a1a] border-b border-[#e8e8e8] dark:border-[#2a2a2a]">
+        <thead className="bg-ink-25 dark:bg-ink-850 border-b border-ink-100 dark:border-ink-800">
           <tr>
             {cols.map((col, idx) => {
               const sortable = isSortable(col._k);
@@ -39,10 +39,10 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
               return (
                 <th
                   key={idx}
-                  className={`px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap ${
-                    sortable ? "cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-[#2A2A2A] transition-colors" : ""
+                  className={`px-4 py-3 text-left font-semibold text-ink-725 dark:text-ink-200 whitespace-nowrap ${
+                    sortable ? "cursor-pointer select-none hover:bg-ink-50 dark:hover:bg-ink-800 transition-colors" : ""
                   } ${
-                    sortState ? "bg-blue-50 dark:bg-blue-900/20" : ""
+                    sortState ? "bg-brand-50 dark:bg-brand-900/20" : ""
                   }`}
                   onClick={() => sortable && onSortChange(col._k)}
                   title={sortable ? (sortState ? `Sorted ${sortState.order}ending - Click to change` : "Click to sort") : ""}
@@ -58,12 +58,12 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
           {data.map((row, rowIdx) => (
             <tr
               key={rowIdx}
-              className="border-b border-[#e8e8e8] dark:border-[#2a2a2a] hover:bg-[#f8f8f8] dark:hover:bg-[#1e1e1e] transition-colors"
+              className="border-b border-ink-100 dark:border-ink-800 hover:bg-ink-25 dark:hover:bg-ink-825 transition-colors"
             >
               {cols.map((col, colIdx) => (
                 <td
                   key={colIdx}
-                  className="px-4 py-2.5 text-[12px] text-[#333] dark:text-[#bbb]"
+                  className="px-4 py-2.5 text-[12px] text-ink-750 dark:text-ink-350"
                 >
                   {row[col._k] || "-"}
                 </td>

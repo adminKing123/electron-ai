@@ -92,9 +92,9 @@ export default function RemovableEdge({
           <button
             type="button"
             className="w-[22px] h-[22px] flex items-center justify-center rounded-full
-              bg-white dark:bg-[#2d2e30]
-              border border-[#dadce0] dark:border-[#3c4043]
-              text-[#5f6368] dark:text-[#9aa0a6]
+              bg-white dark:bg-ink-775
+              border border-ink-200 dark:border-ink-725
+              text-ink-600 dark:text-ink-450
               hover:text-[#d93025] hover:border-[#d93025]
               dark:hover:text-[#f28b82] dark:hover:border-[#f28b82]
               hover:bg-[#fce8e6] dark:hover:bg-[#3c1917]

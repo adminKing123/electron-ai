@@ -14,12 +14,12 @@ const MdDownloadInlineFile = ({ url, children }) => {
       rel="noopener noreferrer"
       download={text}
       className="px-2 py-1 text-[11px] inline-flex items-center gap-1
-        border border-[#e5e5e5] dark:border-[#2e2e2e]
-        bg-[#f0f0f0] dark:bg-[#252525]
-        hover:bg-[#e8e8e8] dark:hover:bg-[#2a2a2a]
-        active:bg-[#e0e0e0] dark:active:bg-[#222]
+        border border-ink-150 dark:border-ink-775
+        bg-ink-75 dark:bg-ink-825
+        hover:bg-ink-100 dark:hover:bg-ink-800
+        active:bg-ink-150 dark:active:bg-ink-875
         rounded-full no-underline
-        text-[#555] dark:text-[#aaa]
+        text-ink-650 dark:text-ink-400
         transition-colors"
     >
       <FileIcon className="w-[12px] h-[12px] flex-shrink-0" />

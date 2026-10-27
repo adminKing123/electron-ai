@@ -4,7 +4,7 @@ const Editor = () => {
   return (
     <div>
       <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3 mb-[1px] header-shadow">
-        <h1 className="text-xl font-semibold text-black dark:text-white">
+        <h1 className="text-xl font-semibold text-ink-950 dark:text-white">
           Editor
         </h1>
       </div>
@@ -53,11 +53,11 @@ const ResizablePanel = ({ children }) => {
       )}
       <div className="flex">
         <div
-          className="hidden md:block h-screen w-[3px] hover:outline active:outline outline-[#f2f2f2] dark:outline-[#2c2c2c] bg-[#f2f2f2] dark:bg-[#2c2c2c] cursor-col-resize"
+          className="hidden md:block h-screen w-[3px] hover:outline active:outline outline-ink-50 dark:outline-ink-775 bg-ink-50 dark:bg-ink-775 cursor-col-resize"
           onMouseDown={() => setIsResizing(true)}
         />
         <div
-          className="h-screen overflow-auto fixed top-0 left-0 min-w-[100vw] md:static md:min-w-96 md:max-w-[50vw] bg-[#ffffff] dark:bg-[#212121]"
+          className="h-screen overflow-auto fixed top-0 left-0 min-w-[100vw] md:static md:min-w-96 md:max-w-[50vw] bg-white dark:bg-ink-875"
           style={{ width: `${width}px` }}
         >
           {children}

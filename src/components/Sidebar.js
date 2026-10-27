@@ -44,10 +44,10 @@ const SidebarHeader = ({ toggleSidebar }) => {
   };
 
   return (
-    <div className="w-full h-[56px] flex items-center justify-between px-4 flex-shrink-0 border-b border-[#ebebeb] dark:border-[#232323]">
+    <div className="w-full h-[56px] flex items-center justify-between px-4 flex-shrink-0 border-b border-ink-100 dark:border-ink-800">
       <div className="flex items-center gap-2.5">
-        <TbGalaxy className="text-[#111] dark:text-white w-[18px] h-[18px]" />
-        <span className="font-semibold text-[14px] text-[#111] dark:text-white tracking-tight">
+        <TbGalaxy className="text-ink-975 dark:text-white w-[20px] h-[20px]" />
+        <span className="font-bold text-[15px] tracking-tight text-ink-975 dark:text-white">
           Comet AI
         </span>
       </div>
@@ -57,9 +57,9 @@ const SidebarHeader = ({ toggleSidebar }) => {
           onClick={handleNewChat}
           title="New chat"
           className="w-8 h-8 flex items-center justify-center rounded-lg
-            text-[#888] dark:text-[#666]
-            hover:text-[#111] dark:hover:text-[#fff]
-            hover:bg-[#ebebeb] dark:hover:bg-[#242424]
+            text-ink-500 dark:text-ink-600
+            hover:text-ink-975 dark:hover:text-white
+            hover:bg-ink-100 dark:hover:bg-ink-800
             transition-colors"
         >
           <TbEdit className="w-[17px] h-[17px]" />
@@ -68,9 +68,9 @@ const SidebarHeader = ({ toggleSidebar }) => {
           onClick={toggleSidebar}
           title="Toggle sidebar"
           className="w-8 h-8 flex items-center justify-center rounded-lg
-            text-[#888] dark:text-[#666]
-            hover:text-[#111] dark:hover:text-[#fff]
-            hover:bg-[#ebebeb] dark:hover:bg-[#242424]
+            text-ink-500 dark:text-ink-600
+            hover:text-ink-975 dark:hover:text-white
+            hover:bg-ink-100 dark:hover:bg-ink-800
             transition-colors"
         >
           <TbLayoutSidebar className="w-[17px] h-[17px] hidden md:block" />
@@ -106,13 +106,13 @@ const Sidebar = () => {
     <>
       <SidebarOverlay open={open} toggleSidebar={toggleSidebar} />
       <div
-        className={`bg-[#F9F9F9] dark:bg-[#171717] h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-300 top-0 left-0 z-10
+        className={`bg-ink-50 dark:bg-ink-850 h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-300 top-0 left-0 z-10
         ${
           mainSidebarLayoutType === "editor" ? "absolute" : "absolute md:static"
-        } ${open ? "w-[260px]" : "w-0"}`}
+        } ${open ? "w-[288px] border-r border-ink-100 dark:border-ink-800" : "w-0"}`}
         id="sidebar"
       >
-        <div className="w-[260px] h-[100dvh] flex flex-col">
+        <div className="w-[288px] h-[100dvh] flex flex-col">
           <SidebarHeader toggleSidebar={toggleSidebar} />
           <div className="flex-grow overflow-y-auto" id="sidebar-scroll-container">
             <SidebarOptions />

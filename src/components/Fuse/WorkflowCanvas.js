@@ -384,8 +384,8 @@ const WorkflowCanvas = ({
   const displayEdges = useMemo(() => {
     if (!readOnly) return edges;
 
-    const traversedStroke = isDark ? "#8ab4f8" : "#1a73e8";
-    const idleStroke = isDark ? "#3c4043" : "#dadce0";
+    const traversedStroke = isDark ? "#a78bfa" : "#7c3aed";
+    const idleStroke = isDark ? "#363636" : "#d8d4e8";
 
     return edges.map((edge) => {
       const traversed = runCanvasActive
@@ -428,26 +428,26 @@ const WorkflowCanvas = ({
       onDragOver={readOnly ? undefined : handleDragOver}
     >
       {loading ? (
-        <div className="flex items-center justify-center h-full min-h-[200px] text-[#c0c0c0] dark:text-[#3a3a3a]">
+        <div className="flex items-center justify-center h-full min-h-[200px] text-ink-400 dark:text-ink-600">
           <BasicLoader />
         </div>
       ) : nodes.length === 0 ? (
         <div className="flex items-center justify-center h-full min-h-[200px] select-none">
           {readOnly ? (
             <div className="text-center px-4">
-              <p className="text-[14px] font-medium text-[#888] dark:text-[#555]">
+              <p className="text-[14px] font-medium text-ink-500 dark:text-ink-550">
                 Workflow graph unavailable
               </p>
-              <p className="text-[12px] text-[#c0c0c0] dark:text-[#404040] mt-1">
+              <p className="text-[12px] text-ink-400 dark:text-ink-600 mt-1">
                 Could not load the canvas for this run.
               </p>
             </div>
           ) : (
             <div className="text-center">
-              <p className="text-[14px] font-medium text-[#888] dark:text-[#555]">
+              <p className="text-[14px] font-medium text-ink-500 dark:text-ink-550">
                 Pick a starter node
               </p>
-              <p className="text-[12px] text-[#c0c0c0] dark:text-[#404040] mt-1">
+              <p className="text-[12px] text-ink-400 dark:text-ink-600 mt-1">
                 Click or drag a node from the right panel to begin
               </p>
             </div>
@@ -477,7 +477,7 @@ const WorkflowCanvas = ({
           proOptions={{ hideAttribution: true }}
           connectionLineType={ConnectionLineType.SmoothStep}
           connectionLineStyle={{
-            stroke: isDark ? "#8ab4f8" : "#1a73e8",
+            stroke: isDark ? "#a78bfa" : "#7c3aed",
             strokeWidth: 2,
             strokeLinecap: "round",
           }}
@@ -491,20 +491,20 @@ const WorkflowCanvas = ({
             variant={BackgroundVariant.Dots}
             gap={20}
             size={1.5}
-            color={isDark ? "#2a2a2a" : "#e0e0e0"}
+            color={isDark ? "#1f1f1f" : "#e5e2f0"}
           />
           <Controls
             showInteractive={false}
-            className="!shadow-none !border !border-[#e5e5e5] dark:!border-[#2a2a2a] !rounded-xl !overflow-hidden !bg-white dark:!bg-[#2b2b2b]"
+            className="!shadow-none !border !border-ink-150 dark:!border-ink-800 !rounded-xl !overflow-hidden !bg-white dark:!bg-ink-775"
             style={
               isDark
                 ? undefined
                 : {
-                    "--xy-controls-button-color-default": "#444444",
-                    "--xy-controls-button-color-hover-default": "#111111",
+                    "--xy-controls-button-color-default": "#404040",
+                    "--xy-controls-button-color-hover-default": "#020202",
                     "--xy-controls-button-background-color-default": "#ffffff",
-                    "--xy-controls-button-background-color-hover-default": "#f5f5f5",
-                    "--xy-controls-button-border-color-default": "#e5e5e5",
+                    "--xy-controls-button-background-color-hover-default": "#f5f4fa",
+                    "--xy-controls-button-border-color-default": "#e5e2f0",
                   }
             }
           />
@@ -530,17 +530,17 @@ const WorkflowCanvas = ({
           {selectionStyle && (
             <div
               className="absolute pointer-events-none rounded-md
-                border-2 border-[#4a6cf7] dark:border-[#6b8aff]
-                bg-[#4a6cf7]/10 dark:bg-[#6b8aff]/10"
+                border-2 border-brand-600 dark:border-brand-400
+                bg-brand-600/10 dark:bg-brand-400/10"
               style={selectionStyle}
             />
           )}
           <div
             className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none
               px-3 py-1.5 rounded-full shadow
-              bg-white/90 dark:bg-[#1e1e1e]/90
-              border border-[#e0e0e0] dark:border-[#2a2a2a]
-              text-[11px] font-medium text-[#888] dark:text-[#666] select-none"
+              bg-white/90 dark:bg-ink-825/90
+              border border-ink-150 dark:border-ink-800
+              text-[11px] font-medium text-ink-500 dark:text-ink-600 select-none"
           >
             Drag to draw a block &nbsp;·&nbsp; <kbd className="font-mono">Esc</kbd> to cancel
           </div>
@@ -556,15 +556,15 @@ const WorkflowCanvas = ({
           />
           <div
             className="relative z-10 w-[280px]
-              bg-white dark:bg-[#1e1e1e]
-              border border-[#e5e5e5] dark:border-[#2a2a2a]
+              bg-white dark:bg-ink-825
+              border border-ink-150 dark:border-ink-800
               rounded-2xl shadow-2xl p-5"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-[14px] font-semibold text-[#111] dark:text-[#e8e8e8] mb-0.5">
+            <h3 className="text-[14px] font-semibold text-ink-975 dark:text-ink-100 mb-0.5">
               Name your block
             </h3>
-            <p className="text-[11.5px] text-[#999] dark:text-[#555] mb-3.5">
+            <p className="text-[12px] text-ink-450 dark:text-ink-550 mb-3.5">
               {pendingBlock.childIds.length} node{pendingBlock.childIds.length !== 1 ? "s" : ""} will be grouped
             </p>
             <input
@@ -580,11 +580,11 @@ const WorkflowCanvas = ({
               maxLength={48}
               className="w-full px-3 py-2 rounded-lg mb-3
                 text-[13px] font-medium
-                bg-[#f5f5f5] dark:bg-[#252525]
-                border border-[#e0e0e0] dark:border-[#333]
-                text-[#111] dark:text-[#e0e0e0]
-                placeholder:text-[#bbb] dark:placeholder:text-[#555]
-                outline-none focus:border-[#4a6cf7] dark:focus:border-[#6b8aff]
+                bg-ink-50 dark:bg-ink-825
+                border border-ink-150 dark:border-ink-750
+                text-ink-975 dark:text-ink-150
+                placeholder:text-ink-450 dark:placeholder:text-ink-550
+                outline-none focus:border-brand-600 dark:focus:border-brand-400
                 transition-colors"
             />
             <div className="flex gap-2">
@@ -593,9 +593,9 @@ const WorkflowCanvas = ({
                 onClick={handleCancelBlock}
                 className="flex-1 py-1.5 rounded-lg
                   text-[12px] font-medium select-none
-                  text-[#777] dark:text-[#666]
-                  border border-[#e0e0e0] dark:border-[#2a2a2a]
-                  hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+                  text-ink-550 dark:text-ink-600
+                  border border-ink-150 dark:border-ink-800
+                  hover:bg-ink-50 dark:hover:bg-ink-825
                   transition-colors"
               >
                 Cancel
@@ -605,9 +605,9 @@ const WorkflowCanvas = ({
                 onClick={handleConfirmBlock}
                 className="flex-1 py-1.5 rounded-lg
                   text-[12px] font-semibold select-none
-                  bg-[#111] dark:bg-[#e8e8e8]
-                  text-white dark:text-[#111]
-                  hover:bg-[#333] dark:hover:bg-[#ccc]
+                  bg-brand-600 dark:bg-brand-500 shadow-glow
+                  text-white
+                  hover:bg-brand-700 dark:hover:bg-brand-400
                   transition-colors"
               >
                 Create Block

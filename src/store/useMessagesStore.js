@@ -84,7 +84,7 @@ const useMessageStore = create(
           state.data[id].steps = state.data[id].steps.concat(eventdata);
         } else if (eventtype === "source") {
           state.data[id].sources = state.data[id].sources.concat(eventdata);
-          if (window.innerWidth >= 1024)
+          if (window.innerWidth >= 1172)
             useMainSideLayoutStore.getState().setData({
               type: "sources",
               payload: {

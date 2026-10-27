@@ -21,11 +21,11 @@ const SidebarChatButton = ({ chat, ...props }) => {
       className={({ isActive }) =>
         `group relative flex items-center w-full min-w-0 rounded-lg text-[13px] font-medium
         transition-colors duration-100 outline-none
-        text-[#333] dark:text-[#ccc]
+        text-ink-750 dark:text-ink-300
         ${
           isActive
-            ? "bg-[#e6e6e6] dark:bg-[#242424] text-[#111] dark:text-white"
-            : "hover:bg-[#ebebeb] dark:hover:bg-[#222]"
+            ? "bg-brand-500/10 dark:bg-brand-400/15 !text-brand-700 dark:!text-brand-200"
+            : "hover:bg-ink-100 dark:hover:bg-ink-800"
         }`
       }
       {...props}
@@ -148,7 +148,7 @@ const SidebarChats = () => {
     <div className="px-2 pb-6">
       {Object.keys(groupedData).map((date) => (
         <div key={date} className="mt-4 first:mt-2">
-          <p className="text-[11px] text-[#aaa] dark:text-[#555] px-3 mb-1">
+          <p className="text-[11px] text-ink-400 dark:text-ink-550 px-3 mb-1">
             {formatDateTimeV1(date)}
           </p>
           <div className="flex flex-col gap-px">
@@ -165,7 +165,7 @@ const SidebarChats = () => {
 
       {isLoading && (
         <div className="flex items-center justify-center py-4">
-          <div className="w-3 h-3 border-2 border-t-transparent border-black dark:border-t-transparent dark:border-white rounded-full animate-spin"></div>
+          <div className="w-3 h-3 border-2 border-t-transparent border-ink-950 dark:border-t-transparent dark:border-white rounded-full animate-spin"></div>
         </div>
       )}
     </div>

@@ -51,11 +51,11 @@ const FusePrimaryButton = ({
       disabled={disabled || loading}
       className={[
         "relative flex items-center justify-center overflow-hidden",
-        "bg-[#111] dark:bg-[#f0f0f0]",
-        "text-white dark:text-[#111]",
+        "bg-brand-600 dark:bg-brand-500 shadow-glow",
+        "text-white",
         "font-semibold select-none",
-        "hover:opacity-80 active:opacity-70",
-        "transition-opacity duration-150",
+        "hover:bg-brand-700 dark:hover:bg-brand-400 active:opacity-80",
+        "transition-[background-color,opacity] duration-150",
         "disabled:cursor-not-allowed",
         config.button,
         className,

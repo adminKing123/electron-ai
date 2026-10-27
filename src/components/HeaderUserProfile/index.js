@@ -11,8 +11,8 @@ import ThemeChangeOption from "../ThemeChangeOption";
 /** Shared menu item style */
 const itemCls =
   "flex items-center gap-2.5 w-full px-2.5 py-[7px] text-[13px] rounded-xl outline-none cursor-pointer transition-colors " +
-  "text-[#333] dark:text-[#ccc] " +
-  "hover:bg-[#f4f4f4] dark:hover:bg-[#363636]";
+  "text-ink-750 dark:text-ink-300 " +
+  "hover:bg-ink-50 dark:hover:bg-ink-750";
 
 const HeaderUserProfile = () => {
   const user = useUserStore((state) => state.user);
@@ -27,7 +27,7 @@ const HeaderUserProfile = () => {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <button className="w-[30px] h-[30px] rounded-full overflow-hidden outline-none ring-2 ring-transparent hover:ring-[#ddd] dark:hover:ring-[#444] transition-all">
+        <button className="w-[30px] h-[30px] rounded-full overflow-hidden outline-none ring-2 ring-transparent hover:ring-ink-200 dark:hover:ring-ink-700 transition-all">
           <img
             alt={user.displayName}
             src={user.photoURL}
@@ -41,8 +41,8 @@ const HeaderUserProfile = () => {
           sideOffset={8}
           align="end"
           className="w-[260px] z-50 p-1.5 rounded-2xl
-            border border-[#e5e5e5] dark:border-[#3a3a3a]
-            bg-white dark:bg-[#2a2a2a]
+            border border-ink-150 dark:border-ink-725
+            bg-white dark:bg-ink-800
             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
         >
           {/* User identity block */}
@@ -53,16 +53,16 @@ const HeaderUserProfile = () => {
               className="w-8 h-8 rounded-full object-cover flex-shrink-0"
             />
             <div className="min-w-0">
-              <p className="text-[13px] font-semibold text-[#111] dark:text-white truncate leading-tight">
+              <p className="text-[13px] font-semibold text-ink-975 dark:text-white truncate leading-tight">
                 {user.displayName}
               </p>
-              <p className="text-[11px] text-[#aaa] dark:text-[#555] truncate leading-tight">
+              <p className="text-[11px] text-ink-400 dark:text-ink-550 truncate leading-tight">
                 {user.email}
               </p>
             </div>
           </div>
 
-          <DropdownMenu.Separator className="h-px bg-[#ebebeb] dark:bg-[#333] mx-1 mb-1" />
+          <DropdownMenu.Separator className="h-px bg-ink-100 dark:bg-ink-750 mx-1 mb-1" />
 
           <div className="flex flex-col gap-px">
             <DropdownMenu.Item asChild>
@@ -84,7 +84,7 @@ const HeaderUserProfile = () => {
               <span>Settings</span>
             </DropdownMenu.Item>
 
-            <DropdownMenu.Separator className="h-px bg-[#ebebeb] dark:bg-[#333] mx-1 my-1" />
+            <DropdownMenu.Separator className="h-px bg-ink-100 dark:bg-ink-750 mx-1 my-1" />
 
             <DropdownMenu.Item
               className={`${itemCls} hover:text-red-500 dark:hover:text-red-400`}

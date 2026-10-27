@@ -29,14 +29,14 @@ export const changeMetaTheme = (theme) => {
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
   themeColorMeta?.setAttribute(
     "content",
-    theme === THEME_OPTIONS.DARK ? "#212121" : "#ffffff"
+    theme === THEME_OPTIONS.DARK ? "#0a0a0a" : "#ffffff"
   );
   const msthemeColorMeta = document.querySelector(
     'meta[name="msapplication-navbutton-color"]'
   );
   msthemeColorMeta?.setAttribute(
     "content",
-    theme === THEME_OPTIONS.DARK ? "#212121" : "#ffffff"
+    theme === THEME_OPTIONS.DARK ? "#0a0a0a" : "#ffffff"
   );
 };
 

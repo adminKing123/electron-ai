@@ -90,49 +90,46 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
   const canSubmit = prompt.trim().length > 0 && !creating;
 
   return (
-    <div ref={containerRef} className="relative w-full flex flex-col items-center pt-5 pb-4 px-4 md:pt-8 md:pb-6 md:px-6">
+    <div ref={containerRef} className="relative w-full flex flex-col items-center pt-8 pb-6 px-4 md:pt-14 md:pb-10 md:px-6">
       {expanded && (
         <div
           aria-hidden
-          className="pointer-events-none absolute top-12 left-1/2 -translate-x-1/2 w-[min(720px,90%)] h-64
-            bg-[radial-gradient(ellipse_at_center,rgba(147,197,253,0.35)_0%,rgba(196,181,253,0.15)_45%,transparent_70%)]
-            dark:bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.2)_0%,rgba(124,58,237,0.1)_45%,transparent_70%)]
+          className="pointer-events-none absolute top-16 left-1/2 -translate-x-1/2 w-[min(720px,90%)] h-64
+            bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.22)_0%,rgba(139,92,246,0.08)_45%,transparent_70%)]
+            dark:bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.2)_0%,rgba(124,58,237,0.08)_45%,transparent_70%)]
             blur-2xl transition-opacity duration-300"
         />
       )}
 
-      <h1
-        className={`relative text-[1.7rem] md:text-[2.4rem] font-semibold font-sans tracking-tight text-[#343434] dark:text-white text-center
-          transition-opacity duration-300 ${expanded ? "opacity-40 dark:opacity-30" : ""}`}
+      <div
+        className={`relative flex flex-col items-center transition-opacity duration-300 ${
+          expanded ? "opacity-40 dark:opacity-30" : ""
+        }`}
       >
-        Automate your work with{" "}
-        <span className="italic text-[#ffad09] dark:text-[#ffbf3e] font-mono">Fuse</span>
-        <span>
-          <TbBolt className="inline-block text-[#ffad09] dark:text-[#ffbf3e] ml-1" />
-        </span>
-      </h1>
 
-      <p
-        className={`relative text-[1rem] md:text-[1.4rem] text-[#888] dark:text-[#666] text-center leading-relaxed mt-1
-          transition-opacity duration-300 ${expanded ? "opacity-30 dark:opacity-25" : ""}`}
-      >
-        Streamline and manage tasks across Workspace
-      </p>
+        <h1 className="text-[28px] md:text-[38px] font-bold tracking-tight leading-[1.15] text-ink-975 dark:text-white text-center">
+          Automate your work with{" "}
+          <span className="text-brand-600 dark:text-brand-400">Fuse</span>
+        </h1>
+
+        <p className="text-[14px] md:text-[16px] text-ink-500 dark:text-ink-500 text-center leading-relaxed mt-3 max-w-md">
+          Streamline and manage tasks across Workspace
+        </p>
+      </div>
 
       <div className="relative w-full max-w-2xl mt-8 flex flex-col gap-3">
         {!expanded ? (
           <div
             onClick={handleExpand}
-            className="w-full flex items-center gap-2 cursor-text
-              bg-white dark:bg-[#242424]
-              border border-[#e0e0e0] dark:border-[#2e2e2e]
-              rounded-full shadow-sm
-              hover:border-[#c4b5fd] dark:hover:border-[#4a3a8a]
-              focus-within:border-[#93c5fd] dark:focus-within:border-[#4a3a8a]
-              focus-within:shadow-[0_0_0_3px_rgba(147,197,253,0.25)]
-              transition-all duration-200
-              pl-4 pr-1 py-1"
+            className="w-full flex items-center gap-3 cursor-text
+              bg-white dark:bg-ink-825
+              border border-ink-150 dark:border-ink-750
+              rounded-2xl shadow-glow-lg dark:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)]
+              hover:border-brand-200 dark:hover:border-brand-900
+              transition-colors duration-200
+              pl-4 pr-1.5 py-1.5"
           >
+            <TbBolt className="w-[18px] h-[18px] flex-shrink-0 text-brand-500 dark:text-brand-400" />
             <input
               ref={collapsedInputRef}
               type="text"
@@ -141,9 +138,9 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
               onFocus={handleExpand}
               placeholder="Describe a task for Comet Fuse…"
               disabled={creating}
-              className="flex-1 min-w-0 bg-transparent text-[13px]
-                text-[#333] dark:text-[#ccc]
-                placeholder-[#bbb] dark:placeholder-[#555]
+              className="flex-1 min-w-0 bg-transparent text-[14px] py-2
+                text-ink-875 dark:text-ink-150
+                placeholder-ink-450 dark:placeholder-ink-550
                 outline-none disabled:opacity-60"
             />
             <button
@@ -155,11 +152,11 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                 if (canSubmit) handleSubmit();
                 else handleExpand();
               }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-semibold
-                bg-[#111] dark:bg-[#f0f0f0] text-white dark:text-[#111]
-                hover:opacity-80 active:opacity-70
+              className="flex items-center gap-1.5 h-10 px-4 rounded-xl text-[13px] font-semibold
+                bg-brand-600 dark:bg-brand-500 text-white
+                hover:bg-brand-700 dark:hover:bg-brand-400 active:opacity-80
                 disabled:opacity-40 disabled:cursor-not-allowed
-                transition-opacity"
+                transition-colors"
             >
               <TbBolt className="w-4 h-4" />
               Create
@@ -173,15 +170,16 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
           >
             <form
               onSubmit={handleSubmit}
-              className="w-full bg-white dark:bg-[#242424]
-                border border-[#dbeafe] dark:border-[#3b3b5c]
-                rounded-[28px]
-                shadow-[0_8px_40px_rgba(59,130,246,0.18),0_2px_12px_rgba(0,0,0,0.06)]
-                dark:shadow-[0_8px_40px_rgba(59,130,246,0.12),0_2px_12px_rgba(0,0,0,0.3)]
-                px-6 pt-5 pb-4
+              className="w-full bg-white dark:bg-ink-825
+                border border-brand-200 dark:border-brand-900
+                rounded-2xl
+                shadow-[0_8px_40px_rgba(139,92,246,0.16),0_2px_12px_rgba(0,0,0,0.05)]
+                dark:shadow-[0_8px_40px_rgba(139,92,246,0.10),0_2px_12px_rgba(0,0,0,0.4)]
+                px-5 pt-4 pb-3.5
                 animate-fuseExpandIn"
             >
-              <p className="text-[15px] font-medium text-[#2563eb] dark:text-[#93c5fd] mb-3">
+              <p className="flex items-center gap-1.5 text-[13px] font-semibold text-brand-600 dark:text-brand-300 mb-2.5">
+                <TbBolt className="w-4 h-4" />
                 Describe a task for Fuse
               </p>
 
@@ -192,26 +190,28 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                 placeholder="Describe what tasks to do, which apps to use, and when to do them"
                 disabled={creating}
                 rows={4}
-                className="w-full resize-none bg-transparent text-[15px] leading-relaxed
-                  text-[#333] dark:text-[#ddd]
-                  placeholder-[#bbb] dark:placeholder-[#555]
+                className="w-full resize-none bg-transparent text-[14px] leading-relaxed
+                  text-ink-875 dark:text-ink-150
+                  placeholder-ink-450 dark:placeholder-ink-550
                   outline-none disabled:opacity-60 min-h-[96px]"
               />
 
-              <div className="flex justify-end mt-2">
+              <div className="flex items-center justify-between gap-3 mt-2 pt-3 border-t border-ink-100 dark:border-ink-800">
+                <span className="hidden sm:inline text-[12px] text-ink-450 dark:text-ink-550">
+                  Press Esc to close
+                </span>
                 <button
                   type="submit"
                   disabled={!canSubmit}
                   onMouseDown={(e) => e.preventDefault()}
-                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-[13px] font-medium
-                    bg-[#f0f0f0] dark:bg-[#333]
-                    text-[#444] dark:text-[#ccc]
-                    hover:bg-[#e8e8e8] dark:hover:bg-[#3a3a3a]
-                    disabled:opacity-50 disabled:cursor-not-allowed
+                  className="ml-auto inline-flex items-center gap-1.5 h-9 px-4 rounded-xl text-[13px] font-semibold
+                    bg-brand-600 dark:bg-brand-500 text-white
+                    hover:bg-brand-700 dark:hover:bg-brand-400
+                    disabled:opacity-40 disabled:cursor-not-allowed
                     transition-colors"
                 >
                   {creating ? (
-                    <span className="w-4 h-4 border-2 border-[#999] border-t-transparent rounded-full animate-spin" />
+                    <span className="w-4 h-4 border-2 border-white/70 border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <TbBolt className="w-4 h-4" />
                   )}
@@ -221,14 +221,14 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
             </form>
 
             <div
-              className="w-full bg-white dark:bg-[#242424]
-                border border-[#e8e8e8] dark:border-[#2e2e2e]
-                rounded-[20px] shadow-sm
+              className="w-full bg-white dark:bg-ink-825
+                border border-ink-150 dark:border-ink-800
+                rounded-2xl shadow-sm
                 px-5 py-4
                 animate-fuseExpandIn"
             >
-              <p className="text-[14px] font-semibold text-[#222] dark:text-[#eee] mb-3">
-                Try example prompts
+              <p className="text-[12px] font-semibold text-ink-500 dark:text-ink-500 mb-3">
+                Try an example
               </p>
               <div className="flex flex-wrap gap-2">
                 {EXAMPLE_PROMPTS.map(({ icon: Icon, label, prompt: examplePrompt }) => (
@@ -238,16 +238,17 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                     disabled={creating}
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => handleExampleClick(examplePrompt)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[13px]
-                      bg-white dark:bg-[#2a2a2a]
-                      border border-[#e0e0e0] dark:border-[#3a3a3a]
-                      text-[#333] dark:text-[#ccc]
-                      hover:border-[#c4b5fd] dark:hover:border-[#5b4a9a]
-                      hover:bg-[#fafafa] dark:hover:bg-[#303030]
+                    className="group inline-flex items-center gap-2 px-3 py-2 rounded-xl text-[13px] font-medium
+                      bg-ink-25 dark:bg-ink-800
+                      border border-ink-150 dark:border-ink-750
+                      text-ink-750 dark:text-ink-200
+                      hover:border-brand-200 dark:hover:border-brand-900
+                      hover:bg-brand-50 dark:hover:bg-ink-775
+                      hover:text-brand-700 dark:hover:text-white
                       disabled:opacity-50 disabled:cursor-not-allowed
                       transition-colors"
                   >
-                    <Icon className="w-4 h-4 flex-shrink-0" />
+                    <Icon className="w-4 h-4 flex-shrink-0 text-brand-500 dark:text-brand-400" />
                     {label}
                   </button>
                 ))}

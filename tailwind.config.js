@@ -3,6 +3,83 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      colors: {
+        // Low steps: violet-tinted light surfaces. High steps (700+): neutral true-black dark surfaces.
+        ink: {
+          25: "#f9f9fc",
+          50: "#f5f4fa",
+          75: "#f1eff7",
+          100: "#ebe9f4",
+          150: "#e5e2f0",
+          200: "#d8d4e8",
+          300: "#c4c1d4",
+          350: "#b9b6ca",
+          400: "#a8a4bd",
+          450: "#9894ae",
+          500: "#8681a0",
+          550: "#746f91",
+          600: "#635e7d",
+          650: "#524d68",
+          700: "#404040",
+          725: "#363636",
+          750: "#2e2e2e",
+          775: "#262626",
+          800: "#1f1f1f",
+          825: "#161616",
+          850: "#101010",
+          875: "#0a0a0a",
+          900: "#080808",
+          925: "#060606",
+          950: "#040404",
+          975: "#020202",
+        },
+        brand: {
+          50: "#f5f3ff",
+          100: "#ede9fe",
+          200: "#ddd6fe",
+          300: "#c4b5fd",
+          400: "#a78bfa",
+          500: "#8b5cf6",
+          600: "#7c3aed",
+          700: "#6d28d9",
+          800: "#5b21b6",
+          900: "#4c1d95",
+          950: "#2e1065",
+        },
+      },
+      fontFamily: {
+        sans: [
+          '"Plus Jakarta Sans"',
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          '"Segoe UI"',
+          "sans-serif",
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+        ],
+        mono: [
+          '"JetBrains Mono"',
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Consolas",
+          "monospace",
+        ],
+      },
+      backgroundImage: {
+        aurora: "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 55%, #c026d3 100%)",
+        "aurora-text": "linear-gradient(90deg, #7c3aed 0%, #c026d3 50%, #0891b2 100%)",
+        "aurora-text-dark": "linear-gradient(90deg, #a78bfa 0%, #e879f9 50%, #22d3ee 100%)",
+        "aurora-glow":
+          "radial-gradient(ellipse 70% 45% at 50% -8%, rgba(139,92,246,0.22), transparent 70%), radial-gradient(ellipse 40% 30% at 100% 0%, rgba(34,211,238,0.14), transparent 70%), radial-gradient(ellipse 35% 30% at 0% 0%, rgba(192,38,211,0.08), transparent 70%)",
+        "aurora-glow-dark":
+          "radial-gradient(ellipse 70% 45% at 50% -8%, rgba(139,92,246,0.24), transparent 70%), radial-gradient(ellipse 40% 30% at 100% 0%, rgba(34,211,238,0.12), transparent 70%), radial-gradient(ellipse 35% 30% at 0% 0%, rgba(192,38,211,0.10), transparent 70%)",
+      },
+      boxShadow: {
+        glow: "0 4px 14px -3px rgba(124,58,237,0.5)",
+        "glow-lg": "0 10px 40px -12px rgba(124,58,237,0.35)",
+      },
       keyframes: {
         shimmer: {
           "0%":   { transform: "translateX(-100%)" },

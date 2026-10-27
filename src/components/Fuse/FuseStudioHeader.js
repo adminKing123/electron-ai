@@ -19,9 +19,9 @@ import ROUTES from "../../router/routes";
 
 export const iconBtnCls =
   "w-8 h-8 flex items-center justify-center rounded-lg " +
-  "text-[#888] dark:text-[#666] " +
-  "hover:text-[#111] dark:hover:text-white " +
-  "hover:bg-[#ebebeb] dark:hover:bg-[#222] " +
+  "text-ink-500 dark:text-ink-600 " +
+  "hover:text-ink-975 dark:hover:text-white " +
+  "hover:bg-ink-100 dark:hover:bg-ink-875 " +
   "transition-colors";
 
   const BackButton = () => {
@@ -59,8 +59,8 @@ const WorkflowNameInput = ({ value, onChange, onBlur, placeholder = "Untitled Wo
         style={{ textOverflow: "ellipsis" }}
         className="w-full min-w-0 bg-transparent px-2 py-1
           text-[14px] font-semibold tracking-tight
-          text-[#111] dark:text-white
-          placeholder:text-[#aaa] dark:placeholder:text-[#555]
+          text-ink-975 dark:text-white
+          placeholder:text-ink-400 dark:placeholder:text-ink-550
           border-none outline-none"
       />
     </div>
@@ -95,7 +95,7 @@ const CompilationErrorsButton = ({ errors = [] }) => {
         type="button"
         onClick={() => setOpen((v) => !v)}
         title="View compilation errors"
-        className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-semibold
+        className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[13px] font-semibold
           transition-colors
           text-red-600 dark:text-red-400
           bg-red-50 dark:bg-red-900/20
@@ -109,7 +109,7 @@ const CompilationErrorsButton = ({ errors = [] }) => {
       {open && (
         <div
           className="absolute right-0 top-full mt-2 w-[300px] z-50
-            bg-white dark:bg-[#1e1e1e]
+            bg-white dark:bg-ink-825
             border border-red-200 dark:border-red-900
             rounded-xl shadow-xl overflow-hidden"
           role="dialog"
@@ -147,8 +147,8 @@ const CompilationErrorsButton = ({ errors = [] }) => {
           </ul>
 
           {/* Footer hint */}
-          <div className="px-3.5 py-2 border-t border-[#f0f0f0] dark:border-[#272727]">
-            <p className="text-[11px] text-[#aaa] dark:text-[#555]">
+          <div className="px-3.5 py-2 border-t border-ink-75 dark:border-ink-825">
+            <p className="text-[11px] text-ink-400 dark:text-ink-550">
               Fix the issues above and click Turn On again.
             </p>
           </div>
@@ -205,8 +205,8 @@ export const CanvasActionBar = ({
       {/* ── Pill ────────────────────────────────────────────────────────── */}
       <div
         className="flex items-center
-          bg-white dark:bg-[#1e1e1e]
-          border border-[#e0e0e0] dark:border-[#2e2e2e]
+          bg-white dark:bg-ink-825
+          border border-ink-150 dark:border-ink-775
           rounded-full shadow-xl shadow-black/10 dark:shadow-black/50
           overflow-hidden p-1 gap-0.5"
       >
@@ -219,8 +219,8 @@ export const CanvasActionBar = ({
           className="flex items-center gap-1 md:gap-1.5 px-2.5 md:px-4 h-8 md:h-10
             text-[11px] md:text-[13px] font-medium whitespace-nowrap
             transition-colors select-none
-            text-[#444] dark:text-[#aaa]
-            hover:bg-[#f5f5f5] dark:hover:bg-[#272727]
+            text-ink-700 dark:text-ink-400
+            hover:bg-ink-50 dark:hover:bg-ink-825
             disabled:opacity-40 disabled:cursor-not-allowed rounded-full"
         >
           <TbPlus className="w-[13px] h-[13px] md:w-[15px] md:h-[15px] flex-shrink-0" />
@@ -234,7 +234,7 @@ export const CanvasActionBar = ({
             className="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 h-8 md:h-10
               text-[11px] md:text-[13px] font-semibold whitespace-nowrap
               select-none cursor-not-allowed
-              text-white bg-[#555] dark:bg-[#333] rounded-full"
+              text-white bg-ink-650 dark:bg-ink-750 rounded-full"
           >
             <span className="w-3 h-3 md:w-3.5 md:h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
             {deactivating ? "Stopping…" : "Compiling…"}
@@ -249,8 +249,8 @@ export const CanvasActionBar = ({
             className="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 h-8 md:h-10
               text-[11px] md:text-[13px] font-semibold whitespace-nowrap
               transition-colors select-none
-              text-white bg-[#111] dark:bg-[#ebebeb] dark:text-[#111]
-              hover:bg-[#2a2a2a] dark:hover:bg-[#d4d4d4] rounded-full
+              text-white bg-brand-600 dark:bg-brand-500 shadow-glow
+              hover:bg-brand-700 dark:hover:bg-brand-400 rounded-full
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <TbRefresh className="w-[13px] h-[13px] md:w-[15px] md:h-[15px] flex-shrink-0" />
@@ -266,8 +266,8 @@ export const CanvasActionBar = ({
             className="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 h-8 md:h-10
               text-[11px] md:text-[13px] font-semibold whitespace-nowrap
               transition-colors select-none
-              text-white bg-[#111] dark:bg-[#ebebeb] dark:text-[#111]
-              hover:bg-[#2a2a2a] dark:hover:bg-[#d4d4d4] rounded-full
+              text-white bg-brand-600 dark:bg-brand-500 shadow-glow
+              hover:bg-brand-700 dark:hover:bg-brand-400 rounded-full
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <TbPower className="w-[13px] h-[13px] md:w-[15px] md:h-[15px] flex-shrink-0" />
@@ -341,10 +341,10 @@ const FuseStudioHeader = ({
           <Link
             to={ROUTES.GET_FUSE_RUNS_URL(workflowId)}
             title="View run history"
-            className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[12.5px] font-medium
-              text-[#888] dark:text-[#555]
-              hover:text-[#333] dark:hover:text-[#ccc]
-              hover:bg-[#ebebeb] dark:hover:bg-[#222]
+            className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-[13px] font-medium
+              text-ink-500 dark:text-ink-550
+              hover:text-ink-750 dark:hover:text-ink-300
+              hover:bg-ink-100 dark:hover:bg-ink-875
               transition-colors"
           >
             <TbActivity className="w-[14px] h-[14px]" />

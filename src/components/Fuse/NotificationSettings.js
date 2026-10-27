@@ -9,7 +9,7 @@ const NotificationHeader = ({ permission, subscribed }) => {
     ) : subscribed ? (
       <TbBell className="w-[15px] h-[15px] text-[#10b981] flex-shrink-0" />
     ) : (
-      <TbBell className="w-[15px] h-[15px] text-[#888] flex-shrink-0" />
+      <TbBell className="w-[15px] h-[15px] text-ink-500 flex-shrink-0" />
     );
 
   const title =
@@ -22,7 +22,7 @@ const NotificationHeader = ({ permission, subscribed }) => {
   return (
     <div className="flex items-center gap-2">
       {icon}
-      <span className="text-[12.5px] font-semibold text-[#333] dark:text-[#ccc]">
+      <span className="text-[13px] font-semibold text-ink-750 dark:text-ink-300">
         {title}
       </span>
     </div>
@@ -37,7 +37,7 @@ const NotificationDescription = ({ permission, subscribed }) => {
       : "Allow browser notifications so Comet AI can deliver push alerts when this step runs.";
 
   return (
-    <p className="text-[11.5px] text-[#888] dark:text-[#555] leading-relaxed">
+    <p className="text-[12px] text-ink-500 dark:text-ink-550 leading-relaxed">
       {description}
     </p>
   );
@@ -51,7 +51,7 @@ const SubscribedButton = ({ onDisable }) => (
       self-start flex items-center gap-1.5
       px-3 py-1.5 rounded-lg
       text-[12px] font-medium
-      border border-[#ddd] dark:border-[#2e2e2e]
+      border border-ink-200 dark:border-ink-775
       text-[#e05c5c] dark:text-[#c26060]
       hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
       hover:border-[#fca5a5] dark:hover:border-[#7f1d1d]
@@ -72,10 +72,10 @@ const EnableNotificationButton = ({ requesting, onEnable }) => (
       self-start flex items-center gap-1.5
       px-3 py-1.5 rounded-lg
       text-[12px] font-medium
-      border border-[#ddd] dark:border-[#2e2e2e]
-      text-[#444] dark:text-[#999]
-      hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
-      hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+      border border-ink-200 dark:border-ink-775
+      text-ink-700 dark:text-ink-450
+      hover:bg-ink-50 dark:hover:bg-ink-825
+      hover:border-ink-300 dark:hover:border-ink-725
       disabled:opacity-50 disabled:cursor-not-allowed
       transition-colors
     "
@@ -119,8 +119,8 @@ const NotificationSettings = ({
       className="
         flex flex-col gap-2.5
         p-3 rounded-lg
-        border border-[#ddd] dark:border-[#2e2e2e]
-        bg-white dark:bg-[#1a1a1a]
+        border border-ink-200 dark:border-ink-775
+        bg-white dark:bg-ink-850
       "
     >
       <NotificationHeader

@@ -5,7 +5,7 @@ import usePromptStore from "../../../store/usePromptStores";
 import { handleSend } from "../../../utils/handleSend";
 
 const DecisionBadge = ({ decision }) => {
-  let cls = "text-[#888] dark:text-[#555] bg-[#f0f0f0] dark:bg-[#2a2a2a] border border-[#e5e5e5] dark:border-[#333]";
+  let cls = "text-ink-500 dark:text-ink-550 bg-ink-75 dark:bg-ink-800 border border-ink-150 dark:border-ink-750";
   let text = "Unknown";
   if (decision === "approve") {
     cls = "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/40";
@@ -46,10 +46,10 @@ const ApproveButton = ({ ...props }) => (
 const UndoButton = ({ ...props }) => (
   <button
     className="text-[12px] font-medium rounded-full px-3 py-1.5
-      border border-[#e5e5e5] dark:border-[#333]
-      bg-[#f0f0f0] dark:bg-[#2a2a2a]
-      text-[#666] dark:text-[#aaa]
-      hover:bg-[#e8e8e8] dark:hover:bg-[#333]
+      border border-ink-150 dark:border-ink-750
+      bg-ink-75 dark:bg-ink-800
+      text-ink-600 dark:text-ink-400
+      hover:bg-ink-100 dark:hover:bg-ink-750
       transition-colors"
     {...props}
   >
@@ -92,12 +92,12 @@ const ActionRequest = ({
   };
 
   return (
-    <div className="border border-[#e8e8e8] dark:border-[#2a2a2a] bg-[#f8f8f8] dark:bg-[#1e1e1e] rounded-2xl px-4 py-3.5">
+    <div className="border border-ink-100 dark:border-ink-800 bg-ink-25 dark:bg-ink-825 rounded-2xl px-4 py-3.5">
       <div>
-        <h3 className="text-[13px] font-semibold text-[#111] dark:text-white italic mb-1">
+        <h3 className="text-[13px] font-semibold text-ink-975 dark:text-white italic mb-1">
           {name}
         </h3>
-        <p className="text-[13px] text-[#666] dark:text-[#888] leading-relaxed">
+        <p className="text-[13px] text-ink-600 dark:text-ink-500 leading-relaxed">
           <pre className="text-wrap font-sans m-0 whitespace-pre-wrap">{description}</pre>
         </p>
       </div>

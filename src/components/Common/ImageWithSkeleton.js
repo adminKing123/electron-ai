@@ -11,7 +11,7 @@ const ImageWithSkeleton = ({
 
   return (
     <>
-      {!isLoaded && <div className={`bg-[#e0e0e0] dark:bg-[#373737] animate-pulse ${skeletonClassName}`} style={skeletonStyle}></div>}
+      {!isLoaded && <div className={`bg-ink-150 dark:bg-ink-725 animate-pulse ${skeletonClassName}`} style={skeletonStyle}></div>}
       <img
         className={`${className} ${!isLoaded ? "hidden" : ""}`}
         src={src}

@@ -49,7 +49,7 @@ const ConfirmDialog = ({
   const confirmCls =
     variant === "danger"
       ? "bg-[#dc2626] hover:bg-[#b91c1c] text-white"
-      : "bg-[#4a6cf7] hover:bg-[#3a5ce0] text-white";
+      : "bg-brand-600 hover:bg-brand-700 text-white";
 
   return (
     /* Backdrop */
@@ -63,8 +63,8 @@ const ConfirmDialog = ({
     >
       {/* Panel */}
       <div className="relative w-full max-w-[400px] rounded-2xl shadow-2xl
-        bg-white dark:bg-[#1e1e1e]
-        border border-[#e8e8e8] dark:border-[#2a2a2a]
+        bg-white dark:bg-ink-825
+        border border-ink-100 dark:border-ink-800
         flex flex-col">
 
         {/* Close button */}
@@ -74,9 +74,9 @@ const ConfirmDialog = ({
           disabled={loading}
           aria-label="Close"
           className="absolute top-3.5 right-3.5 w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#aaa] dark:text-[#555]
-            hover:text-[#333] dark:hover:text-[#ccc]
-            hover:bg-[#f0f0f0] dark:hover:bg-[#272727]
+            text-ink-400 dark:text-ink-550
+            hover:text-ink-750 dark:hover:text-ink-300
+            hover:bg-ink-75 dark:hover:bg-ink-825
             transition-colors disabled:opacity-40"
         >
           <TbX className="w-[15px] h-[15px]" />
@@ -94,7 +94,7 @@ const ConfirmDialog = ({
             )}
             <h2
               id="confirm-dialog-title"
-              className="text-[15px] font-semibold text-[#111] dark:text-[#e8e8e8] leading-snug"
+              className="text-[15px] font-semibold text-ink-975 dark:text-ink-100 leading-snug"
             >
               {title}
             </h2>
@@ -102,7 +102,7 @@ const ConfirmDialog = ({
 
           {/* Message */}
           {message && (
-            <p className="text-[13px] text-[#666] dark:text-[#888] leading-relaxed pl-0.5">
+            <p className="text-[13px] text-ink-600 dark:text-ink-500 leading-relaxed pl-0.5">
               {message}
             </p>
           )}
@@ -115,9 +115,9 @@ const ConfirmDialog = ({
             onClick={onCancel}
             disabled={loading}
             className="px-4 py-2 rounded-lg text-[13px] font-medium
-              text-[#444] dark:text-[#aaa]
-              bg-[#f3f3f3] dark:bg-[#272727]
-              hover:bg-[#e8e8e8] dark:hover:bg-[#303030]
+              text-ink-700 dark:text-ink-400
+              bg-ink-50 dark:bg-ink-825
+              hover:bg-ink-100 dark:hover:bg-ink-775
               disabled:opacity-40 transition-colors"
           >
             {cancelLabel}

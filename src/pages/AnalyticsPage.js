@@ -22,17 +22,29 @@ const METRICS = [
   { label: "Chats",  value: "chats"  },
 ];
 
+/** Segmented-control track; children are SegmentButton items. */
+const SegmentGroup = ({ children, className = "" }) => (
+  <div
+    className={`inline-flex items-center gap-0.5 p-0.5 rounded-xl
+      bg-ink-100 dark:bg-ink-875 border border-ink-150 dark:border-ink-800 ${className}`}
+  >
+    {children}
+  </div>
+);
+
 /**
- * Pill-style toggle button used inside filter rows and chart headers.
+ * Single option inside a SegmentGroup, used by filter rows and chart headers.
  */
-const PillButton = ({ label, active, onClick, style }) => (
+const PillButton = ({ label, active, onClick, style, size = "md" }) => (
   <button
     onClick={onClick}
     style={style}
-    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+    className={`rounded-[10px] font-medium whitespace-nowrap transition-colors ${
+      size === "sm" ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-[12px]"
+    } ${
       active
-        ? "bg-black dark:bg-white text-white dark:text-black"
-        : "border border-[#E1E1E1] dark:border-[#2F2F2F] text-[#555] dark:text-[#888] hover:bg-[#f4f4f4] dark:hover:bg-[#2a2a2a]"
+        ? "bg-white dark:bg-ink-725 text-ink-975 dark:text-white shadow-sm"
+        : "text-ink-500 dark:text-ink-500 hover:text-ink-875 dark:hover:text-ink-150"
     }`}
   >
     {label}
@@ -42,19 +54,26 @@ const PillButton = ({ label, active, onClick, style }) => (
 /**
  * Reusable section card wrapper used to group charts.
  */
-const ChartCard = ({ title, action, children, loading }) => (
-  <div className="border border-[#E1E1E1] dark:border-[#2F2F2F] bg-white dark:bg-[#141414] rounded-2xl p-4">
-    <div className="flex items-center justify-between mb-4">
-      <p className="text-xs font-semibold text-[#555] dark:text-[#888] uppercase tracking-wide">
-        {title}
-      </p>
+const ChartCard = ({ title, subtitle, action, children, loading }) => (
+  <div className="h-full flex flex-col border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850 rounded-2xl">
+    <div className="flex items-center justify-between gap-3 flex-wrap px-5 pt-4 pb-3.5 border-b border-ink-100 dark:border-ink-800">
+      <div className="min-w-0">
+        <h2 className="text-[14px] font-semibold text-ink-975 dark:text-white tracking-tight">
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="text-[12px] text-ink-500 dark:text-ink-550 mt-0.5">{subtitle}</p>
+        )}
+      </div>
       {action}
     </div>
-    {loading ? (
-      <div className="h-[200px] rounded-xl bg-[#f4f4f4] dark:bg-[#1a1a1a] animate-pulse" />
-    ) : (
-      children
-    )}
+    <div className="flex-1 p-5">
+      {loading ? (
+        <div className="h-[220px] rounded-xl bg-ink-50 dark:bg-ink-825 animate-pulse" />
+      ) : (
+        children
+      )}
+    </div>
   </div>
 );
 
@@ -114,54 +133,60 @@ const AnalyticsPage = () => {
 
   /** Metric toggle row shared by chart panels. */
   const MetricToggle = () => (
-    <div className="flex items-center gap-0.5">
+    <SegmentGroup>
       {METRICS.map((m) => (
-        <button
+        <PillButton
           key={m.value}
+          size="sm"
+          label={m.label}
+          active={metric === m.value}
           onClick={() => setMetric(m.value)}
-          className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-colors ${
-            metric === m.value
-              ? "bg-black dark:bg-white text-white dark:text-black"
-              : "text-[#888] dark:text-[#666] hover:text-[#555] dark:hover:text-[#999]"
-          }`}
-        >
-          {m.label}
-        </button>
+        />
       ))}
-    </div>
+    </SegmentGroup>
   );
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="max-w-[892px] px-5 mx-auto pb-10">
+      <div className="max-w-[1080px] px-5 md:px-8 mx-auto pb-16">
 
         {/* ── Page header ── */}
-        <div className="mt-6 flex items-start justify-between gap-3 flex-wrap">
+        <div className="pt-8 md:pt-10 pb-8 mb-6 border-b border-ink-100 dark:border-ink-800 flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <h3 className="text-2xl text-black dark:text-white font-semibold">Analytics</h3>
-            <p className="text-xs text-[#888] dark:text-[#666] mt-0.5">
+            <h1 className="text-[26px] md:text-[30px] font-bold tracking-tight text-ink-975 dark:text-white">
+              Analytics
+            </h1>
+            <p className="text-[14px] text-ink-500 dark:text-ink-500 mt-1">
               Your personal API usage overview
             </p>
           </div>
           <button
             onClick={load}
             disabled={loading}
-            className="flex items-center gap-1.5 text-xs text-[#555] dark:text-[#888]
-              hover:text-black dark:hover:text-white transition-colors disabled:opacity-40 mt-1"
+            className="flex items-center gap-2 h-9 px-3.5 rounded-xl text-[13px] font-medium
+              border border-ink-150 dark:border-ink-800
+              bg-white dark:bg-ink-850 text-ink-750 dark:text-ink-200
+              hover:bg-ink-50 dark:hover:bg-ink-825
+              transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <LuRefreshCw className={`text-sm ${loading ? "animate-spin" : ""}`} />
+            <LuRefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </button>
         </div>
 
         {error && (
-          <p className="mt-3 text-sm text-red-500">{error}</p>
+          <div className="mb-5 flex items-center gap-2.5 px-4 py-3 rounded-xl text-[13px]
+            border border-red-200 dark:border-red-900/60
+            bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+            {error}
+          </div>
         )}
 
         {/* ── Filter bar ── */}
-        <div className="mt-5 flex items-center gap-4 flex-wrap">
+        <div className="mb-5 flex items-center justify-between gap-3 flex-wrap">
           {/* Date range */}
-          <div className="flex items-center gap-1.5 flex-wrap">
+          <SegmentGroup className="flex-wrap">
             {DATE_RANGES.map((r) => (
               <PillButton
                 key={r.value}
@@ -170,24 +195,26 @@ const AnalyticsPage = () => {
                 onClick={() => setDays(r.value)}
               />
             ))}
-          </div>
+          </SegmentGroup>
 
           {/* Model filter dropdown — only shown when at least one model has been used */}
           {usedModels.length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] text-[#aaa] dark:text-[#666]">Model:</span>
+            <label className="flex items-center gap-2">
+              <span className="text-[12px] font-medium text-ink-500 dark:text-ink-500">Model</span>
               <select
                 value={selectedModel ?? ""}
                 onChange={(e) => setSelectedModel(e.target.value || null)}
-                className="text-xs rounded-full border border-[#E1E1E1] dark:border-[#2F2F2F]
-                  bg-white dark:bg-[#141414] text-[#333] dark:text-[#ccc]
-                  px-3 py-1 pr-6 appearance-none cursor-pointer
-                  focus:outline-none focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20
+                className="h-9 text-[13px] font-medium rounded-xl border border-ink-150 dark:border-ink-800
+                  bg-white dark:bg-ink-850 text-ink-875 dark:text-ink-150
+                  pl-3.5 pr-9 min-w-[160px] appearance-none cursor-pointer
+                  hover:border-ink-200 dark:hover:border-ink-750
+                  focus:outline-none focus:border-brand-300 dark:focus:border-brand-500/50
+                  focus:ring-4 focus:ring-brand-500/10
                   transition-colors"
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238681a0' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 10px center",
+                  backgroundPosition: "right 14px center",
                 }}
               >
                 <option value="">All models</option>
@@ -195,12 +222,12 @@ const AnalyticsPage = () => {
                   <option key={m} value={m}>{getModelName(m)}</option>
                 ))}
               </select>
-            </div>
+            </label>
           )}
         </div>
 
         {/* ── Summary stat cards ── */}
-        <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <StatCard
             icon={LuMessageSquare}
             label="Chats"
@@ -233,10 +260,11 @@ const AnalyticsPage = () => {
         </div>
 
         {/* ── Daily usage + token split ── */}
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-5 gap-3">
-          <div className="sm:col-span-3">
+        <div className="mt-4 grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3">
             <ChartCard
-              title="Daily Usage"
+              title="Daily usage"
+              subtitle="Activity over the selected period"
               action={<MetricToggle />}
               loading={loading}
             >
@@ -244,8 +272,8 @@ const AnalyticsPage = () => {
             </ChartCard>
           </div>
 
-          <div className="sm:col-span-2">
-            <ChartCard title="Token Split" loading={loading}>
+          <div className="lg:col-span-2">
+            <ChartCard title="Token split" subtitle="Input vs. output tokens" loading={loading}>
               <TokenSplitChart
                 inputTokens={analytics?.inputTokens ?? 0}
                 outputTokens={analytics?.outputTokens ?? 0}
@@ -255,9 +283,10 @@ const AnalyticsPage = () => {
         </div>
 
         {/* ── Model breakdown ── */}
-        <div className="mt-3">
+        <div className="mt-4">
           <ChartCard
-            title="Usage by Model"
+            title="Usage by model"
+            subtitle="Compare consumption across models"
             action={<MetricToggle />}
             loading={loading}
           >

@@ -48,7 +48,7 @@ export const RunStatusBadge = ({ status, large = false }) => {
     },
     running: {
       icon: TbLoader2,
-      cls: "text-blue-500 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",
+      cls: "text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800",
       spin: true,
     },
   };
@@ -67,12 +67,12 @@ export const RunStatusBadge = ({ status, large = false }) => {
 
 export const NodeStatusIcon = ({ status }) => {
   if (status === "running")
-    return <TbLoader2 className="w-[15px] h-[15px] text-blue-500 dark:text-blue-400 flex-shrink-0 animate-spin" />;
+    return <TbLoader2 className="w-[15px] h-[15px] text-brand-500 dark:text-brand-400 flex-shrink-0 animate-spin" />;
   if (status === "success")
     return <TbCircleCheck className="w-[15px] h-[15px] text-green-500 dark:text-green-400 flex-shrink-0" />;
   if (status === "error")
     return <TbCircleX className="w-[15px] h-[15px] text-red-500 dark:text-red-400 flex-shrink-0" />;
-  return <TbMinus className="w-[15px] h-[15px] text-[#bbb] dark:text-[#555] flex-shrink-0" />;
+  return <TbMinus className="w-[15px] h-[15px] text-ink-450 dark:text-ink-550 flex-shrink-0" />;
 };
 
 function isEmptyValue(value) {
@@ -94,23 +94,23 @@ function RunAccordionSection({
   emptyMessage = "No data",
 }) {
   return (
-    <div className="border-b border-[#ebebeb] dark:border-[#2a2a2a] last:border-b-0">
+    <div className="border-b border-ink-100 dark:border-ink-800 last:border-b-0">
       <button
         type="button"
         onClick={onToggle}
         className="w-full flex items-center gap-2 px-3 py-2.5 text-left
-          hover:bg-[#f8f9fa] dark:hover:bg-[#1e1e1e] transition-colors"
+          hover:bg-ink-25 dark:hover:bg-ink-825 transition-colors"
       >
         {open ? (
-          <TbChevronDown className="w-4 h-4 flex-shrink-0 text-[#888] dark:text-[#666]" />
+          <TbChevronDown className="w-4 h-4 flex-shrink-0 text-ink-500 dark:text-ink-600" />
         ) : (
-          <TbChevronRight className="w-4 h-4 flex-shrink-0 text-[#888] dark:text-[#666]" />
+          <TbChevronRight className="w-4 h-4 flex-shrink-0 text-ink-500 dark:text-ink-600" />
         )}
-        <span className="text-[12px] font-medium text-[#202124] dark:text-[#e8eaed]">
+        <span className="text-[12px] font-medium text-ink-875 dark:text-ink-100">
           {label}
         </span>
         {badge != null && (
-          <span className="ml-auto text-[10px] font-mono text-[#9aa0a6] dark:text-[#5f6368]">
+          <span className="ml-auto text-[11px] font-mono text-ink-450 dark:text-ink-600">
             {badge}
           </span>
         )}
@@ -118,7 +118,7 @@ function RunAccordionSection({
       {open && (
         <div className="px-3 pb-3 pt-0">
           {empty ? (
-            <p className="text-[12px] text-[#9aa0a6] dark:text-[#5f6368] py-1">{emptyMessage}</p>
+            <p className="text-[12px] text-ink-450 dark:text-ink-600 py-1">{emptyMessage}</p>
           ) : (
             children
           )}
@@ -131,8 +131,8 @@ function RunAccordionSection({
 export function RunAccordionGroup({ children, className = "" }) {
   return (
     <div
-      className={`rounded-xl border border-[#ebebeb] dark:border-[#2a2a2a]
-        bg-[#fafafa] dark:bg-[#171717] overflow-hidden ${className}`}
+      className={`rounded-xl border border-ink-100 dark:border-ink-800
+        bg-ink-25 dark:bg-ink-850 overflow-hidden ${className}`}
     >
       {children}
     </div>
@@ -145,7 +145,7 @@ const JSON_BODY_CLASS =
 function RunLogOffloadBanner({ meta, truncatedInline }) {
   if (!meta && !truncatedInline) return null;
   return (
-    <div className="mb-2 text-[11px] text-[#888] dark:text-[#666] space-y-1">
+    <div className="mb-2 text-[11px] text-ink-500 dark:text-ink-600 space-y-1">
       {meta?.url && (
         <p>
           Full payload is stored on the CDN
@@ -157,7 +157,7 @@ function RunLogOffloadBanner({ meta, truncatedInline }) {
             href={meta.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#1a73e8] dark:text-[#8ab4f8] underline"
+            className="text-brand-600 dark:text-brand-400 underline"
           >
             Open file
           </a>
@@ -257,7 +257,7 @@ export const VariablesBlock = ({
         </li>
       )}
       {!offloaded && typeof displayValue === "string" && truncated && (
-        <li className="py-2 text-[11.5px] font-mono text-[#444] dark:text-[#999] whitespace-pre-wrap break-all">
+        <li className="py-2 text-[12px] font-mono text-ink-700 dark:text-ink-450 whitespace-pre-wrap break-all">
           {displayValue}
         </li>
       )}
@@ -266,12 +266,12 @@ export const VariablesBlock = ({
         entries.map(([name, val]) => (
           <li
             key={name}
-            className="py-2.5 flex flex-col gap-0.5 min-w-0 border-b border-[#ebebeb] dark:border-[#2a2a2a] last:border-b-0"
+            className="py-2.5 flex flex-col gap-0.5 min-w-0 border-b border-ink-100 dark:border-ink-800 last:border-b-0"
           >
-            <span className="text-[11px] font-mono text-[#1a73e8] dark:text-[#8ab4f8] break-all">
+            <span className="text-[11px] font-mono text-brand-600 dark:text-brand-400 break-all">
               {name}
             </span>
-            <span className="text-[11.5px] font-mono text-[#444] dark:text-[#999] break-all whitespace-pre-wrap">
+            <span className="text-[12px] font-mono text-ink-700 dark:text-ink-450 break-all whitespace-pre-wrap">
               {formatVariableValue(val)}
             </span>
           </li>

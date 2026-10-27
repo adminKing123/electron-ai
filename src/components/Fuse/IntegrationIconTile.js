@@ -19,7 +19,7 @@ const IntegrationIconTile = ({
     <FuseNodeIcon
       iconName={iconName}
       sizeClass={FUSE_NODE_ICON_SIZES.integration}
-      fallbackClassName="w-6 h-6 rounded-md bg-[#f1f3f4] dark:bg-[#2d2e30]"
+      fallbackClassName="w-6 h-6 rounded-md bg-ink-50 dark:bg-ink-775"
     />
   </div>
 );

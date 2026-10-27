@@ -24,7 +24,7 @@ const FusePageShell = ({
   footer,
   children,
 }) => (
-  <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
+  <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark">
     <Header type="fuse" backRoute={backRoute} />
 
     {dialog}
@@ -36,10 +36,11 @@ const FusePageShell = ({
         className="flex-1 overflow-y-auto
           p-0 md:p-4
           mb-16 md:mb-3 mr-0 md:mr-3
-          md:rounded-xl
-          md:border md:border-[#e5e5e5] md:dark:border-[#252525]
-          bg-[#f7f7f7] dark:bg-[#1a1a1a]
-          md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
+          md:rounded-2xl
+          md:border md:border-ink-150 md:dark:border-ink-800
+          bg-white/80 dark:bg-ink-850/90 backdrop-blur-sm
+          md:shadow-[0_1px_3px_rgba(20,16,40,0.04),0_8px_32px_-16px_rgba(20,16,40,0.10)]
+          md:dark:shadow-[0_8px_32px_-16px_rgba(0,0,0,0.6)]"
       >
         {children}
       </div>

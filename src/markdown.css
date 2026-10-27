@@ -1,14 +1,14 @@
 :root {
   --md-color-scheme: light;
   --md-bg-color: transparent;
-  --md-text-color: #1a1a1a;
-  --md-a-color: #0969da;
-  --md-border-color: #e8e8e8;
+  --md-text-color: #060606;
+  --md-a-color: #7c3aed;
+  --md-border-color: #ebe9f4;
   --md-mark-bg-color: #fff8c5;
-  --md-hr-background-color: #e8e8e8;
-  --md-placeholder-color: #59636e;
-  --md-focus-outline-color: #0969da;
-  --md-kbd-bg-color: #f6f8fa;
+  --md-hr-background-color: #ebe9f4;
+  --md-placeholder-color: #524d68;
+  --md-focus-outline-color: #7c3aed;
+  --md-kbd-bg-color: #f5f4fa;
   --md-absent-text-color: #d1242f;
   --md-code-bg-color: #818b981f;
   --md-csv-blom-bg-color: #ffffff;
@@ -37,7 +37,7 @@
 
   /* syntax token colors */
   --syntax-bg: #ffffff;
-  --syntax-text: #1e1e1e;
+  --syntax-text: #080808;
   --syntax-comment: #6a737d;
   --syntax-punctuation: #24292f;
   --syntax-property: #005cc5;
@@ -59,23 +59,23 @@
   --syntax-boolean: #d73a49;
   --syntax-variable: #e36209;
   --syntax-selection-bg: #cceeff;
-  --syntax-selection-text: #1e1e1e;
+  --syntax-selection-text: #080808;
 }
 
 .dark {
   --md-color-scheme: dark;
   --md-bg-color: transparent;
-  --md-text-color: #e0e0e0;
-  --md-a-color: #58a6ff;
-  --md-border-color: #2a2a2a;
+  --md-text-color: #e5e2f0;
+  --md-a-color: #a78bfa;
+  --md-border-color: #1f1f1f;
   --md-mark-bg-color: #bb800926;
-  --md-hr-background-color: #2a2a2a;
-  --md-placeholder-color: #888888;
-  --md-focus-outline-color: #1f6feb;
-  --md-kbd-bg-color: #1e1e1e;
+  --md-hr-background-color: #1f1f1f;
+  --md-placeholder-color: #8681a0;
+  --md-focus-outline-color: #8b5cf6;
+  --md-kbd-bg-color: #161616;
   --md-absent-text-color: #f85149;
-  --md-code-bg-color: #2e2e2e66;
-  --md-csv-blom-bg-color: #161616;
+  --md-code-bg-color: #282c3566;
+  --md-csv-blom-bg-color: #101010;
   --md-pl-s-pl-v-color: #79c0ff;
   --md-pl-text-color: #d2a8ff;
   --md-pl-ent-text-color: #7ee787;
@@ -100,16 +100,16 @@
   --md-alert-caution-border-color: #da3633;
 
   /* syntax token colors */
-  --syntax-bg: #1e1e1e;
-  --syntax-text: #dcdcdc;
+  --syntax-bg: #101010;
+  --syntax-text: #d8d4e8;
   --syntax-comment: #6a9955;
-  --syntax-punctuation: #dcdcdc;
+  --syntax-punctuation: #d8d4e8;
   --syntax-property: #9cdcfe;
   --syntax-string: #ce9178;
   --syntax-keyword: #c586c0;
   --syntax-function: #dcdcaa;
   --syntax-number: #b5cea8;
-  --syntax-operator: #d4d4d4;
+  --syntax-operator: #d8d4e8;
   --syntax-class: #4ec9b0;
   --syntax-tag: #569cd6;
   --syntax-attribute: #9cdcfe;
@@ -133,8 +133,8 @@
   margin: 0;
   color: var(--md-text-color);
   background-color: transparent;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   font-size: 15px;
   line-height: 1.6;
   word-wrap: break-word;
@@ -469,14 +469,14 @@
 .markdown-body tt,
 .markdown-body code,
 .markdown-body samp {
-  font-family: "Fira Code", "Consolas", "Monaco", monospace;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", "Monaco", monospace;
   font-size: 12px;
 }
 
 .markdown-body pre {
   margin-top: 0;
   margin-bottom: 0;
-  font-family: "Fira Code", "Consolas", "Monaco", monospace;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", "Monaco", monospace;
   font-size: 12px;
   word-wrap: normal;
 }

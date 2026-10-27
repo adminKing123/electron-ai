@@ -17,8 +17,8 @@ const PaginationControls = ({
   onPageChange,
 }) => {
   return (
-    <div className="px-4 py-2.5 bg-[#f0f0f0] dark:bg-[#1e1e1e] border-t border-[#e8e8e8] dark:border-[#2a2a2a] flex flex-col sm:flex-row justify-between items-center gap-3">
-      <div className="text-[11px] text-[#888] dark:text-[#555] text-center sm:text-left">
+    <div className="px-4 py-2.5 bg-ink-75 dark:bg-ink-825 border-t border-ink-100 dark:border-ink-800 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div className="text-[11px] text-ink-500 dark:text-ink-550 text-center sm:text-left">
         Showing {(currentPage - 1) * limit + 1} to{" "}
         {Math.min(currentPage * limit, total)} of {total} entries
       </div>
@@ -27,7 +27,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-[#e5e5e5] dark:border-[#2a2a2a] bg-white dark:bg-[#252525] text-[#888] dark:text-[#888] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] hover:text-[#111] dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="First page"
           aria-label="First page"
         >
@@ -37,21 +37,21 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-[#e5e5e5] dark:border-[#2a2a2a] bg-white dark:bg-[#252525] text-[#888] dark:text-[#888] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] hover:text-[#111] dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="Previous page"
           aria-label="Previous page"
         >
           <MdChevronLeft />
         </button>
 
-        <span className="px-1.5 py-1 text-[11px] text-[#666] dark:text-[#888]">
+        <span className="px-1.5 py-1 text-[11px] text-ink-600 dark:text-ink-500">
           {currentPage} / {totalPages}
         </span>
 
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-[#e5e5e5] dark:border-[#2a2a2a] bg-white dark:bg-[#252525] text-[#888] dark:text-[#888] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] hover:text-[#111] dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="Next page"
           aria-label="Next page"
         >
@@ -61,7 +61,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage >= totalPages}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-[#e5e5e5] dark:border-[#2a2a2a] bg-white dark:bg-[#252525] text-[#888] dark:text-[#888] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] hover:text-[#111] dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="Last page"
           aria-label="Last page"
         >

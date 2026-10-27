@@ -71,20 +71,20 @@ const ICON_PRESENTATION = {
   FaCodePullRequest: { className: "text-[#24292f] dark:text-[#e6edf3]" },
   TbCalendarTime: { className: "text-[#059669] dark:text-[#34d399]" },
   TbWebhook: { className: "text-[#059669] dark:text-[#34d399]" },
-  TbBell: { className: "text-[#2563eb] dark:text-[#60a5fa]" },
+  TbBell: { className: "text-brand-600 dark:text-brand-400" },
   TbGitBranch: { className: "text-[#d97706] dark:text-[#f59e0b]" },
   TbArrowsSplit2: { className: "text-[#7c3aed] dark:text-[#a78bfa]" },
   /** @deprecated legacy switch node key — same icon as TbArrowsSplit2 */
   TbSwitchHorizontal: { className: "text-[#7c3aed] dark:text-[#a78bfa]" },
-  RiAiGenerate: { className: "text-[#2563eb] dark:text-[#60a5fa]" },
+  RiAiGenerate: { className: "text-brand-600 dark:text-brand-400" },
   TbSparkles: { className: "text-[#9333ea] dark:text-[#c084fc]" },
   TbWorldWww: { className: "text-[#0d9488] dark:text-[#2dd4bf]" },
-  TbRepeat: { className: "text-[#2563eb] dark:text-[#60a5fa]" },
-  TbGitFork: { className: "text-[#6366f1] dark:text-[#818cf8]" },
-  TbGitMerge: { className: "text-[#6366f1] dark:text-[#818cf8]" },
+  TbRepeat: { className: "text-brand-600 dark:text-brand-400" },
+  TbGitFork: { className: "text-brand-500 dark:text-[#818cf8]" },
+  TbGitMerge: { className: "text-brand-500 dark:text-[#818cf8]" },
   VscVariableGroup: { className: "text-[#64748b] dark:text-[#94a3b8]" },
   TbFileCode: { className: "text-[#0d9488] dark:text-[#2dd4bf]" },
-  TbMail: { className: "text-[#2563eb] dark:text-[#60a5fa]" },
+  TbMail: { className: "text-brand-600 dark:text-brand-400" },
 };
 
 /**
@@ -93,5 +93,5 @@ const ICON_PRESENTATION = {
  */
 export const getNodeIconPresentation = (iconName) =>
   (iconName && ICON_PRESENTATION[iconName]) || {
-    className: "text-[#555] dark:text-[#aaa]",
+    className: "text-ink-650 dark:text-ink-400",
   };

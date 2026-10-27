@@ -20,14 +20,14 @@ function Metric({ label, value, highlight = false }) {
     <div
       className={`rounded-xl border px-3 py-2.5 ${
         highlight
-          ? "border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10"
-          : "border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#171717]"
+          ? "border-brand-200 dark:border-brand-800 bg-brand-50/50 dark:bg-brand-900/10"
+          : "border-ink-100 dark:border-ink-850 bg-white dark:bg-ink-850"
       }`}
     >
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555]">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-550">
         {label}
       </p>
-      <p className="text-[14px] font-semibold font-mono text-[#111] dark:text-[#e0e0e0] mt-0.5">
+      <p className="text-[14px] font-semibold font-mono text-ink-975 dark:text-ink-150 mt-0.5">
         {value}
       </p>
     </div>
@@ -37,10 +37,10 @@ function Metric({ label, value, highlight = false }) {
 function MetaRow({ label, value }) {
   return (
     <div className="flex items-start gap-2 py-1.5">
-      <span className="text-[11.5px] text-[#aaa] dark:text-[#555] min-w-[88px] flex-shrink-0">
+      <span className="text-[12px] text-ink-400 dark:text-ink-550 min-w-[88px] flex-shrink-0">
         {label}
       </span>
-      <span className="text-[11.5px] font-mono text-[#444] dark:text-[#999] break-all">
+      <span className="text-[12px] font-mono text-ink-700 dark:text-ink-450 break-all">
         {value}
       </span>
     </div>
@@ -58,7 +58,7 @@ function FuseRunOverview({ run, className = "" }) {
   if (!run) {
     return (
       <div
-        className={`flex items-center justify-center min-h-[120px] text-[#c0c0c0] dark:text-[#3a3a3a] ${className}`}
+        className={`flex items-center justify-center min-h-[120px] text-ink-400 dark:text-ink-600 ${className}`}
       >
         <BasicLoader />
       </div>
@@ -68,7 +68,7 @@ function FuseRunOverview({ run, className = "" }) {
   return (
     <div className="min-h-0 flex flex-col gap-4">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-[#aaa] dark:text-[#555]">
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-400 dark:text-ink-550">
           Workflow run
         </p>
         <div className="mt-2">
@@ -87,8 +87,8 @@ function FuseRunOverview({ run, className = "" }) {
         <Metric label="Failed" value={run.nodes_failed ?? 0} />
       </div>
 
-      <div className="rounded-xl border border-[#ebebeb] dark:border-[#232323] bg-white dark:bg-[#171717] px-3 py-3">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] mb-2">
+      <div className="rounded-xl border border-ink-100 dark:border-ink-850 bg-white dark:bg-ink-850 px-3 py-3">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-550 mb-2">
           Run info
         </p>
         <MetaRow label="Started" value={fmtDate(run.started_at)} />
@@ -111,7 +111,7 @@ function FuseRunOverview({ run, className = "" }) {
         </div>
       )}
 
-      <p className="text-[11px] text-[#bbb] dark:text-[#444] pb-1">
+      <p className="text-[11px] text-ink-450 dark:text-ink-600 pb-1">
         Select a node on the canvas to see step-level details.
       </p>
     </div>
@@ -121,10 +121,10 @@ function FuseRunOverview({ run, className = "" }) {
 function RunLogFieldSkipped({ label, saveKey }) {
   return (
     <div className="px-3 py-3">
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#aaa] dark:text-[#555] mb-1">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-550 mb-1">
         {label}
       </p>
-      <p className="text-[12px] text-[#888] dark:text-[#666]">
+      <p className="text-[12px] text-ink-500 dark:text-ink-600">
         {label} was not saved for this step (enable {saveKey} under Run history on this node).
       </p>
     </div>
@@ -174,18 +174,18 @@ function FuseRunNodeDetail({
 
   return (
     <div className="min-h-0 flex flex-col gap-4">
-      <div className="flex items-start gap-3 pb-4 border-b border-[#ebebeb] dark:border-[#232323]">
-        <span className="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-[#f1f3f4] dark:bg-[#2d2e30]">
+      <div className="flex items-start gap-3 pb-4 border-b border-ink-100 dark:border-ink-850">
+        <span className="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-ink-50 dark:bg-ink-775">
           <FuseNodeIcon iconName={iconName} sizeClass={FUSE_NODE_ICON_SIZES.pickerRow} />
           {status === "running" && (
             <FuseRunNodeGalaxySpinner className="top-0 right-0" />
           )}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-[#111] dark:text-[#e8eaed] truncate">
+          <p className="text-[15px] font-semibold text-ink-975 dark:text-ink-100 truncate">
             {label}
           </p>
-          <p className="text-[11px] font-mono text-[#aaa] dark:text-[#555] truncate mt-0.5">
+          <p className="text-[11px] font-mono text-ink-400 dark:text-ink-550 truncate mt-0.5">
             {nodeType}
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">

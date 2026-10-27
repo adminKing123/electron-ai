@@ -11,7 +11,7 @@ const MdTableViewRenderer = ({ content, message_id }) => {
 
   if (process?.id === message_id && !tableConfig) {
     return (
-      <div className="py-4 px-1.5 flex items-center gap-1.5 text-[#aaa] dark:text-[#555] text-[13px]">
+      <div className="py-4 px-1.5 flex items-center gap-1.5 text-ink-400 dark:text-ink-550 text-[13px]">
         <BasicLoader /> please wait...
       </div>
     );
@@ -19,7 +19,7 @@ const MdTableViewRenderer = ({ content, message_id }) => {
 
   if (!tableConfig) {
     return (
-      <div className="p-4 text-[13px] text-[#aaa] dark:text-[#555]">
+      <div className="p-4 text-[13px] text-ink-400 dark:text-ink-550">
         No data to display
       </div>
     );

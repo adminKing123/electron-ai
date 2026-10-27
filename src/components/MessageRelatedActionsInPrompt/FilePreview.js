@@ -30,28 +30,28 @@ const FilePreview = ({ fileId }) => {
         <MdClose className="text-xs" />
       </button>
       {is_image && fileObj.download_url ? (
-        <div className="w-24 h-24 rounded-2xl border bg-white border-gray-200 dark:bg-[#1e1e1e] dark:border-[#2f2f2f] overflow-hidden">
+        <div className="w-24 h-24 rounded-2xl border bg-white border-ink-150 dark:bg-ink-825 dark:border-ink-775 overflow-hidden">
           <img
             src={ENDPOINTS.GET_DOWNLOAD_URI(fileObj.download_url)}
             className="w-full h-full object-cover"
           />
         </div>
       ) : (
-        <div className="relative w-24 h-24 rounded-2xl border flex flex-col items-center justify-center gap-1 p-1 bg-white border-gray-200 dark:bg-[#1e1e1e] dark:border-[#2f2f2f] overflow-hidden">
+        <div className="relative w-24 h-24 rounded-2xl border flex flex-col items-center justify-center gap-1 p-1 bg-white border-ink-150 dark:bg-ink-825 dark:border-ink-775 overflow-hidden">
           <FileIcon className="text-3xl text-black/70 dark:text-white/70" />
           <p
-            className="text-[9px] truncate w-full text-center px-1 text-black dark:text-white"
+            className="text-[11px] truncate w-full text-center px-1 text-ink-950 dark:text-white"
             title={fileObj.file.name}
           >
             {fileObj.file.name}
           </p>
-          <p className="text-[8px] text-gray-500 dark:text-gray-400">
+          <p className="text-[10px] text-ink-550 dark:text-ink-400">
             {convertByteToSize(fileObj.file.size)}
           </p>
           {in_progress && (
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-300 dark:bg-[#3a3a3a]">
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-ink-200 dark:bg-ink-725">
               <div
-                className="h-1 bg-black dark:bg-white transition-all duration-500 rounded-full"
+                className="h-1 bg-brand-600 dark:bg-brand-500 transition-all duration-500 rounded-full"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>

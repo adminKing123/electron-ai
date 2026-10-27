@@ -23,11 +23,11 @@ const SidebarNavButton = ({ icon: Icon, label, to, end = false, onClick }) => {
       onClick={onClick}
       className={({ isActive }) =>
         [
-          "flex flex-col items-center justify-center gap-1 w-14 py-2 rounded-xl",
-          "text-[10px] font-semibold select-none transition-colors",
+          "flex flex-col items-center justify-center gap-1 w-[68px] py-2 rounded-xl",
+          "text-[11px] font-semibold select-none transition-colors",
           isActive
-            ? "text-[#000000] dark:text-[#ffffff]"
-            : "text-[#666] dark:text-[#999] hover:text-[#222] dark:hover:text-[#d0d0d0]",
+            ? "text-brand-700 dark:text-brand-300"
+            : "text-ink-550 dark:text-ink-450 hover:text-brand-600 dark:hover:text-brand-300",
         ].join(" ")
       }
     >
@@ -41,15 +41,16 @@ const SidebarNavButton = ({ icon: Icon, label, to, end = false, onClick }) => {
 const FuseStudioSidebar = ({ creating, onCreate, hideMobileNav = false }) => (
   <>
     {/* Desktop — vertical sidebar */}
-    <aside className="hidden md:flex h-full flex-col items-center px-3 pt-10 gap-4 flex-shrink-0">
+    <aside className="hidden md:flex h-full flex-col items-center px-2.5 pt-6 gap-4 flex-shrink-0">
       <FusePrimaryButton
         icon={TbPlus}
         layout="square"
         loading={creating}
         onClick={onCreate}
         aria-label="New workflow"
+        className="!w-10 !h-10"
       />
-      <div className="flex flex-col items-center gap-1 mt-2">
+      <div className="flex flex-col items-center gap-1.5 mt-1">
         <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} end />
         <SidebarNavButton icon={TbBolt} label="Fuses" to={ROUTES.FUSES_LISTING} />
         <SidebarNavButton icon={TbPlug} label="Integrations" to={ROUTES.FUSE_INTEGRATIONS} />
@@ -60,9 +61,9 @@ const FuseStudioSidebar = ({ creating, onCreate, hideMobileNav = false }) => (
     {!hideMobileNav && (
       <nav
         className="flex md:hidden fixed bottom-0 left-0 right-0 z-50
-          bg-white dark:bg-[#1a1a1a]
-          border-t border-[#e5e5e5] dark:border-[#252525]
-          px-2 py-1 justify-around items-center"
+          bg-white/95 dark:bg-ink-850/95 backdrop-blur
+          border-t border-ink-150 dark:border-ink-800
+          px-2 py-1.5 justify-around items-center"
       >
         <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} end />
         <FusePrimaryButton

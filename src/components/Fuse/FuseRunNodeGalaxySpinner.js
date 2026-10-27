@@ -12,7 +12,7 @@ export default function FuseRunNodeGalaxySpinner({ className = "" }) {
       aria-label="Running"
     >
       <TbGalaxy
-        className="w-4 h-4 text-[#1a73e8] dark:text-[#8ab4f8] spin-animation"
+        className="w-4 h-4 text-brand-600 dark:text-brand-400 spin-animation"
       />
     </span>
   );

@@ -20,7 +20,7 @@ const notifyTextAreaLimitReached = () => {
         "w-screen max-w-[660px] bg-[#E02E2A] rounded-lg shadow-lg p-0 pr-4 pl-2",
       bodyClassName: "",
       closeButton: ({ closeToast }) => (
-        <button onClick={closeToast} className="text-white hover:text-gray-200">
+        <button onClick={closeToast} className="text-white hover:text-ink-150">
           <IoClose className="w-4 h-4 text-white flex-shrink-0" />
         </button>
       ),
@@ -48,7 +48,7 @@ const notifyRenameChatSuccess = () => {
         "w-screen max-w-[660px] bg-[#2EAA5C] rounded-lg shadow-lg p-0 pr-4 pl-2",
       bodyClassName: "",
       closeButton: ({ closeToast }) => (
-        <button onClick={closeToast} className="text-white hover:text-gray-200">
+        <button onClick={closeToast} className="text-white hover:text-ink-150">
           <IoClose className="w-4 h-4 text-white flex-shrink-0" />
         </button>
       ),
@@ -74,7 +74,7 @@ const notifyRenameChatError = (message = "Failed to rename chat") => {
         "w-screen max-w-[660px] bg-[#E02E2A] rounded-lg shadow-lg p-0 pr-4 pl-2",
       bodyClassName: "",
       closeButton: ({ closeToast }) => (
-        <button onClick={closeToast} className="text-white hover:text-gray-200">
+        <button onClick={closeToast} className="text-white hover:text-ink-150">
           <IoClose className="w-4 h-4 text-white flex-shrink-0" />
         </button>
       ),

@@ -41,24 +41,24 @@ const DeleteChatModal = ({ data }) => {
         transition={{ duration: 0.15 }}
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm p-5 rounded-2xl
-          bg-white dark:bg-[#1e1e1e]
-          border border-[#e8e8e8] dark:border-[#2a2a2a]
+          bg-white dark:bg-ink-825
+          border border-ink-100 dark:border-ink-800
           shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]"
       >
         {/* Title */}
-        <h2 className="text-[15px] font-semibold text-[#111] dark:text-white mb-1">
+        <h2 className="text-[15px] font-semibold text-ink-975 dark:text-white mb-1">
           Delete chat?
         </h2>
 
         {/* Body */}
         <div className="mt-2 mb-5 space-y-1.5">
-          <p className="text-[13px] text-[#444] dark:text-[#aaa] leading-relaxed">
-            <span className="font-medium text-[#111] dark:text-white">
+          <p className="text-[13px] text-ink-700 dark:text-ink-400 leading-relaxed">
+            <span className="font-medium text-ink-975 dark:text-white">
               {data?.payload.chat?.title}
             </span>{" "}
             will be permanently deleted.
           </p>
-          <p className="text-[12px] text-[#aaa] dark:text-[#555]">
+          <p className="text-[12px] text-ink-400 dark:text-ink-550">
             Visit settings to delete any memories saved during this chat.
           </p>
         </div>
@@ -68,10 +68,10 @@ const DeleteChatModal = ({ data }) => {
           <button
             onClick={close}
             className="px-4 py-1.5 rounded-full text-[13px] font-medium
-              bg-[#f4f4f4] dark:bg-[#2a2a2a]
-              text-[#333] dark:text-[#ccc]
-              hover:bg-[#ebebeb] dark:hover:bg-[#333]
-              border border-[#e8e8e8] dark:border-[#333]
+              bg-ink-50 dark:bg-ink-800
+              text-ink-750 dark:text-ink-300
+              hover:bg-ink-100 dark:hover:bg-ink-750
+              border border-ink-100 dark:border-ink-750
               transition-colors"
           >
             Cancel

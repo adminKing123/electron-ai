@@ -28,7 +28,7 @@ const FuseNodeIcon = ({
   iconName,
   sizeClass = FUSE_NODE_ICON_SIZES.picker,
   className = "",
-  fallbackClassName = "w-3.5 h-3.5 rounded-full bg-[#ddd] dark:bg-[#444]",
+  fallbackClassName = "w-3.5 h-3.5 rounded-full bg-ink-200 dark:bg-ink-700",
 }) => {
   const Icon = getNodeIcon(iconName);
   if (!Icon) {

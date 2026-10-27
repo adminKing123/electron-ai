@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 /** Shared icon-button style used across header controls */
 const iconBtnCls =
   "w-8 h-8 flex items-center justify-center rounded-lg " +
-  "text-[#888] dark:text-[#666] " +
-  "hover:text-[#111] dark:hover:text-white " +
-  "hover:bg-[#ebebeb] dark:hover:bg-[#222] " +
+  "text-ink-500 dark:text-ink-600 " +
+  "hover:text-ink-975 dark:hover:text-white " +
+  "hover:bg-ink-100 dark:hover:bg-ink-875 " +
   "transition-colors";
 
 const BackButton = ({ route = "" }) => {
@@ -50,7 +50,7 @@ const Header = ({ type, backRoute = "" }) => {
   return (
     <header
       id="header"
-      className={`h-[56px] w-full flex items-center justify-between gap-2 px-3 ${type === "fuse" ? "" : "border-b border-[#ebebeb] dark:border-[#1e1e1e]"}`}
+      className={`h-[56px] w-full flex items-center justify-between gap-2 px-3 ${type === "fuse" ? "" : "border-b border-ink-100 dark:border-ink-900"}`}
     >
       <div className="flex items-center gap-1.5">
         {isStandalone ? (
@@ -58,7 +58,7 @@ const Header = ({ type, backRoute = "" }) => {
         ) : (
           <SidebarOpenButton />
         )}
-        <span className="text-[14px] font-semibold tracking-tight text-[#111] dark:text-white select-none">
+        <span className="text-[14px] font-semibold tracking-tight text-ink-975 dark:text-white select-none">
           {label}
         </span>
       </div>

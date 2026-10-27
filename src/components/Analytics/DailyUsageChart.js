@@ -15,10 +15,10 @@ const DailyUsageChart = ({ daily = [], metric = "tokens" }) => {
   const isDark = useIsDark();
 
   const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const tickColor = isDark ? "#666" : "#aaa";
-  const tooltipBg = isDark ? "#1e1e1e" : "#ffffff";
-  const tooltipBorder = isDark ? "#333" : "#e5e5e5";
-  const tooltipText = isDark ? "#e0e0e0" : "#333";
+  const tickColor = isDark ? "#635e7d" : "#a8a4bd";
+  const tooltipBg = isDark ? "#161616" : "#ffffff";
+  const tooltipBorder = isDark ? "#2e2e2e" : "#e5e2f0";
+  const tooltipText = isDark ? "#e5e2f0" : "#2e2e2e";
 
   const labels = daily.map((d) => d.label);
   const values = useMemo(() => {
@@ -47,12 +47,12 @@ const DailyUsageChart = ({ daily = [], metric = "tokens" }) => {
       {
         label: metric === "cost" ? "Cost (USD)" : metric === "chats" ? "Chats" : "Tokens",
         data: values,
-        borderColor: "#6366f1",
-        backgroundColor: isDark ? "rgba(99,102,241,0.12)" : "rgba(99,102,241,0.08)",
-        borderWidth: 1.5,
+        borderColor: "#8b5cf6",
+        backgroundColor: isDark ? "rgba(139,92,246,0.12)" : "rgba(139,92,246,0.08)",
+        borderWidth: 2,
         pointRadius: 0,
-        pointHoverRadius: 4,
-        pointHoverBackgroundColor: "#6366f1",
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "#8b5cf6",
         fill: true,
         tension: 0.4,
       },
@@ -103,7 +103,7 @@ const DailyUsageChart = ({ daily = [], metric = "tokens" }) => {
   };
 
   return (
-    <div className="relative w-full h-[200px]">
+    <div className="relative w-full h-[240px]">
       <Line data={chartData} options={options} />
     </div>
   );

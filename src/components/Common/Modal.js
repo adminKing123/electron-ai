@@ -23,12 +23,12 @@ const Modal = ({ isOpen, onClose, title, children, size = "sm" }) => {
         transition={{ duration: 0.15 }}
         onClick={(e) => e.stopPropagation()}
         className={`w-full ${widthClass} p-5 rounded-2xl
-          bg-white dark:bg-[#1e1e1e]
-          border border-[#e8e8e8] dark:border-[#2a2a2a]
+          bg-white dark:bg-ink-825
+          border border-ink-100 dark:border-ink-800
           shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]`}
       >
         {title && (
-          <h2 className="text-[15px] font-semibold text-[#111] dark:text-white mb-1">
+          <h2 className="text-[15px] font-semibold text-ink-975 dark:text-white mb-1">
             {title}
           </h2>
         )}

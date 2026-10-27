@@ -30,20 +30,20 @@ const ROWS = [
  * Workflow execution is unchanged when a toggle is off.
  */
 const RunLogSaveSettings = ({ config, onChange }) => (
-  <section className="mt-6 pt-5 pb-2 border-t border-[#e8e8e8] dark:border-[#2a2a2a]">
+  <section className="mt-6 pt-5 pb-2 border-t border-ink-100 dark:border-ink-800">
     <div className="px-0.5 mb-3.5">
-      <h3 className="text-[13px] font-semibold text-[#202124] dark:text-[#e8eaed]">
+      <h3 className="text-[13px] font-semibold text-ink-875 dark:text-ink-100">
         Run history
       </h3>
-      <p className="mt-1 text-[12px] leading-relaxed text-[#5f6368] dark:text-[#9aa0a6]">
+      <p className="mt-1 text-[12px] leading-relaxed text-ink-600 dark:text-ink-450">
         Choose what to save when this step runs. The workflow always runs the same; only
         what appears in past runs changes.
       </p>
     </div>
 
     <ul
-      className="rounded-xl border border-[#ebebeb] dark:border-[#2a2a2a]
-        bg-[#fafafa] dark:bg-[#141414] divide-y divide-[#ebebeb] dark:divide-[#2a2a2a]
+      className="rounded-xl border border-ink-100 dark:border-ink-800
+        bg-ink-25 dark:bg-ink-850 divide-y divide-ink-100 dark:divide-ink-800
         overflow-hidden"
     >
       {ROWS.map(({ key, label, description }) => {
@@ -54,10 +54,10 @@ const RunLogSaveSettings = ({ config, onChange }) => (
           <li key={key}>
             <div className="flex items-start justify-between gap-4 px-3.5 py-3">
               <label htmlFor={switchId} className="min-w-0 flex-1 cursor-pointer select-none pt-0.5">
-                <span className="block text-[13px] font-medium leading-tight text-[#202124] dark:text-[#e8eaed]">
+                <span className="block text-[13px] font-medium leading-tight text-ink-875 dark:text-ink-100">
                   {label}
                 </span>
-                <span className="block text-[11.5px] leading-snug text-[#5f6368] dark:text-[#9aa0a6] mt-0.5">
+                <span className="block text-[12px] leading-snug text-ink-600 dark:text-ink-450 mt-0.5">
                   {description}
                 </span>
               </label>

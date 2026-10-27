@@ -99,7 +99,7 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
   const btnCls =
     "w-8 h-8 flex items-center justify-center rounded-lg " +
     "text-black/60 dark:text-white/80 " +
-    "hover:text-black dark:hover:text-white " +
+    "hover:text-ink-950 dark:hover:text-white " +
     "hover:bg-black/10 dark:hover:bg-white/15 " +
     "transition-colors flex-shrink-0";
 

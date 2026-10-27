@@ -8,13 +8,13 @@ import useMessageStore from "../../store/useMessagesStore";
 
 /* Shared item style used by every option row */
 const itemBase =
-  "flex items-center gap-2.5 w-full rounded-lg px-3 py-[7px] text-[13px] font-medium text-[#333] dark:text-[#ccc] hover:bg-[#ebebeb] dark:hover:bg-[#222] transition-colors duration-100 outline-none";
+  "flex items-center gap-2.5 w-full rounded-lg px-3 py-[7px] text-[13px] font-medium text-ink-750 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors duration-100 outline-none";
 
 const SidebarNavLink = ({ icon: Icon, label, showActiveState, ...props }) => (
   <NavLink
     className={({ isActive }) =>
       itemBase +
-      (showActiveState && isActive ? " bg-[#e6e6e6] dark:bg-[#242424] text-[#111] dark:text-white" : "")
+      (showActiveState && isActive ? " bg-brand-500/10 dark:bg-brand-400/15 !text-brand-700 dark:!text-brand-200" : "")
     }
     {...props}
   >

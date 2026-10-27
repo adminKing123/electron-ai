@@ -1,4 +1,5 @@
 import { TbTrash } from "react-icons/tb";
+import { LuArrowUpRight } from "react-icons/lu";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import WorkflowEmptyState from "./WorkflowEmptyState";
 import {
@@ -6,10 +7,7 @@ import {
   FUSE_LIST_TH,
   FUSE_LIST_TD,
   FUSE_LIST_ROW,
-  FUSE_LIST_LINK,
   fmtListingTime,
-  FuseListingStatusDot,
-  FuseListingViewLink,
   FuseListingTableFooter,
   FuseListingTableHead,
 } from "./fuseListingTable";
@@ -17,106 +15,117 @@ import {
 // ─── Shared sub-components ────────────────────────────────────────────────────
 
 const DELETE_CLS =
-  "w-8 h-8 flex items-center justify-center rounded-lg text-[#bbb] dark:text-[#555] transition-colors duration-150 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/8 dark:hover:bg-red-500/10 disabled:opacity-40 disabled:cursor-not-allowed";
+  "w-8 h-8 flex items-center justify-center rounded-lg text-ink-450 dark:text-ink-550 transition-colors duration-150 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10 disabled:opacity-40 disabled:cursor-not-allowed";
 
-// ─── Mobile card row ──────────────────────────────────────────────────────────
+const OPEN_CLS =
+  "inline-flex items-center gap-1 h-8 px-3 rounded-lg text-[12px] font-semibold " +
+  "border border-ink-150 dark:border-ink-750 bg-white dark:bg-ink-800 " +
+  "text-ink-750 dark:text-ink-200 hover:border-brand-200 dark:hover:border-brand-900 " +
+  "hover:text-brand-700 dark:hover:text-white transition-colors";
 
-const WorkflowListItem = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => {
-  const visibleNodes = workflow.nodes?.slice(0, 4) ?? [];
-  const overflow = Math.max(0, (workflow.nodes?.length ?? 0) - 4);
-
+const StatusPill = ({ status }) => {
+  const active = status === "active";
   return (
-    <div
-      className={`flex items-center gap-3 px-4 py-3.5
-        ${!isLast ? "border-b border-[#eef0f2] dark:border-[#252525]" : ""}`}
+    <span
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold capitalize ${
+        active
+          ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10"
+          : "text-ink-550 dark:text-ink-450 bg-ink-100 dark:bg-ink-800"
+      }`}
     >
-      <div className="flex-1 min-w-0">
-        <button
-          type="button"
-          onClick={() => onEdit(workflow)}
-          className={`${FUSE_LIST_LINK} font-semibold truncate block text-left max-w-full`}
-        >
-          {workflow.name}
-        </button>
-        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-          <FuseListingStatusDot status={workflow.status === "active" ? "active" : "inactive"} />
-          <span className="text-[11px] text-[#9ca3af] dark:text-[#666] capitalize">{workflow.status}</span>
-          {visibleNodes.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              {visibleNodes.map((node) => (
-                <FuseNodeIcon
-                  key={node.id}
-                  iconName={node.data.icon}
-                  sizeClass={FUSE_NODE_ICON_SIZES.picker}
-                />
-              ))}
-              {overflow > 0 && <span className="text-[10px] text-[#aaa] dark:text-[#555]">+{overflow}</span>}
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="flex items-center gap-1 flex-shrink-0">
-        <FuseListingViewLink onClick={() => onEdit(workflow)} />
-        <button
-          type="button"
-          onClick={() => onDelete(workflow)}
-          disabled={isDeleting}
-          title="Delete workflow"
-          className={DELETE_CLS}
-        >
-          <TbTrash className="w-[15px] h-[15px]" />
-        </button>
-      </div>
+      <span className={`w-1.5 h-1.5 rounded-full ${active ? "bg-emerald-500" : "bg-ink-400 dark:bg-ink-600"}`} />
+      {status}
+    </span>
+  );
+};
+
+const NodeIcons = ({ nodes, max }) => {
+  const visible = nodes?.slice(0, max) ?? [];
+  const overflow = Math.max(0, (nodes?.length ?? 0) - max);
+  if (visible.length === 0) {
+    return <span className="text-[12px] text-ink-400 dark:text-ink-600">—</span>;
+  }
+  return (
+    <div className="flex items-center gap-2">
+      {visible.map((node) => (
+        <FuseNodeIcon key={node.id} iconName={node.data.icon} sizeClass={FUSE_NODE_ICON_SIZES.picker} />
+      ))}
+      {overflow > 0 && (
+        <span className="text-[12px] font-semibold text-ink-500 dark:text-ink-450">+{overflow}</span>
+      )}
     </div>
   );
 };
 
+const DeleteButton = ({ isDeleting, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={isDeleting}
+    title="Delete workflow"
+    className={DELETE_CLS}
+  >
+    <TbTrash className="w-[15px] h-[15px]" />
+  </button>
+);
+
+// ─── Mobile card row ──────────────────────────────────────────────────────────
+
+const WorkflowListItem = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => (
+  <div
+    className={`flex items-center gap-3 px-4 py-3.5
+      ${!isLast ? "border-b border-ink-100 dark:border-ink-800" : ""}`}
+  >
+    <button
+      type="button"
+      onClick={() => onEdit(workflow)}
+      className="flex-1 min-w-0 text-left"
+    >
+      <p className="text-[14px] font-semibold text-ink-975 dark:text-white truncate">
+        {workflow.name}
+      </p>
+      <div className="flex items-center gap-2.5 mt-1.5 flex-wrap">
+        <StatusPill status={workflow.status} />
+        <NodeIcons nodes={workflow.nodes} max={4} />
+      </div>
+    </button>
+    <DeleteButton isDeleting={isDeleting} onClick={() => onDelete(workflow)} />
+  </div>
+);
+
 // ─── Desktop table row ────────────────────────────────────────────────────────
 
 const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete }) => {
-  const visibleNodes = workflow.nodes?.slice(0, 5) ?? [];
-  const overflow = Math.max(0, (workflow.nodes?.length ?? 0) - 5);
   const open = () => onEdit(workflow);
 
   return (
-    <tr className={FUSE_LIST_ROW}>
+    <tr className={`${FUSE_LIST_ROW} group`}>
       <td className={FUSE_LIST_TD}>
-        <button type="button" className={`${FUSE_LIST_LINK} font-semibold`} onClick={open}>
-          {workflow.name}
+        <button type="button" onClick={open} className="min-w-0 text-left">
+          <span
+            className="text-[14px] font-semibold text-ink-975 dark:text-white truncate max-w-[320px]
+              group-hover:text-brand-700 dark:group-hover:text-brand-300 transition-colors"
+          >
+            {workflow.name}
+          </span>
         </button>
       </td>
-      <td className={`${FUSE_LIST_TD} text-[#6b7280] dark:text-[#888] tabular-nums whitespace-nowrap hidden sm:table-cell`}>
+      <td className={FUSE_LIST_TD}>
+        <NodeIcons nodes={workflow.nodes} max={5} />
+      </td>
+      <td className={`${FUSE_LIST_TD} text-ink-550 dark:text-ink-500 tabular-nums whitespace-nowrap`}>
         {fmtListingTime(workflow.updated_at)}
       </td>
-      <td className={`${FUSE_LIST_TD} hidden md:table-cell`}>
-        <div className="flex items-center gap-2">
-          {visibleNodes.map((node) => (
-            <FuseNodeIcon
-              key={node.id}
-              iconName={node.data.icon}
-              sizeClass={FUSE_NODE_ICON_SIZES.config}
-            />
-          ))}
-          {overflow > 0 && <span className="text-[11px] text-[#aaa] dark:text-[#555]">+{overflow}</span>}
-        </div>
+      <td className={FUSE_LIST_TD}>
+        <StatusPill status={workflow.status} />
       </td>
       <td className={`${FUSE_LIST_TD} text-right`}>
-        <div className="flex justify-end">
-          <FuseListingStatusDot status={workflow.status === "active" ? "active" : "inactive"} />
-        </div>
-      </td>
-      <td className={`${FUSE_LIST_TD} text-right`}>
-        <div className="flex items-center justify-end gap-2">
-          <FuseListingViewLink onClick={open} />
-          <button
-            type="button"
-            onClick={() => onDelete(workflow)}
-            disabled={isDeleting}
-            title="Delete workflow"
-            className={DELETE_CLS}
-          >
-            <TbTrash className="w-[15px] h-[15px]" />
+        <div className="flex items-center justify-end gap-1.5">
+          <button type="button" onClick={open} className={OPEN_CLS}>
+            Open
+            <LuArrowUpRight className="w-3.5 h-3.5" />
           </button>
+          <DeleteButton isDeleting={isDeleting} onClick={() => onDelete(workflow)} />
         </div>
       </td>
     </tr>
@@ -156,13 +165,13 @@ const WorkflowsTable = ({
 
     {/* Desktop — full table */}
     <div className="hidden md:block overflow-x-auto">
-      <table className="w-full min-w-[560px] border-collapse">
+      <table className="w-full min-w-[640px] border-collapse">
         <FuseListingTableHead>
           <th className={FUSE_LIST_TH}>Name</th>
-          <th className={`${FUSE_LIST_TH} hidden sm:table-cell`}>Time</th>
-          <th className={`${FUSE_LIST_TH} hidden md:table-cell`}>Nodes</th>
-          <th className={`${FUSE_LIST_TH} text-right`}>Status</th>
-          <th className={`${FUSE_LIST_TH} text-right w-[120px]`} />
+          <th className={`${FUSE_LIST_TH} w-[200px]`}>Steps</th>
+          <th className={`${FUSE_LIST_TH} w-[140px]`}>Last updated</th>
+          <th className={`${FUSE_LIST_TH} w-[120px]`}>Status</th>
+          <th className={`${FUSE_LIST_TH} w-[130px]`} />
         </FuseListingTableHead>
         <tbody>
           {workflows.length === 0 ? (

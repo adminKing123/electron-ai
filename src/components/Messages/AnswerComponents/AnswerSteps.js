@@ -22,13 +22,13 @@ function AnswerSteps({ steps, message_id }) {
       <div className="flex items-center gap-2">
         <TbGalaxy
           className={`w-[18px] h-[18px] flex-shrink-0 ${
-            isError ? "text-red-500" : "text-[#888] dark:text-[#888]"
+            isError ? "text-red-500" : "text-ink-500 dark:text-ink-500"
           } ${process?.id === message_id ? "spin-animation" : ""}`}
         />
         <button
           onClick={handleToggle}
           className={`text-[12px] font-medium flex items-center gap-1 hover:opacity-70 transition-opacity ${
-            isError ? "text-red-500" : "text-[#666] dark:text-[#888]"
+            isError ? "text-red-500" : "text-ink-600 dark:text-ink-500"
           }`}
         >
           <span>{lastStep.title}</span>

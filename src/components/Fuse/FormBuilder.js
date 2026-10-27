@@ -85,10 +85,10 @@ const resolvePresetValues = (presetValues) => {
 /** Base for text / date / time inputs */
 const INPUT_BASE =
   "w-full px-3 py-2.5 rounded-lg text-[13px] " +
-  "text-[#222] dark:text-[#d0d0d0] " +
-  "bg-white dark:bg-[#1a1a1a] " +
-  "border border-[#ddd] dark:border-[#2e2e2e] " +
-  "focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a] " +
+  "text-ink-875 dark:text-ink-200 " +
+  "bg-white dark:bg-ink-850 " +
+  "border border-ink-200 dark:border-ink-775 " +
+  "focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 " +
   "transition-colors";
 
 /**
@@ -98,10 +98,10 @@ const INPUT_BASE =
  */
 const SELECT_BASE =
   "w-full pl-3 pr-9 py-2.5 rounded-lg text-[13px] appearance-none " +
-  "text-[#222] dark:text-[#d0d0d0] " +
-  "bg-white dark:bg-[#1a1a1a] " +
-  "border border-[#ddd] dark:border-[#2e2e2e] " +
-  "focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a] " +
+  "text-ink-875 dark:text-ink-200 " +
+  "bg-white dark:bg-ink-850 " +
+  "border border-ink-200 dark:border-ink-775 " +
+  "focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 " +
   "transition-colors cursor-pointer";
 
 /** Custom chevron icon rendered on top of the select wrapper */
@@ -109,7 +109,7 @@ const SelectChevron = () => (
   <span
     aria-hidden
     className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2
-      text-[#aaa] dark:text-[#555]"
+      text-ink-400 dark:text-ink-550"
   >
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
       <path
@@ -213,9 +213,9 @@ const CheckboxField = ({ field, value, onChange }) => (
       type="checkbox"
       checked={!!value}
       onChange={(e) => onChange(e.target.checked)}
-      className="w-4 h-4 rounded border-[#ccc] dark:border-[#444]
-        text-[#2563eb] focus:ring-[#2563eb]/30
-        dark:bg-[#1a1a1a] dark:checked:bg-[#2563eb]"
+      className="w-4 h-4 rounded border-ink-300 dark:border-ink-700
+        text-brand-600 focus:ring-brand-600/30
+        dark:bg-ink-850 dark:checked:bg-brand-600"
     />
   </label>
 );
@@ -249,7 +249,7 @@ const WebexRoomSelectField = ({ field, value, onChange }) => {
 
   if (loading) {
     return (
-      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+      <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
         Loading spaces…
       </div>
     );
@@ -265,7 +265,7 @@ const WebexRoomSelectField = ({ field, value, onChange }) => {
 
   if (!rooms.length) {
     return (
-      <p className="text-[12px] text-[#888] dark:text-[#666]">
+      <p className="text-[12px] text-ink-500 dark:text-ink-600">
         No Webex spaces found on your account.
       </p>
     );
@@ -321,7 +321,7 @@ const GithubRepoSelectField = ({ field, value, onChange }) => {
 
   if (loading) {
     return (
-      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+      <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
         Loading repositories…
       </div>
     );
@@ -337,7 +337,7 @@ const GithubRepoSelectField = ({ field, value, onChange }) => {
 
   if (!repos.length) {
     return (
-      <p className="text-[12px] text-[#888] dark:text-[#666]">
+      <p className="text-[12px] text-ink-500 dark:text-ink-600">
         No GitHub repositories found.
       </p>
     );
@@ -400,7 +400,7 @@ const GithubBranchSelectField = ({ field, value, onChange, variables, allValues 
 
   if (!repoName) {
       return (
-        <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+        <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
           Select a repository first
         </div>
       );
@@ -408,7 +408,7 @@ const GithubBranchSelectField = ({ field, value, onChange, variables, allValues 
 
   if (loading) {
     return (
-      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+      <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
         Loading branches…
       </div>
     );
@@ -424,7 +424,7 @@ const GithubBranchSelectField = ({ field, value, onChange, variables, allValues 
 
   if (!branches.length) {
     return (
-      <p className="text-[12px] text-[#888] dark:text-[#666]">
+      <p className="text-[12px] text-ink-500 dark:text-ink-600">
         No branches found.
       </p>
     );
@@ -486,7 +486,7 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
 
   if (loading) {
     return (
-      <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>
+      <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
         Loading people…
       </div>
     );
@@ -502,7 +502,7 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
 
   if (!options.length) {
     return (
-      <p className="text-[12px] text-[#888] dark:text-[#666]">
+      <p className="text-[12px] text-ink-500 dark:text-ink-600">
         No people found. Switch to &ldquo;Enter manually&rdquo; or use a variable.
       </p>
     );
@@ -626,14 +626,14 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
         className={[
           INPUT_BASE,
           "w-full flex items-center justify-between gap-2 cursor-pointer text-left",
-          value ? "" : "text-[#bbb] dark:text-[#555] italic",
+          value ? "" : "text-ink-450 dark:text-ink-550 italic",
         ].join(" ")}
       >
         <span className="truncate text-[13px]">
           {value ? (selectedLabel || value) : "Select a spreadsheet…"}
         </span>
         <svg
-          className={`flex-shrink-0 text-[#aaa] dark:text-[#555] transition-transform ${open ? "rotate-180" : ""}`}
+          className={`flex-shrink-0 text-ink-400 dark:text-ink-550 transition-transform ${open ? "rotate-180" : ""}`}
           width="14" height="14" viewBox="0 0 14 14" fill="none"
         >
           <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
@@ -643,14 +643,14 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
       {/* Dropdown panel */}
       {open && (
         <div className="absolute z-50 left-0 right-0 top-full mt-1 rounded-xl overflow-hidden
-          bg-white dark:bg-[#1e1e1e]
-          border border-[#e0e0e0] dark:border-[#2e2e2e]
+          bg-white dark:bg-ink-825
+          border border-ink-150 dark:border-ink-775
           shadow-lg flex flex-col"
         >
           {/* Search input */}
-          <div className="px-2 pt-2 pb-1.5 border-b border-[#f0f0f0] dark:border-[#272727]">
+          <div className="px-2 pt-2 pb-1.5 border-b border-ink-75 dark:border-ink-825">
             <div className="relative">
-              <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]"
+              <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-450 dark:text-ink-550"
                 width="13" height="13" viewBox="0 0 14 14" fill="none">
                 <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.5"/>
                 <path d="M10 10l2.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -661,12 +661,12 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
                 value={searchText}
                 onChange={handleSearchChange}
                 placeholder="Search spreadsheets…"
-                className="w-full pl-7 pr-3 py-1.5 rounded-lg text-[12.5px]
-                  bg-[#f5f5f5] dark:bg-[#252525]
-                  border border-[#e8e8e8] dark:border-[#2a2a2a]
-                  text-[#222] dark:text-[#d0d0d0]
-                  focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a]
-                  placeholder-[#bbb] dark:placeholder-[#555]"
+                className="w-full pl-7 pr-3 py-1.5 rounded-lg text-[13px]
+                  bg-ink-50 dark:bg-ink-825
+                  border border-ink-100 dark:border-ink-800
+                  text-ink-875 dark:text-ink-200
+                  focus:outline-none focus:border-ink-400 dark:focus:border-ink-700
+                  placeholder-ink-450 dark:placeholder-ink-550"
               />
             </div>
           </div>
@@ -674,7 +674,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
           {/* Results */}
           <div className="max-h-52 overflow-y-auto">
             {loading && (
-              <div className="px-3 py-4 text-center text-[12px] text-[#888] dark:text-[#666]">
+              <div className="px-3 py-4 text-center text-[12px] text-ink-500 dark:text-ink-600">
                 Loading…
               </div>
             )}
@@ -686,14 +686,14 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
                 <button
                   type="button"
                   onClick={() => fetchSheets(searchText)}
-                  className="text-[11.5px] text-[#4a6cf7] dark:text-[#6b8aff] hover:underline"
+                  className="text-[12px] text-brand-600 dark:text-brand-400 hover:underline"
                 >
                   Retry
                 </button>
               </div>
             )}
             {!loading && !error && spreadsheets.length === 0 && (
-              <div className="px-3 py-4 text-center text-[12px] text-[#888] dark:text-[#666]">
+              <div className="px-3 py-4 text-center text-[12px] text-ink-500 dark:text-ink-600">
                 {searchText ? "No spreadsheets match your search." : "No spreadsheets found."}
               </div>
             )}
@@ -704,19 +704,19 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
                 onMouseDown={(e) => { e.preventDefault(); handleSelect(s); }}
                 className={[
                   "w-full text-left px-3 py-2.5 flex items-center gap-2.5 transition-colors",
-                  "hover:bg-[#f5f7ff] dark:hover:bg-[#252540]",
-                  value === s.id ? "bg-[#eef1ff] dark:bg-[#1a1a38]" : "",
+                  "hover:bg-brand-50 dark:hover:bg-brand-900/30",
+                  value === s.id ? "bg-brand-100 dark:bg-brand-950/60" : "",
                 ].join(" ")}
               >
                 {/* Sheets icon */}
-                <svg className="flex-shrink-0 text-[#1a73e8]" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="flex-shrink-0 text-brand-600" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-8 13H7v-2h4v2zm0-4H7v-2h4v2zm0-4H7V6h4v2zm6 8h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V6h4v2z"/>
                 </svg>
-                <span className="text-[12.5px] text-[#222] dark:text-[#d0d0d0] truncate leading-snug">
+                <span className="text-[13px] text-ink-875 dark:text-ink-200 truncate leading-snug">
                   {s.label}
                 </span>
                 {value === s.id && (
-                  <svg className="flex-shrink-0 ml-auto text-[#4a6cf7] dark:text-[#6b8aff]"
+                  <svg className="flex-shrink-0 ml-auto text-brand-600 dark:text-brand-400"
                     width="13" height="13" viewBox="0 0 13 13" fill="none">
                     <path d="M2 6.5l3.5 3.5L11 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -727,8 +727,8 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
 
           {/* Footer hint */}
           {!loading && !error && !searchText && spreadsheets.length > 0 && (
-            <div className="px-3 py-1.5 border-t border-[#f0f0f0] dark:border-[#272727]">
-              <p className="text-[10.5px] text-[#bbb] dark:text-[#555]">
+            <div className="px-3 py-1.5 border-t border-ink-75 dark:border-ink-825">
+              <p className="text-[11px] text-ink-450 dark:text-ink-550">
                 Showing latest 25 · type to search all
               </p>
             </div>
@@ -758,10 +758,10 @@ const GoogleSheetsSheetSelectField = ({ value, onChange, allValues }) => {
     return () => { mounted = false; };
   }, [spreadsheetId]);
 
-  if (!spreadsheetId) return <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>Select a spreadsheet first</div>;
-  if (loading)        return <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>Loading sheets…</div>;
+  if (!spreadsheetId) return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Select a spreadsheet first</div>;
+  if (loading)        return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading sheets…</div>;
   if (error)          return <p className="text-[12px] text-red-500 dark:text-red-400">Couldn't load sheet tabs. Try again.</p>;
-  if (!sheets.length) return <p className="text-[12px] text-[#888] dark:text-[#666]">No sheets found in this spreadsheet.</p>;
+  if (!sheets.length) return <p className="text-[12px] text-ink-500 dark:text-ink-600">No sheets found in this spreadsheet.</p>;
 
   return (
     <div className="relative">
@@ -810,14 +810,14 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
 
   if (!spreadsheetId || !sheetName) {
     return (
-      <p className="text-[12px] text-[#bbb] dark:text-[#555]">
+      <p className="text-[12px] text-ink-450 dark:text-ink-550">
         Select a spreadsheet and sheet tab above to load columns.
       </p>
     );
   }
 
   if (loading) {
-    return <div className={`${INPUT_BASE} text-[#888] dark:text-[#666]`}>Loading columns…</div>;
+    return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading columns…</div>;
   }
 
   if (error) {
@@ -830,9 +830,9 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
           type="button"
           onClick={() => setFetchKey((k) => k + 1)}
           className="self-start px-2.5 py-1 rounded-lg text-[12px]
-            border border-[#ddd] dark:border-[#2e2e2e]
-            text-[#444] dark:text-[#999]
-            hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+            border border-ink-200 dark:border-ink-775
+            text-ink-700 dark:text-ink-450
+            hover:bg-ink-50 dark:hover:bg-ink-825
             transition-colors"
         >
           Retry
@@ -844,16 +844,16 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
   if (!columns.length) {
     return (
       <div className="flex flex-col gap-2">
-        <p className="text-[12px] text-[#888] dark:text-[#666]">
+        <p className="text-[12px] text-ink-500 dark:text-ink-600">
           No columns found. Make sure row 1 of the sheet contains header names.
         </p>
         <button
           type="button"
           onClick={() => setFetchKey((k) => k + 1)}
           className="self-start px-2.5 py-1 rounded-lg text-[12px]
-            border border-[#ddd] dark:border-[#2e2e2e]
-            text-[#444] dark:text-[#999]
-            hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+            border border-ink-200 dark:border-ink-775
+            text-ink-700 dark:text-ink-450
+            hover:bg-ink-50 dark:hover:bg-ink-825
             transition-colors"
         >
           Refresh
@@ -866,7 +866,7 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
     <div className="flex flex-col gap-3">
       {columns.map((col) => (
         <div key={col} className="flex flex-col gap-1">
-          <label className="text-[12px] font-medium text-[#555] dark:text-[#888]">{col}</label>
+          <label className="text-[12px] font-medium text-ink-650 dark:text-ink-500">{col}</label>
           <VariableTextField
             field={{ placeholder: "Enter @ to add variables" }}
             value={(value || {})[col] ?? ""}
@@ -878,11 +878,11 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
       <button
         type="button"
         onClick={() => setFetchKey((k) => k + 1)}
-        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[11.5px]
-          border border-[#ddd] dark:border-[#2e2e2e]
-          text-[#888] dark:text-[#666]
-          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
-          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+        className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
+          border border-ink-200 dark:border-ink-775
+          text-ink-500 dark:text-ink-600
+          hover:bg-ink-50 dark:hover:bg-ink-825
+          hover:border-ink-300 dark:hover:border-ink-725
           transition-colors"
       >
         ↻ Refresh columns
@@ -1001,8 +1001,8 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
 
   const WRAPPER =
     "absolute z-50 right-0 top-full mt-1 w-64 rounded-xl " +
-    "bg-white dark:bg-[#1e1e1e] " +
-    "border border-[#e0e0e0] dark:border-[#2e2e2e] " +
+    "bg-white dark:bg-ink-825 " +
+    "border border-ink-150 dark:border-ink-775 " +
     "shadow-lg overflow-hidden flex flex-col";
 
   const fetchSystemVars = async () => {
@@ -1021,31 +1021,31 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
   if (systemVarsOpen) {
     return (
       <div className={WRAPPER}>
-        <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5 border-b border-[#f0f0f0] dark:border-[#272727]">
+        <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5 border-b border-ink-75 dark:border-ink-825">
           <button
             type="button"
             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSystemVarsOpen(false); }}
             className="w-6 h-6 flex items-center justify-center rounded-md
-              text-[#aaa] dark:text-[#555] hover:text-[#555] dark:hover:text-[#aaa]
-              hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors flex-shrink-0"
+              text-ink-400 dark:text-ink-550 hover:text-ink-650 dark:hover:text-ink-400
+              hover:bg-ink-75 dark:hover:bg-ink-800 transition-colors flex-shrink-0"
             aria-label="Back to nodes"
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M7.5 2L3.5 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <span className="text-[11.5px] font-semibold text-[#333] dark:text-[#c0c0c0] truncate">
+          <span className="text-[12px] font-semibold text-ink-750 dark:text-ink-300 truncate">
             Runtime Variables
           </span>
         </div>
 
         {!systemVars ? (
-          <div className="px-3 py-6 text-center text-[12px] text-[#888] dark:text-[#666]">
+          <div className="px-3 py-6 text-center text-[12px] text-ink-500 dark:text-ink-600">
             Loading...
           </div>
         ) : (
           <div className="max-h-52 overflow-y-auto pb-1.5 pt-0.5 flex flex-col">
-            <div className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[#bbb] dark:text-[#484848]">
+            <div className="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-ink-450 dark:text-ink-600">
               Metadata
             </div>
             <ul>
@@ -1054,16 +1054,16 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   <button
                     type="button"
                     onMouseDown={(e) => { e.preventDefault(); onPick(v.token); onClose(); }}
-                    className="w-full text-left px-3 py-1.5 hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
+                    className="w-full text-left px-3 py-1.5 hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors"
                   >
-                    <span className="block text-[12px] font-medium text-[#222] dark:text-[#d0d0d0]">{v.label}</span>
-                    <span className="block text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff]">{`{{${v.token}}}`}</span>
+                    <span className="block text-[12px] font-medium text-ink-875 dark:text-ink-200">{v.label}</span>
+                    <span className="block text-[11px] font-mono text-brand-600 dark:text-brand-400">{`{{${v.token}}}`}</span>
                   </button>
                 </li>
               ))}
             </ul>
 
-            <div className="px-3 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[#bbb] dark:text-[#484848]">
+            <div className="px-3 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-ink-450 dark:text-ink-600">
               Date & Time
             </div>
             
@@ -1073,13 +1073,13 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   <select
                     value={selectedTimezone}
                     onChange={(e) => setSelectedTimezone(e.target.value)}
-                    className="w-full pl-2 pr-6 py-1.5 text-[11.5px] appearance-none rounded-lg bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#e0e0e0] dark:border-[#2a2a2a] outline-none text-[#222] dark:text-[#ccc] cursor-pointer"
+                    className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-ink-850 border border-ink-150 dark:border-ink-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
                   >
                     {TIMEZONE_OPTIONS.map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#aaa] dark:text-[#555]">
+                  <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-ink-400 dark:text-ink-550">
                     <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
                       <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -1090,7 +1090,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   <select
                     value={selectedFormat}
                     onChange={(e) => setSelectedFormat(e.target.value)}
-                    className="w-full pl-2 pr-6 py-1.5 text-[11.5px] appearance-none rounded-lg bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#e0e0e0] dark:border-[#2a2a2a] outline-none text-[#222] dark:text-[#ccc] cursor-pointer"
+                    className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-ink-850 border border-ink-150 dark:border-ink-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
                   >
                     <option value="iso">ISO 8601</option>
                     <option value="date">Date (YYYY-MM-DD)</option>
@@ -1098,7 +1098,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                     <option value="unix">Unix Epoch</option>
                     <option value="custom">Custom...</option>
                   </select>
-                  <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#aaa] dark:text-[#555]">
+                  <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-ink-400 dark:text-ink-550">
                     <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
                       <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -1112,7 +1112,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   value={customFormat}
                   onChange={(e) => setCustomFormat(e.target.value)}
                   placeholder="e.g. DD/MM/YYYY hh:mm A"
-                  className="w-full px-2 py-1.5 text-[11px] rounded-lg bg-[#f5f5f5] dark:bg-[#1a1a1a] border border-[#e0e0e0] dark:border-[#2a2a2a] outline-none text-[#222] dark:text-[#ccc]"
+                  className="w-full px-2 py-1.5 text-[11px] rounded-lg bg-ink-50 dark:bg-ink-850 border border-ink-150 dark:border-ink-800 outline-none text-ink-875 dark:text-ink-300"
                 />
               )}
 
@@ -1127,7 +1127,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   onPick(token);
                   onClose();
                 }}
-                className="w-full text-center px-3 py-1.5 rounded-lg bg-[#f0f0f0] dark:bg-[#252540] text-[#333] dark:text-[#d0d0d0] border border-[#ddd] dark:border-[#363660] hover:bg-[#e5e5e5] dark:hover:bg-[#303050] transition-colors text-[11.5px] font-medium"
+                className="w-full text-center px-3 py-1.5 rounded-lg bg-ink-75 dark:bg-brand-900/30 text-ink-750 dark:text-ink-200 border border-ink-200 dark:border-brand-800/50 hover:bg-ink-150 dark:hover:bg-brand-900/45 transition-colors text-[12px] font-medium"
               >
                 Insert Datetime Variable
               </button>
@@ -1147,14 +1147,14 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
       <div className={WRAPPER}>
         {/* Header row with back button */}
         <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5
-          border-b border-[#f0f0f0] dark:border-[#272727]">
+          border-b border-ink-75 dark:border-ink-825">
           <button
             type="button"
             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedNodeId(null); }}
             className="w-6 h-6 flex items-center justify-center rounded-md
-              text-[#aaa] dark:text-[#555]
-              hover:text-[#555] dark:hover:text-[#aaa]
-              hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a]
+              text-ink-400 dark:text-ink-550
+              hover:text-ink-650 dark:hover:text-ink-400
+              hover:bg-ink-75 dark:hover:bg-ink-800
               transition-colors flex-shrink-0"
             aria-label="Back to nodes"
           >
@@ -1162,7 +1162,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
               <path d="M7.5 2L3.5 6l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <span className="text-[11.5px] font-semibold text-[#333] dark:text-[#c0c0c0] truncate">
+          <span className="text-[12px] font-semibold text-ink-750 dark:text-ink-300 truncate">
             {group.nodeName}
           </span>
         </div>
@@ -1174,12 +1174,12 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); onPick(v.token); onClose(); }}
                 className="w-full text-left px-3 py-2 flex flex-col gap-0.5
-                  hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
+                  hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors"
               >
-                <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
+                <span className="text-[12px] font-medium text-ink-875 dark:text-ink-200 truncate">
                   {getShortLabel(v.label, group.nodeName)}
                 </span>
-                <span className="text-[10.5px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] truncate">
+                <span className="text-[11px] font-mono text-brand-600 dark:text-brand-400 truncate">
                   {`{{${v.token}}}`}
                 </span>
               </button>
@@ -1194,16 +1194,16 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
   return (
     <div className={WRAPPER}>
       {!variables.length ? (
-        <div className="p-3 border-b border-[#f0f0f0] dark:border-[#272727]">
-          <p className="text-[11.5px] text-[#bbb] dark:text-[#555] text-center select-none">
+        <div className="p-3 border-b border-ink-75 dark:border-ink-825">
+          <p className="text-[12px] text-ink-450 dark:text-ink-550 text-center select-none">
             No variables available yet.<br />
             Define fields in the webhook body.
           </p>
         </div>
       ) : (
         <>
-          <p className="px-3 pt-2.5 pb-1 text-[10px] font-semibold uppercase tracking-wider
-            text-[#bbb] dark:text-[#484848]">
+          <p className="px-3 pt-2.5 pb-1 text-[11px] font-semibold uppercase tracking-wider
+            text-ink-450 dark:text-ink-600">
             Pick a node
           </p>
           <ul className="max-h-52 overflow-y-auto pb-1.5">
@@ -1213,20 +1213,20 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   type="button"
                   onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedNodeId(g.nodeId); }}
                   className="w-full text-left px-3 py-2 flex items-center justify-between gap-2
-                    hover:bg-[#f5f7ff] dark:hover:bg-[#252540] transition-colors"
+                    hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors"
                 >
                   <div className="flex flex-col gap-0.5 min-w-0">
-                    <span className="text-[12px] font-medium text-[#222] dark:text-[#d0d0d0] truncate">
+                    <span className="text-[12px] font-medium text-ink-875 dark:text-ink-200 truncate">
                       {g.nodeName}
                     </span>
                     {!g.isStarter && (
-                      <span className="text-[10.5px] font-mono text-[#aaa] dark:text-[#555] truncate">
+                      <span className="text-[11px] font-mono text-ink-400 dark:text-ink-550 truncate">
                         {getDisplayFuseNodeId(g.nodeId)}
                       </span>
                     )}
                   </div>
                   {/* Chevron right */}
-                  <svg className="flex-shrink-0 text-[#ccc] dark:text-[#444]"
+                  <svg className="flex-shrink-0 text-ink-400 dark:text-ink-600"
                     width="12" height="12" viewBox="0 0 12 12" fill="none">
                     <path d="M4.5 2L8.5 6l-4 4" stroke="currentColor"
                       strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1238,19 +1238,19 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
         </>
       )}
       
-      <div className="border-t border-[#f0f0f0] dark:border-[#272727] p-1.5">
+      <div className="border-t border-ink-75 dark:border-ink-825 p-1.5">
         <button
           type="button"
           onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); fetchSystemVars(); }}
           className="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between gap-2
-            bg-[#f9fafb] dark:bg-[#141e30] border border-[#e0f2fe] dark:border-[#0c4a6e]
+            bg-ink-25 dark:bg-[#141e30] border border-[#e0f2fe] dark:border-[#0c4a6e]
             hover:bg-[#f0f9ff] dark:hover:bg-[#075985]/30 transition-colors"
         >
           <div className="flex flex-col gap-0.5 min-w-0">
             <span className="text-[12px] font-semibold text-[#0369a1] dark:text-[#38bdf8] truncate">
               Runtime Variables
             </span>
-            <span className="text-[10px] text-[#0ea5e9] dark:text-[#7dd3fc] truncate">
+            <span className="text-[11px] text-[#0ea5e9] dark:text-[#7dd3fc] truncate">
               Datetime, Run ID, etc.
             </span>
           </div>
@@ -1303,11 +1303,11 @@ const VariableTextField = ({ field, value, onChange, variables }) => {
           onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
           className="flex-shrink-0 w-8 h-[38px] flex items-center justify-center rounded-lg
             text-[12px] font-mono font-bold
-            text-[#888] dark:text-[#555]
-            border border-[#ddd] dark:border-[#2e2e2e]
-            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
-            hover:border-[#c0c8f0] dark:hover:border-[#363660]
-            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            text-ink-500 dark:text-ink-550
+            border border-ink-200 dark:border-ink-775
+            hover:text-brand-600 dark:hover:text-brand-400
+            hover:border-brand-200 dark:hover:border-brand-800/50
+            hover:bg-brand-50 dark:hover:bg-brand-950/40
             transition-colors"
         >
           @
@@ -1361,11 +1361,11 @@ const VariableTextareaField = ({ field, value, onChange, variables }) => {
           onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
           className="flex-shrink-0 w-8 h-8 mt-0.5 flex items-center justify-center rounded-lg
             text-[12px] font-mono font-bold
-            text-[#888] dark:text-[#555]
-            border border-[#ddd] dark:border-[#2e2e2e]
-            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
-            hover:border-[#c0c8f0] dark:hover:border-[#363660]
-            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            text-ink-500 dark:text-ink-550
+            border border-ink-200 dark:border-ink-775
+            hover:text-brand-600 dark:hover:text-brand-400
+            hover:border-brand-200 dark:hover:border-brand-800/50
+            hover:bg-brand-50 dark:hover:bg-brand-950/40
             transition-colors"
         >
           @
@@ -1425,7 +1425,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
   };
 
   const canNest = depth < BODY_SCHEMA_MAX_DEPTH;
-  const indent  = "ml-5 pl-3 border-l border-[#e0e0e0] dark:border-[#2a2a2a]";
+  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-ink-800";
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -1472,7 +1472,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
           type="button"
           onClick={onRemove}
           className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#bbb] dark:text-[#444]
+            text-ink-450 dark:text-ink-600
             hover:text-[#e05c5c] dark:hover:text-[#c26060]
             hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
             transition-colors text-lg leading-none"
@@ -1486,7 +1486,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
       {field.type === "array" && (
         <div className={`${indent} flex flex-col gap-1.5 py-1.5`}>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-[#bbb] dark:text-[#555] whitespace-nowrap">
+            <span className="text-[11px] text-ink-450 dark:text-ink-550 whitespace-nowrap">
               Items type:
             </span>
             <div className="relative w-28">
@@ -1548,12 +1548,12 @@ const SchemaFieldList = ({ fields, depth, label, onChange, showDescription, show
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <span className="text-[12px] font-medium text-[#555] dark:text-[#888]">
+        <span className="text-[12px] font-medium text-ink-650 dark:text-ink-500">
           {label}
         </span>
       )}
       {fields.length === 0 && (
-        <p className="text-[11px] text-[#bbb] dark:text-[#555] pl-0.5">
+        <p className="text-[11px] text-ink-450 dark:text-ink-550 pl-0.5">
           {depth === 0 ? "No fields defined yet." : "No properties yet."}
         </p>
       )}
@@ -1570,10 +1570,10 @@ const SchemaFieldList = ({ fields, depth, label, onChange, showDescription, show
         type="button"
         onClick={addRow}
         className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
-          border border-[#ddd] dark:border-[#2e2e2e]
-          text-[#444] dark:text-[#999]
-          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
-          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+          border border-ink-200 dark:border-ink-775
+          text-ink-700 dark:text-ink-450
+          hover:bg-ink-50 dark:hover:bg-ink-825
+          hover:border-ink-300 dark:hover:border-ink-725
           transition-colors"
       >
         + Add {depth === 0 ? "field" : "property"}
@@ -1654,7 +1654,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
   };
 
   const canNest = depth < JSON_VALUE_MAX_DEPTH;
-  const indent  = "ml-5 pl-3 border-l border-[#e0e0e0] dark:border-[#2a2a2a]";
+  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-ink-800";
 
   React.useEffect(() => {
     if (!pickerOpen) return;
@@ -1701,7 +1701,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
           onClick={onRemove}
           aria-label="Remove field"
           className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
-            text-[#bbb] dark:text-[#444]
+            text-ink-450 dark:text-ink-600
             hover:text-[#e05c5c] dark:hover:text-[#c26060]
             hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
             transition-colors text-lg leading-none ml-auto"
@@ -1730,11 +1730,11 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
             onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
             className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
               text-[11px] font-mono font-bold
-              text-[#888] dark:text-[#555]
-              border border-[#ddd] dark:border-[#2e2e2e]
-              hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
-              hover:border-[#c0c8f0] dark:hover:border-[#363660]
-              hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+              text-ink-500 dark:text-ink-550
+              border border-ink-200 dark:border-ink-775
+              hover:text-brand-600 dark:hover:text-brand-400
+              hover:border-brand-200 dark:hover:border-brand-800/50
+              hover:bg-brand-50 dark:hover:bg-brand-950/40
               transition-colors"
           >
             @
@@ -1787,7 +1787,7 @@ const ValueFieldList = ({ fields, depth, onChange, variables, isArray = false })
   return (
     <div className="flex flex-col gap-1.5">
       {fields.length === 0 && (
-        <p className="text-[11px] text-[#bbb] dark:text-[#555] pl-0.5">
+        <p className="text-[11px] text-ink-450 dark:text-ink-550 pl-0.5">
           {isArray ? "No items added yet." : depth === 0 ? "No fields added yet." : "No properties yet."}
         </p>
       )}
@@ -1805,10 +1805,10 @@ const ValueFieldList = ({ fields, depth, onChange, variables, isArray = false })
         type="button"
         onClick={addRow}
         className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
-          border border-[#ddd] dark:border-[#2e2e2e]
-          text-[#444] dark:text-[#999]
-          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
-          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+          border border-ink-200 dark:border-ink-775
+          text-ink-700 dark:text-ink-450
+          hover:bg-ink-50 dark:hover:bg-ink-825
+          hover:border-ink-300 dark:hover:border-ink-725
           transition-colors"
       >
         + Add {isArray ? "item" : depth === 0 ? "field" : "property"}
@@ -1861,7 +1861,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
         value={field.key ?? ""}
         placeholder="key"
         onChange={(e) => onUpdate({ ...field, key: e.target.value })}
-        className={`px-3 py-2.5 rounded-lg text-[13px] text-[#222] dark:text-[#d0d0d0] bg-white dark:bg-[#1a1a1a] border border-[#ddd] dark:border-[#2e2e2e] focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a] transition-colors w-[35%] flex-shrink-0 font-mono`}
+        className={`px-3 py-2.5 rounded-lg text-[13px] text-ink-875 dark:text-ink-200 bg-white dark:bg-ink-850 border border-ink-200 dark:border-ink-775 focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 transition-colors w-[35%] flex-shrink-0 font-mono`}
       />
       <div ref={containerRef} className="relative flex-1 flex items-center gap-1">
         <input
@@ -1870,7 +1870,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           value={field.value ?? ""}
           placeholder="value or {{var}}"
           onChange={(e) => onUpdate({ ...field, value: e.target.value })}
-          className={`px-3 py-2.5 rounded-lg text-[13px] text-[#222] dark:text-[#d0d0d0] bg-white dark:bg-[#1a1a1a] border border-[#ddd] dark:border-[#2e2e2e] focus:outline-none focus:border-[#aaa] dark:focus:border-[#4a4a4a] transition-colors flex-1`}
+          className={`px-3 py-2.5 rounded-lg text-[13px] text-ink-875 dark:text-ink-200 bg-white dark:bg-ink-850 border border-ink-200 dark:border-ink-775 focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 transition-colors flex-1`}
         />
         <button
           type="button"
@@ -1878,11 +1878,11 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
           className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
             text-[11px] font-mono font-bold
-            text-[#888] dark:text-[#555]
-            border border-[#ddd] dark:border-[#2e2e2e]
-            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
-            hover:border-[#c0c8f0] dark:hover:border-[#363660]
-            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            text-ink-500 dark:text-ink-550
+            border border-ink-200 dark:border-ink-775
+            hover:text-brand-600 dark:hover:text-brand-400
+            hover:border-brand-200 dark:hover:border-brand-800/50
+            hover:bg-brand-50 dark:hover:bg-brand-950/40
             transition-colors"
         >
           @
@@ -1899,7 +1899,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
         type="button"
         onClick={onRemove}
         className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
-          text-[#bbb] dark:text-[#444]
+          text-ink-450 dark:text-ink-600
           hover:text-[#e05c5c] dark:hover:text-[#c26060]
           hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
           transition-colors text-lg leading-none"
@@ -1925,7 +1925,7 @@ const KeyValueBuilderField = ({ field, value, onChange, variables }) => {
   return (
     <div className="flex flex-col gap-1.5">
       {fields.length === 0 && (
-        <p className="text-[11px] text-[#bbb] dark:text-[#555] pl-0.5">
+        <p className="text-[11px] text-ink-450 dark:text-ink-550 pl-0.5">
           No items added yet.
         </p>
       )}
@@ -1942,10 +1942,10 @@ const KeyValueBuilderField = ({ field, value, onChange, variables }) => {
         type="button"
         onClick={addRow}
         className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
-          border border-[#ddd] dark:border-[#2e2e2e]
-          text-[#444] dark:text-[#999]
-          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
-          hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+          border border-ink-200 dark:border-ink-775
+          text-ink-700 dark:text-ink-450
+          hover:bg-ink-50 dark:hover:bg-ink-825
+          hover:border-ink-300 dark:hover:border-ink-725
           transition-colors"
       >
         + Add item
@@ -1987,8 +1987,8 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
             INPUT_BASE,
             "flex-1 cursor-pointer select-none font-mono text-[12px] truncate",
             value
-              ? "text-[#4a6cf7] dark:text-[#6b8aff]"
-              : "text-[#bbb] dark:text-[#555] italic",
+              ? "text-brand-600 dark:text-brand-400"
+              : "text-ink-450 dark:text-ink-550 italic",
           ].join(" ")}
         >
           {value || "— click @ to pick a variable —"}
@@ -2001,7 +2001,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
             onClick={() => onChange("")}
             aria-label="Clear variable"
             className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
-              text-[#bbb] dark:text-[#444]
+              text-ink-450 dark:text-ink-600
               hover:text-[#e05c5c] dark:hover:text-[#c26060]
               hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
               transition-colors text-lg leading-none"
@@ -2017,11 +2017,11 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
           onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
           className="flex-shrink-0 w-8 h-[38px] flex items-center justify-center rounded-lg
             text-[12px] font-mono font-bold
-            text-[#888] dark:text-[#555]
-            border border-[#ddd] dark:border-[#2e2e2e]
-            hover:text-[#4a6cf7] dark:hover:text-[#6b8aff]
-            hover:border-[#c0c8f0] dark:hover:border-[#363660]
-            hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+            text-ink-500 dark:text-ink-550
+            border border-ink-200 dark:border-ink-775
+            hover:text-brand-600 dark:hover:text-brand-400
+            hover:border-brand-200 dark:hover:border-brand-800/50
+            hover:bg-brand-50 dark:hover:bg-brand-950/40
             transition-colors"
         >
           @
@@ -2108,8 +2108,8 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
 
   return (
     <div className="flex flex-col gap-2 p-3 rounded-xl
-      bg-[#fafafa] dark:bg-[#141414]
-      border border-[#e8e8e8] dark:border-[#272727]">
+      bg-ink-25 dark:bg-ink-850
+      border border-ink-100 dark:border-ink-825">
 
       {/* Variable selector with optional remove button */}
       <div className="flex items-center gap-1.5">
@@ -2128,8 +2128,8 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
             onClick={onRemove}
             title="Remove this condition"
             className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
-              text-[#bbb] dark:text-[#444]
-              border border-[#e0e0e0] dark:border-[#2a2a2a]
+              text-ink-450 dark:text-ink-600
+              border border-ink-150 dark:border-ink-800
               hover:text-[#e05] hover:border-[#fcc] dark:hover:border-[#5a1a1a]
               hover:bg-[#fff5f5] dark:hover:bg-[#1e0a0a]
               transition-colors"
@@ -2174,9 +2174,9 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
       {/* Live preview */}
       {cond.variable && operator && (
         <div className="px-2.5 py-1.5 rounded-lg
-          bg-[#f5f7ff] dark:bg-[#1a1a30]
-          border border-[#c7cfe8] dark:border-[#2a2a50]
-          text-[11px] font-mono text-[#4a6cf7] dark:text-[#6b8aff] break-all leading-snug">
+          bg-brand-50 dark:bg-brand-950/40
+          border border-brand-200 dark:border-brand-900/50
+          text-[11px] font-mono text-brand-600 dark:text-brand-400 break-all leading-snug">
           {cond.variable} <span className="font-bold">{operator}</span>
           {!isUnary && cond.value ? ` "${cond.value}"` : ""}
         </div>
@@ -2242,11 +2242,11 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
       {cases.map((c, index) => (
         <div
           key={c.id}
-          className="rounded-xl border border-[#e8e8e8] dark:border-[#272727]
-            bg-[#fafafa] dark:bg-[#141414] p-3 flex flex-col gap-2"
+          className="rounded-xl border border-ink-100 dark:border-ink-825
+            bg-ink-25 dark:bg-ink-850 p-3 flex flex-col gap-2"
         >
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#999] dark:text-[#555] flex-shrink-0">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-ink-450 dark:text-ink-550 flex-shrink-0">
               Case {index + 1}
             </span>
             <input
@@ -2262,15 +2262,15 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
                 onClick={() => removeCase(index)}
                 title="Remove case"
                 className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
-                  text-[#bbb] hover:text-[#e05] border border-[#e0e0e0] dark:border-[#2a2a2a]
+                  text-ink-450 hover:text-[#e05] border border-ink-150 dark:border-ink-800
                   hover:border-[#fcc] transition-colors"
               >
                 ×
               </button>
             )}
           </div>
-          <p className="text-[10px] font-mono text-[#aaa] dark:text-[#555]">
-            Output handle: <span className="text-[#1a73e8] dark:text-[#8ab4f8]">{c.id}</span>
+          <p className="text-[11px] font-mono text-ink-400 dark:text-ink-550">
+            Output handle: <span className="text-brand-600 dark:text-brand-400">{c.id}</span>
           </p>
           <ConditionBuilderField
             field={{ ...field, label: "When" }}
@@ -2285,9 +2285,9 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
         type="button"
         onClick={addCase}
         className="flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg text-[12px]
-          text-[#4a6cf7] dark:text-[#6b8aff]
-          border border-[#c7cfe8] dark:border-[#2a2a50]
-          hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30] transition-colors"
+          text-brand-600 dark:text-brand-400
+          border border-brand-200 dark:border-brand-900/50
+          hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors"
       >
         <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
           <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
@@ -2295,7 +2295,7 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
         Add case
       </button>
 
-      <p className="text-[11px] text-[#999] dark:text-[#555] leading-snug">
+      <p className="text-[11px] text-ink-450 dark:text-ink-550 leading-snug">
         Cases run top to bottom; the first match routes the workflow. Connect the{" "}
         <span className="font-medium">Default</span> handle when no case matches.
       </p>
@@ -2328,25 +2328,25 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
           {/* AND / OR toggle badge between condition rows */}
           {idx > 0 && (
             <div className="flex items-center gap-2">
-              <div className="flex-1 h-px bg-[#e8e8e8] dark:bg-[#272727]" />
-              <div className="flex rounded-lg overflow-hidden border border-[#ddd] dark:border-[#2e2e2e]">
+              <div className="flex-1 h-px bg-ink-100 dark:bg-ink-825" />
+              <div className="flex rounded-lg overflow-hidden border border-ink-200 dark:border-ink-775">
                 {["and", "or"].map((c) => (
                   <button
                     key={c}
                     type="button"
                     onClick={() => updateCombinator(c)}
                     className={[
-                      "px-3 py-1 text-[10.5px] font-bold uppercase tracking-widest transition-colors",
+                      "px-3 py-1 text-[11px] font-bold uppercase tracking-widest transition-colors",
                       group.combinator === c
-                        ? "bg-[#4a6cf7] text-white"
-                        : "text-[#999] dark:text-[#555] hover:bg-[#f0f0f0] dark:hover:bg-[#222]",
+                        ? "bg-brand-600 text-white"
+                        : "text-ink-450 dark:text-ink-550 hover:bg-ink-75 dark:hover:bg-ink-875",
                     ].join(" ")}
                   >
                     {c}
                   </button>
                 ))}
               </div>
-              <div className="flex-1 h-px bg-[#e8e8e8] dark:bg-[#272727]" />
+              <div className="flex-1 h-px bg-ink-100 dark:bg-ink-825" />
             </div>
           )}
 
@@ -2365,9 +2365,9 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
         type="button"
         onClick={addCondition}
         className="flex items-center gap-1.5 self-start mt-1 px-3 py-1.5 rounded-lg text-[12px]
-          text-[#4a6cf7] dark:text-[#6b8aff]
-          border border-[#c7cfe8] dark:border-[#2a2a50]
-          hover:bg-[#f5f7ff] dark:hover:bg-[#1a1a30]
+          text-brand-600 dark:text-brand-400
+          border border-brand-200 dark:border-brand-900/50
+          hover:bg-brand-50 dark:hover:bg-brand-950/40
           transition-colors"
       >
         <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
@@ -2484,10 +2484,10 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
               type="button"
               onClick={() => handlePreset(preset)}
               className="px-3 py-1.5 rounded-lg text-[12px]
-                border border-[#ddd] dark:border-[#2e2e2e]
-                text-[#444] dark:text-[#999]
-                hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
-                hover:border-[#c0c0c0] dark:hover:border-[#3a3a3a]
+                border border-ink-200 dark:border-ink-775
+                text-ink-700 dark:text-ink-450
+                hover:bg-ink-50 dark:hover:bg-ink-825
+                hover:border-ink-300 dark:hover:border-ink-725
                 transition-colors"
             >
               {preset.label}
@@ -2501,7 +2501,7 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
         <div key={sIdx} className="flex flex-col gap-3">
           {/* Section heading */}
           {section.title && (
-            <p className="text-[12.5px] font-semibold text-[#333] dark:text-[#c0c0c0]">
+            <p className="text-[13px] font-semibold text-ink-750 dark:text-ink-300">
               {section.title}
             </p>
           )}
@@ -2517,7 +2517,7 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
             {section.fields.filter((field) => isFieldVisible(field, values)).map((field, fIdx) => (
               <div key={`${field.key}-${field.type}-${field.label}-${fIdx}`} className="flex flex-col gap-1">
                 {/* Field label */}
-                <label className="text-[12px] font-medium text-[#555] dark:text-[#888]">
+                <label className="text-[12px] font-medium text-ink-650 dark:text-ink-500">
                   {field.label}
                   {field.required && (
                     <span className="text-[#e05] ml-0.5">*</span>
@@ -2535,14 +2535,14 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
 
                 {/* Hint below the input (e.g. "MM/DD/YYYY") */}
                 {field.hint && (
-                  <span className="text-[11px] text-[#bbb] dark:text-[#555]">
+                  <span className="text-[11px] text-ink-450 dark:text-ink-550">
                     {field.hint}
                   </span>
                 )}
 
                 {/* Contextual note after the field block */}
                 {field.after_hint && (
-                  <span className="text-[11.5px] leading-relaxed text-[#888] dark:text-[#555] mt-0.5">
+                  <span className="text-[12px] leading-relaxed text-ink-500 dark:text-ink-550 mt-0.5">
                     {field.after_hint}
                   </span>
                 )}

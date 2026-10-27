@@ -21,9 +21,9 @@ const MdCodeCopyButton = ({ handleCopy }) => {
       onClick={handleClick}
       className="flex items-center gap-1.5 px-2 py-1 rounded-md
         text-[11px] font-medium
-        text-[#888] dark:text-[#555]
-        hover:text-[#333] dark:hover:text-white
-        hover:bg-[#e4e4e4] dark:hover:bg-[#2a2a2a]
+        text-ink-500 dark:text-ink-550
+        hover:text-ink-750 dark:hover:text-white
+        hover:bg-ink-150 dark:hover:bg-ink-800
         transition-colors"
     >
       {copied ? (

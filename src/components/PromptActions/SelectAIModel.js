@@ -35,10 +35,10 @@ const SelectAIModel = ({ disabled }) => {
         <button
           title={model_selected?.name}
           className="flex items-center gap-1.5 px-2 py-1.5 sm:px-3 rounded-full
-            bg-[#f4f4f4] dark:bg-[#3a3a3a]
-            hover:bg-[#e9e9e9] dark:hover:bg-[#444444]
+            bg-ink-50 dark:bg-ink-725
+            hover:bg-ink-100 dark:hover:bg-ink-700
             disabled:opacity-40 disabled:cursor-not-allowed
-            text-[13px] font-medium text-black dark:text-white
+            text-[13px] font-medium text-ink-950 dark:text-white
             transition-colors duration-150 outline-none"
         >
           <TriggerIcon className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
@@ -52,8 +52,8 @@ const SelectAIModel = ({ disabled }) => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className="p-1.5 max-h-[260px] overflow-auto min-w-[220px] rounded-2xl
-            border border-[#e5e5e5] dark:border-[#3a3a3a]
-            bg-white dark:bg-[#2a2a2a]
+            border border-ink-150 dark:border-ink-725
+            bg-white dark:bg-ink-800
             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]
             z-10"
           sideOffset={8}
@@ -67,21 +67,21 @@ const SelectAIModel = ({ disabled }) => {
                 key={model.id}
                 onSelect={() => onSelect(model)}
                 className="flex items-center gap-2 px-2.5 py-[7px] rounded-xl outline-none cursor-pointer
-                  text-[#333] dark:text-[#ccc]
-                  hover:bg-[#f4f4f4] dark:hover:bg-[#363636]
+                  text-ink-750 dark:text-ink-300
+                  hover:bg-ink-50 dark:hover:bg-ink-750
                   transition-colors duration-100"
               >
                 <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />
                 <div className="flex-1 min-w-0">
                   <p className="text-[13px] font-medium leading-snug truncate">{model.name}</p>
                   {model?.description && (
-                    <p className="text-[11px] text-[#aaa] dark:text-[#666] leading-snug truncate">
+                    <p className="text-[11px] text-ink-400 dark:text-ink-600 leading-snug truncate">
                       {model.description}
                     </p>
                   )}
                 </div>
                 {isSelected && (
-                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-[#333] dark:text-[#ccc] opacity-70" />
+                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-brand-600 dark:text-brand-400" />
                 )}
               </DropdownMenu.Item>
             );

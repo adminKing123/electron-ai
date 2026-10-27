@@ -49,12 +49,12 @@ const StatusBadge = ({ configured }) => (
 
 const InfoRow = ({ icon, label, value, valueClassName = "" }) => (
   <div className="flex items-start justify-between gap-4 py-3">
-    <div className="flex items-center gap-2 text-[13px] text-[#888] dark:text-[#888] shrink-0">
+    <div className="flex items-center gap-2 text-[13px] text-ink-500 dark:text-ink-500 shrink-0">
       {icon}
       <span>{label}</span>
     </div>
     <div
-      className={`text-[13px] font-medium text-right text-[#222] dark:text-[#eee] ${valueClassName}`}
+      className={`text-[13px] font-medium text-right text-ink-875 dark:text-ink-75 ${valueClassName}`}
     >
       {value}
     </div>
@@ -104,10 +104,10 @@ const GoogleSheetsInfoModal = ({ isOpen, onClose }) => {
         <div className="flex items-center gap-3 mb-2">
           <IntegrationIconTile iconName="SiGooglesheets" />
           <div>
-            <p className="text-[15px] font-semibold text-[#222] dark:text-[#eee] leading-tight">
+            <p className="text-[15px] font-semibold text-ink-875 dark:text-ink-75 leading-tight">
               Google Sheets integration
             </p>
-            <p className="text-[12px] text-[#888] dark:text-[#777] leading-tight">
+            <p className="text-[12px] text-ink-500 dark:text-ink-550 leading-tight">
               Connection details for your linked account
             </p>
           </div>
@@ -116,22 +116,22 @@ const GoogleSheetsInfoModal = ({ isOpen, onClose }) => {
     >
       <div className="min-h-[180px]">
         {loadingInfo ? (
-          <div className="flex flex-col items-center justify-center gap-3 h-[180px] text-[#333] dark:text-[#ccc]">
+          <div className="flex flex-col items-center justify-center gap-3 h-[180px] text-ink-750 dark:text-ink-300">
             <BasicLoader />
           </div>
         ) : hasError || !sheetsInfo ? (
           <div className="flex flex-col items-center justify-center gap-2 h-44 text-center px-6">
             <HiOutlineExclamationTriangle className="w-6 h-6 text-red-400" />
-            <p className="text-[13px] font-medium text-[#333] dark:text-[#ccc]">
+            <p className="text-[13px] font-medium text-ink-750 dark:text-ink-300">
               Couldn't load Google Sheets integration info
             </p>
-            <p className="text-[12px] text-[#888] dark:text-[#777]">
+            <p className="text-[12px] text-ink-500 dark:text-ink-550">
               Please try again, or reconnect your account if the issue
               continues.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-[#ececec] dark:divide-[#2a2a2a]">
+          <div className="divide-y divide-ink-100 dark:divide-ink-800">
             <InfoRow
               icon={<HiOutlineIdentification className="w-4 h-4" />}
               label="Integration ID"
@@ -187,10 +187,10 @@ const GoogleSheetsInfoModal = ({ isOpen, onClose }) => {
         <button
           onClick={onClose}
           className="px-4 py-1.5 rounded-full text-[13px] font-medium
-            bg-[#f4f4f4] dark:bg-[#2a2a2a]
-            text-[#333] dark:text-[#ccc]
-            hover:bg-[#ebebeb] dark:hover:bg-[#333]
-            border border-[#e8e8e8] dark:border-[#333]
+            bg-ink-50 dark:bg-ink-800
+            text-ink-750 dark:text-ink-300
+            hover:bg-ink-100 dark:hover:bg-ink-750
+            border border-ink-100 dark:border-ink-750
             transition-colors"
         >
           Close

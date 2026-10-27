@@ -34,7 +34,7 @@ export default function FuseJsonViewer({ value }) {
         margin: 0,
         padding: "12px 0",
         background: "transparent",
-        fontSize: "11.5px",
+        fontSize: "12px",
         lineHeight: 1.55,
       }}
       codeTagProps={{ className: "font-mono" }}

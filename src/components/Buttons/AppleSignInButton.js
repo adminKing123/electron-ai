@@ -7,7 +7,7 @@ const AppleSignInButton = () => {
     <SocialSignInButton
       onClick={() => {}}
       authorizationStatus={AUTHORIZATION_STATUS.NOT_AUTHORIZED}
-      icon={<FaApple className="text-[#111] dark:text-[#eee]" />}
+      icon={<FaApple className="text-ink-975 dark:text-ink-75" />}
       label="Continue with Apple"
     />
   );

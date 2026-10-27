@@ -31,7 +31,7 @@ import ROUTES from "../router/routes";
 const TriggerIcon = ({ type }) => {
   const icons = { webhook: TbWebhook, schedule: TbCalendarTime, manual: TbBolt };
   const Icon = icons[type] ?? TbBolt;
-  return <Icon className="w-4 h-4 text-[#888] dark:text-[#555]" />;
+  return <Icon className="w-4 h-4 text-ink-500 dark:text-ink-550" />;
 };
 
 const ConnectionPill = ({ status }) => {
@@ -42,11 +42,11 @@ const ConnectionPill = ({ status }) => {
   const cls = live
     ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
     : pending
-      ? "text-blue-500 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800"
-      : "text-[#888] dark:text-[#555] bg-[#f5f5f5] dark:bg-[#1a1a1a] border-[#e8e8e8] dark:border-[#2a2a2a]";
+      ? "text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800"
+      : "text-ink-500 dark:text-ink-550 bg-ink-50 dark:bg-ink-850 border-ink-100 dark:border-ink-800";
 
   return (
-    <span className={`hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${cls}`}>
+    <span className={`hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${cls}`}>
       <Icon className={`w-3 h-3 ${pending ? "animate-pulse" : ""}`} />
       {label}
     </span>
@@ -138,8 +138,8 @@ const WorkflowRunDetailPage = () => {
   };
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121] text-black dark:text-white">
-      <header className="w-full flex-shrink-0 bg-[#ffffff] dark:bg-[#212121]">
+    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark text-ink-950 dark:text-white">
+      <header className="w-full flex-shrink-0 bg-transparent">
         <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
           <div className="flex items-center gap-1.5 min-w-0 flex-1">
             <button
@@ -155,10 +155,10 @@ const WorkflowRunDetailPage = () => {
             <div className="flex items-center gap-2 min-w-0">
               {run && <TriggerIcon type={run.trigger_type} />}
               <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-[#bbb] dark:text-[#555] leading-none mb-0.5">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-450 dark:text-ink-550 leading-none mb-0.5">
                   Run Detail
                 </p>
-                <p className="text-[13px] font-mono font-semibold text-[#111] dark:text-white truncate leading-tight">
+                <p className="text-[13px] font-mono font-semibold text-ink-975 dark:text-white truncate leading-tight">
                   {runId}
                 </p>
               </div>
@@ -197,8 +197,8 @@ const WorkflowRunDetailPage = () => {
             p-0 md:p-4
             mb-16 md:mb-3 ml-0 md:ml-3 mr-0 md:mr-3
             md:rounded-xl
-            md:border md:border-[#e5e5e5] md:dark:border-[#252525]
-            bg-[#f7f7f7] dark:bg-[#1a1a1a]
+            md:border md:border-ink-150 md:dark:border-ink-825
+            bg-ink-25 dark:bg-ink-850
             md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
           <div className="relative flex-1 min-w-0 min-h-0">
@@ -225,13 +225,13 @@ const WorkflowRunDetailPage = () => {
           >
             <div
               className="flex md:hidden items-center justify-between px-4 py-2.5 flex-shrink-0
-                bg-white dark:bg-[#212121] rounded-t-2xl
-                border-t border-x border-[#e5e5e5] dark:border-[#2a2a2a]
+                bg-white dark:bg-ink-875 rounded-t-2xl
+                border-t border-x border-ink-150 dark:border-ink-800
                 shadow-[0_-6px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_-6px_24px_rgba(0,0,0,0.35)]"
             >
               <div className="flex items-center gap-2 min-w-0">
-                <TbListDetails className="w-4 h-4 flex-shrink-0 text-[#888] dark:text-[#666]" />
-                <span className="text-[12px] font-semibold text-[#444] dark:text-[#bbb] truncate">
+                <TbListDetails className="w-4 h-4 flex-shrink-0 text-ink-500 dark:text-ink-600" />
+                <span className="text-[12px] font-semibold text-ink-700 dark:text-ink-350 truncate">
                   {mobilePanelTitle}
                 </span>
               </div>
@@ -239,9 +239,9 @@ const WorkflowRunDetailPage = () => {
                 type="button"
                 onClick={() => setMobilePanelOpen(false)}
                 className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0
-                  text-[#888] dark:text-[#666]
-                  hover:text-[#333] dark:hover:text-white
-                  hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a]
+                  text-ink-500 dark:text-ink-600
+                  hover:text-ink-750 dark:hover:text-white
+                  hover:bg-ink-75 dark:hover:bg-ink-800
                   transition-colors"
                 aria-label="Close panel"
               >
@@ -252,8 +252,8 @@ const WorkflowRunDetailPage = () => {
             <FuseRunNodePanel
               className="flex-1 min-h-0 md:rounded-xl rounded-none
                 border-t-0 md:border-t
-                bg-white dark:bg-[#212121]
-                border border-[#e5e5e5] dark:border-[#2a2a2a]
+                bg-white dark:bg-ink-875
+                border border-ink-150 dark:border-ink-800
                 shadow-sm overflow-hidden"
               selectedNode={selectedNode}
               nodeState={selectedNodeState}
@@ -278,19 +278,19 @@ const WorkflowRunDetailPage = () => {
 
       <nav
         className="flex md:hidden fixed bottom-0 left-0 right-0 z-50
-          bg-white dark:bg-[#1a1a1a]
-          border-t border-[#e5e5e5] dark:border-[#252525]
+          bg-white dark:bg-ink-850
+          border-t border-ink-150 dark:border-ink-825
           px-2 py-1 justify-center items-center"
       >
         <button
           type="button"
           onClick={() => setMobilePanelOpen((v) => !v)}
           className={`flex flex-col items-center justify-center gap-0.5 w-20 py-2 rounded-xl
-            text-[10px] font-semibold select-none transition-colors
+            text-[11px] font-semibold select-none transition-colors
             ${
               mobilePanelOpen
-                ? "text-[#000] dark:text-[#fff]"
-                : "text-[#666] dark:text-[#999] hover:text-[#222] dark:hover:text-[#d0d0d0]"
+                ? "text-ink-975 dark:text-white"
+                : "text-ink-600 dark:text-ink-450 hover:text-ink-875 dark:hover:text-ink-200"
             }`}
         >
           <TbListDetails className="w-[20px] h-[20px]" />

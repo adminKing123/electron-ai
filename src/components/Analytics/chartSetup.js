@@ -31,3 +31,6 @@ ChartJS.register(
   Legend,
   Filler
 );
+
+ChartJS.defaults.font.family =
+  '"Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';

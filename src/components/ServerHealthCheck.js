@@ -83,8 +83,8 @@ const LoadingStateUI = ({ checks }) => {
   }, []);
 
   return (
-    <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex items-center justify-center flex-col">
-      <TbGalaxy className="text-[#000000] dark:text-white w-[72px] h-[72px] animate-spin [animation-duration:5s] mb-8" />
+    <div className="bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex items-center justify-center flex-col">
+      <TbGalaxy className="text-ink-975 dark:text-white w-[72px] h-[72px] animate-spin [animation-duration:5s] mb-8" />
       <AnimatePresence mode="wait">
         <motion.p
           key={index}
@@ -92,42 +92,42 @@ const LoadingStateUI = ({ checks }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -12 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="text-[#000000] dark:text-white font-semibold text-center italic px-4"
+          className="text-ink-975 dark:text-white font-semibold text-center italic px-4"
         >
           {messages[index]}
         </motion.p>
       </AnimatePresence>
-      <p className="opacity-50 text-[#000000] dark:text-white text-xs text-center px-4 mt-10">
+      <p className="opacity-50 text-ink-975 dark:text-white text-xs text-center px-4 mt-10">
         Please wait
       </p>
-      <p className="opacity-50 text-[#000000] dark:text-white text-xs text-center px-4 mb-2">
+      <p className="opacity-50 text-ink-975 dark:text-white text-xs text-center px-4 mb-2">
         while we check the server status...
       </p>
       <div className="px-4">
         <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.api)}
-          <span className="min-w-[40px] text-[#000000] dark:text-white font-mono text-xs">
+          <span className="min-w-[40px] text-ink-975 dark:text-white font-mono text-xs">
             Server
           </span>
-          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+          <span className="text-ink-975 dark:text-white opacity-40 text-xs">
             {CONFIG.API_BASE_URL}
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.db)}
-          <span className="min-w-[40px] text-[#000000] dark:text-white font-mono text-xs">
+          <span className="min-w-[40px] text-ink-975 dark:text-white font-mono text-xs">
             Database
           </span>
-          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+          <span className="text-ink-975 dark:text-white opacity-40 text-xs">
             Firebase Firestore
           </span>
         </div>
         <div className="flex items-center gap-3 text-sm">
           {getStatusIcon(checks.cdn)}
-          <span className="min-w-[40px] text-[#000000] dark:text-white font-mono text-xs">
+          <span className="min-w-[40px] text-ink-975 dark:text-white font-mono text-xs">
             CDN
           </span>
-          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+          <span className="text-ink-975 dark:text-white opacity-40 text-xs">
             {CONFIG.FILE_CDN_URL}
           </span>
         </div>
@@ -138,7 +138,7 @@ const LoadingStateUI = ({ checks }) => {
 
 const ErrorStateUI = ({ checks }) => {
   return (
-    <div className="bg-[#ffffff] dark:bg-[#212121] w-screen h-[100dvh] flex items-center justify-center flex-col">
+    <div className="bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex items-center justify-center flex-col">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -160,7 +160,7 @@ const ErrorStateUI = ({ checks }) => {
         </motion.p>
       </AnimatePresence>
 
-      <p className="opacity-60 text-[#000000] dark:text-white text-sm text-center px-4 mt-6 max-w-md">
+      <p className="opacity-60 text-ink-975 dark:text-white text-sm text-center px-4 mt-6 max-w-md">
         We tried reaching the backend server but it didn’t respond. This could
         be a network issue, server downtime, or configuration mismatch.
       </p>
@@ -176,7 +176,7 @@ const ErrorStateUI = ({ checks }) => {
           >
             API Server
           </span>
-          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+          <span className="text-ink-975 dark:text-white opacity-40 text-xs">
             {CONFIG.API_BASE_URL}
           </span>
         </div>
@@ -191,7 +191,7 @@ const ErrorStateUI = ({ checks }) => {
           >
             Database
           </span>
-          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+          <span className="text-ink-975 dark:text-white opacity-40 text-xs">
             Firebase Firestore
           </span>
         </div>
@@ -206,13 +206,13 @@ const ErrorStateUI = ({ checks }) => {
           >
             CDN Server
           </span>
-          <span className="text-[#000000] dark:text-white opacity-40 text-xs">
+          <span className="text-ink-975 dark:text-white opacity-40 text-xs">
             {CONFIG.FILE_CDN_URL}
           </span>
         </div>
       </div>
 
-      <p className="opacity-40 text-[#000000] dark:text-white text-xs text-center px-4 mt-6">
+      <p className="opacity-40 text-ink-975 dark:text-white text-xs text-center px-4 mt-6">
         Please contact the administrator if the issue persists.
       </p>
     </div>

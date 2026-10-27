@@ -18,19 +18,19 @@ export default function MobileActionBar({
   return (
     <nav
       className="flex md:hidden fixed bottom-0 left-0 right-0 z-50
-        bg-white dark:bg-[#1a1a1a]
-        border-t border-[#e5e5e5] dark:border-[#252525]
+        bg-white dark:bg-ink-850
+        border-t border-ink-150 dark:border-ink-825
         px-2 py-1 justify-around items-center"
     >
       {/* Configure — toggles the config bottom-sheet */}
       <button
         onClick={() => setMobilePanelOpen((v) => !v)}
         className={`flex flex-col items-center justify-center gap-0.5 w-14 py-2 rounded-xl
-          text-[10px] font-semibold select-none transition-colors
+          text-[11px] font-semibold select-none transition-colors
           ${
             mobilePanelOpen
-              ? "text-[#000] dark:text-[#fff]"
-              : "text-[#666] dark:text-[#999] hover:text-[#222] dark:hover:text-[#d0d0d0]"
+              ? "text-ink-975 dark:text-white"
+              : "text-ink-600 dark:text-ink-450 hover:text-ink-875 dark:hover:text-ink-200"
           }`}
       >
         <TbSettings2 className="w-[20px] h-[20px]" />
@@ -42,9 +42,9 @@ export default function MobileActionBar({
         onClick={() => setAddingNode(true)}
         disabled={!hasStarterNode || inFlight}
         className="flex flex-col items-center justify-center gap-0.5 w-14 py-2 rounded-xl
-          text-[10px] font-semibold select-none transition-colors
-          text-[#666] dark:text-[#999]
-          hover:text-[#222] dark:hover:text-[#d0d0d0]
+          text-[11px] font-semibold select-none transition-colors
+          text-ink-600 dark:text-ink-450
+          hover:text-ink-875 dark:hover:text-ink-200
           disabled:opacity-30 disabled:cursor-not-allowed"
       >
         <TbPlus className="w-[20px] h-[20px]" />
@@ -56,10 +56,10 @@ export default function MobileActionBar({
         <button
           disabled
           className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
-            text-[10px] font-semibold text-[#888] dark:text-[#555] select-none"
+            text-[11px] font-semibold text-ink-500 dark:text-ink-550 select-none"
         >
           <span className="w-5 h-5 flex items-center justify-center">
-            <span className="w-[14px] h-[14px] border-2 border-[#888] border-t-transparent rounded-full animate-spin" />
+            <span className="w-[14px] h-[14px] border-2 border-ink-500 border-t-transparent rounded-full animate-spin" />
           </span>
           <span>{deactivating ? "Stopping" : "Compiling"}</span>
         </button>
@@ -68,9 +68,9 @@ export default function MobileActionBar({
           onClick={onActivate}
           disabled={saving}
           className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
-            text-[10px] font-semibold select-none transition-all active:opacity-80
-            bg-[#111] dark:bg-[#efefef]
-            text-white dark:text-[#111]
+            text-[11px] font-semibold select-none transition-all active:opacity-80
+            bg-brand-600 dark:bg-brand-500 shadow-glow
+            text-white
             disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <TbRefresh className="w-[20px] h-[20px]" />
@@ -81,9 +81,9 @@ export default function MobileActionBar({
           onClick={onActivate}
           disabled={!hasStarterNode || saving}
           className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
-            text-[10px] font-semibold select-none transition-all active:opacity-80
-            bg-[#111] dark:bg-[#efefef]
-            text-white dark:text-[#111]
+            text-[11px] font-semibold select-none transition-all active:opacity-80
+            bg-brand-600 dark:bg-brand-500 shadow-glow
+            text-white
             disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <TbPower className="w-[20px] h-[20px]" />
@@ -96,7 +96,7 @@ export default function MobileActionBar({
         <button
           onClick={onDeactivate}
           className="flex flex-col items-center justify-center gap-0.5 w-14 py-2 rounded-xl
-            text-[10px] font-semibold select-none transition-colors
+            text-[11px] font-semibold select-none transition-colors
             text-red-500 dark:text-red-400
             hover:bg-red-50 dark:hover:bg-red-900/20"
         >

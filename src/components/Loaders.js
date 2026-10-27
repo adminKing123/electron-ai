@@ -7,7 +7,7 @@ const Spinner = ({ className = "w-3 h-3" }) => (
 
 export const GettingStartedLoader = () => {
   return (
-    <div className="flex items-center gap-2 text-[#888] dark:text-[#555]">
+    <div className="flex items-center gap-2 text-ink-500 dark:text-ink-550">
       <Spinner />
       <span className="text-[12px]">Getting started…</span>
     </div>
@@ -16,7 +16,7 @@ export const GettingStartedLoader = () => {
 
 export const LoadingMessages = () => {
   return (
-    <div className="flex flex-col items-center justify-center gap-2.5 py-16 text-[#bbb] dark:text-[#3a3a3a]">
+    <div className="flex flex-col items-center justify-center gap-2.5 py-16 text-ink-450 dark:text-ink-600">
       <Spinner className="w-4 h-4" />
     </div>
   );

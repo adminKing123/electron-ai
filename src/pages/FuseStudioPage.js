@@ -228,7 +228,7 @@ export default function FuseStudioPage() {
   const { creating, handleCreate } = useCreateWorkflow();
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-[#ffffff] dark:bg-[#212121]">
+    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark">
       <FuseStudioHeader
         name={loading ? "" : workflowName}
         workflowId={id}
@@ -245,8 +245,8 @@ export default function FuseStudioPage() {
             p-0 md:p-4
             mb-16 md:mb-3 mr-0 md:mr-3
             md:rounded-xl
-            md:border md:border-[#e5e5e5] md:dark:border-[#252525]
-            bg-[#f7f7f7] dark:bg-[#1a1a1a]
+            md:border md:border-ink-150 md:dark:border-ink-825
+            bg-ink-25 dark:bg-ink-850
             md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
           {/* Canvas */}
@@ -277,22 +277,22 @@ export default function FuseStudioPage() {
             {/* Handle bar — mobile only */}
             <div
               className="flex md:hidden items-center justify-between px-4 py-2.5 flex-shrink-0
-                bg-white dark:bg-[#212121] rounded-t-2xl
-                border-t border-x border-[#e5e5e5] dark:border-[#2a2a2a]
+                bg-white dark:bg-ink-875 rounded-t-2xl
+                border-t border-x border-ink-150 dark:border-ink-800
                 shadow-[0_-6px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_-6px_24px_rgba(0,0,0,0.35)]"
             >
               <div className="flex items-center gap-2">
-                <TbSettings2 className="w-4 h-4 text-[#888] dark:text-[#666]" />
-                <span className="text-[12px] font-semibold text-[#444] dark:text-[#bbb]">
+                <TbSettings2 className="w-4 h-4 text-ink-500 dark:text-ink-600" />
+                <span className="text-[12px] font-semibold text-ink-700 dark:text-ink-350">
                   Configure
                 </span>
               </div>
               <button
                 onClick={() => setMobilePanelOpen(false)}
                 className="w-7 h-7 flex items-center justify-center rounded-lg
-                  text-[#888] dark:text-[#666]
-                  hover:text-[#333] dark:hover:text-white
-                  hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a]
+                  text-ink-500 dark:text-ink-600
+                  hover:text-ink-750 dark:hover:text-white
+                  hover:bg-ink-75 dark:hover:bg-ink-800
                   transition-colors"
                 aria-label="Close panel"
               >
@@ -303,8 +303,8 @@ export default function FuseStudioPage() {
             <NodeConfigPanel
               className="flex-1 min-h-0 md:rounded-xl rounded-none
                 border-t-0 md:border-t
-                bg-white dark:bg-[#212121]
-                border border-[#e5e5e5] dark:border-[#2a2a2a]
+                bg-white dark:bg-ink-875
+                border border-ink-150 dark:border-ink-800
                 shadow-sm overflow-hidden"
             />
           </div>

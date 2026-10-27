@@ -48,9 +48,9 @@ const MdCode = ({ lang = "", message_id = "", children, ...props }) => {
   if (renderType === "tableview" || renderType === "htmlview") return renderContent();
   else
     return (
-      <div className="my-4 bg-[#f8f8f8] dark:bg-[#161616] border border-[#e8e8e8] dark:border-[#2a2a2a] rounded-2xl overflow-hidden">
-        <div className="px-4 py-2.5 bg-[#f0f0f0] dark:bg-[#1e1e1e] border-b border-[#e8e8e8] dark:border-[#2a2a2a] flex justify-between items-center">
-          <span className="text-[12px] font-medium text-[#888] dark:text-[#555] tracking-wide">
+      <div className="my-4 bg-ink-25 dark:bg-ink-850 border border-ink-100 dark:border-ink-800 rounded-2xl overflow-hidden">
+        <div className="px-4 py-2.5 bg-ink-75 dark:bg-ink-825 border-b border-ink-100 dark:border-ink-800 flex justify-between items-center">
+          <span className="text-[12px] font-medium text-ink-500 dark:text-ink-550 tracking-wide">
             {displayLang}
           </span>
           <MdCodeCopyButton handleCopy={handleCopy} />

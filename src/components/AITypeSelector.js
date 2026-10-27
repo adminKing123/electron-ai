@@ -52,9 +52,9 @@ function AITypeSelector() {
         <button
           id="ai-type-toggler"
           className="flex items-center gap-2 px-3 py-1.5 rounded-full
-            bg-[#f4f4f4] dark:bg-[#3a3a3a]
-            hover:bg-[#e9e9e9] dark:hover:bg-[#444444]
-            text-[#333] dark:text-[#ccc]
+            bg-ink-50 dark:bg-ink-725
+            hover:bg-ink-100 dark:hover:bg-ink-700
+            text-ink-750 dark:text-ink-300
             text-[13px] font-medium
             transition-colors outline-none select-none"
         >
@@ -69,8 +69,8 @@ function AITypeSelector() {
           align="end"
           sideOffset={8}
           className="p-1.5 rounded-2xl z-50
-            border border-[#e5e5e5] dark:border-[#3a3a3a]
-            bg-white dark:bg-[#2a2a2a]
+            border border-ink-150 dark:border-ink-725
+            bg-white dark:bg-ink-800
             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]
             min-w-[220px]"
         >
@@ -82,21 +82,21 @@ function AITypeSelector() {
                 key={type.id}
                 onSelect={() => handleSelect(type)}
                 className="flex items-center gap-2 px-2.5 py-[7px] rounded-xl
-                  text-[#333] dark:text-[#ccc]
-                  hover:bg-[#f4f4f4] dark:hover:bg-[#363636]
+                  text-ink-750 dark:text-ink-300
+                  hover:bg-ink-50 dark:hover:bg-ink-750
                   outline-none cursor-pointer transition-colors"
               >
                 <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />
                 <div className="flex flex-col flex-grow min-w-0">
                   <span className="text-[13px] font-medium leading-snug">{type.name}</span>
                   {type.description ? (
-                    <span className="text-[11px] text-[#aaa] dark:text-[#666] leading-snug truncate">
+                    <span className="text-[11px] text-ink-400 dark:text-ink-600 leading-snug truncate">
                       {type.description}
                     </span>
                   ) : null}
                 </div>
                 {isSelected && (
-                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-[#333] dark:text-[#ccc] opacity-70" />
+                  <IoCheckmark className="w-[13px] h-[13px] flex-shrink-0 text-brand-600 dark:text-brand-400" />
                 )}
               </DropdownMenu.Item>
             );

@@ -56,8 +56,8 @@ const CanvasContextMenu = ({ x, y, onDrawBlock, onClose }) => {
       ref={menuRef}
       style={{ top: safeY, left: safeX, position: "fixed" }}
       className="z-[9999] min-w-[160px]
-        bg-white dark:bg-[#1e1e1e]
-        border border-[#e5e5e5] dark:border-[#2a2a2a]
+        bg-white dark:bg-ink-825
+        border border-ink-150 dark:border-ink-800
         rounded-xl shadow-xl overflow-hidden
         py-1"
     >
@@ -66,11 +66,11 @@ const CanvasContextMenu = ({ x, y, onDrawBlock, onClose }) => {
         onClick={handleDrawBlock}
         className="w-full flex items-center gap-2.5 px-3.5 py-2.5
           text-[13px] font-medium text-left select-none
-          text-[#333] dark:text-[#ccc]
-          hover:bg-[#f5f5f5] dark:hover:bg-[#252525]
+          text-ink-750 dark:text-ink-300
+          hover:bg-ink-50 dark:hover:bg-ink-825
           transition-colors"
       >
-        <TbBorderAll className="w-4 h-4 text-[#4a6cf7] dark:text-[#6b8aff] flex-shrink-0" />
+        <TbBorderAll className="w-4 h-4 text-brand-600 dark:text-brand-400 flex-shrink-0" />
         Draw Block
       </button>
     </div>
