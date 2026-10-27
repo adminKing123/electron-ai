@@ -15,9 +15,15 @@ import {
   HiOutlineUser,
   HiOutlineEnvelope,
   HiOutlineExclamationTriangle,
-  HiOutlineLink,
-  HiOutlineTrash,
 } from "react-icons/hi2";
+import {
+  WebhookList,
+  WebhookListRow,
+  WebhooksListHeader,
+  WebhooksPanelEmpty,
+  WebhooksPanelError,
+  WebhooksPanelLoader,
+} from "./integrationWebhooksUi";
 
 const TABS = [
   { id: "basic", label: "Basic Info" },
@@ -165,139 +171,44 @@ const BasicInfoPanel = ({ webexInfo }) => (
   </div>
 );
 
-const WebhookStatusPill = ({ status }) => {
-  const active = (status || "").toLowerCase() === "active";
-  return (
-    <span
-      className={[
-        "inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium capitalize",
-        active
-          ? "bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400"
-          : "bg-ink-75 text-ink-500 dark:bg-ink-800 dark:text-ink-550",
-      ].join(" ")}
-    >
-      {status || "unknown"}
-    </span>
-  );
+const webexWebhookSubtitle = (webhook) => {
+  const base = `${webhook.resource}/${webhook.event}`;
+  return webhook.filter ? `${base} · ${webhook.filter}` : base;
 };
 
-const WebhookCard = ({ webhook, onRemove, removing }) => (
-  <div
-    className="flex flex-col gap-2 p-3 rounded-xl
-      bg-ink-25 dark:bg-ink-850
-      border border-ink-100 dark:border-ink-800"
-  >
-    <div className="flex items-start justify-between gap-2">
-      <div className="min-w-0 flex-1">
-        <p className="text-[13px] font-semibold text-ink-875 dark:text-ink-75 truncate">
-          {webhook.name || "Unnamed webhook"}
-        </p>
-        <p className="text-[11px] text-ink-500 dark:text-ink-600 mt-0.5">
-          {webhook.resource}/{webhook.event}
-          {webhook.filter ? ` · ${webhook.filter}` : ""}
-        </p>
-      </div>
-      <div className="flex items-center gap-2 shrink-0">
-        <WebhookStatusPill status={webhook.status} />
-        <button
-          type="button"
-          title="Remove webhook"
-          disabled={removing}
-          onClick={() => onRemove(webhook)}
-          className="w-8 h-8 flex items-center justify-center rounded-lg
-            text-ink-450 dark:text-ink-550
-            hover:text-red-500 dark:hover:text-red-400
-            hover:bg-red-50 dark:hover:bg-red-500/10
-            disabled:opacity-50 disabled:cursor-not-allowed
-            transition-colors"
-        >
-          {removing ? (
-            <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <HiOutlineTrash className="w-4 h-4" />
-          )}
-        </button>
-      </div>
-    </div>
-
-    <div className="flex items-start gap-1.5 min-w-0">
-      <HiOutlineLink className="w-3.5 h-3.5 text-ink-400 dark:text-ink-550 mt-0.5 shrink-0" />
-      <p
-        className="text-[11px] font-mono text-ink-600 dark:text-ink-500 break-all leading-relaxed"
-        title={webhook.target_url}
-      >
-        {webhook.target_url}
-      </p>
-    </div>
-
-    <div className="flex items-center justify-between gap-2 text-[11px] text-ink-400 dark:text-ink-550">
-      <span className="font-mono truncate" title={webhook.id}>
-        {webhook.id}
-      </span>
-      {webhook.created && <span>{formatDateTime(webhook.created)}</span>}
-    </div>
-
-    {webhook.is_fuse_managed && (
-      <span className="self-start px-2 py-0.5 rounded-md text-[11px] font-medium
-        bg-[#e0f2fe] text-[#0369a1] dark:bg-[#0c4a6e]/40 dark:text-[#7dd3fc]">
-        Fuse workflow
-      </span>
-    )}
-  </div>
-);
-
 const WebhooksPanel = ({ webhooks, loading, error, onRefresh, onRemove, removingId }) => {
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 h-44 text-ink-750 dark:text-ink-300">
-        <BasicLoader />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 h-44 text-center px-4">
-        <HiOutlineExclamationTriangle className="w-6 h-6 text-red-400" />
-        <p className="text-[13px] font-medium text-ink-750 dark:text-ink-300">
-          Couldn't load webhooks
-        </p>
-        <button
-          type="button"
-          onClick={onRefresh}
-          className="text-[12px] text-[#0073b7] dark:text-[#38bdf8] hover:underline"
-        >
-          Try again
-        </button>
-      </div>
-    );
-  }
-
+  if (loading) return <WebhooksPanelLoader />;
+  if (error) return <WebhooksPanelError onRetry={onRefresh} />;
   if (!webhooks.length) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 h-44 text-center px-6">
-        <p className="text-[13px] font-medium text-ink-750 dark:text-ink-300">
-          No webhooks registered
-        </p>
-        <p className="text-[12px] text-ink-500 dark:text-ink-550 leading-relaxed">
-          Webhooks appear here when you activate a workflow with an
-          &ldquo;On Webex Message&rdquo; starter, or when you create them in Webex directly.
-        </p>
-      </div>
+      <WebhooksPanelEmpty
+        message="No webhooks yet"
+        hint='Shown when a workflow uses the "On Webex Message" starter or you add webhooks in Webex.'
+      />
     );
   }
 
+  const active = (status) => (status || "").toLowerCase() === "active";
+
   return (
-    <div className="flex flex-col gap-2 max-h-[320px] overflow-y-auto pr-0.5">
+    <WebhookList
+      header={
+        <WebhooksListHeader count={webhooks.length} onRefresh={onRefresh} />
+      }
+    >
       {webhooks.map((webhook) => (
-        <WebhookCard
+        <WebhookListRow
           key={webhook.id}
-          webhook={webhook}
-          onRemove={onRemove}
+          title={webhook.name || "Unnamed webhook"}
+          subtitle={webexWebhookSubtitle(webhook)}
+          active={active(webhook.status)}
+          activeLabel={webhook.status || "unknown"}
+          fuseManaged={webhook.is_fuse_managed}
+          onRemove={() => onRemove(webhook)}
           removing={removingId === webhook.id}
         />
       ))}
-    </div>
+    </WebhookList>
   );
 };
 
@@ -403,7 +314,7 @@ const WebexInfoModal = ({ isOpen, onClose }) => {
               Webex integration
             </p>
             <p className="text-[12px] text-ink-500 dark:text-ink-550 leading-tight">
-              Connection details and webhook management
+              Account details and webhooks
             </p>
           </div>
         </div>
