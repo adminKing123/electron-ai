@@ -8,12 +8,12 @@ const AuthorizationHeader = () => {
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="h-[56px] w-full flex items-center justify-between gap-2 px-4 border-b border-[#ebebeb] dark:border-[#222] flex-shrink-0"
+      className="w-full flex items-center justify-between gap-2 p-4 flex-shrink-0"
     >
       {/* Brand mark */}
       <div className="flex items-center gap-2 text-[#111] dark:text-white">
-        <TbGalaxy className="w-[18px] h-[18px]" />
-        <span className="text-[14px] font-semibold tracking-tight">Comet AI</span>
+        <TbGalaxy className="w-[28px] h-[28px]" />
+        <span className="text-[24px] font-semibold tracking-tight">Comet AI</span>
       </div>
 
       {/* Theme toggle */}
