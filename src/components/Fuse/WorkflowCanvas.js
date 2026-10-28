@@ -385,7 +385,7 @@ const WorkflowCanvas = ({
   const displayEdges = useMemo(() => {
     if (!readOnly) return edges;
 
-    const traversedStroke = isDark ? "#a78bfa" : "#7c3aed";
+    const traversedStroke = isDark ? "#94a3b8" : "#7c3aed";
     const idleStroke = isDark ? "#363636" : "#d8d4e8";
 
     return edges.map((edge) => {
@@ -485,7 +485,7 @@ const WorkflowCanvas = ({
           proOptions={{ hideAttribution: true }}
           connectionLineType={ConnectionLineType.SmoothStep}
           connectionLineStyle={{
-            stroke: isDark ? "#a78bfa" : "#7c3aed",
+            stroke: isDark ? "#94a3b8" : "#7c3aed",
             strokeWidth: 2,
             strokeLinecap: "round",
           }}
@@ -627,8 +627,8 @@ const WorkflowCanvas = ({
                 className="flex-1 py-1.5 rounded-lg
                   text-[12px] font-semibold select-none
                   bg-brand-600 dark:bg-brand-500 shadow-glow
-                  text-white
-                  hover:bg-brand-700 dark:hover:bg-brand-400
+                  text-white dark:text-[var(--brand-on-solid)]
+                  hover:bg-brand-700 dark:hover:bg-brand-600
                   transition-colors"
               >
                 Create Block

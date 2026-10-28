@@ -31,12 +31,12 @@ const TokenSplitChart = ({ inputTokens = 0, outputTokens = 0 }) => {
         data: total > 0 ? [inputTokens, outputTokens] : [1, 0],
         backgroundColor: total > 0
           ? isDark
-            ? ["rgba(56,189,248,0.75)", "rgba(16,185,129,0.75)"]
+            ? ["rgba(148,163,184,0.65)", "rgba(16,185,129,0.75)"]
             : ["rgba(139,92,246,0.75)", "rgba(16,185,129,0.75)"]
           : [isDark ? "#2c323e" : "#ebe9f4", "transparent"],
         borderColor: total > 0
           ? isDark
-            ? ["#38bdf8", "#10b981"]
+            ? ["#94a3b8", "#10b981"]
             : ["#8b5cf6", "#10b981"]
           : ["transparent", "transparent"],
         borderWidth: total > 0 ? 1.5 : 0,

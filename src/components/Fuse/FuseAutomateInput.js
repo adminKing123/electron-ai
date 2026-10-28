@@ -96,7 +96,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
           aria-hidden
           className="pointer-events-none absolute top-16 left-1/2 -translate-x-1/2 w-[min(720px,90%)] h-64
             bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.22)_0%,rgba(139,92,246,0.08)_45%,transparent_70%)]
-            dark:bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.2)_0%,rgba(124,58,237,0.08)_45%,transparent_70%)]
+            dark:bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.06)_0%,transparent_55%)]
             blur-2xl transition-opacity duration-300"
         />
       )}
@@ -153,8 +153,8 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                 else handleExpand();
               }}
               className="flex items-center gap-1.5 h-10 px-4 rounded-xl text-[13px] font-semibold
-                bg-brand-600 dark:bg-brand-500 text-white
-                hover:bg-brand-700 dark:hover:bg-brand-400 active:opacity-80
+                bg-brand-600 dark:bg-brand-500 text-white dark:text-[var(--brand-on-solid)]
+                hover:bg-brand-700 dark:hover:bg-brand-600 active:opacity-80
                 disabled:opacity-40 disabled:cursor-not-allowed
                 transition-colors"
             >
@@ -174,7 +174,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                 border border-brand-200 dark:border-brand-900
                 rounded-2xl
                 shadow-[0_8px_40px_rgba(139,92,246,0.16),0_2px_12px_rgba(0,0,0,0.05)]
-                dark:shadow-[0_8px_40px_rgba(139,92,246,0.10),0_2px_12px_rgba(0,0,0,0.4)]
+                dark:shadow-[0_8px_32px_rgba(0,0,0,0.45),0_1px_0_rgba(255,255,255,0.04)_inset]
                 px-5 pt-4 pb-3.5
                 animate-fuseExpandIn"
             >
@@ -205,8 +205,8 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                   disabled={!canSubmit}
                   onMouseDown={(e) => e.preventDefault()}
                   className="ml-auto inline-flex items-center gap-1.5 h-9 px-4 rounded-xl text-[13px] font-semibold
-                    bg-brand-600 dark:bg-brand-500 text-white
-                    hover:bg-brand-700 dark:hover:bg-brand-400
+                    bg-brand-600 dark:bg-brand-500 text-white dark:text-[var(--brand-on-solid)]
+                    hover:bg-brand-700 dark:hover:bg-brand-600
                     disabled:opacity-40 disabled:cursor-not-allowed
                     transition-colors"
                 >

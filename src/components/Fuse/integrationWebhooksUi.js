@@ -129,7 +129,7 @@ export const GithubRepoLookup = ({ repoName, setRepoName, onSubmit, loading }) =
         type="submit"
         disabled={!repoName.trim() || loading}
         className="px-4 py-2 rounded-lg text-[13px] font-medium shrink-0
-          bg-brand-600 text-white hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400
+          bg-brand-600 text-white dark:text-[var(--brand-on-solid)] hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600
           disabled:opacity-45 disabled:cursor-not-allowed transition-colors"
       >
         Load

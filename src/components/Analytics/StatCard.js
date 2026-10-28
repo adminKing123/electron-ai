@@ -43,7 +43,7 @@ const StatCard = ({ icon: Icon, label, value, sub, accent = false, loading = fal
           <span
             className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
               accent
-                ? "bg-amber-500/10 text-[#b8860b] dark:text-[#daa500]"
+                ? "bg-amber-500/10 text-[#b8860b] dark:bg-void-775 dark:text-ink-100"
                 : "bg-brand-500/10 text-brand-600 dark:text-brand-400"
             }`}
           >
@@ -53,7 +53,7 @@ const StatCard = ({ icon: Icon, label, value, sub, accent = false, loading = fal
       </div>
       <p
         className={`text-[24px] md:text-[26px] font-bold tracking-tight leading-none tabular-nums truncate ${
-          accent ? "text-[#b8860b] dark:text-[#daa500]" : "text-ink-975 dark:text-white"
+          accent ? "text-[#b8860b] dark:text-ink-100" : "text-ink-975 dark:text-white"
         }`}
       >
         {value}

@@ -107,8 +107,8 @@ const RenameChatModal = ({ data }) => {
             disabled={isLoading}
             className="px-4 py-1.5 rounded-full text-[13px] font-medium
               bg-brand-600 dark:bg-brand-500 shadow-glow
-              text-white
-              hover:bg-brand-700 dark:hover:bg-brand-400 transition-colors
+              text-white dark:text-[var(--brand-on-solid)]
+              hover:bg-brand-700 dark:hover:bg-brand-600 transition-colors
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {isLoading ? "Renaming…" : "Rename"}

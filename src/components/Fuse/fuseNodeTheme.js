@@ -57,7 +57,7 @@ export const fusePickerCardClass =
 
 const RUN_STATUS_RING = {
   running:
-    "ring-[3px] ring-brand-600 dark:ring-brand-400 shadow-[0_0_0_4px_rgba(124,58,237,0.22)] dark:shadow-[0_0_0_4px_rgba(56,189,248,0.2)]",
+    "ring-[3px] ring-brand-600 dark:ring-brand-400 shadow-[0_0_0_4px_rgba(124,58,237,0.22)] dark:shadow-[0_0_0_4px_rgba(148,163,184,0.18)]",
   success: "ring-2 ring-green-500/45 dark:ring-green-400/40",
   error: "ring-2 ring-red-500/50 dark:ring-red-400/45",
   skipped: "ring-2 ring-ink-200/80 dark:ring-ink-600/50",

@@ -442,8 +442,8 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
         {/* Webex activation note — webhook is registered on Turn On */}
         {node_type === "webex_message" && (
           <p className="text-[12px] leading-relaxed text-ink-500 dark:text-ink-550
-            px-3 py-2.5 rounded-lg bg-[#f0f9ff] dark:bg-[#0c1929]
-            border border-[#bae6fd] dark:border-[#0c4a6e]">
+            px-3 py-2.5 rounded-lg bg-brand-50 dark:bg-brand-950/35
+            border border-brand-200 dark:border-brand-800/55">
             When you turn the workflow on, a Webex webhook is registered automatically.
             Incoming messages matching your filters will trigger this workflow.
           </p>

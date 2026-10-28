@@ -70,7 +70,7 @@ export default function MobileActionBar({
           className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
             text-[11px] font-semibold select-none transition-all active:opacity-80
             bg-brand-600 dark:bg-brand-500 shadow-glow
-            text-white
+            text-white dark:text-[var(--brand-on-solid)]
             disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <TbRefresh className="w-[20px] h-[20px]" />
@@ -83,7 +83,7 @@ export default function MobileActionBar({
           className="flex flex-col items-center justify-center gap-0.5 w-16 py-2 rounded-2xl
             text-[11px] font-semibold select-none transition-all active:opacity-80
             bg-brand-600 dark:bg-brand-500 shadow-glow
-            text-white
+            text-white dark:text-[var(--brand-on-solid)]
             disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <TbPower className="w-[20px] h-[20px]" />

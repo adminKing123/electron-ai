@@ -249,8 +249,8 @@ export const CanvasActionBar = ({
             className="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 h-8 md:h-10
               text-[11px] md:text-[13px] font-semibold whitespace-nowrap
               transition-colors select-none
-              text-white bg-brand-600 dark:bg-brand-500 shadow-glow
-              hover:bg-brand-700 dark:hover:bg-brand-400 rounded-full
+              text-white dark:text-[var(--brand-on-solid)] bg-brand-600 dark:bg-brand-500 shadow-glow
+              hover:bg-brand-700 dark:hover:bg-brand-600 rounded-full
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <TbRefresh className="w-[13px] h-[13px] md:w-[15px] md:h-[15px] flex-shrink-0" />
@@ -266,8 +266,8 @@ export const CanvasActionBar = ({
             className="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 h-8 md:h-10
               text-[11px] md:text-[13px] font-semibold whitespace-nowrap
               transition-colors select-none
-              text-white bg-brand-600 dark:bg-brand-500 shadow-glow
-              hover:bg-brand-700 dark:hover:bg-brand-400 rounded-full
+              text-white dark:text-[var(--brand-on-solid)] bg-brand-600 dark:bg-brand-500 shadow-glow
+              hover:bg-brand-700 dark:hover:bg-brand-600 rounded-full
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <TbPower className="w-[13px] h-[13px] md:w-[15px] md:h-[15px] flex-shrink-0" />

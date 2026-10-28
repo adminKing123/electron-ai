@@ -1243,18 +1243,18 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
           type="button"
           onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); fetchSystemVars(); }}
           className="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between gap-2
-            bg-ink-25 dark:bg-[#141e30] border border-[#e0f2fe] dark:border-[#0c4a6e]
-            hover:bg-[#f0f9ff] dark:hover:bg-[#075985]/30 transition-colors"
+            bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800/50
+            hover:bg-brand-100 dark:hover:bg-brand-900/35 transition-colors"
         >
           <div className="flex flex-col gap-0.5 min-w-0">
-            <span className="text-[12px] font-semibold text-[#0369a1] dark:text-[#38bdf8] truncate">
+            <span className="text-[12px] font-semibold text-brand-700 dark:text-brand-300 truncate">
               Runtime Variables
             </span>
-            <span className="text-[11px] text-[#0ea5e9] dark:text-[#7dd3fc] truncate">
+            <span className="text-[11px] text-brand-600 dark:text-brand-400 truncate">
               Datetime, Run ID, etc.
             </span>
           </div>
-          <svg className="flex-shrink-0 text-[#0284c7] dark:text-[#38bdf8]"
+          <svg className="flex-shrink-0 text-brand-600 dark:text-brand-400"
             width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M4.5 2L8.5 6l-4 4" stroke="currentColor"
               strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>

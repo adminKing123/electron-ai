@@ -14,7 +14,7 @@ import useIsDark from "../../hooks/useIsDark";
 const DailyUsageChart = ({ daily = [], metric = "tokens" }) => {
   const isDark = useIsDark();
 
-  const gridColor = isDark ? "rgba(56,189,248,0.08)" : "rgba(0,0,0,0.05)";
+  const gridColor = isDark ? "rgba(148,163,184,0.1)" : "rgba(0,0,0,0.05)";
   const tickColor = isDark ? "#94a3b8" : "#a8a4bd";
   const tooltipBg = isDark ? "#242a35" : "#ffffff";
   const tooltipBorder = isDark ? "#3b4250" : "#e5e2f0";
@@ -47,12 +47,12 @@ const DailyUsageChart = ({ daily = [], metric = "tokens" }) => {
       {
         label: metric === "cost" ? "Cost (USD)" : metric === "chats" ? "Chats" : "Tokens",
         data: values,
-        borderColor: "#8b5cf6",
-        backgroundColor: isDark ? "rgba(139,92,246,0.12)" : "rgba(139,92,246,0.08)",
+        borderColor: isDark ? "#94a3b8" : "#8b5cf6",
+        backgroundColor: isDark ? "rgba(148,163,184,0.12)" : "rgba(139,92,246,0.08)",
         borderWidth: 2,
         pointRadius: 0,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: "#8b5cf6",
+        pointHoverBackgroundColor: isDark ? "#94a3b8" : "#8b5cf6",
         fill: true,
         tension: 0.4,
       },

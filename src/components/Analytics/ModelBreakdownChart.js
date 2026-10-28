@@ -14,7 +14,7 @@ import useIsDark from "../../hooks/useIsDark";
 const ModelBreakdownChart = ({ byModel = {}, metric = "tokens" }) => {
   const isDark = useIsDark();
 
-  const gridColor = isDark ? "rgba(56,189,248,0.08)" : "rgba(0,0,0,0.05)";
+  const gridColor = isDark ? "rgba(148,163,184,0.1)" : "rgba(0,0,0,0.05)";
   const tickColor = isDark ? "#94a3b8" : "#a8a4bd";
   const tooltipBg = isDark ? "#242a35" : "#ffffff";
   const tooltipBorder = isDark ? "#3b4250" : "#e5e2f0";

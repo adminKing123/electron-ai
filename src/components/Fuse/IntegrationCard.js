@@ -87,8 +87,8 @@ const IntegrationActions = ({ integration, connected, configuring, onConfigure, 
       type="button"
       onClick={onConfigure}
       disabled={configuring}
-      className={`${actionBtn} gap-1.5 bg-brand-600 dark:bg-brand-500 text-white
-        hover:bg-brand-700 dark:hover:bg-brand-400`}
+      className={`${actionBtn} gap-1.5 bg-brand-600 dark:bg-brand-500 text-white dark:text-[var(--brand-on-solid)]
+        hover:bg-brand-700 dark:hover:bg-brand-600`}
     >
       {configuring && (
         <span className="w-3.5 h-3.5 border-2 border-white/70 border-t-transparent rounded-full animate-spin" />

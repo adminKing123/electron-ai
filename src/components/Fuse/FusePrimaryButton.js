@@ -52,9 +52,9 @@ const FusePrimaryButton = ({
       className={[
         "relative flex items-center justify-center overflow-hidden",
         "bg-brand-600 dark:bg-brand-500 shadow-glow",
-        "text-white",
+        "text-white dark:text-[var(--brand-on-solid)]",
         "font-semibold select-none",
-        "hover:bg-brand-700 dark:hover:bg-brand-400 active:opacity-80",
+        "hover:bg-brand-700 dark:hover:bg-brand-600 active:opacity-80",
         "transition-[background-color,opacity] duration-150",
         "disabled:cursor-not-allowed",
         config.button,

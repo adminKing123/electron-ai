@@ -88,17 +88,17 @@ module.exports = {
         aurora: "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 55%, #c026d3 100%)",
         "aurora-text": "linear-gradient(90deg, #7c3aed 0%, #c026d3 50%, #0891b2 100%)",
         "aurora-text-dark":
-          "linear-gradient(90deg, #7dd3fc 0%, #38bdf8 48%, #2dd4bf 100%)",
+          "linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%)",
         "aurora-glow":
           "radial-gradient(ellipse 70% 45% at 50% -8%, rgba(139,92,246,0.22), transparent 70%), radial-gradient(ellipse 40% 30% at 100% 0%, rgba(34,211,238,0.14), transparent 70%), radial-gradient(ellipse 35% 30% at 0% 0%, rgba(192,38,211,0.08), transparent 70%)",
         "aurora-glow-dark":
-          "radial-gradient(ellipse 85% 55% at 50% -12%, rgba(56,189,248,0.32), transparent 68%), radial-gradient(ellipse 50% 38% at 100% 0%, rgba(45,212,191,0.2), transparent 65%), radial-gradient(ellipse 45% 38% at 0% 5%, rgba(14,165,233,0.16), transparent 65%), radial-gradient(ellipse 55% 45% at 50% 105%, rgba(6,182,212,0.1), transparent 72%)",
+          "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(148,163,184,0.08), transparent 70%), radial-gradient(ellipse 45% 35% at 100% 0%, rgba(100,116,139,0.06), transparent 65%)",
       },
       boxShadow: {
         glow: "0 4px 14px -3px rgba(124,58,237,0.5)",
         "glow-lg": "0 10px 40px -12px rgba(124,58,237,0.35)",
-        "glow-dark": "0 4px 20px -4px rgba(56,189,248,0.4)",
-        "glow-lg-dark": "0 12px 48px -14px rgba(14,165,233,0.45)",
+        "glow-dark": "0 1px 2px rgba(0,0,0,0.35)",
+        "glow-lg-dark": "0 4px 16px rgba(0,0,0,0.45)",
       },
       keyframes: {
         shimmer: {

@@ -30,20 +30,25 @@
   --body-bg-color: #151a23;
   --header-shadow-color: #2c323e;
 
-  --selection-bg: #0c4a6e;
-  --selection-text: #e0f2fe;
+  --selection-bg: #334155;
+  --selection-text: #f1f5f9;
 
-  --brand-50: #f0f9ff;
-  --brand-100: #e0f2fe;
-  --brand-200: #bae6fd;
-  --brand-300: #7dd3fc;
-  --brand-400: #38bdf8;
-  --brand-500: #0ea5e9;
-  --brand-600: #0284c7;
-  --brand-700: #0369a1;
-  --brand-800: #075985;
-  --brand-900: #0c4a6e;
-  --brand-950: #082f49;
+  /*
+   * Dark-mode brand = tonal slate (low chroma). Same hue family as void surfaces.
+   * Light mode keeps violet; dark uses neutral CTAs + muted chrome accents (MD3 / Apple HIG).
+   */
+  --brand-on-solid: #0f172a;
+  --brand-50: #1e293b;
+  --brand-100: #243044;
+  --brand-200: #334155;
+  --brand-300: #64748b;
+  --brand-400: #94a3b8;
+  --brand-500: #e2e8f0;
+  --brand-600: #cbd5e1;
+  --brand-700: #94a3b8;
+  --brand-800: #64748b;
+  --brand-900: #475569;
+  --brand-950: #334155;
 }
 
 body {
@@ -70,20 +75,25 @@ body {
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background-color: rgba(56, 189, 248, 0.28);
+  background-color: rgba(148, 163, 184, 0.28);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(56, 189, 248, 0.45);
+  background-color: rgba(148, 163, 184, 0.45);
 }
 
 .dark * {
-  scrollbar-color: rgba(56, 189, 248, 0.28) transparent;
+  scrollbar-color: rgba(148, 163, 184, 0.28) transparent;
 }
 
 .dark .transparent {
   background: rgba(36, 42, 53, 0.55);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Dark primary actions: light neutral fill + dark label (not saturated accent fills) */
+.dark .shadow-glow {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .screen-center {
@@ -179,10 +189,10 @@ body {
 @keyframes fuse-canvas-node-running-dark {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 0 0 rgba(148, 163, 184, 0.35);
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+    box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
   }
 }
 

@@ -25,7 +25,7 @@ const ChartContainer = ({
      `px-3 py-1 rounded-full border text-[11px] font-medium transition-colors
     ${
       state === btnState
-        ? "bg-brand-600 dark:bg-brand-500 text-white border-transparent"
+        ? "bg-brand-600 dark:bg-brand-500 text-white dark:text-[var(--brand-on-solid)] border-transparent"
         : "bg-transparent text-ink-600 dark:text-ink-500 border-ink-150 dark:border-void-750 hover:bg-ink-75 dark:hover:bg-void-825"
     }`;
 
