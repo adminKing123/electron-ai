@@ -10,11 +10,14 @@ import useMessageStore from "../../store/useMessagesStore";
 const itemBase =
   "flex items-center gap-2.5 w-full rounded-lg px-3 py-[7px] text-[13px] font-medium text-ink-750 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-void-800 transition-colors duration-100 outline-none";
 
+/** Selected row — raised surface + stronger text (no brand tint or borders). */
+export const sidebarNavActiveClassName =
+  "bg-ink-150 !text-ink-975 dark:bg-void-775 dark:!text-ink-100";
+
 const SidebarNavLink = ({ icon: Icon, label, showActiveState, ...props }) => (
   <NavLink
     className={({ isActive }) =>
-      itemBase +
-      (showActiveState && isActive ? " bg-brand-500/10 dark:bg-brand-400/15 !text-brand-700 dark:!text-brand-200" : "")
+      `${itemBase}${showActiveState && isActive ? ` ${sidebarNavActiveClassName}` : ""}`
     }
     {...props}
   >

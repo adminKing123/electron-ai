@@ -6,6 +6,7 @@ import ROUTES from "../../router/routes";
 import { getChatsAPI } from "../../apis/chats/queryFunctions";
 import { useSidebarOpenState } from "../../store/useSidebarStores";
 import SidebarChatMenu from "./SidebarChatMenu";
+import { sidebarNavActiveClassName } from "../SidebarOptions";
 import CONFIG from "../../config";
 
 const SidebarChatButton = ({ chat, ...props }) => {
@@ -22,11 +23,7 @@ const SidebarChatButton = ({ chat, ...props }) => {
         `group relative flex items-center w-full min-w-0 rounded-lg text-[13px] font-medium
         transition-colors duration-100 outline-none
         text-ink-750 dark:text-ink-300
-        ${
-          isActive
-            ? "bg-brand-500/10 dark:bg-brand-400/15 !text-brand-700 dark:!text-brand-200"
-            : "hover:bg-ink-100 dark:hover:bg-void-800"
-        }`
+        ${isActive ? sidebarNavActiveClassName : "hover:bg-ink-100 dark:hover:bg-void-800"}`
       }
       {...props}
     >
