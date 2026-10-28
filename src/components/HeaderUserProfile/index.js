@@ -12,7 +12,7 @@ import ThemeChangeOption from "../ThemeChangeOption";
 const itemCls =
   "flex items-center gap-2.5 w-full px-2.5 py-[7px] text-[13px] rounded-xl outline-none cursor-pointer transition-colors " +
   "text-ink-750 dark:text-ink-300 " +
-  "hover:bg-ink-50 dark:hover:bg-ink-750";
+  "hover:bg-ink-50 dark:hover:bg-void-750";
 
 const HeaderUserProfile = () => {
   const user = useUserStore((state) => state.user);
@@ -27,7 +27,7 @@ const HeaderUserProfile = () => {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <button className="w-[30px] h-[30px] rounded-full overflow-hidden outline-none ring-2 ring-transparent hover:ring-ink-200 dark:hover:ring-ink-700 transition-all">
+        <button className="w-[30px] h-[30px] rounded-full overflow-hidden outline-none ring-2 ring-transparent hover:ring-ink-200 dark:hover:ring-void-650 transition-all">
           <img
             alt={user.displayName}
             src={user.photoURL}
@@ -41,8 +41,8 @@ const HeaderUserProfile = () => {
           sideOffset={8}
           align="end"
           className="w-[260px] z-50 p-1.5 rounded-2xl
-            border border-ink-150 dark:border-ink-725
-            bg-white dark:bg-ink-800
+            border border-ink-150 dark:border-void-725
+            bg-white dark:bg-void-800
             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
         >
           {/* User identity block */}
@@ -62,7 +62,7 @@ const HeaderUserProfile = () => {
             </div>
           </div>
 
-          <DropdownMenu.Separator className="h-px bg-ink-100 dark:bg-ink-750 mx-1 mb-1" />
+          <DropdownMenu.Separator className="h-px bg-ink-100 dark:bg-void-750 mx-1 mb-1" />
 
           <div className="flex flex-col gap-px">
             <DropdownMenu.Item asChild>
@@ -84,7 +84,7 @@ const HeaderUserProfile = () => {
               <span>Settings</span>
             </DropdownMenu.Item>
 
-            <DropdownMenu.Separator className="h-px bg-ink-100 dark:bg-ink-750 mx-1 my-1" />
+            <DropdownMenu.Separator className="h-px bg-ink-100 dark:bg-void-750 mx-1 my-1" />
 
             <DropdownMenu.Item
               className={`${itemCls} hover:text-red-500 dark:hover:text-red-400`}

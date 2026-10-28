@@ -28,10 +28,10 @@ const Switch = ({
       TRACK_W,
       "transition-colors duration-150",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600/35",
-      "focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-ink-925",
+      "focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-void-875",
       "disabled:cursor-not-allowed disabled:opacity-45",
       "data-[state=checked]:bg-brand-600 dark:data-[state=checked]:bg-brand-500",
-      "data-[state=unchecked]:bg-ink-200 dark:data-[state=unchecked]:bg-ink-725",
+      "data-[state=unchecked]:bg-ink-200 dark:data-[state=unchecked]:bg-void-700",
       className,
     ]
       .filter(Boolean)

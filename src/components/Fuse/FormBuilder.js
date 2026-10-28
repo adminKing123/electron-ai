@@ -11,7 +11,7 @@ import {
   getGoogleSheetColumnsAPI,
 } from "../../apis/fuse/queryFunctions";
 
-// ─── Timezone options ──────────────────────────────────────────────────────────
+// --- Timezone options ----------------------------------------------------------
 // Built once at module load from the browser's Intl API.
 // Falls back to a curated list on older browsers that lack Intl.supportedValuesOf.
 const TIMEZONE_OPTIONS = (() => {
@@ -44,12 +44,12 @@ const TIMEZONE_OPTIONS = (() => {
   }
 })();
 
-// ─── Preset value resolver ─────────────────────────────────────────────────────
+// --- Preset value resolver -----------------------------------------------------
 /**
  * Converts special dynamic preset tokens into concrete field values.
- *   "today"       → current date (YYYY-MM-DD)
- *   "next-monday" → ISO date of next Monday
- *   "+5min"       → current time + 5 minutes (HH:MM), also sets date to today
+ *   "today"       ? current date (YYYY-MM-DD)
+ *   "next-monday" ? ISO date of next Monday
+ *   "+5min"       ? current time + 5 minutes (HH:MM), also sets date to today
  *
  * @param {object} presetValues
  * @returns {object}
@@ -61,7 +61,7 @@ const resolvePresetValues = (presetValues) => {
     out.date = new Date().toISOString().split("T")[0];
   } else if (out.date === "next-monday") {
     const d = new Date();
-    const dow = d.getDay(); // 0 = Sunday, 1 = Monday, …
+    const dow = d.getDay(); // 0 = Sunday, 1 = Monday, �
     const daysUntilMonday = dow === 1 ? 7 : (1 - dow + 7) % 7 || 7;
     d.setDate(d.getDate() + daysUntilMonday);
     out.date = d.toISOString().split("T")[0];
@@ -80,15 +80,15 @@ const resolvePresetValues = (presetValues) => {
   return out;
 };
 
-// ─── Shared base classes ──────────────────────────────────────────────────────
+// --- Shared base classes ------------------------------------------------------
 
 /** Base for text / date / time inputs */
 const INPUT_BASE =
   "w-full px-3 py-2.5 rounded-lg text-[13px] " +
   "text-ink-875 dark:text-ink-200 " +
-  "bg-white dark:bg-ink-850 " +
-  "border border-ink-200 dark:border-ink-775 " +
-  "focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 " +
+  "bg-white dark:bg-void-850 " +
+  "border border-ink-200 dark:border-void-775 " +
+  "focus:outline-none focus:border-ink-400 dark:focus:border-void-700 " +
   "transition-colors";
 
 /**
@@ -99,9 +99,9 @@ const INPUT_BASE =
 const SELECT_BASE =
   "w-full pl-3 pr-9 py-2.5 rounded-lg text-[13px] appearance-none " +
   "text-ink-875 dark:text-ink-200 " +
-  "bg-white dark:bg-ink-850 " +
-  "border border-ink-200 dark:border-ink-775 " +
-  "focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 " +
+  "bg-white dark:bg-void-850 " +
+  "border border-ink-200 dark:border-void-775 " +
+  "focus:outline-none focus:border-ink-400 dark:focus:border-void-700 " +
   "transition-colors cursor-pointer";
 
 /** Custom chevron icon rendered on top of the select wrapper */
@@ -123,7 +123,7 @@ const SelectChevron = () => (
   </span>
 );
 
-// ─── Field input components ────────────────────────────────────────────────────
+// --- Field input components ----------------------------------------------------
 
 /** Plain single-line text input. */
 const TextField = ({ field, value, onChange }) => (
@@ -167,7 +167,7 @@ const DateField = ({ value, onChange }) => (
   />
 );
 
-/** Time input — same color-scheme trick for the clock icon. */
+/** Time input � same color-scheme trick for the clock icon. */
 const TimeField = ({ value, onChange }) => (
   <input
     type="time"
@@ -213,9 +213,9 @@ const CheckboxField = ({ field, value, onChange }) => (
       type="checkbox"
       checked={!!value}
       onChange={(e) => onChange(e.target.checked)}
-      className="w-4 h-4 rounded border-ink-300 dark:border-ink-700
+      className="w-4 h-4 rounded border-ink-300 dark:border-void-700
         text-brand-600 focus:ring-brand-600/30
-        dark:bg-ink-850 dark:checked:bg-brand-600"
+        dark:bg-void-850 dark:checked:bg-brand-600"
     />
   </label>
 );
@@ -250,7 +250,7 @@ const WebexRoomSelectField = ({ field, value, onChange }) => {
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading spaces…
+        Loading spaces�
       </div>
     );
   }
@@ -279,7 +279,7 @@ const WebexRoomSelectField = ({ field, value, onChange }) => {
         className={SELECT_BASE}
       >
         <option value="" disabled>
-          Select a space or chat…
+          Select a space or chat�
         </option>
         {rooms.map((room) => (
           <option key={room.id} value={room.id}>
@@ -322,7 +322,7 @@ const GithubRepoSelectField = ({ field, value, onChange }) => {
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading repositories…
+        Loading repositories�
       </div>
     );
   }
@@ -351,7 +351,7 @@ const GithubRepoSelectField = ({ field, value, onChange }) => {
         className={SELECT_BASE}
       >
         <option value="" disabled>
-          Select a repository…
+          Select a repository�
         </option>
         {repos.map((repo) => (
           <option key={repo.id} value={repo.id}>
@@ -409,7 +409,7 @@ const GithubBranchSelectField = ({ field, value, onChange, variables, allValues 
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading branches…
+        Loading branches�
       </div>
     );
   }
@@ -487,7 +487,7 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading people…
+        Loading people�
       </div>
     );
   }
@@ -516,7 +516,7 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
         className={SELECT_BASE}
       >
         <option value="" disabled>
-          Select a person…
+          Select a person�
         </option>
         {options.map((person) => {
           const optionValue = valueField === "id" ? person.id : person.email;
@@ -536,7 +536,7 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
   );
 };
 
-// ─── Google Sheets field components ──────────────────────────────────────────
+// --- Google Sheets field components ------------------------------------------
 
 /**
  * Searchable spreadsheet picker.
@@ -630,7 +630,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
         ].join(" ")}
       >
         <span className="truncate text-[13px]">
-          {value ? (selectedLabel || value) : "Select a spreadsheet…"}
+          {value ? (selectedLabel || value) : "Select a spreadsheet�"}
         </span>
         <svg
           className={`flex-shrink-0 text-ink-400 dark:text-ink-550 transition-transform ${open ? "rotate-180" : ""}`}
@@ -643,12 +643,12 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
       {/* Dropdown panel */}
       {open && (
         <div className="absolute z-50 left-0 right-0 top-full mt-1 rounded-xl overflow-hidden
-          bg-white dark:bg-ink-825
-          border border-ink-150 dark:border-ink-775
+          bg-white dark:bg-void-825
+          border border-ink-150 dark:border-void-775
           shadow-lg flex flex-col"
         >
           {/* Search input */}
-          <div className="px-2 pt-2 pb-1.5 border-b border-ink-75 dark:border-ink-825">
+          <div className="px-2 pt-2 pb-1.5 border-b border-ink-75 dark:border-void-825">
             <div className="relative">
               <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-450 dark:text-ink-550"
                 width="13" height="13" viewBox="0 0 14 14" fill="none">
@@ -660,12 +660,12 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
                 type="text"
                 value={searchText}
                 onChange={handleSearchChange}
-                placeholder="Search spreadsheets…"
+                placeholder="Search spreadsheets�"
                 className="w-full pl-7 pr-3 py-1.5 rounded-lg text-[13px]
-                  bg-ink-50 dark:bg-ink-825
-                  border border-ink-100 dark:border-ink-800
+                  bg-ink-50 dark:bg-void-825
+                  border border-ink-100 dark:border-void-800
                   text-ink-875 dark:text-ink-200
-                  focus:outline-none focus:border-ink-400 dark:focus:border-ink-700
+                  focus:outline-none focus:border-ink-400 dark:focus:border-void-700
                   placeholder-ink-450 dark:placeholder-ink-550"
               />
             </div>
@@ -675,7 +675,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
           <div className="max-h-52 overflow-y-auto">
             {loading && (
               <div className="px-3 py-4 text-center text-[12px] text-ink-500 dark:text-ink-600">
-                Loading…
+                Loading�
               </div>
             )}
             {!loading && error && (
@@ -727,9 +727,9 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
 
           {/* Footer hint */}
           {!loading && !error && !searchText && spreadsheets.length > 0 && (
-            <div className="px-3 py-1.5 border-t border-ink-75 dark:border-ink-825">
+            <div className="px-3 py-1.5 border-t border-ink-75 dark:border-void-825">
               <p className="text-[11px] text-ink-450 dark:text-ink-550">
-                Showing latest 25 · type to search all
+                Showing latest 25 � type to search all
               </p>
             </div>
           )}
@@ -759,14 +759,14 @@ const GoogleSheetsSheetSelectField = ({ value, onChange, allValues }) => {
   }, [spreadsheetId]);
 
   if (!spreadsheetId) return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Select a spreadsheet first</div>;
-  if (loading)        return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading sheets…</div>;
+  if (loading)        return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading sheets�</div>;
   if (error)          return <p className="text-[12px] text-red-500 dark:text-red-400">Couldn't load sheet tabs. Try again.</p>;
   if (!sheets.length) return <p className="text-[12px] text-ink-500 dark:text-ink-600">No sheets found in this spreadsheet.</p>;
 
   return (
     <div className="relative">
       <select value={value ?? ""} onChange={(e) => onChange(e.target.value)} className={SELECT_BASE}>
-        <option value="" disabled>Select a sheet tab…</option>
+        <option value="" disabled>Select a sheet tab�</option>
         {sheets.map((s) => (
           <option key={s.id} value={s.id}>{s.label}</option>
         ))}
@@ -777,7 +777,7 @@ const GoogleSheetsSheetSelectField = ({ value, onChange, allValues }) => {
 };
 
 /**
- * Dynamic column builder — fetches header row from the selected sheet and renders
+ * Dynamic column builder � fetches header row from the selected sheet and renders
  * one variable_text input per column. The stored value shape is a plain object:
  * { "Column Name": "value or {{variable}}", ... }
  */
@@ -817,7 +817,7 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
   }
 
   if (loading) {
-    return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading columns…</div>;
+    return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading columns�</div>;
   }
 
   if (error) {
@@ -830,9 +830,9 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
           type="button"
           onClick={() => setFetchKey((k) => k + 1)}
           className="self-start px-2.5 py-1 rounded-lg text-[12px]
-            border border-ink-200 dark:border-ink-775
+            border border-ink-200 dark:border-void-775
             text-ink-700 dark:text-ink-450
-            hover:bg-ink-50 dark:hover:bg-ink-825
+            hover:bg-ink-50 dark:hover:bg-void-825
             transition-colors"
         >
           Retry
@@ -851,9 +851,9 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
           type="button"
           onClick={() => setFetchKey((k) => k + 1)}
           className="self-start px-2.5 py-1 rounded-lg text-[12px]
-            border border-ink-200 dark:border-ink-775
+            border border-ink-200 dark:border-void-775
             text-ink-700 dark:text-ink-450
-            hover:bg-ink-50 dark:hover:bg-ink-825
+            hover:bg-ink-50 dark:hover:bg-void-825
             transition-colors"
         >
           Refresh
@@ -879,13 +879,13 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
         type="button"
         onClick={() => setFetchKey((k) => k + 1)}
         className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
-          border border-ink-200 dark:border-ink-775
+          border border-ink-200 dark:border-void-775
           text-ink-500 dark:text-ink-600
-          hover:bg-ink-50 dark:hover:bg-ink-825
-          hover:border-ink-300 dark:hover:border-ink-725
+          hover:bg-ink-50 dark:hover:bg-void-825
+          hover:border-ink-300 dark:hover:border-void-725
           transition-colors"
       >
-        ↻ Refresh columns
+        ? Refresh columns
       </button>
     </div>
   );
@@ -929,7 +929,7 @@ const TimezoneSelectField = ({ value, onChange }) => {
   );
 };
 
-// ─── Variable picker shared hook ──────────────────────────────────────────────
+// --- Variable picker shared hook ----------------------------------------------
 /**
  * Inserts a variable token `{{token}}` at the current cursor position inside
  * a textarea or text input and fires onChange with the updated string.
@@ -956,13 +956,13 @@ const useVariableInserter = (inputRef, value, onChange) =>
 
 /**
  * Strips the node name prefix from a label to get just the field path.
- * e.g. "My Webhook.body.email"  → "body.email"
- *      "HTTP Node → status_code" → "status_code"
+ * e.g. "My Webhook.body.email"  ? "body.email"
+ *      "HTTP Node ? status_code" ? "status_code"
  */
 const getShortLabel = (label, nodeName) => {
   if (nodeName && label.startsWith(nodeName + "."))
     return label.slice(nodeName.length + 1);
-  if (nodeName && label.startsWith(nodeName + " → "))
+  if (nodeName && label.startsWith(nodeName + " ? "))
     return label.slice(nodeName.length + 3);
   return label;
 };
@@ -970,9 +970,9 @@ const getShortLabel = (label, nodeName) => {
 /**
  * Two-step floating variable picker.
  *
- * Step 1 — node list: shows each upstream node's name + short ID
+ * Step 1 � node list: shows each upstream node's name + short ID
  *           (starter nodes omit the ID).
- * Step 2 — variable list: shows the variables belonging to the chosen node,
+ * Step 2 � variable list: shows the variables belonging to the chosen node,
  *           with a back chevron to return to step 1.
  */
 const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) => {
@@ -1001,8 +1001,8 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
 
   const WRAPPER =
     "absolute z-50 right-0 top-full mt-1 w-64 rounded-xl " +
-    "bg-white dark:bg-ink-825 " +
-    "border border-ink-150 dark:border-ink-775 " +
+    "bg-white dark:bg-void-825 " +
+    "border border-ink-150 dark:border-void-775 " +
     "shadow-lg overflow-hidden flex flex-col";
 
   const fetchSystemVars = async () => {
@@ -1017,17 +1017,17 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
     }
   };
 
-  /* ── System Variables Panel ── */
+  /* -- System Variables Panel -- */
   if (systemVarsOpen) {
     return (
       <div className={WRAPPER}>
-        <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5 border-b border-ink-75 dark:border-ink-825">
+        <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5 border-b border-ink-75 dark:border-void-825">
           <button
             type="button"
             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSystemVarsOpen(false); }}
             className="w-6 h-6 flex items-center justify-center rounded-md
               text-ink-400 dark:text-ink-550 hover:text-ink-650 dark:hover:text-ink-400
-              hover:bg-ink-75 dark:hover:bg-ink-800 transition-colors flex-shrink-0"
+              hover:bg-ink-75 dark:hover:bg-void-800 transition-colors flex-shrink-0"
             aria-label="Back to nodes"
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -1073,7 +1073,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   <select
                     value={selectedTimezone}
                     onChange={(e) => setSelectedTimezone(e.target.value)}
-                    className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-ink-850 border border-ink-150 dark:border-ink-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
+                    className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-void-850 border border-ink-150 dark:border-void-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
                   >
                     {TIMEZONE_OPTIONS.map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -1090,7 +1090,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   <select
                     value={selectedFormat}
                     onChange={(e) => setSelectedFormat(e.target.value)}
-                    className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-ink-850 border border-ink-150 dark:border-ink-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
+                    className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-void-850 border border-ink-150 dark:border-void-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
                   >
                     <option value="iso">ISO 8601</option>
                     <option value="date">Date (YYYY-MM-DD)</option>
@@ -1112,7 +1112,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                   value={customFormat}
                   onChange={(e) => setCustomFormat(e.target.value)}
                   placeholder="e.g. DD/MM/YYYY hh:mm A"
-                  className="w-full px-2 py-1.5 text-[11px] rounded-lg bg-ink-50 dark:bg-ink-850 border border-ink-150 dark:border-ink-800 outline-none text-ink-875 dark:text-ink-300"
+                  className="w-full px-2 py-1.5 text-[11px] rounded-lg bg-ink-50 dark:bg-void-850 border border-ink-150 dark:border-void-800 outline-none text-ink-875 dark:text-ink-300"
                 />
               )}
 
@@ -1138,7 +1138,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
     );
   }
 
-  /* ── Step 2: variables for the selected node ── */
+  /* -- Step 2: variables for the selected node -- */
   if (selectedNodeId !== null) {
     const group = groups.find((g) => g.nodeId === selectedNodeId);
     if (!group) { setSelectedNodeId(null); return null; }
@@ -1147,14 +1147,14 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
       <div className={WRAPPER}>
         {/* Header row with back button */}
         <div className="flex items-center gap-1.5 px-2 pt-2 pb-1.5
-          border-b border-ink-75 dark:border-ink-825">
+          border-b border-ink-75 dark:border-void-825">
           <button
             type="button"
             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedNodeId(null); }}
             className="w-6 h-6 flex items-center justify-center rounded-md
               text-ink-400 dark:text-ink-550
               hover:text-ink-650 dark:hover:text-ink-400
-              hover:bg-ink-75 dark:hover:bg-ink-800
+              hover:bg-ink-75 dark:hover:bg-void-800
               transition-colors flex-shrink-0"
             aria-label="Back to nodes"
           >
@@ -1190,11 +1190,11 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
     );
   }
 
-  /* ── Step 1: node list ── */
+  /* -- Step 1: node list -- */
   return (
     <div className={WRAPPER}>
       {!variables.length ? (
-        <div className="p-3 border-b border-ink-75 dark:border-ink-825">
+        <div className="p-3 border-b border-ink-75 dark:border-void-825">
           <p className="text-[12px] text-ink-450 dark:text-ink-550 text-center select-none">
             No variables available yet.<br />
             Define fields in the webhook body.
@@ -1238,7 +1238,7 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
         </>
       )}
       
-      <div className="border-t border-ink-75 dark:border-ink-825 p-1.5">
+      <div className="border-t border-ink-75 dark:border-void-825 p-1.5">
         <button
           type="button"
           onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); fetchSystemVars(); }}
@@ -1304,7 +1304,7 @@ const VariableTextField = ({ field, value, onChange, variables }) => {
           className="flex-shrink-0 w-8 h-[38px] flex items-center justify-center rounded-lg
             text-[12px] font-mono font-bold
             text-ink-500 dark:text-ink-550
-            border border-ink-200 dark:border-ink-775
+            border border-ink-200 dark:border-void-775
             hover:text-brand-600 dark:hover:text-brand-400
             hover:border-brand-200 dark:hover:border-brand-800/50
             hover:bg-brand-50 dark:hover:bg-brand-950/40
@@ -1362,7 +1362,7 @@ const VariableTextareaField = ({ field, value, onChange, variables }) => {
           className="flex-shrink-0 w-8 h-8 mt-0.5 flex items-center justify-center rounded-lg
             text-[12px] font-mono font-bold
             text-ink-500 dark:text-ink-550
-            border border-ink-200 dark:border-ink-775
+            border border-ink-200 dark:border-void-775
             hover:text-brand-600 dark:hover:text-brand-400
             hover:border-brand-200 dark:hover:border-brand-800/50
             hover:bg-brand-50 dark:hover:bg-brand-950/40
@@ -1382,7 +1382,7 @@ const VariableTextareaField = ({ field, value, onChange, variables }) => {
   );
 };
 
-// ─── BodyBuilderField ─────────────────────────────────────────────────────────
+// --- BodyBuilderField ---------------------------------------------------------
 /**
  * Recursive, visual-only body schema builder.
  *
@@ -1407,7 +1407,7 @@ const BODY_FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
 const BODY_SCHEMA_MAX_DEPTH = 4;
 
 /**
- * Renders one field row: [key input] [type select] [× button]
+ * Renders one field row: [key input] [type select] [� button]
  * Expands below with nested content for "object" and "array" types.
  */
 const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
@@ -1425,7 +1425,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
   };
 
   const canNest = depth < BODY_SCHEMA_MAX_DEPTH;
-  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-ink-800";
+  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-void-800";
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -1478,7 +1478,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
             transition-colors text-lg leading-none"
           aria-label="Remove field"
         >
-          ×
+          �
         </button>
       </div>
 
@@ -1570,10 +1570,10 @@ const SchemaFieldList = ({ fields, depth, label, onChange, showDescription, show
         type="button"
         onClick={addRow}
         className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
-          border border-ink-200 dark:border-ink-775
+          border border-ink-200 dark:border-void-775
           text-ink-700 dark:text-ink-450
-          hover:bg-ink-50 dark:hover:bg-ink-825
-          hover:border-ink-300 dark:hover:border-ink-725
+          hover:bg-ink-50 dark:hover:bg-void-825
+          hover:border-ink-300 dark:hover:border-void-725
           transition-colors"
       >
         + Add {depth === 0 ? "field" : "property"}
@@ -1595,9 +1595,9 @@ const BodyBuilderField = ({ field, value, onChange }) => {
   );
 };
 
-// ─── JsonValueBuilderField ────────────────────────────────────────────────────
+// --- JsonValueBuilderField ----------------------------------------------------
 /**
- * Visual JSON value builder — mirrors BodyBuilderField but assigns concrete
+ * Visual JSON value builder � mirrors BodyBuilderField but assigns concrete
  * VALUES (with variable insertion) to each declared field, instead of just
  * defining the schema type.
  *
@@ -1621,7 +1621,7 @@ const VALUE_FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
 const JSON_VALUE_MAX_DEPTH = 4;
 
 /**
- * Single row: [key] [type] [value-with-@] [×]
+ * Single row: [key] [type] [value-with-@] [�]
  * For "object" type the value column is replaced by nested ValueFieldList.
  * Defined before ValueFieldList so both can reference each other via hoisting.
  */
@@ -1654,7 +1654,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
   };
 
   const canNest = depth < JSON_VALUE_MAX_DEPTH;
-  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-ink-800";
+  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-void-800";
 
   React.useEffect(() => {
     if (!pickerOpen) return;
@@ -1706,11 +1706,11 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
             hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
             transition-colors text-lg leading-none ml-auto"
         >
-          ×
+          �
         </button>
       </div>
 
-      {/* Value row — shown for all types except "object" (nested fields handle it) */}
+      {/* Value row � shown for all types except "object" (nested fields handle it) */}
       {field.type !== "object" && field.type !== "array" && (
         <div ref={containerRef} className="relative flex items-center gap-1 w-full mt-1">
           <input
@@ -1731,7 +1731,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
             className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
               text-[11px] font-mono font-bold
               text-ink-500 dark:text-ink-550
-              border border-ink-200 dark:border-ink-775
+              border border-ink-200 dark:border-void-775
               hover:text-brand-600 dark:hover:text-brand-400
               hover:border-brand-200 dark:hover:border-brand-800/50
               hover:bg-brand-50 dark:hover:bg-brand-950/40
@@ -1805,10 +1805,10 @@ const ValueFieldList = ({ fields, depth, onChange, variables, isArray = false })
         type="button"
         onClick={addRow}
         className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
-          border border-ink-200 dark:border-ink-775
+          border border-ink-200 dark:border-void-775
           text-ink-700 dark:text-ink-450
-          hover:bg-ink-50 dark:hover:bg-ink-825
-          hover:border-ink-300 dark:hover:border-ink-725
+          hover:bg-ink-50 dark:hover:bg-void-825
+          hover:border-ink-300 dark:hover:border-void-725
           transition-colors"
       >
         + Add {isArray ? "item" : depth === 0 ? "field" : "property"}
@@ -1830,7 +1830,7 @@ const JsonValueBuilderField = ({ field, value, onChange, variables }) => {
   );
 };
 
-// ─── KeyValueBuilderField ──────────────────────────────────────────────────────
+// --- KeyValueBuilderField ------------------------------------------------------
 /**
  * Simple Key-Value builder for headers and query params where keys and values are always strings.
  */
@@ -1861,7 +1861,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
         value={field.key ?? ""}
         placeholder="key"
         onChange={(e) => onUpdate({ ...field, key: e.target.value })}
-        className={`px-3 py-2.5 rounded-lg text-[13px] text-ink-875 dark:text-ink-200 bg-white dark:bg-ink-850 border border-ink-200 dark:border-ink-775 focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 transition-colors w-[35%] flex-shrink-0 font-mono`}
+        className={`px-3 py-2.5 rounded-lg text-[13px] text-ink-875 dark:text-ink-200 bg-white dark:bg-void-850 border border-ink-200 dark:border-void-775 focus:outline-none focus:border-ink-400 dark:focus:border-void-700 transition-colors w-[35%] flex-shrink-0 font-mono`}
       />
       <div ref={containerRef} className="relative flex-1 flex items-center gap-1">
         <input
@@ -1870,7 +1870,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           value={field.value ?? ""}
           placeholder="value or {{var}}"
           onChange={(e) => onUpdate({ ...field, value: e.target.value })}
-          className={`px-3 py-2.5 rounded-lg text-[13px] text-ink-875 dark:text-ink-200 bg-white dark:bg-ink-850 border border-ink-200 dark:border-ink-775 focus:outline-none focus:border-ink-400 dark:focus:border-ink-700 transition-colors flex-1`}
+          className={`px-3 py-2.5 rounded-lg text-[13px] text-ink-875 dark:text-ink-200 bg-white dark:bg-void-850 border border-ink-200 dark:border-void-775 focus:outline-none focus:border-ink-400 dark:focus:border-void-700 transition-colors flex-1`}
         />
         <button
           type="button"
@@ -1879,7 +1879,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
             text-[11px] font-mono font-bold
             text-ink-500 dark:text-ink-550
-            border border-ink-200 dark:border-ink-775
+            border border-ink-200 dark:border-void-775
             hover:text-brand-600 dark:hover:text-brand-400
             hover:border-brand-200 dark:hover:border-brand-800/50
             hover:bg-brand-50 dark:hover:bg-brand-950/40
@@ -1904,7 +1904,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
           transition-colors text-lg leading-none"
       >
-        ×
+        �
       </button>
     </div>
   );
@@ -1942,10 +1942,10 @@ const KeyValueBuilderField = ({ field, value, onChange, variables }) => {
         type="button"
         onClick={addRow}
         className="self-start mt-0.5 px-2.5 py-1 rounded-lg text-[12px]
-          border border-ink-200 dark:border-ink-775
+          border border-ink-200 dark:border-void-775
           text-ink-700 dark:text-ink-450
-          hover:bg-ink-50 dark:hover:bg-ink-825
-          hover:border-ink-300 dark:hover:border-ink-725
+          hover:bg-ink-50 dark:hover:bg-void-825
+          hover:border-ink-300 dark:hover:border-void-725
           transition-colors"
       >
         + Add item
@@ -1954,7 +1954,7 @@ const KeyValueBuilderField = ({ field, value, onChange, variables }) => {
   );
 };
 
-// ─── VariableSelectorField ───────────────────────────────────────────────────
+// --- VariableSelectorField ---------------------------------------------------
 /**
  * Picks a single variable from the upstream variable list.
  * Opens the shared VariablePicker on the @ button, sets the value to
@@ -1991,7 +1991,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
               : "text-ink-450 dark:text-ink-550 italic",
           ].join(" ")}
         >
-          {value || "— click @ to pick a variable —"}
+          {value || "� click @ to pick a variable �"}
         </div>
 
         {/* Clear */}
@@ -2006,7 +2006,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
               hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
               transition-colors text-lg leading-none"
           >
-            ×
+            �
           </button>
         )}
 
@@ -2018,7 +2018,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
           className="flex-shrink-0 w-8 h-[38px] flex items-center justify-center rounded-lg
             text-[12px] font-mono font-bold
             text-ink-500 dark:text-ink-550
-            border border-ink-200 dark:border-ink-775
+            border border-ink-200 dark:border-void-775
             hover:text-brand-600 dark:hover:text-brand-400
             hover:border-brand-200 dark:hover:border-brand-800/50
             hover:bg-brand-50 dark:hover:bg-brand-950/40
@@ -2039,11 +2039,11 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
   );
 };
 
-// ─── ConditionBuilderField ────────────────────────────────────────────────────
+// --- ConditionBuilderField ----------------------------------------------------
 /**
  * Builds compound AND/OR conditions for the if/else node.
  *
- * Each condition row: [variable picker] [operator] [value?] [remove ×]
+ * Each condition row: [variable picker] [operator] [value?] [remove �]
  * An AND/OR toggle badge appears between consecutive rows.
  *
  * Stored value shape (new):
@@ -2108,8 +2108,8 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
 
   return (
     <div className="flex flex-col gap-2 p-3 rounded-xl
-      bg-ink-25 dark:bg-ink-850
-      border border-ink-100 dark:border-ink-825">
+      bg-ink-25 dark:bg-void-850
+      border border-ink-100 dark:border-void-825">
 
       {/* Variable selector with optional remove button */}
       <div className="flex items-center gap-1.5">
@@ -2121,7 +2121,7 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
           />
         </div>
 
-        {/* Remove button — only visible when more than one row exists */}
+        {/* Remove button � only visible when more than one row exists */}
         {total > 1 && (
           <button
             type="button"
@@ -2129,7 +2129,7 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
             title="Remove this condition"
             className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
               text-ink-450 dark:text-ink-600
-              border border-ink-150 dark:border-ink-800
+              border border-ink-150 dark:border-void-800
               hover:text-[#e05] hover:border-[#fcc] dark:hover:border-[#5a1a1a]
               hover:bg-[#fff5f5] dark:hover:bg-[#1e0a0a]
               transition-colors"
@@ -2164,7 +2164,7 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
           <input
             type="text"
             value={cond.value ?? ""}
-            placeholder="value…"
+            placeholder="value�"
             onChange={(e) => update({ value: e.target.value })}
             className={`${INPUT_BASE} flex-1`}
           />
@@ -2242,8 +2242,8 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
       {cases.map((c, index) => (
         <div
           key={c.id}
-          className="rounded-xl border border-ink-100 dark:border-ink-825
-            bg-ink-25 dark:bg-ink-850 p-3 flex flex-col gap-2"
+          className="rounded-xl border border-ink-100 dark:border-void-825
+            bg-ink-25 dark:bg-void-850 p-3 flex flex-col gap-2"
         >
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold uppercase tracking-wider text-ink-450 dark:text-ink-550 flex-shrink-0">
@@ -2262,10 +2262,10 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
                 onClick={() => removeCase(index)}
                 title="Remove case"
                 className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
-                  text-ink-450 hover:text-[#e05] border border-ink-150 dark:border-ink-800
+                  text-ink-450 hover:text-[#e05] border border-ink-150 dark:border-void-800
                   hover:border-[#fcc] transition-colors"
               >
-                ×
+                �
               </button>
             )}
           </div>
@@ -2328,8 +2328,8 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
           {/* AND / OR toggle badge between condition rows */}
           {idx > 0 && (
             <div className="flex items-center gap-2">
-              <div className="flex-1 h-px bg-ink-100 dark:bg-ink-825" />
-              <div className="flex rounded-lg overflow-hidden border border-ink-200 dark:border-ink-775">
+              <div className="flex-1 h-px bg-ink-100 dark:bg-void-825" />
+              <div className="flex rounded-lg overflow-hidden border border-ink-200 dark:border-void-775">
                 {["and", "or"].map((c) => (
                   <button
                     key={c}
@@ -2339,14 +2339,14 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
                       "px-3 py-1 text-[11px] font-bold uppercase tracking-widest transition-colors",
                       group.combinator === c
                         ? "bg-brand-600 text-white"
-                        : "text-ink-450 dark:text-ink-550 hover:bg-ink-75 dark:hover:bg-ink-875",
+                        : "text-ink-450 dark:text-ink-550 hover:bg-ink-75 dark:hover:bg-void-875",
                     ].join(" ")}
                   >
                     {c}
                   </button>
                 ))}
               </div>
-              <div className="flex-1 h-px bg-ink-100 dark:bg-ink-825" />
+              <div className="flex-1 h-px bg-ink-100 dark:bg-void-825" />
             </div>
           )}
 
@@ -2412,11 +2412,11 @@ const FieldInput = ({ field, value, onChange, variables = [], allValues = {} }) 
   }
 };
 
-// ─── FormBuilder ───────────────────────────────────────────────────────────────
+// --- FormBuilder ---------------------------------------------------------------
 /**
  * Generic, schema-driven form renderer.
  *
- * The `configForm` schema (provided by the backend) drives everything —
+ * The `configForm` schema (provided by the backend) drives everything �
  * no hardcoded fields exist here. Adding a new field type only requires
  * adding a case to FieldInput and a corresponding entry in the schema.
  *
@@ -2475,7 +2475,7 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* ── Quick preset buttons ─────────────────────────────────────────── */}
+      {/* -- Quick preset buttons ------------------------------------------- */}
       {presets.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {presets.map((preset) => (
@@ -2484,10 +2484,10 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
               type="button"
               onClick={() => handlePreset(preset)}
               className="px-3 py-1.5 rounded-lg text-[12px]
-                border border-ink-200 dark:border-ink-775
+                border border-ink-200 dark:border-void-775
                 text-ink-700 dark:text-ink-450
-                hover:bg-ink-50 dark:hover:bg-ink-825
-                hover:border-ink-300 dark:hover:border-ink-725
+                hover:bg-ink-50 dark:hover:bg-void-825
+                hover:border-ink-300 dark:hover:border-void-725
                 transition-colors"
             >
               {preset.label}
@@ -2496,7 +2496,7 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
         </div>
       )}
 
-      {/* ── Form sections ─────────────────────────────────────────────────── */}
+      {/* -- Form sections --------------------------------------------------- */}
       {sections.map((section, sIdx) => (
         <div key={sIdx} className="flex flex-col gap-3">
           {/* Section heading */}
@@ -2506,7 +2506,7 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
             </p>
           )}
 
-          {/* Fields — grid-2 layout or single column */}
+          {/* Fields � grid-2 layout or single column */}
           <div
             className={
               section.layout === "grid-2"

@@ -21,7 +21,7 @@ function Metric({ label, value, highlight = false }) {
       className={`rounded-xl border px-3 py-2.5 ${
         highlight
           ? "border-brand-200 dark:border-brand-800 bg-brand-50/50 dark:bg-brand-900/10"
-          : "border-ink-100 dark:border-ink-850 bg-white dark:bg-ink-850"
+          : "border-ink-100 dark:border-void-850 bg-white dark:bg-void-850"
       }`}
     >
       <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-550">
@@ -87,16 +87,16 @@ function FuseRunOverview({ run, className = "" }) {
         <Metric label="Failed" value={run.nodes_failed ?? 0} />
       </div>
 
-      <div className="rounded-xl border border-ink-100 dark:border-ink-850 bg-white dark:bg-ink-850 px-3 py-3">
+      <div className="rounded-xl border border-ink-100 dark:border-void-850 bg-white dark:bg-void-850 px-3 py-3">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-550 mb-2">
           Run info
         </p>
         <MetaRow label="Started" value={fmtDate(run.started_at)} />
         <MetaRow label="Finished" value={fmtDate(run.finished_at)} />
-        <MetaRow label="Trigger" value={run.trigger_type ?? "â€”"} />
-        <MetaRow label="Version" value={run.version_id ?? "â€”"} />
-        <MetaRow label="Run ID" value={run.run_id ?? "â€”"} />
-        <MetaRow label="Workflow" value={run.workflow_id ?? "â€”"} />
+        <MetaRow label="Trigger" value={run.trigger_type ?? "—"} />
+        <MetaRow label="Version" value={run.version_id ?? "—"} />
+        <MetaRow label="Run ID" value={run.run_id ?? "—"} />
+        <MetaRow label="Workflow" value={run.workflow_id ?? "—"} />
       </div>
 
       <JsonBlock label="Trigger data" value={run.trigger_data} />
@@ -139,7 +139,7 @@ function FuseRunNodeDetail({
   run,
 }) {
   const label = nodeState?.node_label ?? selectedNode?.data?.label ?? "Node";
-  const nodeType = nodeState?.node_type ?? selectedNode?.data?.nodeType ?? "â€”";
+  const nodeType = nodeState?.node_type ?? selectedNode?.data?.nodeType ?? "—";
   const iconName = selectedNode?.data?.icon ?? null;
   const status = isActiveNode ? "running" : nodeState?.status ?? null;
 
@@ -174,8 +174,8 @@ function FuseRunNodeDetail({
 
   return (
     <div className="min-h-0 flex flex-col gap-4">
-      <div className="flex items-start gap-3 pb-4 border-b border-ink-100 dark:border-ink-850">
-        <span className="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-ink-50 dark:bg-ink-775">
+      <div className="flex items-start gap-3 pb-4 border-b border-ink-100 dark:border-void-850">
+        <span className="relative flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-ink-50 dark:bg-void-775">
           <FuseNodeIcon iconName={iconName} sizeClass={FUSE_NODE_ICON_SIZES.pickerRow} />
           {status === "running" && (
             <FuseRunNodeGalaxySpinner className="top-0 right-0" />
@@ -267,7 +267,7 @@ function FuseRunPanelScroll({ children, className = "" }) {
 }
 
 /**
- * Right-hand panel on the run detail page â€” run overview or live node execution info.
+ * Right-hand panel on the run detail page — run overview or live node execution info.
  */
 export default function FuseRunNodePanel(props) {
   const { className = "", ...rest } = props;

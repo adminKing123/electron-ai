@@ -4,7 +4,7 @@ import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
 /** Shared list-table chrome (send-logs style reference). */
 
 export const FUSE_LIST_TABLE_WRAP =
-  "overflow-x-auto rounded-2xl border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850";
+  "overflow-x-auto rounded-2xl border border-ink-150 dark:border-void-800 bg-white dark:bg-void-850";
 
 export const FUSE_LIST_TH =
   "px-5 py-3 text-left text-[12px] font-medium text-ink-500 dark:text-ink-500 whitespace-nowrap";
@@ -13,13 +13,13 @@ export const FUSE_LIST_TD =
   "px-5 py-3.5 text-[13px] text-ink-725 dark:text-ink-300 align-middle";
 
 export const FUSE_LIST_ROW =
-  "border-b border-ink-100 dark:border-ink-800 last:border-b-0 hover:bg-ink-25 dark:hover:bg-ink-825 transition-colors";
+  "border-b border-ink-100 dark:border-void-800 last:border-b-0 hover:bg-ink-25 dark:hover:bg-void-825 transition-colors";
 
 export const FUSE_LIST_LINK =
   "text-[13px] font-medium text-brand-600 dark:text-brand-400 hover:underline bg-transparent border-0 p-0 cursor-pointer";
 
 export function fmtListingTime(iso) {
-  if (!iso) return "â€”";
+  if (!iso) return "—";
   try {
     const d = new Date(iso);
     const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -34,14 +34,14 @@ export function fmtListingTime(iso) {
 
 /** Duration like `1.19 s` in the reference UI. */
 export function fmtListingDuration(ms) {
-  if (ms == null || Number.isNaN(ms)) return "â€”";
+  if (ms == null || Number.isNaN(ms)) return "—";
   if (ms < 1000) return `${Math.round(ms)} ms`;
   return `${(ms / 1000).toFixed(2)} s`;
 }
 
-/** Short run id for the `#â€¦` link column. */
+/** Short run id for the `#…` link column. */
 export function fmtRunIdLink(runId) {
-  if (!runId) return "#â€”";
+  if (!runId) return "#—";
   const compact = runId.replace(/-/g, "").slice(0, 6);
   return `#${compact}`;
 }
@@ -81,10 +81,10 @@ export function FuseListingViewLink({ onClick, href, children = "View", disabled
 }
 
 export const FUSE_LIST_TABLE_FOOTER =
-  "px-5 py-3 border-t border-ink-100 dark:border-ink-800 bg-ink-25/60 dark:bg-ink-850";
+  "px-5 py-3 border-t border-ink-100 dark:border-void-800 bg-ink-25/60 dark:bg-void-850";
 
 const PAGINATION_BTN =
-  "w-8 h-8 flex items-center justify-center rounded-lg text-ink-500 dark:text-ink-550 hover:bg-ink-100 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors";
+  "w-8 h-8 flex items-center justify-center rounded-lg text-ink-500 dark:text-ink-550 hover:bg-ink-100 dark:hover:bg-void-800 hover:text-ink-975 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors";
 
 export function FuseListingTablePagination({
   page = 0,
@@ -163,7 +163,7 @@ export function FuseListingTableFooter({
 export function FuseListingTableHead({ children }) {
   return (
     <thead>
-      <tr className="border-b border-ink-100 dark:border-ink-800 bg-ink-25/60 dark:bg-ink-850">
+      <tr className="border-b border-ink-100 dark:border-void-800 bg-ink-25/60 dark:bg-void-850">
         {children}
       </tr>
     </thead>

@@ -11,7 +11,7 @@ import {
 import FuseJsonViewer from "./FuseJsonViewer";
 
 export function fmtDate(iso) {
-  if (!iso) return "â€”";
+  if (!iso) return "—";
   try {
     return new Date(iso).toLocaleString(undefined, {
       month: "short",
@@ -27,7 +27,7 @@ export function fmtDate(iso) {
 }
 
 export function fmtDuration(ms) {
-  if (ms == null || Number.isNaN(ms)) return "â€”";
+  if (ms == null || Number.isNaN(ms)) return "—";
   if (ms < 1000) return `${Math.round(ms)}ms`;
   return `${(ms / 1000).toFixed(2)}s`;
 }
@@ -94,12 +94,12 @@ function RunAccordionSection({
   emptyMessage = "No data",
 }) {
   return (
-    <div className="border-b border-ink-100 dark:border-ink-800 last:border-b-0">
+    <div className="border-b border-ink-100 dark:border-void-800 last:border-b-0">
       <button
         type="button"
         onClick={onToggle}
         className="w-full flex items-center gap-2 px-3 py-2.5 text-left
-          hover:bg-ink-25 dark:hover:bg-ink-825 transition-colors"
+          hover:bg-ink-25 dark:hover:bg-void-825 transition-colors"
       >
         {open ? (
           <TbChevronDown className="w-4 h-4 flex-shrink-0 text-ink-500 dark:text-ink-600" />
@@ -131,8 +131,8 @@ function RunAccordionSection({
 export function RunAccordionGroup({ children, className = "" }) {
   return (
     <div
-      className={`rounded-xl border border-ink-100 dark:border-ink-800
-        bg-ink-25 dark:bg-ink-850 overflow-hidden ${className}`}
+      className={`rounded-xl border border-ink-100 dark:border-void-800
+        bg-ink-25 dark:bg-void-850 overflow-hidden ${className}`}
     >
       {children}
     </div>
@@ -266,7 +266,7 @@ export const VariablesBlock = ({
         entries.map(([name, val]) => (
           <li
             key={name}
-            className="py-2.5 flex flex-col gap-0.5 min-w-0 border-b border-ink-100 dark:border-ink-800 last:border-b-0"
+            className="py-2.5 flex flex-col gap-0.5 min-w-0 border-b border-ink-100 dark:border-void-800 last:border-b-0"
           >
             <span className="text-[11px] font-mono text-brand-600 dark:text-brand-400 break-all">
               {name}

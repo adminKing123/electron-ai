@@ -14,11 +14,11 @@ import useIsDark from "../../hooks/useIsDark";
 const DailyUsageChart = ({ daily = [], metric = "tokens" }) => {
   const isDark = useIsDark();
 
-  const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const tickColor = isDark ? "#635e7d" : "#a8a4bd";
-  const tooltipBg = isDark ? "#161616" : "#ffffff";
-  const tooltipBorder = isDark ? "#2e2e2e" : "#e5e2f0";
-  const tooltipText = isDark ? "#e5e2f0" : "#2e2e2e";
+  const gridColor = isDark ? "rgba(56,189,248,0.08)" : "rgba(0,0,0,0.05)";
+  const tickColor = isDark ? "#94a3b8" : "#a8a4bd";
+  const tooltipBg = isDark ? "#242a35" : "#ffffff";
+  const tooltipBorder = isDark ? "#3b4250" : "#e5e2f0";
+  const tooltipText = isDark ? "#e2e8f0" : "#2e2e2e";
 
   const labels = daily.map((d) => d.label);
   const values = useMemo(() => {

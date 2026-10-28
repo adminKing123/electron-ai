@@ -23,7 +23,7 @@ const MdCodeCopyButton = ({ handleCopy }) => {
         text-[11px] font-medium
         text-ink-500 dark:text-ink-550
         hover:text-ink-750 dark:hover:text-white
-        hover:bg-ink-150 dark:hover:bg-ink-800
+        hover:bg-ink-150 dark:hover:bg-void-800
         transition-colors"
     >
       {copied ? (

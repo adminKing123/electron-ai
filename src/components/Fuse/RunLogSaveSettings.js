@@ -30,7 +30,7 @@ const ROWS = [
  * Workflow execution is unchanged when a toggle is off.
  */
 const RunLogSaveSettings = ({ config, onChange }) => (
-  <section className="mt-6 pt-5 pb-2 border-t border-ink-100 dark:border-ink-800">
+  <section className="mt-6 pt-5 pb-2 border-t border-ink-100 dark:border-void-800">
     <div className="px-0.5 mb-3.5">
       <h3 className="text-[13px] font-semibold text-ink-875 dark:text-ink-100">
         Run history
@@ -42,8 +42,8 @@ const RunLogSaveSettings = ({ config, onChange }) => (
     </div>
 
     <ul
-      className="rounded-xl border border-ink-100 dark:border-ink-800
-        bg-ink-25 dark:bg-ink-850 divide-y divide-ink-100 dark:divide-ink-800
+      className="rounded-xl border border-ink-100 dark:border-void-800
+        bg-ink-25 dark:bg-void-850 divide-y divide-ink-100 dark:divide-void-800
         overflow-hidden"
     >
       {ROWS.map(({ key, label, description }) => {
@@ -61,7 +61,7 @@ const RunLogSaveSettings = ({ config, onChange }) => (
                   {description}
                 </span>
               </label>
-              {/* Fixed slot so every rowâ€™s switch aligns in one column */}
+              {/* Fixed slot so every row’s switch aligns in one column */}
               <div className="flex h-6 w-11 shrink-0 items-center justify-center pt-0.5">
                 <Switch
                   id={switchId}

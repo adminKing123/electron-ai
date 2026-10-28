@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Low steps: violet-tinted light surfaces. High steps (700+): neutral true-black dark surfaces.
+        // Low steps: violet-tinted light surfaces. High steps (700+): near-black text on light UI.
+        // Dark mode surfaces/borders use the separate `void` scale (see index.css).
         ink: {
           25: "#f9f9fc",
           50: "#f5f4fa",
@@ -34,17 +35,33 @@ module.exports = {
           975: "#020202",
         },
         brand: {
-          50: "#f5f3ff",
-          100: "#ede9fe",
-          200: "#ddd6fe",
-          300: "#c4b5fd",
-          400: "#a78bfa",
-          500: "#8b5cf6",
-          600: "#7c3aed",
-          700: "#6d28d9",
-          800: "#5b21b6",
-          900: "#4c1d95",
-          950: "#2e1065",
+          50: "var(--brand-50)",
+          100: "var(--brand-100)",
+          200: "var(--brand-200)",
+          300: "var(--brand-300)",
+          400: "var(--brand-400)",
+          500: "var(--brand-500)",
+          600: "var(--brand-600)",
+          700: "var(--brand-700)",
+          800: "var(--brand-800)",
+          900: "var(--brand-900)",
+          950: "var(--brand-950)",
+        },
+        /** Cool slate surfaces — dark mode only (via dark:bg-void-* etc.). */
+        void: {
+          650: "#5a6272",
+          700: "#4b5363",
+          725: "#434b5a",
+          750: "#3b4250",
+          775: "#333a47",
+          800: "#2c323e",
+          825: "#242a35",
+          850: "#1c222c",
+          875: "#151a23",
+          900: "#11151d",
+          925: "#0d1017",
+          950: "#090c12",
+          975: "#06080d",
         },
       },
       fontFamily: {
@@ -70,15 +87,18 @@ module.exports = {
       backgroundImage: {
         aurora: "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 55%, #c026d3 100%)",
         "aurora-text": "linear-gradient(90deg, #7c3aed 0%, #c026d3 50%, #0891b2 100%)",
-        "aurora-text-dark": "linear-gradient(90deg, #a78bfa 0%, #e879f9 50%, #22d3ee 100%)",
+        "aurora-text-dark":
+          "linear-gradient(90deg, #7dd3fc 0%, #38bdf8 48%, #2dd4bf 100%)",
         "aurora-glow":
           "radial-gradient(ellipse 70% 45% at 50% -8%, rgba(139,92,246,0.22), transparent 70%), radial-gradient(ellipse 40% 30% at 100% 0%, rgba(34,211,238,0.14), transparent 70%), radial-gradient(ellipse 35% 30% at 0% 0%, rgba(192,38,211,0.08), transparent 70%)",
         "aurora-glow-dark":
-          "radial-gradient(ellipse 70% 45% at 50% -8%, rgba(139,92,246,0.24), transparent 70%), radial-gradient(ellipse 40% 30% at 100% 0%, rgba(34,211,238,0.12), transparent 70%), radial-gradient(ellipse 35% 30% at 0% 0%, rgba(192,38,211,0.10), transparent 70%)",
+          "radial-gradient(ellipse 85% 55% at 50% -12%, rgba(56,189,248,0.32), transparent 68%), radial-gradient(ellipse 50% 38% at 100% 0%, rgba(45,212,191,0.2), transparent 65%), radial-gradient(ellipse 45% 38% at 0% 5%, rgba(14,165,233,0.16), transparent 65%), radial-gradient(ellipse 55% 45% at 50% 105%, rgba(6,182,212,0.1), transparent 72%)",
       },
       boxShadow: {
         glow: "0 4px 14px -3px rgba(124,58,237,0.5)",
         "glow-lg": "0 10px 40px -12px rgba(124,58,237,0.35)",
+        "glow-dark": "0 4px 20px -4px rgba(56,189,248,0.4)",
+        "glow-lg-dark": "0 12px 48px -14px rgba(14,165,233,0.45)",
       },
       keyframes: {
         shimmer: {

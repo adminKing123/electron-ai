@@ -31,9 +31,9 @@ const TABS = [
 ];
 
 const formatDateTime = (value) => {
-  if (!value) return "â€”";
+  if (!value) return "—";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "â€”";
+  if (Number.isNaN(date.getTime())) return "—";
   return date.toLocaleString(undefined, {
     dateStyle: "medium",
     timeStyle: "short",
@@ -79,7 +79,7 @@ const InfoRow = ({ icon, label, value, valueClassName = "" }) => (
 );
 
 const TabBar = ({ activeTab, onChange, webhookCount }) => (
-  <div className="flex gap-1 p-1 mb-4 rounded-xl bg-ink-50 dark:bg-ink-825">
+  <div className="flex gap-1 p-1 mb-4 rounded-xl bg-ink-50 dark:bg-void-825">
     {TABS.map((tab) => (
       <button
         key={tab.id}
@@ -88,7 +88,7 @@ const TabBar = ({ activeTab, onChange, webhookCount }) => (
         className={[
           "flex-1 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors",
           activeTab === tab.id
-            ? "bg-white dark:bg-ink-850 text-ink-875 dark:text-ink-75 shadow-sm"
+            ? "bg-white dark:bg-void-850 text-ink-875 dark:text-ink-75 shadow-sm"
             : "text-ink-500 dark:text-ink-550 hover:text-ink-700 dark:hover:text-ink-350",
         ].join(" ")}
       >
@@ -100,7 +100,7 @@ const TabBar = ({ activeTab, onChange, webhookCount }) => (
 );
 
 const BasicInfoPanel = ({ webexInfo }) => (
-  <div className="divide-y divide-ink-100 dark:divide-ink-800">
+  <div className="divide-y divide-ink-100 dark:divide-void-800">
     <InfoRow
       icon={<HiOutlineIdentification className="w-4 h-4" />}
       label="Integration ID"
@@ -173,7 +173,7 @@ const BasicInfoPanel = ({ webexInfo }) => (
 
 const webexWebhookSubtitle = (webhook) => {
   const base = `${webhook.resource}/${webhook.event}`;
-  return webhook.filter ? `${base} Â· ${webhook.filter}` : base;
+  return webhook.filter ? `${base} · ${webhook.filter}` : base;
 };
 
 const WebhooksPanel = ({ webhooks, loading, error, onRefresh, onRemove, removingId }) => {
@@ -359,14 +359,14 @@ const WebexInfoModal = ({ isOpen, onClose }) => {
         </>
       )}
 
-      <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-ink-100 dark:border-ink-800">
+      <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-ink-100 dark:border-void-800">
         <button
           onClick={onClose}
           className="px-4 py-1.5 rounded-full text-[13px] font-medium
-            bg-ink-50 dark:bg-ink-800
+            bg-ink-50 dark:bg-void-800
             text-ink-750 dark:text-ink-300
-            hover:bg-ink-100 dark:hover:bg-ink-750
-            border border-ink-100 dark:border-ink-750
+            hover:bg-ink-100 dark:hover:bg-void-750
+            border border-ink-100 dark:border-void-750
             transition-colors"
         >
           Close

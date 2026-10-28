@@ -35,7 +35,7 @@ const StatusPill = ({ connected }) => (
     className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${
       connected
         ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10"
-        : "text-ink-550 dark:text-ink-450 bg-ink-100 dark:bg-ink-800"
+        : "text-ink-550 dark:text-ink-450 bg-ink-100 dark:bg-void-800"
     }`}
   >
     <span className={`w-1.5 h-1.5 rounded-full ${connected ? "bg-emerald-500" : "bg-ink-400 dark:bg-ink-600"}`} />
@@ -73,8 +73,8 @@ const IntegrationActions = ({ integration, connected, configuring, onConfigure, 
         <button
           type="button"
           onClick={() => openInfoModal(integration.id)}
-          className={`${actionBtn} border border-ink-150 dark:border-ink-750 bg-white dark:bg-ink-800
-            text-ink-750 dark:text-ink-200 hover:bg-ink-50 dark:hover:bg-ink-775`}
+          className={`${actionBtn} border border-ink-150 dark:border-void-750 bg-white dark:bg-void-800
+            text-ink-750 dark:text-ink-200 hover:bg-ink-50 dark:hover:bg-void-775`}
         >
           Details
         </button>
@@ -93,7 +93,7 @@ const IntegrationActions = ({ integration, connected, configuring, onConfigure, 
       {configuring && (
         <span className="w-3.5 h-3.5 border-2 border-white/70 border-t-transparent rounded-full animate-spin" />
       )}
-      {configuring ? "Connectingâ€¦" : "Connect"}
+      {configuring ? "Connecting…" : "Connect"}
     </button>
   );
 };
@@ -124,7 +124,7 @@ const useIntegrationActions = (integration) => {
 export function IntegrationRowSkeleton({ isLast = false, desktop = false }) {
   if (desktop) {
     return (
-      <tr className="border-b border-ink-100 dark:border-ink-800 last:border-b-0" aria-hidden>
+      <tr className="border-b border-ink-100 dark:border-void-800 last:border-b-0" aria-hidden>
         <td className="px-5 py-3.5">
           <div className="flex items-center gap-3">
             <div className="skeleton w-8 h-8 rounded-lg flex-shrink-0" />
@@ -149,7 +149,7 @@ export function IntegrationRowSkeleton({ isLast = false, desktop = false }) {
   return (
     <div
       className={`flex items-center gap-3 px-4 py-3.5 ${
-        !isLast ? "border-b border-ink-100 dark:border-ink-800" : ""
+        !isLast ? "border-b border-ink-100 dark:border-void-800" : ""
       }`}
       aria-hidden
     >
@@ -169,7 +169,7 @@ const IntegrationListItem = ({ integration, onRevokeClick, isLast }) => {
   return (
     <div
       className={`flex items-center gap-3 px-4 py-3.5
-        ${!isLast ? "border-b border-ink-100 dark:border-ink-800" : ""}`}
+        ${!isLast ? "border-b border-ink-100 dark:border-void-800" : ""}`}
     >
       <IntegrationIconTile iconName={integration.icon} tileClassName="w-8 h-8" />
       <div className="flex-1 min-w-0">

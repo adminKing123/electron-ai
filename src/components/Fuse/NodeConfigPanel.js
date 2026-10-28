@@ -62,7 +62,7 @@ const groupNodesBySection = (nodes, query) => {
   });
 };
 
-const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes…" }) => (
+const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes�" }) => (
   <div
     className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl transition-colors ${FUSE_PICKER_ROW}`}
   >
@@ -132,25 +132,25 @@ const StarterPanel = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-ink-850">
+      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-void-850">
         <div className="flex items-center gap-2 mb-3">
           <TbLayoutGrid className="w-[20px] h-[20px] text-ink-600 dark:text-ink-450" />
           <span className="text-[16px] font-medium text-ink-875 dark:text-ink-100">
             Choose a starter
           </span>
         </div>
-        <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters…" />
+        <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters�" />
       </div>
-      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-ink-850">
+      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-void-850">
         {loadingNodes ? (
           ["General", "Webex"].map((sk) => (
             <div key={sk} className="flex flex-col gap-2">
-              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-ink-875 animate-pulse" />
+              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-void-875 animate-pulse" />
               <div className="grid grid-cols-2 gap-2">
                 {[1, 2].map((i) => (
                   <div
                     key={i}
-                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-ink-775 animate-pulse"
+                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-void-775 animate-pulse"
                   />
                 ))}
               </div>
@@ -176,7 +176,7 @@ const StarterPanel = () => {
   );
 };
 
-// ─── AddNodePanel ──────────────────────────────────────────────────────────────
+// --- AddNodePanel --------------------------------------------------------------
 // Shown when the user clicks "Add Node" in the header.
 // Groups action nodes by their `section` field and renders each group with a
 // section heading + 2-column grid of draggable ActionNodeCards.
@@ -220,7 +220,7 @@ const AddNodePanel = () => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-ink-850">
+      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-void-850">
         <div className="flex items-center justify-between mb-3">
           <span className="text-[16px] font-medium text-ink-875 dark:text-ink-100">
             Add Node
@@ -230,17 +230,17 @@ const AddNodePanel = () => {
       </div>
 
       {/* Sectioned node list */}
-      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-ink-850">
+      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-void-850">
         {loadingActionNodes ? (
           // Loading skeleton: two mock sections
           ["Webex", "General"].map((sk) => (
             <div key={sk} className="flex flex-col gap-2">
-              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-ink-875 animate-pulse" />
+              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-void-875 animate-pulse" />
               <div className="grid grid-cols-2 gap-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-ink-775 animate-pulse"
+                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-void-775 animate-pulse"
                   />
                 ))}
               </div>
@@ -299,8 +299,8 @@ const WebhookUrlDisplay = ({ workflowId }) => {
         <code
           className="flex-1 w-full px-3 py-2.5 rounded-lg text-[13px] font-mono
             text-ink-875 dark:text-ink-200
-            bg-white dark:bg-ink-850
-            border border-ink-200 dark:border-ink-775
+            bg-white dark:bg-void-850
+            border border-ink-200 dark:border-void-775
             truncate"
           title={url}
         >
@@ -313,7 +313,7 @@ const WebhookUrlDisplay = ({ workflowId }) => {
           className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
             text-ink-500 dark:text-ink-600
             hover:text-ink-975 dark:hover:text-white
-            hover:bg-ink-100 dark:hover:bg-ink-875
+            hover:bg-ink-100 dark:hover:bg-void-875
             transition-colors"
         >
           {copied ? (
@@ -368,7 +368,7 @@ const NodeLabelInput = ({ value, onChange, onBlur, maxLength, typeLabel }) => {
   );
 };
 
-// ─── NodeConfigView ────────────────────────────────────────────────────────────
+// --- NodeConfigView ------------------------------------------------------------
 // Shown when a React Flow node is selected.
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
 const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
@@ -391,7 +391,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="px-4 pt-4 pb-3.5 border-b border-ink-100 dark:border-ink-800 flex-shrink-0">
+      <div className="px-4 pt-4 pb-3.5 border-b border-ink-100 dark:border-void-800 flex-shrink-0">
         <div className="flex items-start justify-between gap-2 mb-2">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-450 dark:text-ink-550">
             {node.data.isStarter ? "Starter" : "Node"} {getDisplayFuseNodeId(node.id)}
@@ -434,12 +434,12 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
 
       {/* Scrollable config form */}
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
-        {/* Webhook URL — always shown for webhook starter nodes */}
+        {/* Webhook URL � always shown for webhook starter nodes */}
         {node_type === "webhook" && (
           <WebhookUrlDisplay workflowId={workflowId} />
         )}
 
-        {/* Webex activation note — webhook is registered on Turn On */}
+        {/* Webex activation note � webhook is registered on Turn On */}
         {node_type === "webex_message" && (
           <p className="text-[12px] leading-relaxed text-ink-500 dark:text-ink-550
             px-3 py-2.5 rounded-lg bg-[#f0f9ff] dark:bg-[#0c1929]
@@ -449,15 +449,15 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
           </p>
         )}
 
-        {/* Push permission banner — shown for get_notified nodes */}
+        {/* Push permission banner � shown for get_notified nodes */}
         {node_type === "get_notified" && (
           <NotificationSettings nodeType={node_type} />
         )}
 
         {node_type === "get_notified_email" && (
           <div
-            className="rounded-xl border border-ink-100 dark:border-ink-850
-              bg-white dark:bg-ink-850 px-3 py-3"
+            className="rounded-xl border border-ink-100 dark:border-void-850
+              bg-white dark:bg-void-850 px-3 py-3"
           >
             <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-ink-550 mb-1">
               To
@@ -493,19 +493,19 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
   );
 };
 
-// ─── NodeConfigPanel ───────────────────────────────────────────────────────────
+// --- NodeConfigPanel -----------------------------------------------------------
 /**
  * Right panel of the workflow studio canvas.
  *
- * Block nodes (fuse_block) never reach this panel — clicking a block clears
+ * Block nodes (fuse_block) never reach this panel � clicking a block clears
  * selectedNode so the panel stays on its current / default view.
  * All block editing (rename, colour, remove) happens in BlockNode's NodeToolbar.
  *
  * Panel states (in priority order):
- *   1. nodes.length === 0          → StarterPanel   (no workflow started yet)
- *   2. addingNode === true          → AddNodePanel   (user clicked "Add Node")
- *   3. selectedNode !== null        → NodeConfigView (configure selected node)
- *   4. default                      → AddNodePanel   (nodes exist, none selected)
+ *   1. nodes.length === 0          ? StarterPanel   (no workflow started yet)
+ *   2. addingNode === true          ? AddNodePanel   (user clicked "Add Node")
+ *   3. selectedNode !== null        ? NodeConfigView (configure selected node)
+ *   4. default                      ? AddNodePanel   (nodes exist, none selected)
  */
 const NodeConfigPanel = ({ className = "" }) => {
   const nodes = useFuseStudioStore((s) => s.nodes);
@@ -525,7 +525,7 @@ const NodeConfigPanel = ({ className = "" }) => {
    * Walk the entire ancestor chain backwards from `selectedNode` via BFS,
    * collecting variables from every upstream node that exposes a `body_schema`.
    *
-   * This means a node at any depth (e.g. webhook → notified → if_else) will
+   * This means a node at any depth (e.g. webhook ? notified ? if_else) will
    * still see variables produced by the webhook, not just its direct parent.
    *
    * Nested objects produce dot-notation paths:  <id>.body.address.street
@@ -607,7 +607,7 @@ const NodeConfigPanel = ({ className = "" }) => {
       if (n.data?.nodeType === "ai_generate_text") {
         vars.push({
           token: `${n.id}.text`,
-          label: `${n.data.label} → text`,
+          label: `${n.data.label} ? text`,
           ...nodeMeta,
         });
       }
@@ -691,17 +691,17 @@ const NodeConfigPanel = ({ className = "" }) => {
         vars.push(
           {
             token: `${n.id}.success`,
-            label: `${n.data.label} → success`,
+            label: `${n.data.label} ? success`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.message_id`,
-            label: `${n.data.label} → message_id`,
+            label: `${n.data.label} ? message_id`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.room_id`,
-            label: `${n.data.label} → room_id`,
+            label: `${n.data.label} ? room_id`,
             ...nodeMeta,
           },
         );
@@ -711,54 +711,54 @@ const NodeConfigPanel = ({ className = "" }) => {
         vars.push(
           {
             token: `${n.id}.url`,
-            label: `${n.data.label} → url`,
+            label: `${n.data.label} ? url`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.filename`,
-            label: `${n.data.label} → filename`,
+            label: `${n.data.label} ? filename`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.path`,
-            label: `${n.data.label} → path`,
+            label: `${n.data.label} ? path`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.size_bytes`,
-            label: `${n.data.label} → size_bytes`,
+            label: `${n.data.label} ? size_bytes`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.content_type`,
-            label: `${n.data.label} → content_type`,
+            label: `${n.data.label} ? content_type`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.original_name`,
-            label: `${n.data.label} → original_name`,
+            label: `${n.data.label} ? original_name`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.success`,
-            label: `${n.data.label} → success`,
+            label: `${n.data.label} ? success`,
             ...nodeMeta,
           },
         );
       }
 
       // http_request: expose status_code, success, and response body fields.
-      // Response data lives under "body" only — same pattern as webhook.
+      // Response data lives under "body" only � same pattern as webhook.
       if (n.data?.nodeType === "http_request") {
         vars.push(
           {
             token: `${n.id}.status_code`,
-            label: `${n.data.label} → status_code`,
+            label: `${n.data.label} ? status_code`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.success`,
-            label: `${n.data.label} → success`,
+            label: `${n.data.label} ? success`,
             ...nodeMeta,
           },
         );
@@ -778,7 +778,7 @@ const NodeConfigPanel = ({ className = "" }) => {
         } else {
           vars.push({
             token: `${n.id}.body`,
-            label: `${n.data.label} → body`,
+            label: `${n.data.label} ? body`,
             ...nodeMeta,
           });
         }
@@ -789,23 +789,23 @@ const NodeConfigPanel = ({ className = "" }) => {
         vars.push(
           {
             token: `${n.id}.current_item`,
-            label: `${n.data.label} → current item`,
+            label: `${n.data.label} ? current item`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.current_index`,
-            label: `${n.data.label} → current index`,
+            label: `${n.data.label} ? current index`,
             ...nodeMeta,
           },
           {
             token: `${n.id}.items`,
-            label: `${n.data.label} → items (full array)`,
+            label: `${n.data.label} ? items (full array)`,
             isArray: true,
             ...nodeMeta,
           },
           {
             token: `${n.id}.count`,
-            label: `${n.data.label} → count`,
+            label: `${n.data.label} ? count`,
             ...nodeMeta,
           },
         );
@@ -855,7 +855,7 @@ const NodeConfigPanel = ({ className = "" }) => {
                 flattenFields(
                   arrField.items.fields || [],
                   `${n.id}.current_item`,
-                  `${n.data.label} → item`,
+                  `${n.data.label} ? item`,
                 ).forEach((v) => vars.push({ ...v, ...nodeMeta }));
                 break;
               }
@@ -882,13 +882,13 @@ const NodeConfigPanel = ({ className = "" }) => {
   if (loading) {
     content = null;
   } else if (nodes.length === 0 || !hasStarterNode) {
-    // No nodes placed yet — must choose a starter first.
+    // No nodes placed yet � must choose a starter first.
     content = <StarterPanel />;
   } else if (addingNode) {
     // User opened the "Add Node" picker via the header button.
     content = <AddNodePanel />;
   } else if (selectedNode) {
-    // A workflow node is selected — show its config form.
+    // A workflow node is selected � show its config form.
     // Block nodes (fuse_block) never reach here; WorkflowCanvas clears
     // selectedNode before they could be set.
     const nodeDef = allNodeDefs.find(

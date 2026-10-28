@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { TbBorderAll } from "react-icons/tb";
 
-// ─── CanvasContextMenu ────────────────────────────────────────────────────────
+// --- CanvasContextMenu --------------------------------------------------------
 /**
  * Right-click context menu for the workflow canvas pane.
  *
@@ -56,8 +56,8 @@ const CanvasContextMenu = ({ x, y, onDrawBlock, onClose }) => {
       ref={menuRef}
       style={{ top: safeY, left: safeX, position: "fixed" }}
       className="z-[9999] min-w-[160px]
-        bg-white dark:bg-ink-825
-        border border-ink-150 dark:border-ink-800
+        bg-white dark:bg-void-825
+        border border-ink-150 dark:border-void-800
         rounded-xl shadow-xl overflow-hidden
         py-1"
     >
@@ -67,7 +67,7 @@ const CanvasContextMenu = ({ x, y, onDrawBlock, onClose }) => {
         className="w-full flex items-center gap-2.5 px-3.5 py-2.5
           text-[13px] font-medium text-left select-none
           text-ink-750 dark:text-ink-300
-          hover:bg-ink-50 dark:hover:bg-ink-825
+          hover:bg-ink-50 dark:hover:bg-void-825
           transition-colors"
       >
         <TbBorderAll className="w-4 h-4 text-brand-600 dark:text-brand-400 flex-shrink-0" />

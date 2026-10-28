@@ -5,21 +5,21 @@ import ROUTES from "../../router/routes";
 import FuseWorkflowToggle from "./FuseWorkflowToggle";
 
 const CARD_BASE =
-  "rounded-2xl border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 overflow-hidden";
+  "rounded-2xl border border-ink-150 dark:border-void-800 bg-white dark:bg-void-825 overflow-hidden";
 
 const CARD_HOVER =
   "hover:border-brand-200 dark:hover:border-brand-900 hover:shadow-[0_4px_20px_-8px_rgba(124,58,237,0.25)]";
 
-// ─── Action Buttons ───────────────────────────────────────────────────────────
+// --- Action Buttons -----------------------------------------------------------
 
 const OpenButton = ({ onClick }) => (
   <button
     onClick={onClick}
     className="inline-flex items-center gap-1 h-8 px-3.5 rounded-xl text-[12px] font-semibold select-none
-      border border-ink-150 dark:border-ink-750
-      bg-white dark:bg-ink-800
+      border border-ink-150 dark:border-void-750
+      bg-white dark:bg-void-800
       text-ink-750 dark:text-ink-200
-      hover:bg-ink-50 dark:hover:bg-ink-775
+      hover:bg-ink-50 dark:hover:bg-void-775
       active:opacity-80 transition-colors duration-150"
   >
     Open
@@ -27,14 +27,14 @@ const OpenButton = ({ onClick }) => (
   </button>
 );
 
-// ─── Status badge ─────────────────────────────────────────────────────────────
+// --- Status badge -------------------------------------------------------------
 
 const StatusBadge = ({ workflow }) => {
   const [label, cls, dot] = workflow.compiled_graph
     ? workflow.status === "active"
       ? ["Active", "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10", "bg-emerald-500"]
       : ["Inactive", "text-red-600 dark:text-red-400 bg-red-500/10", "bg-red-500"]
-    : ["Draft", "text-ink-550 dark:text-ink-450 bg-ink-100 dark:bg-ink-800", "bg-ink-450"];
+    : ["Draft", "text-ink-550 dark:text-ink-450 bg-ink-100 dark:bg-void-800", "bg-ink-450"];
 
   return (
     <span
@@ -46,7 +46,7 @@ const StatusBadge = ({ workflow }) => {
   );
 };
 
-// ─── Node icons strip — shared by both card states ────────────────────────────
+// --- Node icons strip � shared by both card states ----------------------------
 
 const NodeIcons = ({ nodes, overflowCls }) => {
   const visible = nodes.slice(0, 4);
@@ -67,7 +67,7 @@ const NodeIcons = ({ nodes, overflowCls }) => {
 
 const OVERFLOW_CLS = "text-[12px] font-semibold text-ink-550 dark:text-ink-400";
 
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
+// --- Skeleton -----------------------------------------------------------------
 
 const IconSkeletons = () => (
   <div className="flex items-center gap-2.5">
@@ -106,7 +106,7 @@ export const ReviewQuicklySkeletons = () => (
   </div>
 );
 
-// ─── ReviewCard ───────────────────────────────────────────────────────────────
+// --- ReviewCard ---------------------------------------------------------------
 
 const ReviewCard = ({ workflow, onHover, active }) => {
   const navigate = useNavigate();
@@ -159,7 +159,7 @@ const ReviewCard = ({ workflow, onHover, active }) => {
   );
 };
 
-// ─── Recent Fuses Skeleton ───────────────────────────────────────────────────
+// --- Recent Fuses Skeleton ---------------------------------------------------
 
 export const RecentFusesSkeletons = ({ count = 6 }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -169,7 +169,7 @@ export const RecentFusesSkeletons = ({ count = 6 }) => (
           <div className="skeleton h-4 w-full rounded-md" />
           <div className="skeleton mt-1.5 h-4 w-3/5 rounded-md" />
         </div>
-        <div className="mt-5 pt-3.5 border-t border-ink-100 dark:border-ink-800 flex justify-between items-center">
+        <div className="mt-5 pt-3.5 border-t border-ink-100 dark:border-void-800 flex justify-between items-center">
           <IconSkeletons />
           <div className="skeleton h-5 w-14 rounded-full" />
         </div>
@@ -178,7 +178,7 @@ export const RecentFusesSkeletons = ({ count = 6 }) => (
   </div>
 );
 
-// ─── NormalReviewCard ─────────────────────────────────────────────────────────
+// --- NormalReviewCard ---------------------------------------------------------
 
 export const NormalReviewCard = ({ workflow }) => (
   <Link
@@ -194,7 +194,7 @@ export const NormalReviewCard = ({ workflow }) => (
           group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors"
       />
     </div>
-    <div className="mt-5 pt-3.5 border-t border-ink-100 dark:border-ink-800 flex justify-between items-center gap-2">
+    <div className="mt-5 pt-3.5 border-t border-ink-100 dark:border-void-800 flex justify-between items-center gap-2">
       <NodeIcons nodes={workflow.nodes} overflowCls={OVERFLOW_CLS} />
       <StatusBadge workflow={workflow} />
     </div>

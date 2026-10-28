@@ -41,8 +41,8 @@ const DeleteChatModal = ({ data }) => {
         transition={{ duration: 0.15 }}
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm p-5 rounded-2xl
-          bg-white dark:bg-ink-825
-          border border-ink-100 dark:border-ink-800
+          bg-white dark:bg-void-825
+          border border-ink-100 dark:border-void-800
           shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]"
       >
         {/* Title */}
@@ -68,10 +68,10 @@ const DeleteChatModal = ({ data }) => {
           <button
             onClick={close}
             className="px-4 py-1.5 rounded-full text-[13px] font-medium
-              bg-ink-50 dark:bg-ink-800
+              bg-ink-50 dark:bg-void-800
               text-ink-750 dark:text-ink-300
-              hover:bg-ink-100 dark:hover:bg-ink-750
-              border border-ink-100 dark:border-ink-750
+              hover:bg-ink-100 dark:hover:bg-void-750
+              border border-ink-100 dark:border-void-750
               transition-colors"
           >
             Cancel

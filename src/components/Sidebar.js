@@ -44,7 +44,7 @@ const SidebarHeader = ({ toggleSidebar }) => {
   };
 
   return (
-    <div className="w-full h-[56px] flex items-center justify-between px-4 flex-shrink-0 border-b border-ink-100 dark:border-ink-800">
+    <div className="w-full h-[56px] flex items-center justify-between px-4 flex-shrink-0 border-b border-ink-100 dark:border-void-800">
       <div className="flex items-center gap-2.5">
         <TbGalaxy className="text-ink-975 dark:text-white w-[20px] h-[20px]" />
         <span className="font-bold text-[15px] tracking-tight text-ink-975 dark:text-white">
@@ -59,7 +59,7 @@ const SidebarHeader = ({ toggleSidebar }) => {
           className="w-8 h-8 flex items-center justify-center rounded-lg
             text-ink-500 dark:text-ink-600
             hover:text-ink-975 dark:hover:text-white
-            hover:bg-ink-100 dark:hover:bg-ink-800
+            hover:bg-ink-100 dark:hover:bg-void-800
             transition-colors"
         >
           <TbEdit className="w-[17px] h-[17px]" />
@@ -70,7 +70,7 @@ const SidebarHeader = ({ toggleSidebar }) => {
           className="w-8 h-8 flex items-center justify-center rounded-lg
             text-ink-500 dark:text-ink-600
             hover:text-ink-975 dark:hover:text-white
-            hover:bg-ink-100 dark:hover:bg-ink-800
+            hover:bg-ink-100 dark:hover:bg-void-800
             transition-colors"
         >
           <TbLayoutSidebar className="w-[17px] h-[17px] hidden md:block" />
@@ -106,10 +106,10 @@ const Sidebar = () => {
     <>
       <SidebarOverlay open={open} toggleSidebar={toggleSidebar} />
       <div
-        className={`bg-ink-50 dark:bg-ink-850 h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-300 top-0 left-0 z-10
+        className={`bg-ink-50 dark:bg-void-850 h-[100dvh] flex-shrink-0 overflow-hidden transition-[width] duration-300 top-0 left-0 z-10
         ${
           mainSidebarLayoutType === "editor" ? "absolute" : "absolute md:static"
-        } ${open ? "w-[288px] border-r border-ink-100 dark:border-ink-800" : "w-0"}`}
+        } ${open ? "w-[288px] border-r border-ink-100 dark:border-void-800" : "w-0"}`}
         id="sidebar"
       >
         <div className="w-[288px] h-[100dvh] flex flex-col">

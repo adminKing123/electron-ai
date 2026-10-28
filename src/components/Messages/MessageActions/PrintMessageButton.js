@@ -121,7 +121,7 @@ const PrintMessageButton = ({ message_id }) => {
       className="w-7 h-7 flex items-center justify-center rounded-lg
         text-ink-500 dark:text-ink-500
         hover:text-ink-975 dark:hover:text-white
-        hover:bg-ink-100 dark:hover:bg-ink-875
+        hover:bg-ink-100 dark:hover:bg-void-875
         transition-colors"
     >
       <FiPrinter className="w-[14px] h-[14px]" />

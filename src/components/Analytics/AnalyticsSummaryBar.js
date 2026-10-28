@@ -10,7 +10,7 @@ import SectionHeader from "../Common/SectionHeader";
  * `accent` applies the golden colour used for cost figures.
  */
 const STAT_CARD =
-  "flex flex-col gap-3 p-4 rounded-2xl border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850";
+  "flex flex-col gap-3 p-4 rounded-2xl border border-ink-150 dark:border-void-800 bg-white dark:bg-void-850";
 
 const StatItem = ({ icon: Icon, label, value, accent = false }) => (
   <div className={STAT_CARD}>
@@ -42,10 +42,10 @@ const StatItem = ({ icon: Icon, label, value, accent = false }) => (
 const StatSkeleton = () => (
   <div className={`${STAT_CARD} animate-pulse`}>
     <div className="flex items-center justify-between">
-      <div className="h-3 w-16 rounded-full bg-ink-100 dark:bg-ink-800" />
-      <div className="w-8 h-8 rounded-lg bg-ink-100 dark:bg-ink-800" />
+      <div className="h-3 w-16 rounded-full bg-ink-100 dark:bg-void-800" />
+      <div className="w-8 h-8 rounded-lg bg-ink-100 dark:bg-void-800" />
     </div>
-    <div className="h-[26px] w-24 rounded-lg bg-ink-100 dark:bg-ink-800" />
+    <div className="h-[26px] w-24 rounded-lg bg-ink-100 dark:bg-void-800" />
   </div>
 );
 
@@ -54,7 +54,7 @@ const StatSkeleton = () => (
  *
  * Shows total chats, token consumption, and estimated spend in a clean
  * bordered card. Links through to the full analytics dashboard.
- * One Firestore read on mount â€” no charts.
+ * One Firestore read on mount — no charts.
  */
 const AnalyticsSummaryBar = () => {
   const [data, setData] = useState(null);

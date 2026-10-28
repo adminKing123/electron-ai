@@ -64,7 +64,7 @@ const FuseIntegrationsPage = () => {
       footer={<MasterInfoModal />}
     >
       <div className="max-w-[1080px] mx-auto px-4 pt-6 pb-12 sm:px-8 sm:pt-10">
-        <div className="pb-6 mb-6 border-b border-ink-100 dark:border-ink-800">
+        <div className="pb-6 mb-6 border-b border-ink-100 dark:border-void-800">
           <h1 className="text-[24px] md:text-[28px] font-bold tracking-tight text-ink-975 dark:text-white leading-tight">
             Integrations
           </h1>

@@ -38,12 +38,12 @@ const ConnectionPill = ({ status }) => {
   const live = status === "connected";
   const pending = status === "connecting" || status === "idle";
   const Icon = live ? TbWifi : TbWifiOff;
-  const label = live ? "Live" : pending ? "Connectingâ€¦" : "Offline";
+  const label = live ? "Live" : pending ? "Connecting…" : "Offline";
   const cls = live
     ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
     : pending
       ? "text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800"
-      : "text-ink-500 dark:text-ink-550 bg-ink-50 dark:bg-ink-850 border-ink-100 dark:border-ink-800";
+      : "text-ink-500 dark:text-ink-550 bg-ink-50 dark:bg-void-850 border-ink-100 dark:border-void-800";
 
   return (
     <span className={`hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${cls}`}>
@@ -138,7 +138,7 @@ const WorkflowRunDetailPage = () => {
   };
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark text-ink-950 dark:text-white">
+    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-void-875 bg-aurora-glow dark:bg-aurora-glow-dark text-ink-950 dark:text-white">
       <header className="w-full flex-shrink-0 bg-transparent">
         <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
           <div className="flex items-center gap-1.5 min-w-0 flex-1">
@@ -197,8 +197,8 @@ const WorkflowRunDetailPage = () => {
             p-0 md:p-4
             mb-16 md:mb-3 ml-0 md:ml-3 mr-0 md:mr-3
             md:rounded-xl
-            md:border md:border-ink-150 md:dark:border-ink-825
-            bg-ink-25 dark:bg-ink-850
+            md:border md:border-ink-150 md:dark:border-void-825
+            bg-ink-25 dark:bg-void-850
             md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
           <div className="relative flex-1 min-w-0 min-h-0">
@@ -213,7 +213,7 @@ const WorkflowRunDetailPage = () => {
             />
           </div>
 
-          {/* Run panel â€” side on desktop, bottom sheet on mobile (matches Fuse Studio) */}
+          {/* Run panel — side on desktop, bottom sheet on mobile (matches Fuse Studio) */}
           <div
             className={`
               flex flex-col
@@ -225,8 +225,8 @@ const WorkflowRunDetailPage = () => {
           >
             <div
               className="flex md:hidden items-center justify-between px-4 py-2.5 flex-shrink-0
-                bg-white dark:bg-ink-875 rounded-t-2xl
-                border-t border-x border-ink-150 dark:border-ink-800
+                bg-white dark:bg-void-875 rounded-t-2xl
+                border-t border-x border-ink-150 dark:border-void-800
                 shadow-[0_-6px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_-6px_24px_rgba(0,0,0,0.35)]"
             >
               <div className="flex items-center gap-2 min-w-0">
@@ -241,7 +241,7 @@ const WorkflowRunDetailPage = () => {
                 className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0
                   text-ink-500 dark:text-ink-600
                   hover:text-ink-750 dark:hover:text-white
-                  hover:bg-ink-75 dark:hover:bg-ink-800
+                  hover:bg-ink-75 dark:hover:bg-void-800
                   transition-colors"
                 aria-label="Close panel"
               >
@@ -252,8 +252,8 @@ const WorkflowRunDetailPage = () => {
             <FuseRunNodePanel
               className="flex-1 min-h-0 md:rounded-xl rounded-none
                 border-t-0 md:border-t
-                bg-white dark:bg-ink-875
-                border border-ink-150 dark:border-ink-800
+                bg-white dark:bg-void-875
+                border border-ink-150 dark:border-void-800
                 shadow-sm overflow-hidden"
               selectedNode={selectedNode}
               nodeState={selectedNodeState}
@@ -278,8 +278,8 @@ const WorkflowRunDetailPage = () => {
 
       <nav
         className="flex md:hidden fixed bottom-0 left-0 right-0 z-50
-          bg-white dark:bg-ink-850
-          border-t border-ink-150 dark:border-ink-825
+          bg-white dark:bg-void-850
+          border-t border-ink-150 dark:border-void-825
           px-2 py-1 justify-center items-center"
       >
         <button

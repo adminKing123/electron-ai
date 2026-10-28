@@ -22,11 +22,11 @@ const MessageBeingEdited = ({ action }) => {
       onClick={handleClick}
       className="flex items-center gap-2 px-4 py-2 mx-1 mt-1
         text-ink-650 dark:text-ink-500
-        bg-ink-50 dark:bg-ink-800
+        bg-ink-50 dark:bg-void-800
         rounded-t-[20px] rounded-b-md
-        border-b border-ink-100 dark:border-ink-750
+        border-b border-ink-100 dark:border-void-750
         cursor-pointer
-        hover:bg-ink-75 dark:hover:bg-ink-775
+        hover:bg-ink-75 dark:hover:bg-void-775
         transition-colors"
     >
       <FiEdit2 className="w-[11px] h-[11px] flex-shrink-0 opacity-60" />
@@ -36,7 +36,7 @@ const MessageBeingEdited = ({ action }) => {
       <button
         onClick={handleCancel}
         className="w-6 h-6 flex items-center justify-center rounded-md flex-shrink-0
-          hover:bg-ink-150 dark:hover:bg-ink-725
+          hover:bg-ink-150 dark:hover:bg-void-725
           hover:text-ink-975 dark:hover:text-white
           transition-colors"
       >

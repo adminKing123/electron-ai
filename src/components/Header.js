@@ -11,7 +11,7 @@ const iconBtnCls =
   "w-8 h-8 flex items-center justify-center rounded-lg " +
   "text-ink-500 dark:text-ink-600 " +
   "hover:text-ink-975 dark:hover:text-white " +
-  "hover:bg-ink-100 dark:hover:bg-ink-875 " +
+  "hover:bg-ink-100 dark:hover:bg-void-875 " +
   "transition-colors";
 
 const BackButton = ({ route = "" }) => {
@@ -37,7 +37,7 @@ const SidebarOpenButton = () => {
   );
 };
 
-/** Page-specific header labels â€” keyed by `type`. Falls back to "Comet AI". */
+/** Page-specific header labels — keyed by `type`. Falls back to "Comet AI". */
 const PAGE_LABELS = {
   "comet-rj": "Comet RJ",
   fuse: "Fuse",
@@ -50,7 +50,7 @@ const Header = ({ type, backRoute = "" }) => {
   return (
     <header
       id="header"
-      className={`h-[56px] w-full flex items-center justify-between gap-2 px-3 ${type === "fuse" ? "" : "border-b border-ink-100 dark:border-ink-900"}`}
+      className={`h-[56px] w-full flex items-center justify-between gap-2 px-3 ${type === "fuse" ? "" : "border-b border-ink-100 dark:border-void-900"}`}
     >
       <div className="flex items-center gap-1.5">
         {isStandalone ? (

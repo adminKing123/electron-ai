@@ -26,12 +26,12 @@ const ChartContainer = ({
     ${
       state === btnState
         ? "bg-brand-600 dark:bg-brand-500 text-white border-transparent"
-        : "bg-transparent text-ink-600 dark:text-ink-500 border-ink-150 dark:border-ink-750 hover:bg-ink-75 dark:hover:bg-ink-825"
+        : "bg-transparent text-ink-600 dark:text-ink-500 border-ink-150 dark:border-void-750 hover:bg-ink-75 dark:hover:bg-void-825"
     }`;
 
    return (
-     <div className="border border-ink-100 dark:border-ink-800 rounded-2xl overflow-hidden my-2">
-       <div className="px-4 py-2.5 bg-ink-75 dark:bg-ink-825 border-b border-ink-100 dark:border-ink-800 flex justify-between items-center">
+     <div className="border border-ink-100 dark:border-void-800 rounded-2xl overflow-hidden my-2">
+       <div className="px-4 py-2.5 bg-ink-75 dark:bg-void-825 border-b border-ink-100 dark:border-void-800 flex justify-between items-center">
          <div className="text-[12px] font-medium text-ink-500 dark:text-ink-550 tracking-wide truncate">
            {isValid ? chartData.meta_data.title : "Chart Data"}
          </div>

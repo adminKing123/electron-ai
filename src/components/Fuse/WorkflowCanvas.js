@@ -38,14 +38,14 @@ const NODE_DIM = {
 /** Space (flow units) added outside the tight bounding box when creating a block. */
 const BLOCK_PADDING = 30;
 
-// ─── WorkflowCanvas ───────────────────────────────────────────────────────────
+// --- WorkflowCanvas -----------------------------------------------------------
 /**
  * React Flow canvas for the Fuse workflow builder.
  *
- * Right-click on the canvas pane → context menu → "Draw Block":
+ * Right-click on the canvas pane ? context menu ? "Draw Block":
  *   1. Canvas enters draw mode (crosshair overlay)
  *   2. User drags a selection rectangle
- *   3. On release — if ≥1 workflow node was enclosed — a name dialog appears
+ *   3. On release � if =1 workflow node was enclosed � a name dialog appears
  *   4. Confirming creates a purely-visual fuse_block node behind those nodes
  *
  * Blocks are cosmetic overlays and do not affect workflow node data.
@@ -79,10 +79,10 @@ const WorkflowCanvas = ({
   const [rfInstance, setRfInstance] = useState(null);
   const containerRef = useRef(null);
 
-  // ── Context menu ─────────────────────────────────────────────────────────
+  // -- Context menu ---------------------------------------------------------
   const [contextMenu, setContextMenu] = useState(null); // { x, y } screen coords
 
-  // ── Draw mode ─────────────────────────────────────────────────────────────
+  // -- Draw mode -------------------------------------------------------------
   const [drawMode,     setDrawMode]     = useState(false);
   const [drawRect,     setDrawRect]     = useState(null);  // container-relative px
   const [pendingBlock, setPendingBlock] = useState(null);  // { childIds }
@@ -92,7 +92,7 @@ const WorkflowCanvas = ({
   const drawStateRef      = useRef({ active: false, startX: 0, startY: 0, endX: 0, endY: 0 });
   const blockNameInputRef = useRef(null);
 
-  // ── Global mouse listeners during draw mode ───────────────────────────────
+  // -- Global mouse listeners during draw mode -------------------------------
   useEffect(() => {
     if (!drawMode) return;
 
@@ -122,7 +122,7 @@ const WorkflowCanvas = ({
       const maxY = Math.max(ds.startY, ds.endY);
       if (maxX - minX < 10 || maxY - minY < 10) return;
 
-      // Convert container-relative corners → flow coordinates
+      // Convert container-relative corners ? flow coordinates
       const tl = rfInstance.screenToFlowPosition({ x: minX + containerRect.left, y: minY + containerRect.top });
       const br = rfInstance.screenToFlowPosition({ x: maxX + containerRect.left, y: maxY + containerRect.top });
       const dr = { x: tl.x, y: tl.y, w: br.x - tl.x, h: br.y - tl.y };
@@ -173,10 +173,10 @@ const WorkflowCanvas = ({
     if (pendingBlock) setTimeout(() => blockNameInputRef.current?.focus(), 50);
   }, [pendingBlock]);
 
-  // ── Handlers ─────────────────────────────────────────────────────────────
+  // -- Handlers -------------------------------------------------------------
 
   /**
-   * Node click: blocks do NOT open the side panel — all editing is in the
+   * Node click: blocks do NOT open the side panel � all editing is in the
    * block's own NodeToolbar.  Regular workflow nodes go through selectNode.
    */
   const handleNodeClick = useCallback(
@@ -256,7 +256,7 @@ const WorkflowCanvas = ({
     setBlockName("");
   }, []);
 
-  // ── Connection validation ─────────────────────────────────────────────────
+  // -- Connection validation -------------------------------------------------
   const isValidConnection = useCallback(
     (connection) => {
       const sourceNode = nodes.find((n) => n.id === connection.source);
@@ -284,7 +284,7 @@ const WorkflowCanvas = ({
     [nodes, edges]
   );
 
-  // ── Drag-and-drop ─────────────────────────────────────────────────────────
+  // -- Drag-and-drop ---------------------------------------------------------
   const handleDrop = useCallback(
     (e) => {
       e.preventDefault();
@@ -321,7 +321,7 @@ const WorkflowCanvas = ({
     e.dataTransfer.dropEffect = "copy";
   }, []);
 
-  // ── Selection rectangle visual style ────────────────────────────────────
+  // -- Selection rectangle visual style ------------------------------------
   const selectionStyle = drawRect
     ? {
         left:   Math.min(drawRect.startX, drawRect.endX),
@@ -427,7 +427,7 @@ const WorkflowCanvas = ({
     });
   }, [edges, readOnly, runningNodeIds, isDark, runCanvasActive, runNodeStates, nodeById]);
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // -- Render ----------------------------------------------------------------
   return (
     <div
       ref={containerRef}
@@ -506,14 +506,20 @@ const WorkflowCanvas = ({
             variant={BackgroundVariant.Dots}
             gap={20}
             size={1.5}
-            color={isDark ? "#1f1f1f" : "#e5e2f0"}
+            color={isDark ? "#3b4250" : "#e5e2f0"}
           />
           <Controls
             showInteractive={false}
-            className="!shadow-none !border !border-ink-150 dark:!border-ink-800 !rounded-xl !overflow-hidden !bg-white dark:!bg-ink-775"
+            className="!shadow-none !border !border-ink-150 dark:!border-void-800 !rounded-xl !overflow-hidden !bg-white dark:!bg-void-775"
             style={
               isDark
-                ? undefined
+                ? {
+                    "--xy-controls-button-color-default": "#9894ae",
+                    "--xy-controls-button-color-hover-default": "#ebe9f4",
+                    "--xy-controls-button-background-color-default": "#333a47",
+                    "--xy-controls-button-background-color-hover-default": "#3b4250",
+                    "--xy-controls-button-border-color-default": "#3b4250",
+                  }
                 : {
                     "--xy-controls-button-color-default": "#404040",
                     "--xy-controls-button-color-hover-default": "#020202",
@@ -526,7 +532,7 @@ const WorkflowCanvas = ({
         </ReactFlow>
       )}
 
-      {/* ── Context menu ──────────────────────────────────────────────── */}
+      {/* -- Context menu ------------------------------------------------ */}
       {!readOnly && contextMenu && (
         <CanvasContextMenu
           x={contextMenu.x}
@@ -536,7 +542,7 @@ const WorkflowCanvas = ({
         />
       )}
 
-      {/* ── Draw-mode overlay ─────────────────────────────────────────── */}
+      {/* -- Draw-mode overlay ------------------------------------------- */}
       {!readOnly && drawMode && (
         <div
           className="absolute inset-0 z-10 cursor-crosshair select-none"
@@ -553,16 +559,16 @@ const WorkflowCanvas = ({
           <div
             className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none
               px-3 py-1.5 rounded-full shadow
-              bg-white/90 dark:bg-ink-825/90
-              border border-ink-150 dark:border-ink-800
+              bg-white/90 dark:bg-void-825/90
+              border border-ink-150 dark:border-void-800
               text-[11px] font-medium text-ink-500 dark:text-ink-600 select-none"
           >
-            Drag to draw a block &nbsp;·&nbsp; <kbd className="font-mono">Esc</kbd> to cancel
+            Drag to draw a block &nbsp;�&nbsp; <kbd className="font-mono">Esc</kbd> to cancel
           </div>
         </div>
       )}
 
-      {/* ── Block name dialog ─────────────────────────────────────────── */}
+      {/* -- Block name dialog ------------------------------------------- */}
       {!readOnly && pendingBlock && (
         <div className="absolute inset-0 z-20 flex items-center justify-center">
           <div
@@ -571,8 +577,8 @@ const WorkflowCanvas = ({
           />
           <div
             className="relative z-10 w-[280px]
-              bg-white dark:bg-ink-825
-              border border-ink-150 dark:border-ink-800
+              bg-white dark:bg-void-825
+              border border-ink-150 dark:border-void-800
               rounded-2xl shadow-2xl p-5"
             onClick={(e) => e.stopPropagation()}
           >
@@ -591,12 +597,12 @@ const WorkflowCanvas = ({
                 if (e.key === "Enter")  handleConfirmBlock();
                 if (e.key === "Escape") handleCancelBlock();
               }}
-              placeholder="Block name…"
+              placeholder="Block name�"
               maxLength={48}
               className="w-full px-3 py-2 rounded-lg mb-3
                 text-[13px] font-medium
-                bg-ink-50 dark:bg-ink-825
-                border border-ink-150 dark:border-ink-750
+                bg-ink-50 dark:bg-void-825
+                border border-ink-150 dark:border-void-750
                 text-ink-975 dark:text-ink-150
                 placeholder:text-ink-450 dark:placeholder:text-ink-550
                 outline-none focus:border-brand-600 dark:focus:border-brand-400
@@ -609,8 +615,8 @@ const WorkflowCanvas = ({
                 className="flex-1 py-1.5 rounded-lg
                   text-[12px] font-medium select-none
                   text-ink-550 dark:text-ink-600
-                  border border-ink-150 dark:border-ink-800
-                  hover:bg-ink-50 dark:hover:bg-ink-825
+                  border border-ink-150 dark:border-void-800
+                  hover:bg-ink-50 dark:hover:bg-void-825
                   transition-colors"
               >
                 Cancel

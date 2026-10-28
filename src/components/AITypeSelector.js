@@ -52,8 +52,8 @@ function AITypeSelector() {
         <button
           id="ai-type-toggler"
           className="flex items-center gap-2 px-3 py-1.5 rounded-full
-            bg-ink-50 dark:bg-ink-725
-            hover:bg-ink-100 dark:hover:bg-ink-700
+            bg-ink-50 dark:bg-void-725
+            hover:bg-ink-100 dark:hover:bg-void-700
             text-ink-750 dark:text-ink-300
             text-[13px] font-medium
             transition-colors outline-none select-none"
@@ -69,8 +69,8 @@ function AITypeSelector() {
           align="end"
           sideOffset={8}
           className="p-1.5 rounded-2xl z-50
-            border border-ink-150 dark:border-ink-725
-            bg-white dark:bg-ink-800
+            border border-ink-150 dark:border-void-725
+            bg-white dark:bg-void-800
             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]
             min-w-[220px]"
         >
@@ -83,7 +83,7 @@ function AITypeSelector() {
                 onSelect={() => handleSelect(type)}
                 className="flex items-center gap-2 px-2.5 py-[7px] rounded-xl
                   text-ink-750 dark:text-ink-300
-                  hover:bg-ink-50 dark:hover:bg-ink-750
+                  hover:bg-ink-50 dark:hover:bg-void-750
                   outline-none cursor-pointer transition-colors"
               >
                 <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />

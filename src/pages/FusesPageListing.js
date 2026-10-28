@@ -18,7 +18,7 @@ import ROUTES from "../router/routes";
 const PAGE_SIZE = 20;
 
 const WorkflowsHeading = ({ creating, onCreate }) => (
-  <div className="pb-6 mb-6 border-b border-ink-100 dark:border-ink-800 flex items-end justify-between gap-4 flex-wrap">
+  <div className="pb-6 mb-6 border-b border-ink-100 dark:border-void-800 flex items-end justify-between gap-4 flex-wrap">
     <div>
       <h1 className="text-[24px] md:text-[28px] font-bold tracking-tight text-ink-975 dark:text-white leading-tight">
         Fuses
@@ -33,15 +33,15 @@ const WorkflowsHeading = ({ creating, onCreate }) => (
   </div>
 );
 
-/** Skeleton loader � card list on mobile, table on desktop. */
+/** Skeleton loader ? card list on mobile, table on desktop. */
 const WorkflowsSkeletonLoader = ({ count = 6 }) => (
-  <div className="rounded-2xl border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850 overflow-hidden">
+  <div className="rounded-2xl border border-ink-150 dark:border-void-800 bg-white dark:bg-void-850 overflow-hidden">
     {/* Mobile card skeletons */}
     <div className="md:hidden">
       {[...Array(count)].map((_, i) => (
         <div
           key={i}
-          className={`flex items-center gap-3 px-4 py-3.5 ${i !== count - 1 ? "border-b border-ink-100 dark:border-ink-800" : ""}`}
+          className={`flex items-center gap-3 px-4 py-3.5 ${i !== count - 1 ? "border-b border-ink-100 dark:border-void-800" : ""}`}
         >
           <div className="flex-1">
             <div className="skeleton h-3.5 w-40 rounded-md" />
@@ -59,7 +59,7 @@ const WorkflowsSkeletonLoader = ({ count = 6 }) => (
     <div className="hidden md:block overflow-x-auto">
       <table className="w-full min-w-[640px] border-collapse">
         <thead>
-          <tr className="border-b border-ink-100 dark:border-ink-800 bg-ink-25/60 dark:bg-ink-850">
+          <tr className="border-b border-ink-100 dark:border-void-800 bg-ink-25/60 dark:bg-void-850">
             {[
               ["Name", ""],
               ["Steps", "w-[200px]"],
@@ -78,7 +78,7 @@ const WorkflowsSkeletonLoader = ({ count = 6 }) => (
         </thead>
         <tbody>
           {[...Array(count)].map((_, i) => (
-            <tr key={i} className={i !== count - 1 ? "border-b border-ink-100 dark:border-ink-800" : ""}>
+            <tr key={i} className={i !== count - 1 ? "border-b border-ink-100 dark:border-void-800" : ""}>
               <td className="px-5 py-3.5">
                 <div className="skeleton h-3.5 w-44 rounded-md" />
               </td>

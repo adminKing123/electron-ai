@@ -17,7 +17,7 @@ const PaginationControls = ({
   onPageChange,
 }) => {
   return (
-    <div className="px-4 py-2.5 bg-ink-75 dark:bg-ink-825 border-t border-ink-100 dark:border-ink-800 flex flex-col sm:flex-row justify-between items-center gap-3">
+    <div className="px-4 py-2.5 bg-ink-75 dark:bg-void-825 border-t border-ink-100 dark:border-void-800 flex flex-col sm:flex-row justify-between items-center gap-3">
       <div className="text-[11px] text-ink-500 dark:text-ink-550 text-center sm:text-left">
         Showing {(currentPage - 1) * limit + 1} to{" "}
         {Math.min(currentPage * limit, total)} of {total} entries
@@ -27,7 +27,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-void-800 bg-white dark:bg-void-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-void-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="First page"
           aria-label="First page"
         >
@@ -37,7 +37,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-void-800 bg-white dark:bg-void-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-void-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="Previous page"
           aria-label="Previous page"
         >
@@ -51,7 +51,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-void-800 bg-white dark:bg-void-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-void-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="Next page"
           aria-label="Next page"
         >
@@ -61,7 +61,7 @@ const PaginationControls = ({
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage >= totalPages}
-          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-ink-800 hover:text-ink-975 dark:hover:text-white transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[16px] rounded-lg border border-ink-150 dark:border-void-800 bg-white dark:bg-void-825 text-ink-500 dark:text-ink-500 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink-75 dark:hover:bg-void-800 hover:text-ink-975 dark:hover:text-white transition-colors"
           title="Last page"
           aria-label="Last page"
         >

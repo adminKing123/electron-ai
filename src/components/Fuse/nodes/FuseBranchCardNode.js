@@ -32,7 +32,7 @@ const branchRunBorderClass = (runStatus) => {
     return "border-red-500/75 dark:border-red-400/70 ring-2 ring-red-500/30 dark:ring-red-400/25 fuse-canvas-node-error";
   }
   if (runStatus === "skipped") {
-    return "border-ink-300/80 dark:border-ink-600/70 opacity-90";
+    return "border-ink-300/80 dark:border-void-650/45 opacity-90";
   }
   if (runStatus === "running") {
     return "fuse-canvas-node-running";
@@ -41,7 +41,7 @@ const branchRunBorderClass = (runStatus) => {
 };
 
 /**
- * Shared branch UI â€” header (icon + title), output rows, left in / right outs.
+ * Shared branch UI — header (icon + title), output rows, left in / right outs.
  * @param {Array<{ id: string, label: string, dot?: keyof typeof DOT_CLASS }>} branches
  */
 const FuseBranchCardNode = ({
@@ -79,7 +79,7 @@ const FuseBranchCardNode = ({
         />
 
         <div
-          className="flex items-center gap-2.5 px-3 border-b border-ink-200 dark:border-ink-725 pointer-events-none"
+          className="flex items-center gap-2.5 px-3 border-b border-ink-200 dark:border-void-725 pointer-events-none"
           style={{ height: HEADER_H }}
         >
           <FuseNodeIcon
@@ -104,7 +104,7 @@ const FuseBranchCardNode = ({
               key={branch.id}
               className={[
                 "flex items-center gap-2 px-3 pointer-events-none",
-                !isLast ? "border-b border-ink-200 dark:border-ink-725" : "",
+                !isLast ? "border-b border-ink-200 dark:border-void-725" : "",
               ].join(" ")}
               style={{ height: ROW_H }}
             >

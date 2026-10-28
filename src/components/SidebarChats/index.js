@@ -25,7 +25,7 @@ const SidebarChatButton = ({ chat, ...props }) => {
         ${
           isActive
             ? "bg-brand-500/10 dark:bg-brand-400/15 !text-brand-700 dark:!text-brand-200"
-            : "hover:bg-ink-100 dark:hover:bg-ink-800"
+            : "hover:bg-ink-100 dark:hover:bg-void-800"
         }`
       }
       {...props}

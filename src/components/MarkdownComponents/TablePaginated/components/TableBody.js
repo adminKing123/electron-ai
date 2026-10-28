@@ -31,7 +31,7 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
   return (
     <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
       <table className="hidden sm:table w-full text-xs">
-        <thead className="bg-ink-25 dark:bg-ink-850 border-b border-ink-100 dark:border-ink-800">
+        <thead className="bg-ink-25 dark:bg-void-850 border-b border-ink-100 dark:border-void-800">
           <tr>
             {cols.map((col, idx) => {
               const sortable = isSortable(col._k);
@@ -40,7 +40,7 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
                 <th
                   key={idx}
                   className={`px-4 py-3 text-left font-semibold text-ink-725 dark:text-ink-200 whitespace-nowrap ${
-                    sortable ? "cursor-pointer select-none hover:bg-ink-50 dark:hover:bg-ink-800 transition-colors" : ""
+                    sortable ? "cursor-pointer select-none hover:bg-ink-50 dark:hover:bg-void-800 transition-colors" : ""
                   } ${
                     sortState ? "bg-brand-50 dark:bg-brand-900/20" : ""
                   }`}
@@ -58,7 +58,7 @@ const TableBody = ({ cols, data, sorts = [], onSortChange, sortableColumns = [] 
           {data.map((row, rowIdx) => (
             <tr
               key={rowIdx}
-              className="border-b border-ink-100 dark:border-ink-800 hover:bg-ink-25 dark:hover:bg-ink-825 transition-colors"
+              className="border-b border-ink-100 dark:border-void-800 hover:bg-ink-25 dark:hover:bg-void-825 transition-colors"
             >
               {cols.map((col, colIdx) => (
                 <td

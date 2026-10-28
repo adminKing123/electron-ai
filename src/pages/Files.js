@@ -9,7 +9,7 @@ import { BiExpandAlt } from "react-icons/bi";
 import ImageViewer from "../components/Common/ImageViewer";
 
 /**
- * Single file card — image thumbnails open in the fullscreen ImageViewer,
+ * Single file card � image thumbnails open in the fullscreen ImageViewer,
  * non-image files show an icon with name + size. Both support a download button.
  */
 const FilePreview = ({ file }) => {
@@ -35,16 +35,16 @@ const FilePreview = ({ file }) => {
     <>
       <div
         className="relative group cursor-pointer flex flex-col rounded-2xl overflow-hidden
-          border border-ink-150 dark:border-ink-800
-          bg-white dark:bg-ink-850
+          border border-ink-150 dark:border-void-800
+          bg-white dark:bg-void-850
           hover:border-brand-200 dark:hover:border-brand-900
           hover:shadow-[0_4px_20px_-8px_rgba(124,58,237,0.25)]
           transition-[border-color,box-shadow]"
       >
         {is_image && fileObj.download_url ? (
-          /* ── Image thumbnail ── */
+          /* -- Image thumbnail -- */
           <div
-            className="relative aspect-[4/3] bg-ink-50 dark:bg-ink-825 overflow-hidden"
+            className="relative aspect-[4/3] bg-ink-50 dark:bg-void-825 overflow-hidden"
             onClick={() => setViewerOpen(true)}
           >
             <img
@@ -59,16 +59,16 @@ const FilePreview = ({ file }) => {
             </div>
           </div>
         ) : (
-          /* ── Non-image file preview ── */
-          <div className="aspect-[4/3] flex items-center justify-center bg-ink-50 dark:bg-ink-825">
-            <span className="w-12 h-12 rounded-xl flex items-center justify-center bg-white dark:bg-ink-800 border border-ink-150 dark:border-ink-750">
+          /* -- Non-image file preview -- */
+          <div className="aspect-[4/3] flex items-center justify-center bg-ink-50 dark:bg-void-825">
+            <span className="w-12 h-12 rounded-xl flex items-center justify-center bg-white dark:bg-void-800 border border-ink-150 dark:border-void-750">
               <FileIcon className="text-[22px] text-ink-600 dark:text-ink-400" />
             </span>
           </div>
         )}
 
-        {/* ── Footer: name + size ── */}
-        <div className="px-3 py-2.5 border-t border-ink-100 dark:border-ink-800 min-w-0">
+        {/* -- Footer: name + size -- */}
+        <div className="px-3 py-2.5 border-t border-ink-100 dark:border-void-800 min-w-0">
           <p
             className="text-[12px] font-medium truncate text-ink-875 dark:text-ink-150"
             title={fileObj.original_name}
@@ -80,11 +80,11 @@ const FilePreview = ({ file }) => {
           </p>
         </div>
 
-        {/* Download button — always shown on hover */}
+        {/* Download button � always shown on hover */}
         {fileObj.download_url && (
           <button
             onClick={handleDownload}
-            className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 dark:bg-ink-825/90 backdrop-blur-sm border border-ink-150 dark:border-ink-750 text-ink-650 dark:text-ink-400 hover:text-brand-600 dark:hover:text-brand-400 opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+            className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-lg bg-white/90 dark:bg-void-825/90 backdrop-blur-sm border border-ink-150 dark:border-void-750 text-ink-650 dark:text-ink-400 hover:text-brand-600 dark:hover:text-brand-400 opacity-0 group-hover:opacity-100 transition-all shadow-sm"
             title="Download file"
           >
             <FiDownload className="w-[14px] h-[14px]" />
@@ -111,7 +111,7 @@ const FilePreview = ({ file }) => {
 const FilesListing = ({ files }) => {
   if (files.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center text-center py-14 px-6 rounded-2xl border border-dashed border-ink-200 dark:border-ink-750 bg-white/60 dark:bg-ink-850/60">
+      <div className="flex flex-col items-center justify-center text-center py-14 px-6 rounded-2xl border border-dashed border-ink-200 dark:border-void-750 bg-white/60 dark:bg-void-850/60">
         <span className="w-11 h-11 rounded-xl flex items-center justify-center bg-brand-500/10 text-brand-600 dark:text-brand-400 mb-3">
           <FiFolder className="w-5 h-5" />
         </span>
@@ -152,7 +152,7 @@ const FilesPage = () => {
         description="Documents and images shared in your chats"
         action={
           !files.loading && files.data.length > 0 ? (
-            <span className="px-2.5 py-1 rounded-full text-[11px] font-medium tabular-nums bg-ink-100 dark:bg-ink-800 text-ink-600 dark:text-ink-400 flex-shrink-0">
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-medium tabular-nums bg-ink-100 dark:bg-void-800 text-ink-600 dark:text-ink-400 flex-shrink-0">
               {files.data.length} {files.data.length === 1 ? "file" : "files"}
             </span>
           ) : null

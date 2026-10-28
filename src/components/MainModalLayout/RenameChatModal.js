@@ -57,8 +57,8 @@ const RenameChatModal = ({ data }) => {
         transition={{ duration: 0.15 }}
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm p-5 rounded-2xl
-          bg-white dark:bg-ink-825
-          border border-ink-100 dark:border-ink-800
+          bg-white dark:bg-void-825
+          border border-ink-100 dark:border-void-800
           shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]"
       >
         {/* Title */}
@@ -75,15 +75,15 @@ const RenameChatModal = ({ data }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Enter new nameâ€¦"
+          placeholder="Enter new name…"
           autoFocus
           disabled={isLoading}
           className="w-full px-3.5 py-2.5 mb-5 text-[13px] rounded-xl
-            bg-ink-50 dark:bg-ink-825
-            border border-ink-100 dark:border-ink-800
+            bg-ink-50 dark:bg-void-825
+            border border-ink-100 dark:border-void-800
             text-ink-975 dark:text-white
             placeholder:text-ink-450 dark:placeholder:text-ink-600
-            focus:outline-none focus:border-ink-300 dark:focus:border-ink-700
+            focus:outline-none focus:border-ink-300 dark:focus:border-void-700
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-colors"
         />
@@ -94,10 +94,10 @@ const RenameChatModal = ({ data }) => {
             onClick={close}
             disabled={isLoading}
             className="px-4 py-1.5 rounded-full text-[13px] font-medium
-              bg-ink-50 dark:bg-ink-800
+              bg-ink-50 dark:bg-void-800
               text-ink-750 dark:text-ink-300
-              hover:bg-ink-100 dark:hover:bg-ink-750
-              border border-ink-100 dark:border-ink-750
+              hover:bg-ink-100 dark:hover:bg-void-750
+              border border-ink-100 dark:border-void-750
               transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Cancel
@@ -111,7 +111,7 @@ const RenameChatModal = ({ data }) => {
               hover:bg-brand-700 dark:hover:bg-brand-400 transition-colors
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Renamingâ€¦" : "Rename"}
+            {isLoading ? "Renaming…" : "Rename"}
           </button>
         </div>
       </motion.div>

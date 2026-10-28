@@ -8,9 +8,9 @@ export const FUSE_EDGE_THEME = {
     halo: "#f9f9fc",
   },
   dark: {
-    stroke: "#9894ae",
-    strokeActive: "#a78bfa",
-    halo: "#101010",
+    stroke: "#5a6272",
+    strokeActive: "#38bdf8",
+    halo: "#151a23",
   },
 };
 

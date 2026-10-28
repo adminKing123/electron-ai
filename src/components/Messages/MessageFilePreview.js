@@ -23,7 +23,7 @@ const MessageFilePreview = ({ fileObj }) => {
   return (
     <div className="flex-shrink-0 relative group cursor-pointer">
       {is_image && fileObj.download_url ? (
-        <div className="w-24 h-24 rounded-2xl border bg-white border-ink-150 dark:bg-ink-825 dark:border-ink-775 overflow-hidden">
+        <div className="w-24 h-24 rounded-2xl border bg-white border-ink-150 dark:bg-void-825 dark:border-void-775 overflow-hidden">
           <img
             src={ENDPOINTS.GET_DOWNLOAD_URI(fileObj.download_url)}
             className="w-full h-full object-cover"
@@ -31,7 +31,7 @@ const MessageFilePreview = ({ fileObj }) => {
           />
         </div>
       ) : (
-        <div className="relative w-24 h-24 rounded-2xl border flex flex-col items-center justify-center gap-1 p-1 bg-white border-ink-150 dark:bg-ink-825 dark:border-ink-775 overflow-hidden">
+        <div className="relative w-24 h-24 rounded-2xl border flex flex-col items-center justify-center gap-1 p-1 bg-white border-ink-150 dark:bg-void-825 dark:border-void-775 overflow-hidden">
           <FileIcon className="text-3xl text-black/70 dark:text-white/70" />
           <p
             className="text-[11px] truncate w-full text-center px-1 text-ink-950 dark:text-white"
@@ -47,7 +47,7 @@ const MessageFilePreview = ({ fileObj }) => {
       {fileObj.download_url && (
         <button
           onClick={handleDownload}
-          className="absolute top-1.5 right-1.5 rounded-lg p-1 hover:bg-ink-100 dark:hover:bg-ink-725 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-1.5 right-1.5 rounded-lg p-1 hover:bg-ink-100 dark:hover:bg-void-725 opacity-0 group-hover:opacity-100 transition-opacity"
           title="Download file"
         >
           <FiDownload className="text-ink-950 dark:text-white text-base" />

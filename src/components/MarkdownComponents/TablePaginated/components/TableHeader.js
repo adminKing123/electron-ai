@@ -31,11 +31,11 @@ const SearchInput = ({ value, onChange }) => {
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="Search..."
         className="block w-full pl-7 pr-7 py-1.5 text-[12px]
-                   border border-ink-150 dark:border-ink-800 rounded-lg
-                   bg-white dark:bg-ink-825
+                   border border-ink-150 dark:border-void-800 rounded-lg
+                   bg-white dark:bg-void-825
                    text-ink-750 dark:text-ink-300
                    placeholder:text-ink-450 dark:placeholder:text-ink-600
-                   focus:outline-none focus:ring-1 focus:ring-ink-300 dark:focus:ring-ink-700
+                   focus:outline-none focus:ring-1 focus:ring-ink-300 dark:focus:ring-void-650
                    transition-colors"
       />
       {inputValue && (
@@ -63,8 +63,8 @@ const RowsPerPageSelector = ({ limit, onChange }) => {
         value={limit}
         onChange={(e) => onChange(Number(e.target.value))}
         className="px-2 py-1.5 text-[12px]
-                   border border-ink-150 dark:border-ink-800 rounded-lg
-                   bg-white dark:bg-ink-825
+                   border border-ink-150 dark:border-void-800 rounded-lg
+                   bg-white dark:bg-void-825
                    text-ink-750 dark:text-ink-300
                    cursor-pointer focus:outline-none transition-colors"
       >
@@ -86,7 +86,7 @@ const TableHeader = ({
   hasSearch,
 }) => {
   return (
-    <div className="px-4 py-2 bg-ink-25 dark:bg-ink-850 border-b border-ink-100 dark:border-ink-800">
+    <div className="px-4 py-2 bg-ink-25 dark:bg-void-850 border-b border-ink-100 dark:border-void-800">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
         {hasSearch && <SearchInput value={search} onChange={onSearchChange} />}
 

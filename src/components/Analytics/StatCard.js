@@ -2,25 +2,25 @@
  * Generic stat card for the analytics dashboard.
  *
  * Props:
- *   icon    â€“ react-icons component to show beside the label
- *   label   â€“ Short descriptive label
- *   value   â€“ Primary value (string or number)
- *   sub     â€“ Optional secondary line beneath the value
- *   accent  â€“ When true, renders golden cost-style styling
- *   loading â€“ Shows an animated skeleton instead of content
+ *   icon    – react-icons component to show beside the label
+ *   label   – Short descriptive label
+ *   value   – Primary value (string or number)
+ *   sub     – Optional secondary line beneath the value
+ *   accent  – When true, renders golden cost-style styling
+ *   loading – Shows an animated skeleton instead of content
  */
 
 const CONTAINER =
-  "flex flex-col gap-3 p-4 md:p-5 rounded-2xl border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850";
+  "flex flex-col gap-3 p-4 md:p-5 rounded-2xl border border-ink-150 dark:border-void-800 bg-white dark:bg-void-850";
 
 const StatCardSkeleton = () => (
   <div className="animate-pulse flex flex-col gap-3">
     <div className="flex items-center justify-between">
-      <div className="h-3 w-20 rounded-full bg-ink-100 dark:bg-ink-800" />
-      <div className="w-8 h-8 rounded-lg bg-ink-100 dark:bg-ink-800" />
+      <div className="h-3 w-20 rounded-full bg-ink-100 dark:bg-void-800" />
+      <div className="w-8 h-8 rounded-lg bg-ink-100 dark:bg-void-800" />
     </div>
-    <div className="h-[26px] w-24 rounded-lg bg-ink-100 dark:bg-ink-800" />
-    <div className="h-3 w-28 rounded-full bg-ink-100 dark:bg-ink-800" />
+    <div className="h-[26px] w-24 rounded-lg bg-ink-100 dark:bg-void-800" />
+    <div className="h-3 w-28 rounded-full bg-ink-100 dark:bg-void-800" />
   </div>
 );
 

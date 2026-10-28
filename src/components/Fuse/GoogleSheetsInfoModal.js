@@ -14,9 +14,9 @@ import {
 } from "react-icons/hi2";
 
 const formatDateTime = (value) => {
-  if (!value) return "â€”";
+  if (!value) return "—";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "â€”";
+  if (Number.isNaN(date.getTime())) return "—";
   return date.toLocaleString(undefined, {
     dateStyle: "medium",
     timeStyle: "short",
@@ -131,7 +131,7 @@ const GoogleSheetsInfoModal = ({ isOpen, onClose }) => {
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-ink-100 dark:divide-ink-800">
+          <div className="divide-y divide-ink-100 dark:divide-void-800">
             <InfoRow
               icon={<HiOutlineIdentification className="w-4 h-4" />}
               label="Integration ID"
@@ -187,10 +187,10 @@ const GoogleSheetsInfoModal = ({ isOpen, onClose }) => {
         <button
           onClick={onClose}
           className="px-4 py-1.5 rounded-full text-[13px] font-medium
-            bg-ink-50 dark:bg-ink-800
+            bg-ink-50 dark:bg-void-800
             text-ink-750 dark:text-ink-300
-            hover:bg-ink-100 dark:hover:bg-ink-750
-            border border-ink-100 dark:border-ink-750
+            hover:bg-ink-100 dark:hover:bg-void-750
+            border border-ink-100 dark:border-void-750
             transition-colors"
         >
           Close

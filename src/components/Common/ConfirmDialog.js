@@ -2,21 +2,21 @@ import React, { useEffect, useRef } from "react";
 import { TbAlertTriangle, TbX } from "react-icons/tb";
 
 /**
- * ConfirmDialog â€” a reusable, accessible confirmation modal.
+ * ConfirmDialog — a reusable, accessible confirmation modal.
  *
  * Renders a centered overlay with a title, message, and two action buttons.
  * Closes on Escape key or backdrop click.
  *
  * @param {object}   props
- * @param {boolean}  props.open              â€” controls visibility
- * @param {string}   props.title             â€” modal heading
- * @param {string}   [props.message]         â€” body text (supports JSX)
- * @param {string}   [props.confirmLabel]    â€” confirm button label (default: "Confirm")
- * @param {string}   [props.cancelLabel]     â€” cancel button label  (default: "Cancel")
- * @param {"danger"|"primary"} [props.variant] â€” button color theme (default: "danger")
- * @param {boolean}  [props.loading]         â€” disables buttons and shows spinner on confirm
- * @param {Function} props.onConfirm         â€” called when the confirm button is clicked
- * @param {Function} props.onCancel          â€” called when cancel / backdrop / Escape is used
+ * @param {boolean}  props.open              — controls visibility
+ * @param {string}   props.title             — modal heading
+ * @param {string}   [props.message]         — body text (supports JSX)
+ * @param {string}   [props.confirmLabel]    — confirm button label (default: "Confirm")
+ * @param {string}   [props.cancelLabel]     — cancel button label  (default: "Cancel")
+ * @param {"danger"|"primary"} [props.variant] — button color theme (default: "danger")
+ * @param {boolean}  [props.loading]         — disables buttons and shows spinner on confirm
+ * @param {Function} props.onConfirm         — called when the confirm button is clicked
+ * @param {Function} props.onCancel          — called when cancel / backdrop / Escape is used
  */
 const ConfirmDialog = ({
   open,
@@ -63,8 +63,8 @@ const ConfirmDialog = ({
     >
       {/* Panel */}
       <div className="relative w-full max-w-[400px] rounded-2xl shadow-2xl
-        bg-white dark:bg-ink-825
-        border border-ink-100 dark:border-ink-800
+        bg-white dark:bg-void-825
+        border border-ink-100 dark:border-void-800
         flex flex-col">
 
         {/* Close button */}
@@ -76,7 +76,7 @@ const ConfirmDialog = ({
           className="absolute top-3.5 right-3.5 w-7 h-7 flex items-center justify-center rounded-lg
             text-ink-400 dark:text-ink-550
             hover:text-ink-750 dark:hover:text-ink-300
-            hover:bg-ink-75 dark:hover:bg-ink-825
+            hover:bg-ink-75 dark:hover:bg-void-825
             transition-colors disabled:opacity-40"
         >
           <TbX className="w-[15px] h-[15px]" />
@@ -116,8 +116,8 @@ const ConfirmDialog = ({
             disabled={loading}
             className="px-4 py-2 rounded-lg text-[13px] font-medium
               text-ink-700 dark:text-ink-400
-              bg-ink-50 dark:bg-ink-825
-              hover:bg-ink-100 dark:hover:bg-ink-775
+              bg-ink-50 dark:bg-void-825
+              hover:bg-ink-100 dark:hover:bg-void-775
               disabled:opacity-40 transition-colors"
           >
             {cancelLabel}

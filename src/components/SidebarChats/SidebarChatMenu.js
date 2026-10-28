@@ -54,13 +54,13 @@ const SidebarChatMenu = ({ chat }) => {
           side="bottom"
           align="start"
           className="min-w-[150px] p-1 rounded-xl z-50
-            bg-white dark:bg-ink-825
-            border border-ink-100 dark:border-ink-775
+            bg-white dark:bg-void-825
+            border border-ink-100 dark:border-void-775
             shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
         >
           <DropdownMenuButton onClick={handleClick} icon={PiShareBold} label="Share" />
           <DropdownMenuButton onClick={handleRename} icon={FiEdit2} label="Rename" />
-          <DropdownMenu.Separator className="h-px my-1 bg-ink-100 dark:bg-ink-775" />
+          <DropdownMenu.Separator className="h-px my-1 bg-ink-100 dark:bg-void-775" />
           <DropdownMenuButton
             onClick={handleDelete}
             icon={AiOutlineDelete}

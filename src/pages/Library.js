@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import AnalyticsSummaryBar from "../components/Analytics/AnalyticsSummaryBar";
 import SectionHeader from "../components/Common/SectionHeader";
 
-/** App shortcuts — always visible, no toggle required. */
+/** App shortcuts � always visible, no toggle required. */
 const APPS = [
   {
     Icon: TbBolt,
@@ -29,8 +29,8 @@ const AppCard = ({ app }) => (
   <Link
     to={app.to}
     className="group flex items-center gap-3.5 p-4 rounded-2xl
-      border border-ink-150 dark:border-ink-800
-      bg-white dark:bg-ink-850
+      border border-ink-150 dark:border-void-800
+      bg-white dark:bg-void-850
       hover:border-brand-200 dark:hover:border-brand-900
       hover:shadow-[0_4px_20px_-8px_rgba(124,58,237,0.25)]
       transition-[border-color,box-shadow]"
@@ -61,8 +61,8 @@ const LibraryPage = () => (
   <div className="h-full overflow-y-auto">
     <div className="max-w-[1080px] px-5 md:px-8 mx-auto pb-16">
 
-      {/* ── Page header ── */}
-      <div className="pt-8 md:pt-10 pb-8 mb-8 border-b border-ink-100 dark:border-ink-800">
+      {/* -- Page header -- */}
+      <div className="pt-8 md:pt-10 pb-8 mb-8 border-b border-ink-100 dark:border-void-800">
         <h1 className="text-[26px] md:text-[30px] font-bold tracking-tight text-ink-975 dark:text-white">
           Library
         </h1>
@@ -72,7 +72,7 @@ const LibraryPage = () => (
       </div>
 
       <div className="flex flex-col gap-10">
-        {/* ── Apps ── */}
+        {/* -- Apps -- */}
         <section>
           <SectionHeader title="Apps" description="Jump into Comet AI tools" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -82,12 +82,12 @@ const LibraryPage = () => (
           </div>
         </section>
 
-        {/* ── Usage summary ── */}
+        {/* -- Usage summary -- */}
         <section>
           <AnalyticsSummaryBar />
         </section>
 
-        {/* ── Files ── */}
+        {/* -- Files -- */}
         <section>
           <FilesPage />
         </section>

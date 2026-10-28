@@ -47,7 +47,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
 
   if (!currentTrack) {
     return (
-      <main className="h-screen flex flex-col overflow-hidden bg-ink-25 dark:bg-ink-850">
+      <main className="h-screen flex flex-col overflow-hidden bg-ink-25 dark:bg-void-850">
         <Header type="comet-rj" />
         <div className="flex-1 flex flex-col items-center justify-center gap-3">
           <div className="flex items-center gap-1.5">
@@ -76,14 +76,14 @@ export default function PlayingState({ status, currentTrack, onStop }) {
     ? "Comet is speaking"
     : isSongPlaying
     ? "Now playing"
-    : "Bufferingâ€¦";
+    : "Buffering…";
 
   const artistLine = isSongPlaying
-    ? currentTrack.metadata.artists.map((a) => a.name).join("  Â·  ")
+    ? currentTrack.metadata.artists.map((a) => a.name).join("  ·  ")
     : null;
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-ink-25 dark:bg-ink-850">
+    <main className="h-screen flex flex-col overflow-hidden bg-ink-25 dark:bg-void-850">
       <Header type="comet-rj" />
 
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-5 pb-4">
@@ -95,7 +95,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
               Live
             </span>
           </div>
-          <span className="text-[11px] text-ink-450 dark:text-ink-600">Â·</span>
+          <span className="text-[11px] text-ink-450 dark:text-ink-600">·</span>
           <span className="text-[11px] text-ink-500 dark:text-ink-550 tracking-wide">
             {statusLabel}
           </span>
@@ -117,7 +117,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
           ) : (
             <div
               style={{ width: ALBUM_SIZE, height: ALBUM_SIZE }}
-              className="rounded-full bg-white dark:bg-ink-850 border border-ink-150 dark:border-ink-875 shadow-xl flex items-center justify-center relative z-10"
+              className="rounded-full bg-white dark:bg-void-850 border border-ink-150 dark:border-void-875 shadow-xl flex items-center justify-center relative z-10"
             >
               <FaRadio className="text-4xl text-ink-450 dark:text-ink-600" />
             </div>
@@ -135,7 +135,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
                 {artistLine}
               </p>
               <p className="text-xs text-ink-400 dark:text-ink-600 mt-0.5">
-                {currentTrack.metadata.album.title}&ensp;Â·&ensp;{currentTrack.metadata.album.year}
+                {currentTrack.metadata.album.title}&ensp;·&ensp;{currentTrack.metadata.album.year}
               </p>
             </>
           ) : (
@@ -148,9 +148,9 @@ export default function PlayingState({ status, currentTrack, onStop }) {
         <button
           onClick={onStop}
           aria-label="Stop radio"
-          className="flex items-center gap-2 px-5 py-2 rounded-full border border-ink-200 dark:border-ink-800
+          className="flex items-center gap-2 px-5 py-2 rounded-full border border-ink-200 dark:border-void-800
             text-xs font-medium text-ink-950 dark:text-white
-            hover:bg-ink-50 dark:hover:bg-ink-850 transition-colors"
+            hover:bg-ink-50 dark:hover:bg-void-850 transition-colors"
         >
           <IoStop className="text-sm" />
           Stop

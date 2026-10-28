@@ -59,7 +59,7 @@ const TablePaginatedView = ({ config, message_id }) => {
   };
 
   return (
-    <div className="border border-ink-100 dark:border-ink-800 rounded-2xl overflow-hidden my-2">
+    <div className="border border-ink-100 dark:border-void-800 rounded-2xl overflow-hidden my-2">
       <CollapsibleHeader
         tableName={config?.table_name}
         totalEntries={loading || !isExpanded ? null : pagination.total}

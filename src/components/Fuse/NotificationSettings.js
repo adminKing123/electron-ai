@@ -51,7 +51,7 @@ const SubscribedButton = ({ onDisable }) => (
       self-start flex items-center gap-1.5
       px-3 py-1.5 rounded-lg
       text-[12px] font-medium
-      border border-ink-200 dark:border-ink-775
+      border border-ink-200 dark:border-void-775
       text-[#e05c5c] dark:text-[#c26060]
       hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
       hover:border-[#fca5a5] dark:hover:border-[#7f1d1d]
@@ -72,10 +72,10 @@ const EnableNotificationButton = ({ requesting, onEnable }) => (
       self-start flex items-center gap-1.5
       px-3 py-1.5 rounded-lg
       text-[12px] font-medium
-      border border-ink-200 dark:border-ink-775
+      border border-ink-200 dark:border-void-775
       text-ink-700 dark:text-ink-450
-      hover:bg-ink-50 dark:hover:bg-ink-825
-      hover:border-ink-300 dark:hover:border-ink-725
+      hover:bg-ink-50 dark:hover:bg-void-825
+      hover:border-ink-300 dark:hover:border-void-725
       disabled:opacity-50 disabled:cursor-not-allowed
       transition-colors
     "
@@ -86,7 +86,7 @@ const EnableNotificationButton = ({ requesting, onEnable }) => (
       <TbBell className="w-[13px] h-[13px]" />
     )}
 
-    {requesting ? "Requestingâ€¦" : "Allow notifications"}
+    {requesting ? "Requesting…" : "Allow notifications"}
   </button>
 );
 
@@ -119,8 +119,8 @@ const NotificationSettings = ({
       className="
         flex flex-col gap-2.5
         p-3 rounded-lg
-        border border-ink-200 dark:border-ink-775
-        bg-white dark:bg-ink-850
+        border border-ink-200 dark:border-void-775
+        bg-white dark:bg-void-850
       "
     >
       <NotificationHeader

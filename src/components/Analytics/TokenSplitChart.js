@@ -10,10 +10,10 @@ import useIsDark from "../../hooks/useIsDark";
 const TokenSplitChart = ({ inputTokens = 0, outputTokens = 0 }) => {
   const isDark = useIsDark();
 
-  const tooltipBg = isDark ? "#161616" : "#ffffff";
-  const tooltipBorder = isDark ? "#2e2e2e" : "#e5e2f0";
-  const tooltipText = isDark ? "#e5e2f0" : "#2e2e2e";
-  const legendColor = isDark ? "#8681a0" : "#635e7d";
+  const tooltipBg = isDark ? "#242a35" : "#ffffff";
+  const tooltipBorder = isDark ? "#3b4250" : "#e5e2f0";
+  const tooltipText = isDark ? "#e2e8f0" : "#2e2e2e";
+  const legendColor = isDark ? "#94a3b8" : "#635e7d";
 
   const total = inputTokens + outputTokens;
 
@@ -30,9 +30,15 @@ const TokenSplitChart = ({ inputTokens = 0, outputTokens = 0 }) => {
         // If there's no data yet, render a muted placeholder slice.
         data: total > 0 ? [inputTokens, outputTokens] : [1, 0],
         backgroundColor: total > 0
-          ? ["rgba(139,92,246,0.75)", "rgba(16,185,129,0.75)"]
-          : [isDark ? "#1f1f1f" : "#ebe9f4", "transparent"],
-        borderColor: total > 0 ? ["#8b5cf6", "#10b981"] : ["transparent", "transparent"],
+          ? isDark
+            ? ["rgba(56,189,248,0.75)", "rgba(16,185,129,0.75)"]
+            : ["rgba(139,92,246,0.75)", "rgba(16,185,129,0.75)"]
+          : [isDark ? "#2c323e" : "#ebe9f4", "transparent"],
+        borderColor: total > 0
+          ? isDark
+            ? ["#38bdf8", "#10b981"]
+            : ["#8b5cf6", "#10b981"]
+          : ["transparent", "transparent"],
         borderWidth: total > 0 ? 1.5 : 0,
         hoverOffset: 4,
       },

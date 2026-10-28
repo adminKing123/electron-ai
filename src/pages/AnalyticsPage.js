@@ -26,7 +26,7 @@ const METRICS = [
 const SegmentGroup = ({ children, className = "" }) => (
   <div
     className={`inline-flex items-center gap-0.5 p-0.5 rounded-xl
-      bg-ink-100 dark:bg-ink-875 border border-ink-150 dark:border-ink-800 ${className}`}
+      bg-ink-100 dark:bg-void-875 border border-ink-150 dark:border-void-800 ${className}`}
   >
     {children}
   </div>
@@ -43,7 +43,7 @@ const PillButton = ({ label, active, onClick, style, size = "md" }) => (
       size === "sm" ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-[12px]"
     } ${
       active
-        ? "bg-white dark:bg-ink-725 text-ink-975 dark:text-white shadow-sm"
+        ? "bg-white dark:bg-void-725 text-ink-975 dark:text-white shadow-sm"
         : "text-ink-500 dark:text-ink-500 hover:text-ink-875 dark:hover:text-ink-150"
     }`}
   >
@@ -55,8 +55,8 @@ const PillButton = ({ label, active, onClick, style, size = "md" }) => (
  * Reusable section card wrapper used to group charts.
  */
 const ChartCard = ({ title, subtitle, action, children, loading }) => (
-  <div className="h-full flex flex-col border border-ink-150 dark:border-ink-800 bg-white dark:bg-ink-850 rounded-2xl">
-    <div className="flex items-center justify-between gap-3 flex-wrap px-5 pt-4 pb-3.5 border-b border-ink-100 dark:border-ink-800">
+  <div className="h-full flex flex-col border border-ink-150 dark:border-void-800 bg-white dark:bg-void-850 rounded-2xl">
+    <div className="flex items-center justify-between gap-3 flex-wrap px-5 pt-4 pb-3.5 border-b border-ink-100 dark:border-void-800">
       <div className="min-w-0">
         <h2 className="text-[14px] font-semibold text-ink-975 dark:text-white tracking-tight">
           {title}
@@ -69,7 +69,7 @@ const ChartCard = ({ title, subtitle, action, children, loading }) => (
     </div>
     <div className="flex-1 p-5">
       {loading ? (
-        <div className="h-[220px] rounded-xl bg-ink-50 dark:bg-ink-825 animate-pulse" />
+        <div className="h-[220px] rounded-xl bg-ink-50 dark:bg-void-825 animate-pulse" />
       ) : (
         children
       )}
@@ -150,8 +150,8 @@ const AnalyticsPage = () => {
     <div className="h-full overflow-y-auto">
       <div className="max-w-[1080px] px-5 md:px-8 mx-auto pb-16">
 
-        {/* ── Page header ── */}
-        <div className="pt-8 md:pt-10 pb-8 mb-6 border-b border-ink-100 dark:border-ink-800 flex items-end justify-between gap-4 flex-wrap">
+        {/* -- Page header -- */}
+        <div className="pt-8 md:pt-10 pb-8 mb-6 border-b border-ink-100 dark:border-void-800 flex items-end justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-[26px] md:text-[30px] font-bold tracking-tight text-ink-975 dark:text-white">
               Analytics
@@ -164,9 +164,9 @@ const AnalyticsPage = () => {
             onClick={load}
             disabled={loading}
             className="flex items-center gap-2 h-9 px-3.5 rounded-xl text-[13px] font-medium
-              border border-ink-150 dark:border-ink-800
-              bg-white dark:bg-ink-850 text-ink-750 dark:text-ink-200
-              hover:bg-ink-50 dark:hover:bg-ink-825
+              border border-ink-150 dark:border-void-800
+              bg-white dark:bg-void-850 text-ink-750 dark:text-ink-200
+              hover:bg-ink-50 dark:hover:bg-void-825
               transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <LuRefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
@@ -183,7 +183,7 @@ const AnalyticsPage = () => {
           </div>
         )}
 
-        {/* ── Filter bar ── */}
+        {/* -- Filter bar -- */}
         <div className="mb-5 flex items-center justify-between gap-3 flex-wrap">
           {/* Date range */}
           <SegmentGroup className="flex-wrap">
@@ -197,17 +197,17 @@ const AnalyticsPage = () => {
             ))}
           </SegmentGroup>
 
-          {/* Model filter dropdown — only shown when at least one model has been used */}
+          {/* Model filter dropdown � only shown when at least one model has been used */}
           {usedModels.length > 0 && (
             <label className="flex items-center gap-2">
               <span className="text-[12px] font-medium text-ink-500 dark:text-ink-500">Model</span>
               <select
                 value={selectedModel ?? ""}
                 onChange={(e) => setSelectedModel(e.target.value || null)}
-                className="h-9 text-[13px] font-medium rounded-xl border border-ink-150 dark:border-ink-800
-                  bg-white dark:bg-ink-850 text-ink-875 dark:text-ink-150
+                className="h-9 text-[13px] font-medium rounded-xl border border-ink-150 dark:border-void-800
+                  bg-white dark:bg-void-850 text-ink-875 dark:text-ink-150
                   pl-3.5 pr-9 min-w-[160px] appearance-none cursor-pointer
-                  hover:border-ink-200 dark:hover:border-ink-750
+                  hover:border-ink-200 dark:hover:border-void-750
                   focus:outline-none focus:border-brand-300 dark:focus:border-brand-500/50
                   focus:ring-4 focus:ring-brand-500/10
                   transition-colors"
@@ -226,7 +226,7 @@ const AnalyticsPage = () => {
           )}
         </div>
 
-        {/* ── Summary stat cards ── */}
+        {/* -- Summary stat cards -- */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <StatCard
             icon={LuMessageSquare}
@@ -259,7 +259,7 @@ const AnalyticsPage = () => {
           />
         </div>
 
-        {/* ── Daily usage + token split ── */}
+        {/* -- Daily usage + token split -- */}
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-5 gap-4">
           <div className="lg:col-span-3">
             <ChartCard
@@ -282,7 +282,7 @@ const AnalyticsPage = () => {
           </div>
         </div>
 
-        {/* ── Model breakdown ── */}
+        {/* -- Model breakdown -- */}
         <div className="mt-4">
           <ChartCard
             title="Usage by model"

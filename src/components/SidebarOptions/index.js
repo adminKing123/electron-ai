@@ -8,7 +8,7 @@ import useMessageStore from "../../store/useMessagesStore";
 
 /* Shared item style used by every option row */
 const itemBase =
-  "flex items-center gap-2.5 w-full rounded-lg px-3 py-[7px] text-[13px] font-medium text-ink-750 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors duration-100 outline-none";
+  "flex items-center gap-2.5 w-full rounded-lg px-3 py-[7px] text-[13px] font-medium text-ink-750 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-void-800 transition-colors duration-100 outline-none";
 
 const SidebarNavLink = ({ icon: Icon, label, showActiveState, ...props }) => (
   <NavLink

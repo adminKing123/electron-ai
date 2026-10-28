@@ -22,7 +22,7 @@ const CHECK_STATES = {
 };
 
 const messages = [
-  "Language is more than wordsâ€”it's intent.",
+  "Language is more than words—it's intent.",
   "Every question carries context beyond the surface.",
   "Patterns emerge when information connects.",
   "Understanding improves when assumptions are minimized.",
@@ -83,7 +83,7 @@ const LoadingStateUI = ({ checks }) => {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex items-center justify-center flex-col">
+    <div className="bg-white dark:bg-void-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex items-center justify-center flex-col">
       <TbGalaxy className="text-ink-975 dark:text-white w-[72px] h-[72px] animate-spin [animation-duration:5s] mb-8" />
       <AnimatePresence mode="wait">
         <motion.p
@@ -138,7 +138,7 @@ const LoadingStateUI = ({ checks }) => {
 
 const ErrorStateUI = ({ checks }) => {
   return (
-    <div className="bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex items-center justify-center flex-col">
+    <div className="bg-white dark:bg-void-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex items-center justify-center flex-col">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -156,12 +156,12 @@ const ErrorStateUI = ({ checks }) => {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="text-red-600 dark:text-red-400 font-semibold text-center italic px-4 text-lg"
         >
-          Server said â€œnah bro, not today.â€
+          Server said “nah bro, not today.”
         </motion.p>
       </AnimatePresence>
 
       <p className="opacity-60 text-ink-975 dark:text-white text-sm text-center px-4 mt-6 max-w-md">
-        We tried reaching the backend server but it didnâ€™t respond. This could
+        We tried reaching the backend server but it didn’t respond. This could
         be a network issue, server downtime, or configuration mismatch.
       </p>
       <div className="mt-6 px-4">

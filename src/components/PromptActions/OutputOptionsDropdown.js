@@ -6,8 +6,8 @@ import { useOutputOptionsStore } from "../../store/usePromptStores";
 
 /**
  * Dropdown button that exposes output-format toggles:
- * - HTML Preview  â€“ AI produces a self-contained HTML file rendered in-app
- * - Chart View    â€“ AI produces Chart.js-compatible JSON rendered as a chart
+ * - HTML Preview  – AI produces a self-contained HTML file rendered in-app
+ * - Chart View    – AI produces Chart.js-compatible JSON rendered as a chart
  *
  * Both options are independent toggles backed by `useOutputOptionsStore`.
  */
@@ -44,14 +44,14 @@ const OutputOptionsDropdown = () => {
         <button
           title="Output options"
           className="relative flex items-center gap-1.5 px-2 py-1.5 sm:px-3 rounded-full
-            bg-ink-50 dark:bg-ink-725
-            hover:bg-ink-100 dark:hover:bg-ink-700
+            bg-ink-50 dark:bg-void-725
+            hover:bg-ink-100 dark:hover:bg-void-700
             text-[13px] font-medium text-ink-950 dark:text-white
             transition-colors duration-150 outline-none"
         >
           <MdOutlineAutoAwesome className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
           <span className="hidden sm:inline">Output</span>
-          {/* Active count badge â€” number on sm+, dot on xs */}
+          {/* Active count badge — number on sm+, dot on xs */}
           {hasActiveOption && (
             <>
               <span className="sm:hidden w-2 h-2 rounded-full bg-brand-600 dark:bg-brand-500" />
@@ -70,8 +70,8 @@ const OutputOptionsDropdown = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className="p-1.5 min-w-[230px] rounded-2xl
-            border border-ink-150 dark:border-ink-725
-            bg-white dark:bg-ink-800
+            border border-ink-150 dark:border-void-725
+            bg-white dark:bg-void-800
             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]
             z-10"
           sideOffset={8}
@@ -87,7 +87,7 @@ const OutputOptionsDropdown = () => {
                 }}
                 className="flex items-center gap-2 px-2.5 py-[7px] rounded-xl outline-none cursor-pointer
                   text-ink-750 dark:text-ink-300
-                  hover:bg-ink-50 dark:hover:bg-ink-750
+                  hover:bg-ink-50 dark:hover:bg-void-750
                   transition-colors duration-100"
               >
                 <Icon className="w-[14px] h-[14px] flex-shrink-0 opacity-60" />

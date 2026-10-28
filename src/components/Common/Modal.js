@@ -23,8 +23,8 @@ const Modal = ({ isOpen, onClose, title, children, size = "sm" }) => {
         transition={{ duration: 0.15 }}
         onClick={(e) => e.stopPropagation()}
         className={`w-full ${widthClass} p-5 rounded-2xl
-          bg-white dark:bg-ink-825
-          border border-ink-100 dark:border-ink-800
+          bg-white dark:bg-void-825
+          border border-ink-100 dark:border-void-800
           shadow-[0_16px_48px_rgba(0,0,0,0.16)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.6)]`}
       >
         {title && (

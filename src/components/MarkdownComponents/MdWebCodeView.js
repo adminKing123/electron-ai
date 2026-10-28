@@ -136,13 +136,13 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
       className={`my-4 ${
         view === VIEWS.PREVIEW
           ? "rounded-2xl overflow-hidden"
-          : "bg-ink-25 dark:bg-ink-850 border border-ink-100 dark:border-ink-800 rounded-2xl overflow-hidden"
+          : "bg-ink-25 dark:bg-void-850 border border-ink-100 dark:border-void-800 rounded-2xl overflow-hidden"
       }`}
     >
       <div
         className={`px-4 py-2.5 flex justify-between items-center ${
           view === VIEWS.CODE
-            ? "bg-ink-75 dark:bg-ink-825 border-b border-ink-100 dark:border-ink-800"
+            ? "bg-ink-75 dark:bg-void-825 border-b border-ink-100 dark:border-void-800"
             : ""
         }`}
       >
@@ -157,7 +157,7 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
               text-[11px] font-medium
               text-ink-500 dark:text-ink-600
               hover:text-ink-750 dark:hover:text-ink-300
-              hover:bg-ink-150 dark:hover:bg-ink-800
+              hover:bg-ink-150 dark:hover:bg-void-800
               transition-colors"
             title="Copy code"
           >
@@ -181,12 +181,12 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
                 setView(value);
               }
             }}
-            className="flex items-center bg-ink-150 dark:bg-ink-825 rounded-full p-0.5"
+            className="flex items-center bg-ink-150 dark:bg-void-825 rounded-full p-0.5"
           >
             <ToggleGroup.Item
               value={VIEWS.CODE}
               className="p-1.5 rounded-full transition-colors
-                data-[state=on]:bg-white dark:data-[state=on]:bg-ink-900
+                data-[state=on]:bg-white dark:data-[state=on]:bg-void-850
                 data-[state=on]:shadow-sm
                 data-[state=off]:bg-transparent
                 text-ink-500 dark:text-ink-550
@@ -198,7 +198,7 @@ const MdWebCodeViewRenderer = ({ content, message_id }) => {
             <ToggleGroup.Item
               value={VIEWS.PREVIEW}
               className={`p-1.5 rounded-full transition-colors
-                data-[state=on]:bg-white dark:data-[state=on]:bg-ink-900
+                data-[state=on]:bg-white dark:data-[state=on]:bg-void-850
                 data-[state=on]:shadow-sm
                 data-[state=off]:bg-transparent
                 text-ink-500 dark:text-ink-550

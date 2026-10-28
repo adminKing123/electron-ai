@@ -26,26 +26,26 @@ import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 
 /**
- * FuseStudioPage — the workflow builder canvas.
+ * FuseStudioPage � the workflow builder canvas.
  *
  * All observable graph state lives in useFuseStudioStore.
  * This page owns the async API calls and wires them into the store.
  *
  * Execution flow
- * ──────────────
- * Turn On  → activateWorkflowAPI  → backend compiles + starts execution
- * Turn Off → deactivateWorkflowAPI → backend stops execution
- * Recompile (Save Changes) → same as Turn On (activate endpoint handles it)
+ * --------------
+ * Turn On  ? activateWorkflowAPI  ? backend compiles + starts execution
+ * Turn Off ? deactivateWorkflowAPI ? backend stops execution
+ * Recompile (Save Changes) ? same as Turn On (activate endpoint handles it)
  *
  * Graph auto-save
- * ───────────────
+ * ---------------
  * Debounced 1.5 s after every graph change.  Skipped during initial hydration.
- * Auto-save does NOT recompile — the running execution is NOT updated.
+ * Auto-save does NOT recompile � the running execution is NOT updated.
  */
 export default function FuseStudioPage() {
   const { id } = useParams();
 
-  // ── Store reads ──────────────────────────────────────────────────────────
+  // -- Store reads ----------------------------------------------------------
   const workflowName  = useFuseStudioStore((s) => s.workflowName);
   const loading       = useFuseStudioStore((s) => s.loading);
   const savingName        = useFuseStudioStore((s) => s.savingName);
@@ -83,7 +83,7 @@ export default function FuseStudioPage() {
     if (!loading && !hasStarterNode) setMobilePanelOpen(true);
   }, [loading, hasStarterNode]);
 
-  // ── Store actions ────────────────────────────────────────────────────────
+  // -- Store actions --------------------------------------------------------
   const setWorkflow           = useFuseStudioStore((s) => s.setWorkflow);
   const setWorkflowName       = useFuseStudioStore((s) => s.setWorkflowName);
   const setLoading            = useFuseStudioStore((s) => s.setLoading);
@@ -104,10 +104,10 @@ export default function FuseStudioPage() {
   const initCompilationState  = useFuseStudioStore((s) => s.initCompilationState);
   const clearCompilation      = useFuseStudioStore((s) => s.clearCompilation);
 
-  // Not observable state — mutable anchor to compare against for name autosave
+  // Not observable state � mutable anchor to compare against for name autosave
   const committedNameRef = useRef("");
 
-  // ── Load workflow + node definitions ─────────────────────────────────────
+  // -- Load workflow + node definitions -------------------------------------
   useEffect(() => {
     let cancelled = false;
 
@@ -120,7 +120,7 @@ export default function FuseStudioPage() {
         committedNameRef.current = name;
         setWorkflow(wf);
 
-        // ── Load graph ──────────────────────────────────────────────────────
+        // -- Load graph ------------------------------------------------------
         // wf.nodes  = workflow logic nodes
         // wf.blocks = purely-visual block overlays (rendered first so they sit behind)
         setNodes([...(wf.blocks ?? []), ...(wf.nodes ?? [])]);
@@ -153,7 +153,7 @@ export default function FuseStudioPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // ── Auto-save graph (debounced 1.5 s) ───────────────────────────────────
+  // -- Auto-save graph (debounced 1.5 s) -----------------------------------
   // Splits the ReactFlow nodes array into workflow nodes (fuse_node) and
   // visual block overlays (fuse_block) before calling the API so the two
   // concerns are always stored under separate keys and never mixed.
@@ -176,7 +176,7 @@ export default function FuseStudioPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, edges]);
 
-  // ── Name autosave on blur ────────────────────────────────────────────────
+  // -- Name autosave on blur ------------------------------------------------
   const handleNameBlur = async () => {
     const trimmed = workflowName.trim() || "Untitled Workflow";
     if (!workflowName.trim()) setWorkflowName("Untitled Workflow");
@@ -194,7 +194,7 @@ export default function FuseStudioPage() {
     }
   };
 
-  // ── Activate (Turn On / Recompile) ──────────────────────────────────────
+  // -- Activate (Turn On / Recompile) --------------------------------------
   const handleActivate = useCallback(async () => {
     setActivating(true);
     try {
@@ -211,7 +211,7 @@ export default function FuseStudioPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // ── Deactivate (Turn Off) ───────────────────────────────────────────────
+  // -- Deactivate (Turn Off) -----------------------------------------------
   const handleDeactivate = useCallback(async () => {
     setDeactivating(true);
     try {
@@ -228,7 +228,7 @@ export default function FuseStudioPage() {
   const { creating, handleCreate } = useCreateWorkflow();
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark">
+    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-void-875 bg-aurora-glow dark:bg-aurora-glow-dark">
       <FuseStudioHeader
         name={loading ? "" : workflowName}
         workflowId={id}
@@ -245,8 +245,8 @@ export default function FuseStudioPage() {
             p-0 md:p-4
             mb-16 md:mb-3 mr-0 md:mr-3
             md:rounded-xl
-            md:border md:border-ink-150 md:dark:border-ink-825
-            bg-ink-25 dark:bg-ink-850
+            md:border md:border-ink-150 md:dark:border-void-825
+            bg-ink-25 dark:bg-void-850
             md:shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)] md:dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
         >
           {/* Canvas */}
@@ -264,7 +264,7 @@ export default function FuseStudioPage() {
             />
           </div>
 
-          {/* NodeConfigPanel — side panel on desktop, bottom-sheet with handle on mobile */}
+          {/* NodeConfigPanel � side panel on desktop, bottom-sheet with handle on mobile */}
           <div
             className={`
               flex flex-col
@@ -274,11 +274,11 @@ export default function FuseStudioPage() {
               ${mobilePanelOpen ? "translate-y-0" : "translate-y-[calc(100%+4rem)]"}
             `}
           >
-            {/* Handle bar — mobile only */}
+            {/* Handle bar � mobile only */}
             <div
               className="flex md:hidden items-center justify-between px-4 py-2.5 flex-shrink-0
-                bg-white dark:bg-ink-875 rounded-t-2xl
-                border-t border-x border-ink-150 dark:border-ink-800
+                bg-white dark:bg-void-875 rounded-t-2xl
+                border-t border-x border-ink-150 dark:border-void-800
                 shadow-[0_-6px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_-6px_24px_rgba(0,0,0,0.35)]"
             >
               <div className="flex items-center gap-2">
@@ -292,7 +292,7 @@ export default function FuseStudioPage() {
                 className="w-7 h-7 flex items-center justify-center rounded-lg
                   text-ink-500 dark:text-ink-600
                   hover:text-ink-750 dark:hover:text-white
-                  hover:bg-ink-75 dark:hover:bg-ink-800
+                  hover:bg-ink-75 dark:hover:bg-void-800
                   transition-colors"
                 aria-label="Close panel"
               >
@@ -303,8 +303,8 @@ export default function FuseStudioPage() {
             <NodeConfigPanel
               className="flex-1 min-h-0 md:rounded-xl rounded-none
                 border-t-0 md:border-t
-                bg-white dark:bg-ink-875
-                border border-ink-150 dark:border-ink-800
+                bg-white dark:bg-void-875
+                border border-ink-150 dark:border-void-800
                 shadow-sm overflow-hidden"
             />
           </div>
@@ -319,7 +319,7 @@ export default function FuseStudioPage() {
         </div>
       </div>
 
-      {/* ── Mobile studio action bar ────────────────────────────────────── */}
+      {/* -- Mobile studio action bar -------------------------------------- */}
       <MobileActionBar
         mobilePanelOpen={mobilePanelOpen}
         setMobilePanelOpen={setMobilePanelOpen}

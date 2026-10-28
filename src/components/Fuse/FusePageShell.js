@@ -3,12 +3,12 @@ import Header from "../Header";
 import FuseStudioSidebar from "./FuseStudioSidebar";
 
 /**
- * FusePageShell — shared page chrome for non-studio Fuse pages.
+ * FusePageShell � shared page chrome for non-studio Fuse pages.
  *
- * Renders: Header → optional dialog overlay → sidebar + scrollable content area.
+ * Renders: Header ? optional dialog overlay ? sidebar + scrollable content area.
  *
  * Props
- * ─────
+ * -----
  * backRoute   {string}       Route the header back-arrow navigates to
  * creating    {boolean}      Forwarded to the sidebar's "new workflow" button
  * onCreate    {Function}     Forwarded to the sidebar's "new workflow" button
@@ -24,7 +24,7 @@ const FusePageShell = ({
   footer,
   children,
 }) => (
-  <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark">
+  <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-void-875 bg-aurora-glow dark:bg-aurora-glow-dark">
     <Header type="fuse" backRoute={backRoute} />
 
     {dialog}
@@ -37,8 +37,8 @@ const FusePageShell = ({
           p-0 md:p-4
           mb-16 md:mb-3 mr-0 md:mr-3
           md:rounded-2xl
-          md:border md:border-ink-150 md:dark:border-ink-800
-          bg-white/80 dark:bg-ink-850/90 backdrop-blur-sm
+          md:border md:border-ink-150 md:dark:border-void-800
+          bg-white/80 dark:bg-void-850/90 backdrop-blur-sm
           md:shadow-[0_1px_3px_rgba(20,16,40,0.04),0_8px_32px_-16px_rgba(20,16,40,0.10)]
           md:dark:shadow-[0_8px_32px_-16px_rgba(0,0,0,0.6)]"
       >

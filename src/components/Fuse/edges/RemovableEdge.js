@@ -52,7 +52,7 @@ export default function RemovableEdge({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Halo â€” keeps edges readable on the dotted canvas */}
+      {/* Halo — keeps edges readable on the dotted canvas */}
       <BaseEdge
         id={`${id}-halo`}
         path={edgePath}
@@ -92,8 +92,8 @@ export default function RemovableEdge({
           <button
             type="button"
             className="w-[22px] h-[22px] flex items-center justify-center rounded-full
-              bg-white dark:bg-ink-775
-              border border-ink-200 dark:border-ink-725
+              bg-white dark:bg-void-775
+              border border-ink-200 dark:border-void-725
               text-ink-600 dark:text-ink-450
               hover:text-[#d93025] hover:border-[#d93025]
               dark:hover:text-[#f28b82] dark:hover:border-[#f28b82]

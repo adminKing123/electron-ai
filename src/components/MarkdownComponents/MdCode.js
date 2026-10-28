@@ -48,8 +48,8 @@ const MdCode = ({ lang = "", message_id = "", children, ...props }) => {
   if (renderType === "tableview" || renderType === "htmlview") return renderContent();
   else
     return (
-      <div className="my-4 bg-ink-25 dark:bg-ink-850 border border-ink-100 dark:border-ink-800 rounded-2xl overflow-hidden">
-        <div className="px-4 py-2.5 bg-ink-75 dark:bg-ink-825 border-b border-ink-100 dark:border-ink-800 flex justify-between items-center">
+      <div className="my-4 bg-ink-25 dark:bg-void-850 border border-ink-100 dark:border-void-800 rounded-2xl overflow-hidden">
+        <div className="px-4 py-2.5 bg-ink-75 dark:bg-void-825 border-b border-ink-100 dark:border-void-800 flex justify-between items-center">
           <span className="text-[12px] font-medium text-ink-500 dark:text-ink-550 tracking-wide">
             {displayLang}
           </span>

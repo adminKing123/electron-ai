@@ -22,10 +22,10 @@ const MdCopyInlineText = ({ children }) => {
     <button
       onClick={handleCopy}
       className="px-2 py-1 text-[11px] inline-flex items-center gap-1
-        border border-ink-150 dark:border-ink-775
-        bg-ink-75 dark:bg-ink-825
-        hover:bg-ink-100 dark:hover:bg-ink-800
-        active:bg-ink-150 dark:active:bg-ink-875
+        border border-ink-150 dark:border-void-775
+        bg-ink-75 dark:bg-void-825
+        hover:bg-ink-100 dark:hover:bg-void-800
+        active:bg-ink-150 dark:active:bg-void-875
         rounded-full
         text-ink-650 dark:text-ink-400
         transition-colors"

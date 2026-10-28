@@ -66,16 +66,16 @@
   --md-color-scheme: dark;
   --md-bg-color: transparent;
   --md-text-color: #e5e2f0;
-  --md-a-color: #a78bfa;
-  --md-border-color: #1f1f1f;
-  --md-mark-bg-color: #bb800926;
-  --md-hr-background-color: #1f1f1f;
-  --md-placeholder-color: #8681a0;
-  --md-focus-outline-color: #8b5cf6;
-  --md-kbd-bg-color: #161616;
-  --md-absent-text-color: #f85149;
-  --md-code-bg-color: #282c3566;
-  --md-csv-blom-bg-color: #101010;
+  --md-a-color: #38bdf8;
+  --md-border-color: #3b4250;
+  --md-mark-bg-color: #0ea5e926;
+  --md-hr-background-color: #3b4250;
+  --md-placeholder-color: #94a3b8;
+  --md-focus-outline-color: #38bdf8;
+  --md-kbd-bg-color: #242a35;
+  --md-absent-text-color: #f87171;
+  --md-code-bg-color: #2c323e99;
+  --md-csv-blom-bg-color: #1c222c;
   --md-pl-s-pl-v-color: #79c0ff;
   --md-pl-text-color: #d2a8ff;
   --md-pl-ent-text-color: #7ee787;
@@ -91,8 +91,8 @@
   --md-pl-mc-text-color: #ffdfb6;
   --md-pl-mc-bg-color: #5a1e02;
   --md-pl-mi2-bg-color: #1158c7;
-  --md-alert-important-border-color: #8957e5;
-  --md-alert-title-text-color: #ab7df8;
+  --md-alert-important-border-color: #0284c7;
+  --md-alert-title-text-color: #7dd3fc;
   --md-alert-warning-border-color: #9e6a03;
   --md-alert-warning-text-color: #d29922;
   --md-alert-tip-border-color: #238636;
@@ -100,8 +100,8 @@
   --md-alert-caution-border-color: #da3633;
 
   /* syntax token colors */
-  --syntax-bg: #101010;
-  --syntax-text: #d8d4e8;
+  --syntax-bg: #1c222c;
+  --syntax-text: #e2e8f0;
   --syntax-comment: #6a9955;
   --syntax-punctuation: #d8d4e8;
   --syntax-property: #9cdcfe;

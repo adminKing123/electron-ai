@@ -1,6 +1,6 @@
 /**
  * WorkflowRunsPage.js
- * ────────────────────
+ * --------------------
  * Displays the trigger history (all runs) for a single workflow.
  *
  * Route: /fuse/studio/:id/runs
@@ -41,11 +41,11 @@ const PAGE_SIZE = 20;
 
 const OPEN_CLS =
   "inline-flex items-center gap-1 h-8 px-3 rounded-lg text-[12px] font-semibold " +
-  "border border-ink-150 dark:border-ink-750 bg-white dark:bg-ink-800 " +
+  "border border-ink-150 dark:border-void-750 bg-white dark:bg-void-800 " +
   "text-ink-750 dark:text-ink-200 hover:border-brand-200 dark:hover:border-brand-900 " +
   "hover:text-brand-700 dark:hover:text-white transition-colors";
 
-// ─── Sub-components ────────────────────────────────────────────────────────────
+// --- Sub-components ------------------------------------------------------------
 
 const RunDurationCell = ({ run }) => {
   const liveMs = useLiveDuration(
@@ -85,7 +85,7 @@ const OpenButton = ({ onClick }) => (
 );
 
 const SkeletonListItem = () => (
-  <div className="flex items-center gap-3 px-4 py-3.5 border-b border-ink-100 dark:border-ink-800 last:border-b-0">
+  <div className="flex items-center gap-3 px-4 py-3.5 border-b border-ink-100 dark:border-void-800 last:border-b-0">
     <div className="flex-1 min-w-0">
       <div className="skeleton h-3.5 w-40 rounded-md" />
       <div className="skeleton h-3 w-24 rounded-md mt-2" />
@@ -96,7 +96,7 @@ const SkeletonListItem = () => (
 );
 
 const SkeletonRow = () => (
-  <tr className="border-b border-ink-100 dark:border-ink-800 last:border-b-0">
+  <tr className="border-b border-ink-100 dark:border-void-800 last:border-b-0">
     <td className="px-5 py-3.5">
       <div className="skeleton h-3.5 w-44 rounded-md" />
       <div className="skeleton h-3 w-16 rounded-md mt-2" />
@@ -130,7 +130,7 @@ const EmptyState = () => (
 const RunListItem = ({ run, workflowName, onOpen, isLast }) => (
   <div
     className={`flex items-center gap-3 px-4 py-3.5
-      ${!isLast ? "border-b border-ink-100 dark:border-ink-800" : ""}`}
+      ${!isLast ? "border-b border-ink-100 dark:border-void-800" : ""}`}
   >
     <button type="button" onClick={onOpen} className="flex-1 min-w-0 text-left">
       <p className="text-[14px] font-semibold text-ink-975 dark:text-white truncate">
@@ -140,7 +140,7 @@ const RunListItem = ({ run, workflowName, onOpen, isLast }) => (
         <span className="text-[12px] font-medium text-ink-450 dark:text-ink-550 tabular-nums">
           {fmtRunIdLink(run.run_id)}
         </span>
-        <span className="text-ink-200 dark:text-ink-750">·</span>
+        <span className="text-ink-200 dark:text-void-650">�</span>
         <span className="text-[12px] text-ink-500 dark:text-ink-500 tabular-nums">
           {fmtListingTime(run.started_at)}
         </span>
@@ -187,7 +187,7 @@ const RunRow = ({ run, workflowName, onOpen }) => (
   </tr>
 );
 
-// ─── Main page ─────────────────────────────────────────────────────────────────
+// --- Main page -----------------------------------------------------------------
 
 const WorkflowRunsPage = () => {
   const { id: workflowId } = useParams();
@@ -199,7 +199,7 @@ const WorkflowRunsPage = () => {
   const [refreshing,  setRefreshing]  = useState(false);
   const [error,       setError]       = useState(null);
 
-  // Cursor-based pagination — stored in a ref so fetchPage always reads the
+  // Cursor-based pagination � stored in a ref so fetchPage always reads the
   // latest cursor without stale-closure issues.
   const [page,        setPage]        = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -250,10 +250,10 @@ const WorkflowRunsPage = () => {
   };
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark text-ink-950 dark:text-white">
-      {/* ── Header ── */}
+    <main className="h-screen flex flex-col overflow-hidden bg-white dark:bg-void-875 bg-aurora-glow dark:bg-aurora-glow-dark text-ink-950 dark:text-white">
+      {/* -- Header -- */}
       <header className="flex-shrink-0 bg-transparent
-        border-b border-ink-150 dark:border-ink-800">
+        border-b border-ink-150 dark:border-void-800">
         <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
           {/* Left: back + title */}
           <div className="flex items-center gap-1.5 min-w-0 flex-1">
@@ -269,7 +269,7 @@ const WorkflowRunsPage = () => {
                 Runs
               </p>
               <p className="text-[12px] text-ink-500 dark:text-ink-500 truncate leading-tight mt-0.5">
-                {workflow?.name ?? "…"}
+                {workflow?.name ?? "�"}
               </p>
             </div>
           </div>
@@ -289,10 +289,10 @@ const WorkflowRunsPage = () => {
         </div>
       </header>
 
-      {/* ── Content ── */}
+      {/* -- Content -- */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-[1080px] mx-auto px-4 pt-6 pb-12 sm:px-8 sm:pt-8">
-          <div className="pb-6 mb-6 border-b border-ink-100 dark:border-ink-800 flex items-end justify-between gap-4 flex-wrap">
+          <div className="pb-6 mb-6 border-b border-ink-100 dark:border-void-800 flex items-end justify-between gap-4 flex-wrap">
             <div>
               <h1 className="text-[24px] md:text-[28px] font-bold tracking-tight text-ink-975 dark:text-white leading-tight">
                 Run history
@@ -305,9 +305,9 @@ const WorkflowRunsPage = () => {
               onClick={handleRefresh}
               disabled={refreshing || loading}
               className="flex items-center gap-2 h-9 px-3.5 rounded-xl text-[13px] font-medium
-                border border-ink-150 dark:border-ink-800
-                bg-white dark:bg-ink-850 text-ink-750 dark:text-ink-200
-                hover:bg-ink-50 dark:hover:bg-ink-825
+                border border-ink-150 dark:border-void-800
+                bg-white dark:bg-void-850 text-ink-750 dark:text-ink-200
+                hover:bg-ink-50 dark:hover:bg-void-825
                 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <TbRefresh className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />

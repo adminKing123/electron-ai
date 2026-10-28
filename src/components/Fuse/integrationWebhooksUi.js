@@ -59,7 +59,7 @@ export const WebhookListRow = ({
   onRemove,
   removing,
 }) => (
-  <div className="flex items-start gap-2 py-2.5 border-b border-ink-100 dark:border-ink-800 last:border-0">
+  <div className="flex items-start gap-2 py-2.5 border-b border-ink-100 dark:border-void-800 last:border-0">
     <div className="flex-1 min-w-0">
       <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
         <span className="text-[13px] font-medium text-ink-875 dark:text-ink-100 truncate max-w-full">
@@ -103,7 +103,7 @@ export const WebhookList = ({ children, header }) => (
   </div>
 );
 
-/** GitHub repo lookup â€” minimal single row. */
+/** GitHub repo lookup — minimal single row. */
 export const GithubRepoLookup = ({ repoName, setRepoName, onSubmit, loading }) => (
   <form
     onSubmit={(e) => {
@@ -121,7 +121,7 @@ export const GithubRepoLookup = ({ repoName, setRepoName, onSubmit, loading }) =
         placeholder="owner/repo"
         value={repoName}
         onChange={(e) => setRepoName(e.target.value)}
-        className="flex-1 min-w-0 bg-white dark:bg-ink-850 border border-ink-200 dark:border-ink-750
+        className="flex-1 min-w-0 bg-white dark:bg-void-850 border border-ink-200 dark:border-void-750
           text-[13px] px-3 py-2 rounded-lg text-ink-875 dark:text-ink-100
           placeholder:text-ink-400 focus:outline-none focus:border-brand-500 dark:focus:border-brand-400"
       />
@@ -141,7 +141,7 @@ export const GithubRepoLookup = ({ repoName, setRepoName, onSubmit, loading }) =
 export const WebhooksListHeader = ({ count, onRefresh }) => {
   if (!count) return null;
   return (
-    <div className="flex items-center justify-between mb-2 pb-2 border-b border-ink-100 dark:border-ink-800">
+    <div className="flex items-center justify-between mb-2 pb-2 border-b border-ink-100 dark:border-void-800">
       <span className="text-[12px] text-ink-500 dark:text-ink-550">
         {count} {count === 1 ? "webhook" : "webhooks"}
       </span>

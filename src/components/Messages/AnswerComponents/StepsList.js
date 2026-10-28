@@ -4,7 +4,7 @@ import { formartJSON } from "../../../utils/helpers";
 function StepWrapper({ children }) {
   return (
     <div className="mb-1.5 pl-5 relative">
-      <div className="w-1 h-1 rounded-full bg-ink-200 dark:bg-ink-725 absolute left-[-2px] top-[7px]"></div>
+      <div className="w-1 h-1 rounded-full bg-ink-200 dark:bg-void-725 absolute left-[-2px] top-[7px]"></div>
       {children}
     </div>
   );
@@ -12,7 +12,7 @@ function StepWrapper({ children }) {
 
 function JsonCodeBlock({ data }) {
   return (
-    <div className="overflow-auto max-h-64 mt-1 p-3 bg-ink-50 dark:bg-ink-850 border border-ink-100 dark:border-ink-800 rounded-xl">
+    <div className="overflow-auto max-h-64 mt-1 p-3 bg-ink-50 dark:bg-void-850 border border-ink-100 dark:border-void-800 rounded-xl">
       <pre className="whitespace-pre text-[11px] text-ink-650 dark:text-ink-500 font-mono">
         <code>{formartJSON(data)}</code>
       </pre>
@@ -68,7 +68,7 @@ function StepsList({ steps }) {
       animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.25, ease: "easeInOut" }}
-      className="mt-2 ml-[8px] border-l border-ink-100 dark:border-ink-800 pt-1"
+      className="mt-2 ml-[8px] border-l border-ink-100 dark:border-void-800 pt-1"
     >
       {steps.map((step, index) => (
         <Step key={index} step={step} />

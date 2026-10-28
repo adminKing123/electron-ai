@@ -16,8 +16,8 @@ const ScrollToBottomButton = () => {
       id="scroll-to-top"
       onClick={handleClick}
       className="flex items-center justify-center w-8 h-8 rounded-full
-        bg-white dark:bg-ink-825
-        border border-ink-150 dark:border-ink-800
+        bg-white dark:bg-void-825
+        border border-ink-150 dark:border-void-800
         shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]
         text-ink-500 dark:text-ink-500
         hover:text-ink-975 dark:hover:text-white

@@ -12,14 +12,14 @@ import {
   FuseListingTableHead,
 } from "./fuseListingTable";
 
-// ─── Shared sub-components ────────────────────────────────────────────────────
+// --- Shared sub-components ----------------------------------------------------
 
 const DELETE_CLS =
   "w-8 h-8 flex items-center justify-center rounded-lg text-ink-450 dark:text-ink-550 transition-colors duration-150 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10 disabled:opacity-40 disabled:cursor-not-allowed";
 
 const OPEN_CLS =
   "inline-flex items-center gap-1 h-8 px-3 rounded-lg text-[12px] font-semibold " +
-  "border border-ink-150 dark:border-ink-750 bg-white dark:bg-ink-800 " +
+  "border border-ink-150 dark:border-void-750 bg-white dark:bg-void-800 " +
   "text-ink-750 dark:text-ink-200 hover:border-brand-200 dark:hover:border-brand-900 " +
   "hover:text-brand-700 dark:hover:text-white transition-colors";
 
@@ -30,7 +30,7 @@ const StatusPill = ({ status }) => {
       className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold capitalize ${
         active
           ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10"
-          : "text-ink-550 dark:text-ink-450 bg-ink-100 dark:bg-ink-800"
+          : "text-ink-550 dark:text-ink-450 bg-ink-100 dark:bg-void-800"
       }`}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${active ? "bg-emerald-500" : "bg-ink-400 dark:bg-ink-600"}`} />
@@ -43,7 +43,7 @@ const NodeIcons = ({ nodes, max }) => {
   const visible = nodes?.slice(0, max) ?? [];
   const overflow = Math.max(0, (nodes?.length ?? 0) - max);
   if (visible.length === 0) {
-    return <span className="text-[12px] text-ink-400 dark:text-ink-600">—</span>;
+    return <span className="text-[12px] text-ink-400 dark:text-ink-600">�</span>;
   }
   return (
     <div className="flex items-center gap-2">
@@ -69,12 +69,12 @@ const DeleteButton = ({ isDeleting, onClick }) => (
   </button>
 );
 
-// ─── Mobile card row ──────────────────────────────────────────────────────────
+// --- Mobile card row ----------------------------------------------------------
 
 const WorkflowListItem = ({ workflow, isDeleting, onEdit, onDelete, isLast }) => (
   <div
     className={`flex items-center gap-3 px-4 py-3.5
-      ${!isLast ? "border-b border-ink-100 dark:border-ink-800" : ""}`}
+      ${!isLast ? "border-b border-ink-100 dark:border-void-800" : ""}`}
   >
     <button
       type="button"
@@ -93,7 +93,7 @@ const WorkflowListItem = ({ workflow, isDeleting, onEdit, onDelete, isLast }) =>
   </div>
 );
 
-// ─── Desktop table row ────────────────────────────────────────────────────────
+// --- Desktop table row --------------------------------------------------------
 
 const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete }) => {
   const open = () => onEdit(workflow);
@@ -132,7 +132,7 @@ const WorkflowRow = ({ workflow, isDeleting, onEdit, onDelete }) => {
   );
 };
 
-// ─── WorkflowsTable ───────────────────────────────────────────────────────────
+// --- WorkflowsTable -----------------------------------------------------------
 
 const WorkflowsTable = ({
   workflows,
@@ -145,7 +145,7 @@ const WorkflowsTable = ({
   onNextPage,
 }) => (
   <div className={FUSE_LIST_TABLE_WRAP}>
-    {/* Mobile — card list */}
+    {/* Mobile � card list */}
     <div className="md:hidden">
       {workflows.length === 0 ? (
         <WorkflowEmptyState />
@@ -163,7 +163,7 @@ const WorkflowsTable = ({
       )}
     </div>
 
-    {/* Desktop — full table */}
+    {/* Desktop � full table */}
     <div className="hidden md:block overflow-x-auto">
       <table className="w-full min-w-[640px] border-collapse">
         <FuseListingTableHead>

@@ -9,7 +9,7 @@ const EXAMPLE_PROMPTS = [
 ];
 
 /**
- * FuseAutomateInput â€” Hero prompt area on the Fuse discovery page.
+ * FuseAutomateInput — Hero prompt area on the Fuse discovery page.
  *
  * Collapsed: compact pill input.
  * Focused:  expands into a card with textarea, Create action, and example prompts.
@@ -122,8 +122,8 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
           <div
             onClick={handleExpand}
             className="w-full flex items-center gap-3 cursor-text
-              bg-white dark:bg-ink-825
-              border border-ink-150 dark:border-ink-750
+              bg-white dark:bg-void-825
+              border border-ink-150 dark:border-void-750
               rounded-2xl shadow-glow-lg dark:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)]
               hover:border-brand-200 dark:hover:border-brand-900
               transition-colors duration-200
@@ -136,7 +136,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               onFocus={handleExpand}
-              placeholder="Describe a task for Comet Fuseâ€¦"
+              placeholder="Describe a task for Comet Fuse…"
               disabled={creating}
               className="flex-1 min-w-0 bg-transparent text-[14px] py-2
                 text-ink-875 dark:text-ink-150
@@ -170,7 +170,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
           >
             <form
               onSubmit={handleSubmit}
-              className="w-full bg-white dark:bg-ink-825
+              className="w-full bg-white dark:bg-void-825
                 border border-brand-200 dark:border-brand-900
                 rounded-2xl
                 shadow-[0_8px_40px_rgba(139,92,246,0.16),0_2px_12px_rgba(0,0,0,0.05)]
@@ -196,7 +196,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                   outline-none disabled:opacity-60 min-h-[96px]"
               />
 
-              <div className="flex items-center justify-between gap-3 mt-2 pt-3 border-t border-ink-100 dark:border-ink-800">
+              <div className="flex items-center justify-between gap-3 mt-2 pt-3 border-t border-ink-100 dark:border-void-800">
                 <span className="hidden sm:inline text-[12px] text-ink-450 dark:text-ink-550">
                   Press Esc to close
                 </span>
@@ -221,8 +221,8 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
             </form>
 
             <div
-              className="w-full bg-white dark:bg-ink-825
-                border border-ink-150 dark:border-ink-800
+              className="w-full bg-white dark:bg-void-825
+                border border-ink-150 dark:border-void-800
                 rounded-2xl shadow-sm
                 px-5 py-4
                 animate-fuseExpandIn"
@@ -239,11 +239,11 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => handleExampleClick(examplePrompt)}
                     className="group inline-flex items-center gap-2 px-3 py-2 rounded-xl text-[13px] font-medium
-                      bg-ink-25 dark:bg-ink-800
-                      border border-ink-150 dark:border-ink-750
+                      bg-ink-25 dark:bg-void-800
+                      border border-ink-150 dark:border-void-750
                       text-ink-750 dark:text-ink-200
                       hover:border-brand-200 dark:hover:border-brand-900
-                      hover:bg-brand-50 dark:hover:bg-ink-775
+                      hover:bg-brand-50 dark:hover:bg-void-775
                       hover:text-brand-700 dark:hover:text-white
                       disabled:opacity-50 disabled:cursor-not-allowed
                       transition-colors"

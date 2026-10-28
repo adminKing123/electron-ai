@@ -24,7 +24,7 @@ const AuthorizationPage = () => {
   if (user) return <Navigate to={ROUTES.INDEX} />;
 
   return (
-    <div className="bg-ink-25 dark:bg-ink-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex flex-col">
+    <div className="bg-ink-25 dark:bg-void-875 bg-aurora-glow dark:bg-aurora-glow-dark w-screen h-[100dvh] flex flex-col">
       <AuthorizationHeader />
 
       <div className="flex-1 flex items-center justify-center gap-20">
@@ -64,7 +64,7 @@ const AuthorizationPage = () => {
         </motion.div>
 
         <div className="hidden lg:block aspect-[12/16] h-[80%] max-h-[712px] rounded-2xl overflow-hidden">
-          <video src={"https://cdn.pixabay.com/video/2026/08/08/369425_large.mp4"} autoPlay loop muted className="w-full h-full object-cover" />
+          <video src={"https://cdn.pixabay.com/video/2026/09/25/378787_large.mp4"} autoPlay loop muted className="w-full h-full object-cover" />
         </div>
       </div>
     </div>

@@ -78,8 +78,8 @@ const FileInputTaker = ({ inputRef, disabled, chat }) => {
         htmlFor="file-upload"
         title="Attach File"
         className="flex items-center gap-1.5 px-2 py-1.5 rounded-full cursor-pointer
-          bg-ink-50 dark:bg-ink-725
-          hover:bg-ink-100 dark:hover:bg-ink-700
+          bg-ink-50 dark:bg-void-725
+          hover:bg-ink-100 dark:hover:bg-void-700
           text-ink-950 dark:text-white
           transition-colors duration-150"
       >
