@@ -9,9 +9,9 @@ import ROUTES from "../../router/routes";
  * Vertical icon + label nav button used in the Fuse Studio sidebar.
  *
  * @param {object}            props
- * @param {React.ElementType} props.icon    — icon component
- * @param {string}            props.label   — text shown below the icon
- * @param {boolean}           [props.active] — highlights the button when true
+ * @param {React.ElementType} props.icon    â€” icon component
+ * @param {string}            props.label   â€” text shown below the icon
+ * @param {boolean}           [props.active] â€” highlights the button when true
  * @param {Function}          [props.onClick]
  */
 
@@ -40,7 +40,7 @@ const SidebarNavButton = ({ icon: Icon, label, to, end = false, onClick }) => {
 // --- FuseStudioSidebar --------------------------------------------------------
 const FuseStudioSidebar = ({ creating, onCreate, hideMobileNav = false }) => (
   <>
-    {/* Desktop — vertical sidebar */}
+    {/* Desktop â€” vertical sidebar */}
     <aside className="hidden md:flex h-full flex-col items-center px-2.5 pt-6 gap-4 flex-shrink-0">
       <FusePrimaryButton
         icon={TbPlus}
@@ -57,7 +57,7 @@ const FuseStudioSidebar = ({ creating, onCreate, hideMobileNav = false }) => (
       </div>
     </aside>
 
-    {/* Mobile — fixed bottom navigation bar (hidden on pages with a custom action bar) */}
+    {/* Mobile â€” fixed bottom navigation bar (hidden on pages with a custom action bar) */}
     {!hideMobileNav && (
       <nav
         className="flex md:hidden fixed bottom-0 left-0 right-0 z-50

@@ -62,7 +62,7 @@ const groupNodesBySection = (nodes, query) => {
   });
 };
 
-const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes…" }) => (
+const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes..." }) => (
   <div
     className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl transition-colors ${FUSE_PICKER_ROW}`}
   >
@@ -139,7 +139,7 @@ const StarterPanel = () => {
             Choose a starter
           </span>
         </div>
-        <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters…" />
+        <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters..." />
       </div>
       <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-void-850">
         {loadingNodes ? (
@@ -434,12 +434,12 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
 
       {/* Scrollable config form */}
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
-        {/* Webhook URL — always shown for webhook starter nodes */}
+        {/* Webhook URL â€” always shown for webhook starter nodes */}
         {node_type === "webhook" && (
           <WebhookUrlDisplay workflowId={workflowId} />
         )}
 
-        {/* Webex activation note — webhook is registered on Turn On */}
+        {/* Webex activation note â€” webhook is registered on Turn On */}
         {node_type === "webex_message" && (
           <p className="text-[12px] leading-relaxed text-ink-500 dark:text-ink-550
             px-3 py-2.5 rounded-lg bg-brand-50 dark:bg-brand-950/35
@@ -449,7 +449,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
           </p>
         )}
 
-        {/* Push permission banner — shown for get_notified nodes */}
+        {/* Push permission banner â€” shown for get_notified nodes */}
         {node_type === "get_notified" && (
           <NotificationSettings nodeType={node_type} />
         )}
@@ -497,7 +497,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
 /**
  * Right panel of the workflow studio canvas.
  *
- * Block nodes (fuse_block) never reach this panel — clicking a block clears
+ * Block nodes (fuse_block) never reach this panel â€” clicking a block clears
  * selectedNode so the panel stays on its current / default view.
  * All block editing (rename, colour, remove) happens in BlockNode's NodeToolbar.
  *
@@ -748,7 +748,7 @@ const NodeConfigPanel = ({ className = "" }) => {
       }
 
       // http_request: expose status_code, success, and response body fields.
-      // Response data lives under "body" only — same pattern as webhook.
+      // Response data lives under "body" only â€” same pattern as webhook.
       if (n.data?.nodeType === "http_request") {
         vars.push(
           {
@@ -882,13 +882,13 @@ const NodeConfigPanel = ({ className = "" }) => {
   if (loading) {
     content = null;
   } else if (nodes.length === 0 || !hasStarterNode) {
-    // No nodes placed yet — must choose a starter first.
+    // No nodes placed yet â€” must choose a starter first.
     content = <StarterPanel />;
   } else if (addingNode) {
     // User opened the "Add Node" picker via the header button.
     content = <AddNodePanel />;
   } else if (selectedNode) {
-    // A workflow node is selected — show its config form.
+    // A workflow node is selected â€” show its config form.
     // Block nodes (fuse_block) never reach here; WorkflowCanvas clears
     // selectedNode before they could be set.
     const nodeDef = allNodeDefs.find(

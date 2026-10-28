@@ -22,7 +22,7 @@ export default function MobileActionBar({
         border-t border-ink-150 dark:border-void-825
         px-2 py-1 justify-around items-center"
     >
-      {/* Configure — toggles the config bottom-sheet */}
+      {/* Configure â€” toggles the config bottom-sheet */}
       <button
         onClick={() => setMobilePanelOpen((v) => !v)}
         className={`flex flex-col items-center justify-center gap-0.5 w-14 py-2 rounded-xl
@@ -91,7 +91,7 @@ export default function MobileActionBar({
         </button>
       )}
 
-      {/* Turn off — only when active; spacer keeps layout stable otherwise */}
+      {/* Turn off â€” only when active; spacer keeps layout stable otherwise */}
       {isActive && !inFlight ? (
         <button
           onClick={onDeactivate}

@@ -93,10 +93,10 @@ function FuseRunOverview({ run, className = "" }) {
         </p>
         <MetaRow label="Started" value={fmtDate(run.started_at)} />
         <MetaRow label="Finished" value={fmtDate(run.finished_at)} />
-        <MetaRow label="Trigger" value={run.trigger_type ?? "—"} />
-        <MetaRow label="Version" value={run.version_id ?? "—"} />
-        <MetaRow label="Run ID" value={run.run_id ?? "—"} />
-        <MetaRow label="Workflow" value={run.workflow_id ?? "—"} />
+        <MetaRow label="Trigger" value={run.trigger_type ?? "â€”"} />
+        <MetaRow label="Version" value={run.version_id ?? "â€”"} />
+        <MetaRow label="Run ID" value={run.run_id ?? "â€”"} />
+        <MetaRow label="Workflow" value={run.workflow_id ?? "â€”"} />
       </div>
 
       <JsonBlock label="Trigger data" value={run.trigger_data} />
@@ -139,7 +139,7 @@ function FuseRunNodeDetail({
   run,
 }) {
   const label = nodeState?.node_label ?? selectedNode?.data?.label ?? "Node";
-  const nodeType = nodeState?.node_type ?? selectedNode?.data?.nodeType ?? "—";
+  const nodeType = nodeState?.node_type ?? selectedNode?.data?.nodeType ?? "â€”";
   const iconName = selectedNode?.data?.icon ?? null;
   const status = isActiveNode ? "running" : nodeState?.status ?? null;
 
@@ -267,7 +267,7 @@ function FuseRunPanelScroll({ children, className = "" }) {
 }
 
 /**
- * Right-hand panel on the run detail page — run overview or live node execution info.
+ * Right-hand panel on the run detail page â€” run overview or live node execution info.
  */
 export default function FuseRunNodePanel(props) {
   const { className = "", ...rest } = props;

@@ -8,7 +8,7 @@ const themeOptions = [
   THEME_OPTIONS.SYSTEM,
 ];
 
-/** Segmented 3-icon toggle — reused in both standalone (header) and menu-item (sidebar) contexts. */
+/** Segmented 3-icon toggle â€” reused in both standalone (header) and menu-item (sidebar) contexts. */
 const ThemeToggle = ({ theme, setTheme, Icons }) => (
   <div className="flex items-center gap-0.5 bg-ink-100 dark:bg-void-875 border border-ink-150 dark:border-void-750 rounded-lg p-0.5">
     {themeOptions.map((option) => {
@@ -34,8 +34,8 @@ const ThemeToggle = ({ theme, setTheme, Icons }) => (
 );
 
 /**
- * `standalone` — renders only the segmented toggle (for headers, toolbars).
- * Default — renders a full sidebar menu-item row with a "Theme" label.
+ * `standalone` â€” renders only the segmented toggle (for headers, toolbars).
+ * Default â€” renders a full sidebar menu-item row with a "Theme" label.
  */
 const ThemeChangeOption = ({ standalone = false }) => {
   const theme = useThemeStore((state) => state.theme);

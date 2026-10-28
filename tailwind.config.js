@@ -87,8 +87,6 @@ module.exports = {
       backgroundImage: {
         aurora: "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 55%, #c026d3 100%)",
         "aurora-text": "linear-gradient(90deg, #7c3aed 0%, #c026d3 50%, #0891b2 100%)",
-        "aurora-text-dark":
-          "linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%)",
         "aurora-glow":
           "radial-gradient(ellipse 70% 45% at 50% -8%, rgba(139,92,246,0.22), transparent 70%), radial-gradient(ellipse 40% 30% at 100% 0%, rgba(34,211,238,0.14), transparent 70%), radial-gradient(ellipse 35% 30% at 0% 0%, rgba(192,38,211,0.08), transparent 70%)",
         "aurora-glow-dark":
@@ -97,8 +95,6 @@ module.exports = {
       boxShadow: {
         glow: "0 4px 14px -3px rgba(124,58,237,0.5)",
         "glow-lg": "0 10px 40px -12px rgba(124,58,237,0.35)",
-        "glow-dark": "0 1px 2px rgba(0,0,0,0.35)",
-        "glow-lg-dark": "0 4px 16px rgba(0,0,0,0.45)",
       },
       keyframes: {
         shimmer: {

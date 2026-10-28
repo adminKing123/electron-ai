@@ -54,7 +54,7 @@ const StatSkeleton = () => (
  *
  * Shows total chats, token consumption, and estimated spend in a clean
  * bordered card. Links through to the full analytics dashboard.
- * One Firestore read on mount — no charts.
+ * One Firestore read on mount â€” no charts.
  */
 const AnalyticsSummaryBar = () => {
   const [data, setData] = useState(null);

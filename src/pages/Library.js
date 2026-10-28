@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import AnalyticsSummaryBar from "../components/Analytics/AnalyticsSummaryBar";
 import SectionHeader from "../components/Common/SectionHeader";
 
-/** App shortcuts — always visible, no toggle required. */
+/** App shortcuts â€” always visible, no toggle required. */
 const APPS = [
   {
     Icon: TbBolt,

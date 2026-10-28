@@ -45,7 +45,7 @@ const BLOCK_PADDING = 30;
  * Right-click on the canvas pane ? context menu ? "Draw Block":
  *   1. Canvas enters draw mode (crosshair overlay)
  *   2. User drags a selection rectangle
- *   3. On release — if =1 workflow node was enclosed — a name dialog appears
+ *   3. On release â€” if =1 workflow node was enclosed â€” a name dialog appears
  *   4. Confirming creates a purely-visual fuse_block node behind those nodes
  *
  * Blocks are cosmetic overlays and do not affect workflow node data.
@@ -176,7 +176,7 @@ const WorkflowCanvas = ({
   // -- Handlers -------------------------------------------------------------
 
   /**
-   * Node click: blocks do NOT open the side panel — all editing is in the
+   * Node click: blocks do NOT open the side panel â€” all editing is in the
    * block's own NodeToolbar.  Regular workflow nodes go through selectNode.
    */
   const handleNodeClick = useCallback(
@@ -597,7 +597,7 @@ const WorkflowCanvas = ({
                 if (e.key === "Enter")  handleConfirmBlock();
                 if (e.key === "Escape") handleCancelBlock();
               }}
-              placeholder="Block name…"
+              placeholder="Block name..."
               maxLength={48}
               className="w-full px-3 py-2 rounded-lg mb-3
                 text-[13px] font-medium

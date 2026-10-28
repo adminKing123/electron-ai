@@ -26,7 +26,7 @@ import useCreateWorkflow from "../hooks/useCreateWorkflow";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 
 /**
- * FuseStudioPage — the workflow builder canvas.
+ * FuseStudioPage â€” the workflow builder canvas.
  *
  * All observable graph state lives in useFuseStudioStore.
  * This page owns the async API calls and wires them into the store.
@@ -40,7 +40,7 @@ import useFuseStudioStore from "../store/useFuseStudioStore";
  * Graph auto-save
  * ---------------
  * Debounced 1.5 s after every graph change.  Skipped during initial hydration.
- * Auto-save does NOT recompile — the running execution is NOT updated.
+ * Auto-save does NOT recompile â€” the running execution is NOT updated.
  */
 export default function FuseStudioPage() {
   const { id } = useParams();
@@ -104,7 +104,7 @@ export default function FuseStudioPage() {
   const initCompilationState  = useFuseStudioStore((s) => s.initCompilationState);
   const clearCompilation      = useFuseStudioStore((s) => s.clearCompilation);
 
-  // Not observable state — mutable anchor to compare against for name autosave
+  // Not observable state â€” mutable anchor to compare against for name autosave
   const committedNameRef = useRef("");
 
   // -- Load workflow + node definitions -------------------------------------
@@ -264,7 +264,7 @@ export default function FuseStudioPage() {
             />
           </div>
 
-          {/* NodeConfigPanel — side panel on desktop, bottom-sheet with handle on mobile */}
+          {/* NodeConfigPanel â€” side panel on desktop, bottom-sheet with handle on mobile */}
           <div
             className={`
               flex flex-col
@@ -274,7 +274,7 @@ export default function FuseStudioPage() {
               ${mobilePanelOpen ? "translate-y-0" : "translate-y-[calc(100%+4rem)]"}
             `}
           >
-            {/* Handle bar — mobile only */}
+            {/* Handle bar â€” mobile only */}
             <div
               className="flex md:hidden items-center justify-between px-4 py-2.5 flex-shrink-0
                 bg-white dark:bg-void-875 rounded-t-2xl

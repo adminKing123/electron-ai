@@ -2,21 +2,21 @@ import React, { useEffect, useRef } from "react";
 import { TbAlertTriangle, TbX } from "react-icons/tb";
 
 /**
- * ConfirmDialog — a reusable, accessible confirmation modal.
+ * ConfirmDialog â€” a reusable, accessible confirmation modal.
  *
  * Renders a centered overlay with a title, message, and two action buttons.
  * Closes on Escape key or backdrop click.
  *
  * @param {object}   props
- * @param {boolean}  props.open              — controls visibility
- * @param {string}   props.title             — modal heading
- * @param {string}   [props.message]         — body text (supports JSX)
- * @param {string}   [props.confirmLabel]    — confirm button label (default: "Confirm")
- * @param {string}   [props.cancelLabel]     — cancel button label  (default: "Cancel")
- * @param {"danger"|"primary"} [props.variant] — button color theme (default: "danger")
- * @param {boolean}  [props.loading]         — disables buttons and shows spinner on confirm
- * @param {Function} props.onConfirm         — called when the confirm button is clicked
- * @param {Function} props.onCancel          — called when cancel / backdrop / Escape is used
+ * @param {boolean}  props.open              â€” controls visibility
+ * @param {string}   props.title             â€” modal heading
+ * @param {string}   [props.message]         â€” body text (supports JSX)
+ * @param {string}   [props.confirmLabel]    â€” confirm button label (default: "Confirm")
+ * @param {string}   [props.cancelLabel]     â€” cancel button label  (default: "Cancel")
+ * @param {"danger"|"primary"} [props.variant] â€” button color theme (default: "danger")
+ * @param {boolean}  [props.loading]         â€” disables buttons and shows spinner on confirm
+ * @param {Function} props.onConfirm         â€” called when the confirm button is clicked
+ * @param {Function} props.onCancel          â€” called when cancel / backdrop / Escape is used
  */
 const ConfirmDialog = ({
   open,

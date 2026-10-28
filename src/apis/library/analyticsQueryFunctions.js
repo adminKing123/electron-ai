@@ -47,7 +47,7 @@ export const fetchUserUsageRaw = async () => {
     const data = docSnap.data();
     const tokens = data.total_tokens ?? {};
 
-    // Convert the Firestore by_model map (safe keys with dotsâ†’underscores) back
+    // Convert the Firestore by_model map (safe keys with dotsâ†'underscores) back
     // to real Comet model IDs using the stored model_id field on each entry.
     const rawByModel = data.by_model ?? {};
     const byModel = {};
@@ -130,10 +130,10 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
       costUsd: chatCost, createdAt,
     } = chat;
 
-    // â”€â”€ Date filter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ Date filter â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     if (cutoff && createdAt && createdAt < cutoff) return;
 
-    // â”€â”€ Model filter â€” only include chats that used this model â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ Model filter â€” only include chats that used this model â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     if (modelFilter && !chatByModel[modelFilter]) return;
 
     // When a model filter is active, attribute only that model's share of
@@ -161,7 +161,7 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
     totalImagesGenerated += imgs ?? 0;
     totalCostUsd         += cost;
 
-    // â”€â”€ Per-model aggregation â€” iterate each model used in this chat â”€â”€â”€â”€â”€â”€
+    // â"€â"€ Per-model aggregation â€” iterate each model used in this chat â"€â"€â"€â"€â"€â"€
     Object.entries(chatByModel).forEach(([modelId, stats]) => {
       if (!byModel[modelId]) byModel[modelId] = emptyModelStats();
       byModel[modelId].chats           += stats.count           ?? 0;
@@ -175,7 +175,7 @@ export const computeAnalytics = (rawUsage, { days = 0, model: modelFilter = null
       byModel[modelId].generationType   = stats.generationType  ?? "text";
     });
 
-    // â”€â”€ Daily aggregation (keyed YYYY-MM-DD by chat createdAt) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // â"€â"€ Daily aggregation (keyed YYYY-MM-DD by chat createdAt) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     if (createdAt) {
       const dayKey = format(createdAt, "yyyy-MM-dd");
       if (!dailyMap[dayKey]) {

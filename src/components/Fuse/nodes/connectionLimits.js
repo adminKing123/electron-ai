@@ -1,4 +1,4 @@
-// â”€â”€â”€ Connection limits â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Connection limits â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 /**
  * Maximum number of outgoing edges allowed per node type.
  *
@@ -7,8 +7,8 @@
  * simply add an entry â€” no other code needs to change.
  *
  * Examples:
- *   if_else: 2   â†’ exactly two outgoing branches (true / false)
- *   fork:    Infinity  â†’ unlimited outgoing edges
+ *   if_else: 2   â†' exactly two outgoing branches (true / false)
+ *   fork:    Infinity  â†' unlimited outgoing edges
  */
 export const NODE_OUTGOING_LIMIT = {
   if_else:  2,        // true + false branch, one edge each

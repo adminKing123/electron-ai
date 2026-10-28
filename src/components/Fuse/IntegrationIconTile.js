@@ -5,8 +5,8 @@ import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
  * Brand-colored integration icon for cards, modals, and settings.
  * Uses the same registry + colors as workflow node picker / studio.
  *
- * @param {string} iconName — backend key (e.g. "SiGmail", "SiWebex")
- * @param {string} [tileClassName] — outer wrapper size/layout (default 48×48)
+ * @param {string} iconName â€” backend key (e.g. "SiGmail", "SiWebex")
+ * @param {string} [tileClassName] â€” outer wrapper size/layout (default 48×48)
  */
 const IntegrationIconTile = ({
   iconName,

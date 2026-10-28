@@ -86,7 +86,7 @@ const EnableNotificationButton = ({ requesting, onEnable }) => (
       <TbBell className="w-[13px] h-[13px]" />
     )}
 
-    {requesting ? "Requesting…" : "Allow notifications"}
+    {requesting ? "Requesting..." : "Allow notifications"}
   </button>
 );
 

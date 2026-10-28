@@ -11,7 +11,7 @@ const ROUTE_META = [
   {
     test: (p) => p === "/",
     meta: {
-      title: `${SITE_NAME} – AI Chat, Workflow Automation, MCP & App Builder`,
+      title: `${SITE_NAME} — AI Chat, Workflow Automation, MCP & App Builder`,
       description: DEFAULT_DESCRIPTION,
     },
   },
@@ -47,14 +47,14 @@ const ROUTE_META = [
   {
     test: (p) => p === "/comet-rj",
     meta: {
-      title: `Comet RJ – AI Radio | ${SITE_NAME}`,
+      title: `Comet RJ — AI Radio | ${SITE_NAME}`,
       description: "Listen to Comet RJ, an AI-driven radio experience powered by Comet AI.",
     },
   },
   {
     test: (p) => p === "/fuse/discover",
     meta: {
-      title: `Comet Fuse – Discover Workflows | ${SITE_NAME}`,
+      title: `Comet Fuse — Discover Workflows | ${SITE_NAME}`,
       description: "Discover and automate tasks with Comet Fuse workflow templates and AI routing.",
     },
   },
@@ -88,7 +88,7 @@ export const resolvePageMeta = (pathname) => {
   const normalized = pathname.replace(/\/+$/, "") || "/";
   const match = ROUTE_META.find(({ test }) => test(normalized));
   const base = match?.meta ?? {
-    title: `${SITE_NAME} – Your All-in-One AI Platform`,
+    title: `${SITE_NAME} — Your All-in-One AI Platform`,
     description: DEFAULT_DESCRIPTION,
   };
   return {

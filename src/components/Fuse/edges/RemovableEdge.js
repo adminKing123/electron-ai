@@ -52,7 +52,7 @@ export default function RemovableEdge({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Halo — keeps edges readable on the dotted canvas */}
+      {/* Halo â€” keeps edges readable on the dotted canvas */}
       <BaseEdge
         id={`${id}-halo`}
         path={edgePath}

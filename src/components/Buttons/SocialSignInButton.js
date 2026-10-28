@@ -6,7 +6,7 @@ const SocialSignInButton = ({
   disabled,
   icon,
   label,
-  loadingLabel = "Signing in…",
+  loadingLabel = "Signing in...",
   errorMessage = "Sign-in failed. Please try again.",
 }) => {
   return (

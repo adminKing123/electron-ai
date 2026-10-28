@@ -19,10 +19,10 @@ export const FUSE_NODE_ICON_SIZES = {
 /**
  * Renders a workflow node icon with brand / semantic colors (no forced blue tint).
  *
- * @param {string | null | undefined} iconName — backend icon key (e.g. "SiGmail")
- * @param {string} [sizeClass] — Tailwind w/h classes
- * @param {string} [className] — extra classes on the SVG
- * @param {string} [fallbackClassName] — placeholder dot when icon is unknown
+ * @param {string | null | undefined} iconName â€” backend icon key (e.g. "SiGmail")
+ * @param {string} [sizeClass] â€” Tailwind w/h classes
+ * @param {string} [className] â€” extra classes on the SVG
+ * @param {string} [fallbackClassName] â€” placeholder dot when icon is unknown
  */
 const FuseNodeIcon = ({
   iconName,

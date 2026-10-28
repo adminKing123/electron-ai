@@ -75,7 +75,7 @@ const RenameChatModal = ({ data }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Enter new name…"
+          placeholder="Enter new name..."
           autoFocus
           disabled={isLoading}
           className="w-full px-3.5 py-2.5 mb-5 text-[13px] rounded-xl
@@ -111,7 +111,7 @@ const RenameChatModal = ({ data }) => {
               hover:bg-brand-700 dark:hover:bg-brand-600 transition-colors
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Renaming…" : "Rename"}
+            {isLoading ? "Renaming..." : "Rename"}
           </button>
         </div>
       </motion.div>

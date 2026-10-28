@@ -43,7 +43,7 @@ const NodeIcons = ({ nodes, max }) => {
   const visible = nodes?.slice(0, max) ?? [];
   const overflow = Math.max(0, (nodes?.length ?? 0) - max);
   if (visible.length === 0) {
-    return <span className="text-[12px] text-ink-400 dark:text-ink-600">—</span>;
+    return <span className="text-[12px] text-ink-400 dark:text-ink-600">â€”</span>;
   }
   return (
     <div className="flex items-center gap-2">
@@ -145,7 +145,7 @@ const WorkflowsTable = ({
   onNextPage,
 }) => (
   <div className={FUSE_LIST_TABLE_WRAP}>
-    {/* Mobile — card list */}
+    {/* Mobile â€” card list */}
     <div className="md:hidden">
       {workflows.length === 0 ? (
         <WorkflowEmptyState />
@@ -163,7 +163,7 @@ const WorkflowsTable = ({
       )}
     </div>
 
-    {/* Desktop — full table */}
+    {/* Desktop â€” full table */}
     <div className="hidden md:block overflow-x-auto">
       <table className="w-full min-w-[640px] border-collapse">
         <FuseListingTableHead>

@@ -1,6 +1,6 @@
 /**
  * usePushNotification.js
- * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+ * â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
  * Manages the full web push subscription lifecycle:
  *
  *   1. Register /push-sw.js service worker (once per session).
@@ -60,9 +60,9 @@ export default function usePushNotification() {
 
   // Register the service worker and check/restore an existing subscription.
   // Runs once on mount â€” covers the following cases:
-  //   â€¢ Same device, page reload           â†’ re-post existing subscription to backend
-  //   â€¢ New device, permission pre-granted â†’ no existing subscription, auto-subscribe
-  //   â€¢ Permission not yet granted         â†’ nothing (user must call requestPermission)
+  //   â€¢ Same device, page reload           â†' re-post existing subscription to backend
+  //   â€¢ New device, permission pre-granted â†' no existing subscription, auto-subscribe
+  //   â€¢ Permission not yet granted         â†' nothing (user must call requestPermission)
   useEffect(() => {
     if (!supported) return;
 

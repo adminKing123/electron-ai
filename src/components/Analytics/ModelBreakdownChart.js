@@ -8,8 +8,8 @@ import useIsDark from "../../hooks/useIsDark";
  * Horizontal bar chart showing per-model breakdown of tokens, cost, or chats.
  *
  * @param {{ byModel: Record<string, object>, metric: 'tokens'|'cost'|'chats' }} props
- *   byModel – Per-model stats map from computeAnalytics()
- *   metric  – Which value to plot
+ *   byModel - Per-model stats map from computeAnalytics()
+ *   metric  - Which value to plot
  */
 const ModelBreakdownChart = ({ byModel = {}, metric = "tokens" }) => {
   const isDark = useIsDark();
@@ -105,7 +105,7 @@ const ModelBreakdownChart = ({ byModel = {}, metric = "tokens" }) => {
   if (sorted.length === 0) {
     return (
       <div className="flex items-center justify-center h-[120px] rounded-xl border border-dashed border-ink-200 dark:border-void-750 text-ink-500 dark:text-ink-550 text-[13px] text-center px-4">
-        No model data yet — start a conversation to see usage.
+        No model data yet â€” start a conversation to see usage.
       </div>
     );
   }

@@ -3,7 +3,7 @@ import Header from "../Header";
 import FuseStudioSidebar from "./FuseStudioSidebar";
 
 /**
- * FusePageShell — shared page chrome for non-studio Fuse pages.
+ * FusePageShell â€” shared page chrome for non-studio Fuse pages.
  *
  * Renders: Header ? optional dialog overlay ? sidebar + scrollable content area.
  *

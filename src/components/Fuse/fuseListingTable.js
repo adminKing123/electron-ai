@@ -19,7 +19,7 @@ export const FUSE_LIST_LINK =
   "text-[13px] font-medium text-brand-600 dark:text-brand-400 hover:underline bg-transparent border-0 p-0 cursor-pointer";
 
 export function fmtListingTime(iso) {
-  if (!iso) return "—";
+  if (!iso) return "â€”";
   try {
     const d = new Date(iso);
     const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -34,14 +34,14 @@ export function fmtListingTime(iso) {
 
 /** Duration like `1.19 s` in the reference UI. */
 export function fmtListingDuration(ms) {
-  if (ms == null || Number.isNaN(ms)) return "—";
+  if (ms == null || Number.isNaN(ms)) return "â€”";
   if (ms < 1000) return `${Math.round(ms)} ms`;
   return `${(ms / 1000).toFixed(2)} s`;
 }
 
-/** Short run id for the `#…` link column. */
+/** Short run id for the `#...` link column. */
 export function fmtRunIdLink(runId) {
-  if (!runId) return "#—";
+  if (!runId) return "#â€”";
   const compact = runId.replace(/-/g, "").slice(0, 6);
   return `#${compact}`;
 }

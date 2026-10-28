@@ -37,7 +37,7 @@ const SidebarOpenButton = () => {
   );
 };
 
-/** Page-specific header labels — keyed by `type`. Falls back to "Comet AI". */
+/** Page-specific header labels â€” keyed by `type`. Falls back to "Comet AI". */
 const PAGE_LABELS = {
   "comet-rj": "Comet RJ",
   fuse: "Fuse",

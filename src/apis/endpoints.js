@@ -35,7 +35,7 @@ const ENDPOINTS = {
   STT_DEEPGRAM_LIVE_CONFIG: "/stt/deepgram/live-config",
   STT_DEEPGRAM_TRANSCRIBE: "/stt/deepgram/transcribe",
 
-  // â”€â”€ Fuse Workflows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Fuse Workflows â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   FUSE_WORKFLOWS:               "/fuse/workflows",
   FUSE_WORKFLOWS_GENERATE:      "/fuse/workflows/generate",
   FUSE_DISCOVER:                "/fuse/discover",
@@ -50,12 +50,12 @@ const ENDPOINTS = {
   FUSE_NODES_SYSTEM_VARIABLES:  "/fuse/nodes/system-variables",
   FUSE_INTEGRATIONS:            "/fuse/integration",
 
-  // â”€â”€ Fuse Push Notifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Fuse Push Notifications â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   FUSE_PUSH_VAPID_KEY:          "/fuse/push/vapid-public-key",
   FUSE_PUSH_SUBSCRIBE:          "/fuse/push/subscribe",
   FUSE_PUSH_UNSUBSCRIBE:        "/fuse/push/unsubscribe",
 
-  // â”€â”€ Fuse Runs & Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Fuse Runs & Logs â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   FUSE_WORKFLOW_RUNS:   (id) => `/fuse/workflows/${id}/runs`,
   FUSE_RUN:             (runId) => `/fuse/runs/${runId}`,
   FUSE_RUN_LOGS:        (runId) => `/fuse/runs/${runId}/logs`,
@@ -63,11 +63,11 @@ const ENDPOINTS = {
   FUSE_WORKFLOW_RUNS_LIVE_CONFIG: (workflowId) =>
     `/fuse/workflows/${workflowId}/runs/live-config`,
 
-  // â”€â”€ Fuse Compiled Versions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Fuse Compiled Versions â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   FUSE_WORKFLOW_VERSIONS: (id) => `/fuse/workflows/${id}/versions`,
   FUSE_VERSION:           (versionId) => `/fuse/versions/${versionId}`,
 
-  // â”€â”€ Integrations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ Integrations â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   FUSE_INTEGRATION_GMAIL_INFO:  "/fuse/integration/gmail/info",
   FUSE_INTEGRATION_GMAIL_AUTH:  "/fuse/integration/gmail/auth",
   FUSE_INTEGRATION_WEBEX_INFO:  "/fuse/integration/webex/info",

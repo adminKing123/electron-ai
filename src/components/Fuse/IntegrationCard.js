@@ -93,7 +93,7 @@ const IntegrationActions = ({ integration, connected, configuring, onConfigure, 
       {configuring && (
         <span className="w-3.5 h-3.5 border-2 border-white/70 border-t-transparent rounded-full animate-spin" />
       )}
-      {configuring ? "Connecting…" : "Connect"}
+      {configuring ? "Connecting..." : "Connect"}
     </button>
   );
 };

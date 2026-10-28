@@ -7,14 +7,14 @@ const SendButton = ({ onClick }) => {
   const setProcess = useProcessController((state) => state.setProcess);
   const prompt = usePromptStore((state) => state.prompt);
   const model = useModelStore((state) => state.model);
-  const isGeneratingPrompt = process ? true : false;
+  const isGeneratingPrompt = Boolean(process);
   const isRecording = useMicStore((state) => state.isRecording);
   const disabled = !prompt.trim() || model === null ? true : false;
 
   const { attachedFiles } = useFileInputStore();
   
   const files = Object.values(attachedFiles);
-  const any_file_uploading = files.some((file) => file?.in_progress ? true : false);
+  const any_file_uploading = files.some((file) => Boolean(file?.in_progress));
 
   const stopGeneration = () => {
     setProcess(null, null, true);

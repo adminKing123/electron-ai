@@ -8,8 +8,8 @@ import useIsDark from "../../hooks/useIsDark";
  * over a date range.
  *
  * @param {{ daily: Array, metric: 'tokens'|'cost'|'chats' }} props
- *   daily  – Array of { date, label, tokens, cost, chats } from computeAnalytics()
- *   metric – Which value to plot on the Y axis
+ *   daily  — Array of { date, label, tokens, cost, chats } from computeAnalytics()
+ *   metric — Which value to plot on the Y axis
  */
 const DailyUsageChart = ({ daily = [], metric = "tokens" }) => {
   const isDark = useIsDark();

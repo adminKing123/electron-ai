@@ -140,7 +140,7 @@ const CompilationErrorsButton = ({ errors = [] }) => {
           <ul className="px-3.5 py-3 space-y-1.5 max-h-60 overflow-y-auto">
             {errors.map((e, i) => (
               <li key={i} className="flex items-start gap-2 text-[12px] text-red-600 dark:text-red-400">
-                <span className="flex-shrink-0 mt-0.5 font-bold">•</span>
+                <span className="flex-shrink-0 mt-0.5 font-bold">â€¢</span>
                 <span>{e}</span>
               </li>
             ))}
@@ -165,7 +165,7 @@ const CompilationErrorsButton = ({ errors = [] }) => {
 // Rendered as `position: absolute` inside a `position: relative` canvas wrapper.
 //
 // States:
-//   in-flight  ? spinner pill ("Compiling…" or "Stopping…")
+//   in-flight  ? spinner pill ("Compiling..." or "Stopping...")
 //   active     ? "Add step" | "Save changes" (dark) | "Turn off"
 //   inactive   ? "Add step" | "Turn on" (dark)
 //
@@ -195,7 +195,7 @@ export const CanvasActionBar = ({
 
   return (
     <>
-      {/* Errors badge — top-right corner of the canvas */}
+      {/* Errors badge â€” top-right corner of the canvas */}
       <div className="absolute top-4 right-4 z-20">
         <CompilationErrorsButton errors={compilationErrors} />
       </div>
@@ -210,7 +210,7 @@ export const CanvasActionBar = ({
           rounded-full shadow-xl shadow-black/10 dark:shadow-black/50
           overflow-hidden p-1 gap-0.5"
       >
-        {/* Add step — always visible (disabled when no trigger yet or in-flight) */}
+        {/* Add step â€” always visible (disabled when no trigger yet or in-flight) */}
         <button
           type="button"
           onClick={onAddNode}
@@ -237,10 +237,10 @@ export const CanvasActionBar = ({
               text-white bg-ink-650 dark:bg-void-750 rounded-full"
           >
             <span className="w-3 h-3 md:w-3.5 md:h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
-            {deactivating ? "Stopping…" : "Compiling…"}
+            {deactivating ? "Stopping..." : "Compiling..."}
           </button>
         ) : isActive ? (
-          /* Save changes — primary action when running */
+          /* Save changes â€” primary action when running */
           <button
             type="button"
             onClick={onActivate}
@@ -257,7 +257,7 @@ export const CanvasActionBar = ({
             Save changes
           </button>
         ) : (
-          /* Turn on — primary action when inactive */
+          /* Turn on â€” primary action when inactive */
           <button
             type="button"
             onClick={onActivate}
@@ -275,7 +275,7 @@ export const CanvasActionBar = ({
           </button>
         )}
 
-        {/* Turn off — only shown when active and not in-flight */}
+        {/* Turn off â€” only shown when active and not in-flight */}
         {isActive && !inFlight && (
           <>
             <button
@@ -300,7 +300,7 @@ export const CanvasActionBar = ({
 
 // --- Root header --------------------------------------------------------------
 //
-// Slim top bar — back navigation, editable workflow name,
+// Slim top bar â€” back navigation, editable workflow name,
 // optional webhook URL pill (when running + webhook-triggered), and profile.
 // Execution controls live in CanvasActionBar (bottom of canvas), not here.
 //

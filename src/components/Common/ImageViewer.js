@@ -14,10 +14,10 @@ const SCALE_STEP = 0.25;
  * Fullscreen image lightbox with zoom (scroll) and pan (drag) support.
  *
  * Props:
- *   src       â€“ image URL
- *   alt       â€“ alt / filename label shown in the top bar
- *   isOpen    â€“ boolean controlling visibility
- *   onClose   â€“ callback to close the viewer
+ *   src       â€” image URL
+ *   alt       â€” alt / filename label shown in the top bar
+ *   isOpen    â€” boolean controlling visibility
+ *   onClose   â€” callback to close the viewer
  */
 const ImageViewer = ({ src, alt, isOpen, onClose }) => {
   const [scale, setScale] = useState(1);
@@ -115,7 +115,7 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
           className="fixed inset-0 z-[9999] flex flex-col select-none bg-white/[0.96] dark:bg-black/[0.92]"
           onClick={onClose}
         >
-          {/* â”€â”€ Top control bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* â"€â"€ Top control bar â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
           <div
             className="flex items-center justify-between px-4 py-4 flex-shrink-0 bg-gradient-to-b from-black/10 dark:from-black/60 to-transparent"
             onClick={(e) => e.stopPropagation()}
@@ -171,7 +171,7 @@ const ImageViewer = ({ src, alt, isOpen, onClose }) => {
           >
             <div
               style={{
-                // scale(s) translate(x/s, y/s) â†’ visual offset of (x, y) screen px
+                // scale(s) translate(x/s, y/s) â†' visual offset of (x, y) screen px
                 transform: `scale(${scale}) translate(${offset.x / scale}px, ${offset.y / scale}px)`,
                 cursor: scale > 1 ? (dragging ? "grabbing" : "grab") : "default",
                 transition: dragging ? "none" : "transform 0.1s ease-out",

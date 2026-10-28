@@ -199,7 +199,7 @@ const WorkflowRunsPage = () => {
   const [refreshing,  setRefreshing]  = useState(false);
   const [error,       setError]       = useState(null);
 
-  // Cursor-based pagination — stored in a ref so fetchPage always reads the
+  // Cursor-based pagination â€” stored in a ref so fetchPage always reads the
   // latest cursor without stale-closure issues.
   const [page,        setPage]        = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -269,7 +269,7 @@ const WorkflowRunsPage = () => {
                 Runs
               </p>
               <p className="text-[12px] text-ink-500 dark:text-ink-500 truncate leading-tight mt-0.5">
-                {workflow?.name ?? "…"}
+                {workflow?.name ?? "..."}
               </p>
             </div>
           </div>

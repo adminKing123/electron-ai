@@ -76,7 +76,7 @@ export default function PlayingState({ status, currentTrack, onStop }) {
     ? "Comet is speaking"
     : isSongPlaying
     ? "Now playing"
-    : "Buffering…";
+    : "Buffering...";
 
   const artistLine = isSongPlaying
     ? currentTrack.metadata.artists.map((a) => a.name).join("  ·  ")

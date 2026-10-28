@@ -61,7 +61,7 @@ const RunLogSaveSettings = ({ config, onChange }) => (
                   {description}
                 </span>
               </label>
-              {/* Fixed slot so every row’s switch aligns in one column */}
+              {/* Fixed slot so every row's switch aligns in one column */}
               <div className="flex h-6 w-11 shrink-0 items-center justify-center pt-0.5">
                 <Switch
                   id={switchId}

@@ -1,5 +1,5 @@
 /**
- * Neutral Fuse node surfaces — color comes from icons, not card fills.
+ * Neutral Fuse node surfaces â€” color comes from icons, not card fills.
  * Row metrics match picker grid column at md panel (550px - padding - gap) ÷ 2.
  */
 export const FUSE_NODE_SURFACE = "bg-white dark:bg-void-825";
@@ -19,7 +19,7 @@ export const FUSE_NODE_HANDLE_CONNECTED =
 export const FUSE_PICKER_ROW =
   "bg-ink-50 dark:bg-void-775 hover:bg-ink-100 dark:hover:bg-void-750 active:bg-ink-150 dark:active:bg-void-725";
 
-/** Studio canvas nodes — white card on #f9f9fc canvas (picker keeps FUSE_PICKER_ROW). */
+/** Studio canvas nodes â€” white card on #f9f9fc canvas (picker keeps FUSE_PICKER_ROW). */
 export const FUSE_CANVAS_NODE_SURFACE =
   "bg-white dark:bg-void-775 border border-ink-200 dark:border-void-725 hover:border-ink-300 dark:hover:border-void-650 shadow-[0_1px_2px_rgba(60,64,67,0.1)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.35)]";
 
@@ -27,11 +27,11 @@ export const FUSE_CANVAS_NODE_SURFACE =
 export const FUSE_CANVAS_LABEL_CLASS =
   "text-[13px] font-medium leading-snug tracking-tight";
 
-/** Icon tile on canvas (96×96 — n8n DEFAULT_NODE_SIZE). */
+/** Icon tile on canvas (96×96 â€” n8n DEFAULT_NODE_SIZE). */
 export const FUSE_CANVAS_NODE_BOX =
   "w-[96px] h-[96px] min-w-[96px] min-h-[96px] box-border";
 
-/** Trigger/starter nodes — rounded left “pill” (n8n --trigger-node--radius). */
+/** Trigger/starter nodes â€” rounded left "pill" (n8n --trigger-node--radius). */
 export const FUSE_CANVAS_TRIGGER_SHAPE =
   "rounded-l-[36px] rounded-r-xl";
 
@@ -41,7 +41,7 @@ export const FUSE_CANVAS_DEFAULT_SHAPE = "rounded-xl";
 export const FUSE_NODE_ROW_WIDTH =
   "w-[255px] min-w-[255px] max-w-[255px] shrink-0";
 
-/** Shared row layout — picker tiles and studio nodes must use these together. */
+/** Shared row layout â€” picker tiles and studio nodes must use these together. */
 export const FUSE_NODE_ROW_SHELL =
   "flex flex-row items-center gap-3 h-[52px] min-h-[52px] px-3.5 py-2.5 rounded-2xl box-border";
 
@@ -63,7 +63,7 @@ const RUN_STATUS_RING = {
   skipped: "ring-2 ring-ink-200/80 dark:ring-ink-600/50",
 };
 
-/** Studio canvas row — same size/type as picker; optional selection + run-status ring. */
+/** Studio canvas row â€” same size/type as picker; optional selection + run-status ring. */
 export const fuseCanvasNodeShellClass = (selected, runStatus) => {
   const parts = [
     FUSE_CANVAS_NODE_SURFACE,

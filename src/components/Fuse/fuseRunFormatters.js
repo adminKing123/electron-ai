@@ -11,7 +11,7 @@ import {
 import FuseJsonViewer from "./FuseJsonViewer";
 
 export function fmtDate(iso) {
-  if (!iso) return "—";
+  if (!iso) return "â€”";
   try {
     return new Date(iso).toLocaleString(undefined, {
       month: "short",
@@ -27,7 +27,7 @@ export function fmtDate(iso) {
 }
 
 export function fmtDuration(ms) {
-  if (ms == null || Number.isNaN(ms)) return "—";
+  if (ms == null || Number.isNaN(ms)) return "â€”";
   if (ms < 1000) return `${Math.round(ms)}ms`;
   return `${(ms / 1000).toFixed(2)}s`;
 }

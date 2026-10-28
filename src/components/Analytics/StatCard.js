@@ -2,12 +2,12 @@
  * Generic stat card for the analytics dashboard.
  *
  * Props:
- *   icon    – react-icons component to show beside the label
- *   label   – Short descriptive label
- *   value   – Primary value (string or number)
- *   sub     – Optional secondary line beneath the value
- *   accent  – When true, renders golden cost-style styling
- *   loading – Shows an animated skeleton instead of content
+ *   icon    - react-icons component to show beside the label
+ *   label   - Short descriptive label
+ *   value   - Primary value (string or number)
+ *   sub     - Optional secondary line beneath the value
+ *   accent  - When true, renders golden cost-style styling
+ *   loading - Shows an animated skeleton instead of content
  */
 
 const CONTAINER =

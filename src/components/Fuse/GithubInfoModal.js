@@ -32,9 +32,9 @@ const TABS = [
 ];
 
 const formatDateTime = (value) => {
-  if (!value) return "—";
+  if (!value) return "â€”";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return "â€”";
   return date.toLocaleString(undefined, {
     dateStyle: "medium",
     timeStyle: "short",
@@ -191,7 +191,7 @@ const WebhooksPanel = ({
           <WebhookListRow
             key={webhook.id}
             title={webhook.name || "Webhook"}
-            subtitle={(webhook.events || []).join(", ") || "—"}
+            subtitle={(webhook.events || []).join(", ") || "â€”"}
             active={!!webhook.active}
             activeLabel={webhook.active ? "Active" : "Inactive"}
             fuseManaged={webhook.is_fuse_managed}

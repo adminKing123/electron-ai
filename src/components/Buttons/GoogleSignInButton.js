@@ -14,7 +14,7 @@ const GoogleSignInButton = () => {
     try {
       setAuthorizationStatus(AUTHORIZATION_STATUS.AUTHORIZATION_IN_PROGRESS);
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch {
       setAuthorizationStatus(AUTHORIZATION_STATUS.AUTHORIZATION_FAILED);
     }
   };

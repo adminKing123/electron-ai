@@ -197,7 +197,7 @@ const AnalyticsPage = () => {
             ))}
           </SegmentGroup>
 
-          {/* Model filter dropdown — only shown when at least one model has been used */}
+          {/* Model filter dropdown â€” only shown when at least one model has been used */}
           {usedModels.length > 0 && (
             <label className="flex items-center gap-2">
               <span className="text-[12px] font-medium text-ink-500 dark:text-ink-500">Model</span>

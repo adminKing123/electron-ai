@@ -6,8 +6,8 @@ import { useOutputOptionsStore } from "../../store/usePromptStores";
 
 /**
  * Dropdown button that exposes output-format toggles:
- * - HTML Preview  – AI produces a self-contained HTML file rendered in-app
- * - Chart View    – AI produces Chart.js-compatible JSON rendered as a chart
+ * - HTML Preview  - AI produces a self-contained HTML file rendered in-app
+ * - Chart View    - AI produces Chart.js-compatible JSON rendered as a chart
  *
  * Both options are independent toggles backed by `useOutputOptionsStore`.
  */
@@ -51,7 +51,7 @@ const OutputOptionsDropdown = () => {
         >
           <MdOutlineAutoAwesome className="w-3.5 h-3.5 flex-shrink-0 opacity-70" />
           <span className="hidden sm:inline">Output</span>
-          {/* Active count badge — number on sm+, dot on xs */}
+          {/* Active count badge â€” number on sm+, dot on xs */}
           {hasActiveOption && (
             <>
               <span className="sm:hidden w-2 h-2 rounded-full bg-brand-600 dark:bg-brand-500" />

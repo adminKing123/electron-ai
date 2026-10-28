@@ -38,7 +38,7 @@ const ConnectionPill = ({ status }) => {
   const live = status === "connected";
   const pending = status === "connecting" || status === "idle";
   const Icon = live ? TbWifi : TbWifiOff;
-  const label = live ? "Live" : pending ? "Connecting…" : "Offline";
+  const label = live ? "Live" : pending ? "Connecting..." : "Offline";
   const cls = live
     ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
     : pending
@@ -213,7 +213,7 @@ const WorkflowRunDetailPage = () => {
             />
           </div>
 
-          {/* Run panel — side on desktop, bottom sheet on mobile (matches Fuse Studio) */}
+          {/* Run panel â€” side on desktop, bottom sheet on mobile (matches Fuse Studio) */}
           <div
             className={`
               flex flex-col

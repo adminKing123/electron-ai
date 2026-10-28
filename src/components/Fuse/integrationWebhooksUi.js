@@ -103,7 +103,7 @@ export const WebhookList = ({ children, header }) => (
   </div>
 );
 
-/** GitHub repo lookup — minimal single row. */
+/** GitHub repo lookup â€” minimal single row. */
 export const GithubRepoLookup = ({ repoName, setRepoName, onSubmit, loading }) => (
   <form
     onSubmit={(e) => {

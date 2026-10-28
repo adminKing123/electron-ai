@@ -31,9 +31,9 @@ const TABS = [
 ];
 
 const formatDateTime = (value) => {
-  if (!value) return "—";
+  if (!value) return "â€”";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return "â€”";
   return date.toLocaleString(undefined, {
     dateStyle: "medium",
     timeStyle: "short",

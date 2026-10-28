@@ -9,7 +9,7 @@ const EXAMPLE_PROMPTS = [
 ];
 
 /**
- * FuseAutomateInput — Hero prompt area on the Fuse discovery page.
+ * FuseAutomateInput â€” Hero prompt area on the Fuse discovery page.
  *
  * Collapsed: compact pill input.
  * Focused:  expands into a card with textarea, Create action, and example prompts.
@@ -136,7 +136,7 @@ const FuseAutomateInput = ({ creating, onCreate, onExpandedChange }) => {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               onFocus={handleExpand}
-              placeholder="Describe a task for Comet Fuse…"
+              placeholder="Describe a task for Comet Fuse..."
               disabled={creating}
               className="flex-1 min-w-0 bg-transparent text-[14px] py-2
                 text-ink-875 dark:text-ink-150

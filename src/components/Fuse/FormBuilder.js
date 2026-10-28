@@ -61,7 +61,7 @@ const resolvePresetValues = (presetValues) => {
     out.date = new Date().toISOString().split("T")[0];
   } else if (out.date === "next-monday") {
     const d = new Date();
-    const dow = d.getDay(); // 0 = Sunday, 1 = Monday, …
+    const dow = d.getDay(); // 0 = Sunday, 1 = Monday, ...
     const daysUntilMonday = dow === 1 ? 7 : (1 - dow + 7) % 7 || 7;
     d.setDate(d.getDate() + daysUntilMonday);
     out.date = d.toISOString().split("T")[0];
@@ -167,7 +167,7 @@ const DateField = ({ value, onChange }) => (
   />
 );
 
-/** Time input — same color-scheme trick for the clock icon. */
+/** Time input â€” same color-scheme trick for the clock icon. */
 const TimeField = ({ value, onChange }) => (
   <input
     type="time"
@@ -250,7 +250,7 @@ const WebexRoomSelectField = ({ field, value, onChange }) => {
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading spaces…
+        Loading spaces...
       </div>
     );
   }
@@ -279,7 +279,7 @@ const WebexRoomSelectField = ({ field, value, onChange }) => {
         className={SELECT_BASE}
       >
         <option value="" disabled>
-          Select a space or chat…
+          Select a space or chat...
         </option>
         {rooms.map((room) => (
           <option key={room.id} value={room.id}>
@@ -322,7 +322,7 @@ const GithubRepoSelectField = ({ field, value, onChange }) => {
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading repositories…
+        Loading repositories...
       </div>
     );
   }
@@ -351,7 +351,7 @@ const GithubRepoSelectField = ({ field, value, onChange }) => {
         className={SELECT_BASE}
       >
         <option value="" disabled>
-          Select a repository…
+          Select a repository...
         </option>
         {repos.map((repo) => (
           <option key={repo.id} value={repo.id}>
@@ -409,7 +409,7 @@ const GithubBranchSelectField = ({ field, value, onChange, variables, allValues 
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading branches…
+        Loading branches...
       </div>
     );
   }
@@ -487,7 +487,7 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
   if (loading) {
     return (
       <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>
-        Loading people…
+        Loading people...
       </div>
     );
   }
@@ -516,7 +516,7 @@ const WebexPersonSelectField = ({ field, value, onChange }) => {
         className={SELECT_BASE}
       >
         <option value="" disabled>
-          Select a person…
+          Select a person...
         </option>
         {options.map((person) => {
           const optionValue = valueField === "id" ? person.id : person.email;
@@ -630,7 +630,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
         ].join(" ")}
       >
         <span className="truncate text-[13px]">
-          {value ? (selectedLabel || value) : "Select a spreadsheet…"}
+          {value ? (selectedLabel || value) : "Select a spreadsheet..."}
         </span>
         <svg
           className={`flex-shrink-0 text-ink-400 dark:text-ink-550 transition-transform ${open ? "rotate-180" : ""}`}
@@ -660,7 +660,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
                 type="text"
                 value={searchText}
                 onChange={handleSearchChange}
-                placeholder="Search spreadsheets…"
+                placeholder="Search spreadsheets..."
                 className="w-full pl-7 pr-3 py-1.5 rounded-lg text-[13px]
                   bg-ink-50 dark:bg-void-825
                   border border-ink-100 dark:border-void-800
@@ -675,7 +675,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
           <div className="max-h-52 overflow-y-auto">
             {loading && (
               <div className="px-3 py-4 text-center text-[12px] text-ink-500 dark:text-ink-600">
-                Loading…
+                Loading...
               </div>
             )}
             {!loading && error && (
@@ -759,14 +759,14 @@ const GoogleSheetsSheetSelectField = ({ value, onChange, allValues }) => {
   }, [spreadsheetId]);
 
   if (!spreadsheetId) return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Select a spreadsheet first</div>;
-  if (loading)        return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading sheets…</div>;
+  if (loading)        return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading sheets...</div>;
   if (error)          return <p className="text-[12px] text-red-500 dark:text-red-400">Couldn't load sheet tabs. Try again.</p>;
   if (!sheets.length) return <p className="text-[12px] text-ink-500 dark:text-ink-600">No sheets found in this spreadsheet.</p>;
 
   return (
     <div className="relative">
       <select value={value ?? ""} onChange={(e) => onChange(e.target.value)} className={SELECT_BASE}>
-        <option value="" disabled>Select a sheet tab…</option>
+        <option value="" disabled>Select a sheet tab...</option>
         {sheets.map((s) => (
           <option key={s.id} value={s.id}>{s.label}</option>
         ))}
@@ -777,7 +777,7 @@ const GoogleSheetsSheetSelectField = ({ value, onChange, allValues }) => {
 };
 
 /**
- * Dynamic column builder — fetches header row from the selected sheet and renders
+ * Dynamic column builder â€” fetches header row from the selected sheet and renders
  * one variable_text input per column. The stored value shape is a plain object:
  * { "Column Name": "value or {{variable}}", ... }
  */
@@ -817,7 +817,7 @@ const GoogleSheetsColumnBuilderField = ({ value, onChange, allValues, variables 
   }
 
   if (loading) {
-    return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading columns…</div>;
+    return <div className={`${INPUT_BASE} text-ink-500 dark:text-ink-600`}>Loading columns...</div>;
   }
 
   if (error) {
@@ -970,9 +970,9 @@ const getShortLabel = (label, nodeName) => {
 /**
  * Two-step floating variable picker.
  *
- * Step 1 — node list: shows each upstream node's name + short ID
+ * Step 1 â€” node list: shows each upstream node's name + short ID
  *           (starter nodes omit the ID).
- * Step 2 — variable list: shows the variables belonging to the chosen node,
+ * Step 2 â€” variable list: shows the variables belonging to the chosen node,
  *           with a back chevron to return to step 1.
  */
 const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) => {
@@ -1597,7 +1597,7 @@ const BodyBuilderField = ({ field, value, onChange }) => {
 
 // --- JsonValueBuilderField ----------------------------------------------------
 /**
- * Visual JSON value builder — mirrors BodyBuilderField but assigns concrete
+ * Visual JSON value builder â€” mirrors BodyBuilderField but assigns concrete
  * VALUES (with variable insertion) to each declared field, instead of just
  * defining the schema type.
  *
@@ -1710,7 +1710,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
         </button>
       </div>
 
-      {/* Value row — shown for all types except "object" (nested fields handle it) */}
+      {/* Value row â€” shown for all types except "object" (nested fields handle it) */}
       {field.type !== "object" && field.type !== "array" && (
         <div ref={containerRef} className="relative flex items-center gap-1 w-full mt-1">
           <input
@@ -1991,7 +1991,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
               : "text-ink-450 dark:text-ink-550 italic",
           ].join(" ")}
         >
-          {value || "— click @ to pick a variable —"}
+          {value || "â€” click @ to pick a variable â€”"}
         </div>
 
         {/* Clear */}
@@ -2121,7 +2121,7 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
           />
         </div>
 
-        {/* Remove button — only visible when more than one row exists */}
+        {/* Remove button â€” only visible when more than one row exists */}
         {total > 1 && (
           <button
             type="button"
@@ -2164,7 +2164,7 @@ const ConditionRow = ({ cond, total, variables, onChange, onRemove }) => {
           <input
             type="text"
             value={cond.value ?? ""}
-            placeholder="value…"
+            placeholder="value..."
             onChange={(e) => update({ value: e.target.value })}
             className={`${INPUT_BASE} flex-1`}
           />
@@ -2416,7 +2416,7 @@ const FieldInput = ({ field, value, onChange, variables = [], allValues = {} }) 
 /**
  * Generic, schema-driven form renderer.
  *
- * The `configForm` schema (provided by the backend) drives everything —
+ * The `configForm` schema (provided by the backend) drives everything â€”
  * no hardcoded fields exist here. Adding a new field type only requires
  * adding a case to FieldInput and a corresponding entry in the schema.
  *
@@ -2506,7 +2506,7 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
             </p>
           )}
 
-          {/* Fields — grid-2 layout or single column */}
+          {/* Fields â€” grid-2 layout or single column */}
           <div
             className={
               section.layout === "grid-2"

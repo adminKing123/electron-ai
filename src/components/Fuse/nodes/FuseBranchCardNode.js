@@ -41,7 +41,7 @@ const branchRunBorderClass = (runStatus) => {
 };
 
 /**
- * Shared branch UI — header (icon + title), output rows, left in / right outs.
+ * Shared branch UI â€” header (icon + title), output rows, left in / right outs.
  * @param {Array<{ id: string, label: string, dot?: keyof typeof DOT_CLASS }>} branches
  */
 const FuseBranchCardNode = ({

@@ -46,7 +46,7 @@ const StatusBadge = ({ workflow }) => {
   );
 };
 
-// --- Node icons strip — shared by both card states ----------------------------
+// --- Node icons strip â€” shared by both card states ----------------------------
 
 const NodeIcons = ({ nodes, overflowCls }) => {
   const visible = nodes.slice(0, 4);

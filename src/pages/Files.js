@@ -9,7 +9,7 @@ import { BiExpandAlt } from "react-icons/bi";
 import ImageViewer from "../components/Common/ImageViewer";
 
 /**
- * Single file card — image thumbnails open in the fullscreen ImageViewer,
+ * Single file card â€” image thumbnails open in the fullscreen ImageViewer,
  * non-image files show an icon with name + size. Both support a download button.
  */
 const FilePreview = ({ file }) => {
@@ -80,7 +80,7 @@ const FilePreview = ({ file }) => {
           </p>
         </div>
 
-        {/* Download button — always shown on hover */}
+        {/* Download button â€” always shown on hover */}
         {fileObj.download_url && (
           <button
             onClick={handleDownload}

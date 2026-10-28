@@ -23,7 +23,7 @@ import {
  * Extend this map as new node types are introduced on the backend.
  *
  * The backend sends: { icon: "TbCalendarTime" }
- * The frontend resolves: getNodeIcon("TbCalendarTime") â†’ <TbCalendarTime />
+ * The frontend resolves: getNodeIcon("TbCalendarTime") â†' <TbCalendarTime />
  */
 export const ICON_REGISTRY = {
   SiGmail,
