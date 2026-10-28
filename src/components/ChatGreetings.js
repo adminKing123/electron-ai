@@ -11,7 +11,7 @@ function ChatGreetings() {
     "Ready to help today!",
     "Ask Comet AI anything :)",
     "What's on your mind?",
-    "I'm here ðŸâ€˜€",
+    "I'm here",
   ];
 
   const nameGreets = firstName
