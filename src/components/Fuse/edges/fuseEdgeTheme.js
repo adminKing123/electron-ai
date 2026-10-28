@@ -1,4 +1,4 @@
-import { MarkerType } from "@xyflow/react";
+import { getBezierPath, MarkerType } from "@xyflow/react";
 
 /** Edge stroke tokens — aligned with connected handles (#7c3aed light / #94a3b8 dark). */
 export const FUSE_EDGE_THEME = {
@@ -14,11 +14,34 @@ export const FUSE_EDGE_THEME = {
   },
 };
 
-export const FUSE_EDGE_PATH = {
-  borderRadius: 12,
-  /** Offset from handle center so the line clears the node border and output labels. */
-  offset: 12,
+/** n8n-style curved connectors (React Flow `default` = bezier). */
+export const FUSE_EDGE_SHAPE = {
+  type: "default",
+  curvature: 0.35,
 };
+
+export const fuseEdgePathOptions = () => ({
+  curvature: FUSE_EDGE_SHAPE.curvature,
+});
+
+export function buildFuseEdgePath({
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+}) {
+  return getBezierPath({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    curvature: FUSE_EDGE_SHAPE.curvature,
+  });
+}
 
 export const fuseEdgeMarker = (color) => ({
   type: MarkerType.ArrowClosed,

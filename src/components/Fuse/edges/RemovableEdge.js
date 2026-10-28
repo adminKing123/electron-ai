@@ -1,14 +1,10 @@
 import React, { useState, useMemo } from "react";
-import {
-  BaseEdge,
-  EdgeLabelRenderer,
-  getSmoothStepPath,
-} from "@xyflow/react";
+import { BaseEdge, EdgeLabelRenderer } from "@xyflow/react";
 import { TbX } from "react-icons/tb";
 import useFuseStudioStore from "../../../store/useFuseStudioStore";
 import useIsDark from "../../../hooks/useIsDark";
 import {
-  FUSE_EDGE_PATH,
+  buildFuseEdgePath,
   fuseEdgeHaloColor,
   fuseEdgeMarker,
   resolveFuseEdgeStroke,
@@ -28,15 +24,13 @@ export default function RemovableEdge({
   const [hovered, setHovered] = useState(false);
   const removeEdge = useFuseStudioStore((s) => s.removeEdge);
 
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
+  const [edgePath, labelX, labelY] = buildFuseEdgePath({
     sourceX,
     sourceY,
     sourcePosition,
     targetX,
     targetY,
     targetPosition,
-    borderRadius: FUSE_EDGE_PATH.borderRadius,
-    offset: FUSE_EDGE_PATH.offset,
   });
 
   const stroke = useMemo(

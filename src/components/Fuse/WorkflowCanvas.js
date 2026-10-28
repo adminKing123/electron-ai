@@ -16,7 +16,7 @@ import { createFuseNodeId } from "../../utils/helpers";
 import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
 import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
-import { FUSE_EDGE_PATH } from "./edges/fuseEdgeTheme";
+import { FUSE_EDGE_SHAPE, fuseEdgePathOptions } from "./edges/fuseEdgeTheme";
 import {
   buildNodeLookup,
   collectRunningNodeIds,
@@ -394,15 +394,12 @@ const WorkflowCanvas = ({
         : false;
       const toActive = runningNodeIds.has(edge.target);
 
-      const pathOptions = {
-        borderRadius: FUSE_EDGE_PATH.borderRadius,
-        offset: FUSE_EDGE_PATH.offset,
-      };
+      const pathOptions = fuseEdgePathOptions();
 
       if (traversed) {
         return {
           ...edge,
-          type: "smoothstep",
+          type: FUSE_EDGE_SHAPE.type,
           pathOptions,
           animated: toActive,
           style: {
@@ -415,7 +412,7 @@ const WorkflowCanvas = ({
 
       return {
         ...edge,
-        type: "smoothstep",
+        type: FUSE_EDGE_SHAPE.type,
         pathOptions,
         animated: false,
         style: {
@@ -483,7 +480,7 @@ const WorkflowCanvas = ({
           fitView
           fitViewOptions={{ padding: 0.35, maxZoom: 1 }}
           proOptions={{ hideAttribution: true }}
-          connectionLineType={ConnectionLineType.SmoothStep}
+          connectionLineType={ConnectionLineType.Bezier}
           connectionLineStyle={{
             stroke: isDark ? "#94a3b8" : "#7c3aed",
             strokeWidth: 2,
@@ -492,12 +489,9 @@ const WorkflowCanvas = ({
           defaultEdgeOptions={
             readOnly
               ? {
-                  type: "smoothstep",
+                  type: FUSE_EDGE_SHAPE.type,
                   animated: false,
-                  pathOptions: {
-                    borderRadius: FUSE_EDGE_PATH.borderRadius,
-                    offset: FUSE_EDGE_PATH.offset,
-                  },
+                  pathOptions: fuseEdgePathOptions(),
                 }
               : { type: "removable", animated: false }
           }
