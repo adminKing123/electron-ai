@@ -1,8 +1,6 @@
 import React from "react";
 import { Position } from "@xyflow/react";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
-import FuseRunNodeGalaxySpinner from "../FuseRunNodeGalaxySpinner";
-import FuseCanvasNodeStatus from "./FuseCanvasNodeStatus";
 import FuseNodeHandle from "./FuseNodeHandle";
 import {
   FUSE_NODE_LABEL,
@@ -24,22 +22,6 @@ const DOT_CLASS = {
 export const branchRowHandleTop = (rowIndex) =>
   HEADER_H + rowIndex * ROW_H + ROW_H / 2;
 
-const branchRunBorderClass = (runStatus) => {
-  if (runStatus === "success") {
-    return "border-emerald-500/70 dark:border-emerald-400/65 ring-2 ring-emerald-500/25 dark:ring-emerald-400/20 fuse-canvas-node-success";
-  }
-  if (runStatus === "error") {
-    return "border-red-500/75 dark:border-red-400/70 ring-2 ring-red-500/30 dark:ring-red-400/25 fuse-canvas-node-error";
-  }
-  if (runStatus === "skipped") {
-    return "border-ink-300/80 dark:border-void-650/45 opacity-90";
-  }
-  if (runStatus === "running") {
-    return "fuse-canvas-node-running";
-  }
-  return "";
-};
-
 /**
  * Shared branch UI — header (icon + title), output rows, left in / right outs.
  * @param {Array<{ id: string, label: string, dot?: keyof typeof DOT_CLASS }>} branches
@@ -60,7 +42,6 @@ const FuseBranchCardNode = ({
         className={[
           "relative rounded-xl overflow-visible box-border",
           fuseCanvasNodeShellClass(selected, runStatus),
-          branchRunBorderClass(runStatus),
           selected && runStatus !== "running"
             ? "border-brand-500/40 dark:border-brand-400/45"
             : "",
@@ -118,11 +99,6 @@ const FuseBranchCardNode = ({
             </div>
           );
         })}
-
-        {runStatus === "running" && (
-          <FuseRunNodeGalaxySpinner className="top-2 right-2" />
-        )}
-        <FuseCanvasNodeStatus runStatus={runStatus} />
 
         {branches.map((branch, index) => (
           <FuseNodeHandle

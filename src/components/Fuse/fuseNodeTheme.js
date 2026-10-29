@@ -55,30 +55,54 @@ export const FUSE_NODE_ROW_LABEL =
 export const fusePickerCardClass =
   `${FUSE_NODE_ROW_SHELL} ${FUSE_PICKER_ROW} w-full text-left justify-start transition-colors duration-150 cursor-grab active:cursor-grabbing select-none`;
 
-const RUN_STATUS_RING = {
-  running:
-    "ring-[3px] ring-brand-600 dark:ring-brand-400 shadow-[0_0_0_4px_rgba(124,58,237,0.22)] dark:shadow-[0_0_0_4px_rgba(148,163,184,0.18)]",
-  success: "ring-2 ring-green-500/45 dark:ring-green-400/40",
-  error: "ring-2 ring-red-500/50 dark:ring-red-400/45",
-  skipped: "ring-2 ring-ink-200/80 dark:ring-ink-600/50",
+/** Run-detail canvas: color + border highlight (no status icons). */
+export const fuseCanvasRunStatusClass = (runStatus) => {
+  switch (runStatus) {
+    case "running":
+      return [
+        "border",
+        "bg-brand-50/95 dark:bg-brand-950/45",
+        "border-brand-500 dark:border-brand-400",
+        "ring-[3px] ring-brand-500/40 dark:ring-brand-400/35",
+        "fuse-canvas-node-running",
+        "relative overflow-visible",
+      ].join(" ");
+    case "success":
+      return [
+        "border",
+        "bg-emerald-50 dark:bg-emerald-950/50",
+        "border-emerald-500 dark:border-emerald-400",
+        "ring-2 ring-emerald-500/35 dark:ring-emerald-400/30",
+        "fuse-canvas-node-success",
+      ].join(" ");
+    case "error":
+      return [
+        "border",
+        "bg-red-50 dark:bg-red-950/50",
+        "border-red-500 dark:border-red-400",
+        "ring-2 ring-red-500/35 dark:ring-red-400/30",
+        "fuse-canvas-node-error",
+      ].join(" ");
+    case "skipped":
+      return [
+        "border",
+        "bg-ink-50/95 dark:bg-void-800/85",
+        "border-ink-350 dark:border-void-650",
+        "opacity-90",
+        "ring-1 ring-ink-200/80 dark:ring-void-700/55",
+        "fuse-canvas-node-skipped",
+      ].join(" ");
+    default:
+      return "";
+  }
 };
 
 /** Studio canvas row — same size/type as picker; optional selection + run-status ring. */
 export const fuseCanvasNodeShellClass = (selected, runStatus) => {
   const parts = [
-    FUSE_CANVAS_NODE_SURFACE,
-    "transition-[box-shadow,ring-color] duration-200",
+    runStatus ? fuseCanvasRunStatusClass(runStatus) : FUSE_CANVAS_NODE_SURFACE,
+    "transition-[box-shadow,ring-color,background-color,border-color] duration-200",
   ];
-
-  if (runStatus === "running") {
-    parts.push(
-      RUN_STATUS_RING.running,
-      "fuse-run-node-shell-running",
-      "relative overflow-visible",
-    );
-  } else if (runStatus && RUN_STATUS_RING[runStatus]) {
-    parts.push(RUN_STATUS_RING[runStatus]);
-  }
 
   if (selected && runStatus !== "running") {
     parts.push("ring-2 ring-brand-600/25 dark:ring-brand-400/30");
@@ -96,34 +120,10 @@ export const fuseCanvasNodeBoxClass = (
 ) => {
   const parts = [
     dynamicSize ? "min-w-[96px] min-h-[96px] box-border" : FUSE_CANVAS_NODE_BOX,
-    FUSE_CANVAS_NODE_SURFACE,
+    runStatus ? fuseCanvasRunStatusClass(runStatus) : FUSE_CANVAS_NODE_SURFACE,
     isStarter ? FUSE_CANVAS_TRIGGER_SHAPE : FUSE_CANVAS_DEFAULT_SHAPE,
-    "transition-[box-shadow,border-color] duration-150 overflow-visible relative",
+    "transition-[box-shadow,border-color,background-color] duration-150 overflow-visible relative",
   ];
-
-  if (runStatus === "running") {
-    parts.push(
-      RUN_STATUS_RING.running,
-      "fuse-canvas-node-running",
-    );
-  } else if (runStatus === "success") {
-    parts.push(
-      "border-emerald-500/70 dark:border-emerald-400/65",
-      "ring-2 ring-emerald-500/25 dark:ring-emerald-400/20",
-      "fuse-canvas-node-success",
-    );
-  } else if (runStatus === "error") {
-    parts.push(
-      "border-red-500/75 dark:border-red-400/70",
-      "ring-2 ring-red-500/30 dark:ring-red-400/25",
-      "fuse-canvas-node-error",
-    );
-  } else if (runStatus === "skipped") {
-    parts.push(
-      "border-ink-300/80 dark:border-void-650/45 opacity-90",
-      "ring-1 ring-ink-200/60 dark:ring-void-700/40",
-    );
-  }
 
   if (selected && runStatus !== "running") {
     parts.push(

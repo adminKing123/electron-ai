@@ -361,8 +361,8 @@ const WorkflowCanvas = ({
             ...next,
             style: {
               ...(next.style ?? {}),
-              opacity: 0.28,
-              filter: "saturate(0.45)",
+              opacity: 0.42,
+              filter: "saturate(0.58)",
             },
           };
         }
@@ -418,7 +418,7 @@ const WorkflowCanvas = ({
         style: {
           stroke: idleStroke,
           strokeWidth: 1.25,
-          opacity: runCanvasActive ? 0.22 : 0.45,
+          opacity: runCanvasActive ? 0.40 : 0.45,
         },
       };
     });
@@ -557,7 +557,7 @@ const WorkflowCanvas = ({
               border border-ink-150 dark:border-void-800
               text-[11px] font-medium text-ink-500 dark:text-ink-600 select-none"
           >
-            Drag to draw a block &nbsp;·&nbsp; <kbd className="font-mono">Esc</kbd> to cancel
+            Drag to draw a block &nbsp;ï¿½&nbsp; <kbd className="font-mono">Esc</kbd> to cancel
           </div>
         </div>
       )}
