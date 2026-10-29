@@ -729,7 +729,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
           {!loading && !error && !searchText && spreadsheets.length > 0 && (
             <div className="px-3 py-1.5 border-t border-ink-75 dark:border-void-825">
               <p className="text-[11px] text-ink-450 dark:text-ink-550">
-                Showing latest 25 · type to search all
+                Showing latest 25 ï¿½ type to search all
               </p>
             </div>
           )}
@@ -953,6 +953,65 @@ const useVariableInserter = (inputRef, value, onChange) =>
     },
     [inputRef, value, onChange]
   );
+
+/** Close a floating picker when the user clicks outside its container. */
+const usePickerDismiss = (containerRef, isOpen, setOpen) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const onOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
+  }, [isOpen, containerRef, setOpen]);
+};
+
+const VARIABLE_INSERT_BTN_CLASS =
+  "flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg " +
+  "text-[11px] font-mono font-bold text-ink-500 dark:text-ink-550 " +
+  "border border-ink-200 dark:border-void-775 " +
+  "hover:text-brand-600 dark:hover:text-brand-400 " +
+  "hover:border-brand-200 dark:hover:border-brand-800/50 " +
+  "hover:bg-brand-50 dark:hover:bg-brand-950/40 transition-colors";
+
+/** Text input with @ variable insertion (shared by value builders). */
+const VariableTextInput = ({ value, onChange, variables, placeholder, className = "" }) => {
+  const inputRef = useRef(null);
+  const containerRef = useRef(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const insertVariable = useVariableInserter(inputRef, value ?? "", onChange);
+  usePickerDismiss(containerRef, pickerOpen, setPickerOpen);
+
+  return (
+    <div ref={containerRef} className={`relative flex items-center gap-1 w-full ${className}`}>
+      <input
+        ref={inputRef}
+        type="text"
+        value={value ?? ""}
+        placeholder={placeholder ?? "value  or  {{var}}"}
+        onChange={(e) => onChange(e.target.value)}
+        className={`${INPUT_BASE} flex-1 text-[12px]`}
+      />
+      <button
+        type="button"
+        title="Insert variable"
+        onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
+        className={VARIABLE_INSERT_BTN_CLASS}
+      >
+        @
+      </button>
+      {pickerOpen && (
+        <VariablePicker
+          variables={variables}
+          onPick={insertVariable}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
+    </div>
+  );
+};
 
 /**
  * Strips the node name prefix from a label to get just the field path.
@@ -1388,8 +1447,10 @@ const VariableTextareaField = ({ field, value, onChange, variables }) => {
  *
  * Stored value shape:
  * {
- *   mode:   "visual",
- *   fields: FieldNode[],
+ *   mode:     "visual",
+ *   rootType: "object" | "array" | "string" | "number" | "boolean",
+ *   fields:   FieldNode[],  // object root
+ *   items:    { type, fields? },  // array root
  * }
  *
  * FieldNode:
@@ -1403,11 +1464,136 @@ const VariableTextareaField = ({ field, value, onChange, variables }) => {
  *   },
  * }
  */
-const BODY_FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
-const BODY_SCHEMA_MAX_DEPTH = 4;
+const JSON_NESTED_FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
+const ROOT_JSON_TYPES = ["object", "array", "string", "number", "boolean"];
+const JSON_NESTED_MAX_DEPTH = 4;
+const JSON_ENVELOPE_FIELD_TYPES = new Set(["body_builder", "json_value_builder"]);
+const coerceRootType = (raw) =>
+  ROOT_JSON_TYPES.includes(raw) ? raw : "object";
+
+const patchVisualEnvelope = (value, rootType, patch) =>
+  ({ mode: "visual", rootType: coerceRootType(rootType ?? value?.rootType), ...patch });
+
+const applyJsonEnvelopeRootType = (value, newRoot, { isValueBuilder = false } = {}) => {
+  const current = value && typeof value === "object" ? value : { mode: "visual" };
+  const next = { mode: "visual", rootType: newRoot };
+  if (newRoot === "object") {
+    next.fields = current.fields ?? [];
+  } else if (newRoot === "array") {
+    if (isValueBuilder) next.elements = current.elements ?? [];
+    else next.items = current.items ?? { type: "string" };
+  } else {
+    next.value = current.value ?? "";
+  }
+  return next;
+};
+
+const JSON_ROOT_SELECT_CLASS =
+  "w-full pl-2 pr-6 py-1 rounded-md text-[11px] font-mono appearance-none " +
+  "text-ink-700 dark:text-ink-350 bg-white dark:bg-void-850 " +
+  "border border-ink-200 dark:border-void-775 " +
+  "focus:outline-none focus:border-ink-400 dark:focus:border-void-700 " +
+  "transition-colors cursor-pointer";
+
+/** Compact root-type dropdown beside the field title (no separate label). */
+const JsonRootTypeDropdown = ({ value, onChange }) => (
+  <div className="relative flex-shrink-0 w-[7.25rem]">
+    <select
+      value={coerceRootType(value)}
+      onChange={(e) => onChange(e.target.value)}
+      aria-label="JSON root type"
+      className={JSON_ROOT_SELECT_CLASS}
+    >
+      {ROOT_JSON_TYPES.map((t) => (
+        <option key={t} value={t}>{t}</option>
+      ))}
+    </select>
+    <span
+      aria-hidden
+      className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-ink-400 dark:text-ink-550"
+    >
+      <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+        <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  </div>
+);
+
+const NESTED_INDENT = "ml-5 pl-3 border-l border-ink-150 dark:border-void-800";
+
+const RemoveFieldButton = ({ onClick, className = "" }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-label="Remove field"
+    className={
+      "flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg " +
+      "text-ink-450 dark:text-ink-600 " +
+      "hover:text-[#e05c5c] dark:hover:text-[#c26060] " +
+      "hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a] " +
+      "transition-colors text-lg leading-none " +
+      className
+    }
+  >
+    Ã—
+  </button>
+);
+
+/** Schema builder: array item type (+ nested object properties). Used in rows and at array root. */
+const SchemaArrayItemsEditor = ({
+  items,
+  depth,
+  showDescription,
+  showEnum,
+  onChange,
+  className = "",
+}) => {
+  const itemType = items?.type ?? "string";
+  const canNest = depth < JSON_NESTED_MAX_DEPTH;
+
+  const handleItemsTypeChange = (newType) => {
+    const next = { ...(items ?? {}), type: newType };
+    if (newType === "object") next.fields = items?.fields ?? [];
+    onChange(next);
+  };
+
+  return (
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <div className="flex items-center gap-2">
+        <span className="text-[11px] text-ink-450 dark:text-ink-550 whitespace-nowrap">
+          Items type:
+        </span>
+        <div className="relative w-28">
+          <select
+            value={itemType}
+            onChange={(e) => handleItemsTypeChange(e.target.value)}
+            className={SELECT_BASE}
+          >
+            {JSON_NESTED_FIELD_TYPES.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <SelectChevron />
+        </div>
+      </div>
+      {itemType === "object" && canNest && (
+        <SchemaFieldList
+          fields={items?.fields ?? []}
+          depth={depth + 1}
+          label="Object properties"
+          showDescription={showDescription}
+          showEnum={showEnum}
+          onChange={(newFields) =>
+            onChange({ ...(items ?? {}), type: "object", fields: newFields })
+          }
+        />
+      )}
+    </div>
+  );
+};
 
 /**
- * Renders one field row: [key input] [type select] [× button]
+ * Renders one field row: [key input] [type select] [ï¿½ button]
  * Expands below with nested content for "object" and "array" types.
  */
 const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
@@ -1418,14 +1604,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
     onUpdate(updated);
   };
 
-  const handleItemsTypeChange = (newType) => {
-    const items = { ...(field.items ?? {}), type: newType };
-    if (newType === "object") items.fields = field.items?.fields ?? [];
-    onUpdate({ ...field, items });
-  };
-
-  const canNest = depth < BODY_SCHEMA_MAX_DEPTH;
-  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-void-800";
+  const canNest = depth < JSON_NESTED_MAX_DEPTH;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -1444,7 +1623,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
             onChange={(e) => handleTypeChange(e.target.value)}
             className={SELECT_BASE}
           >
-            {BODY_FIELD_TYPES.map((t) => (
+            {JSON_NESTED_FIELD_TYPES.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
@@ -1478,49 +1657,23 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
             transition-colors text-lg leading-none"
           aria-label="Remove field"
         >
-          ×
+          ï¿½
         </button>
       </div>
 
-      {/* Array: choose items type + optionally define object properties */}
       {field.type === "array" && (
-        <div className={`${indent} flex flex-col gap-1.5 py-1.5`}>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] text-ink-450 dark:text-ink-550 whitespace-nowrap">
-              Items type:
-            </span>
-            <div className="relative w-28">
-              <select
-                value={field.items?.type ?? "string"}
-                onChange={(e) => handleItemsTypeChange(e.target.value)}
-                className={SELECT_BASE}
-              >
-                {BODY_FIELD_TYPES.map((t) => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-              <SelectChevron />
-            </div>
-          </div>
-          {/* If each array item is an object, define its properties */}
-          {field.items?.type === "object" && canNest && (
-            <SchemaFieldList
-              fields={field.items.fields ?? []}
-              depth={depth + 1}
-              label="Object properties"
-              showDescription={field.showDescription}
-              showEnum={field.showEnum}
-              onChange={(newFields) =>
-                onUpdate({ ...field, items: { ...field.items, fields: newFields } })
-              }
-            />
-          )}
-        </div>
+        <SchemaArrayItemsEditor
+          className={`${NESTED_INDENT} py-1.5`}
+          items={field.items}
+          depth={depth}
+          showDescription={field.showDescription}
+          showEnum={field.showEnum}
+          onChange={(items) => onUpdate({ ...field, items })}
+        />
       )}
 
-      {/* Object: define its properties */}
       {field.type === "object" && canNest && (
-        <div className={`${indent} py-1.5`}>
+        <div className={`${NESTED_INDENT} py-1.5`}>
           <SchemaFieldList
             fields={field.fields ?? []}
             depth={depth + 1}
@@ -1583,58 +1736,37 @@ const SchemaFieldList = ({ fields, depth, label, onChange, showDescription, show
 };
 
 const BodyBuilderField = ({ field, value, onChange }) => {
-  const fields = value?.fields ?? [];
+  const rootType = coerceRootType(value?.rootType);
+
+  const commit = (patch) => onChange(patchVisualEnvelope(value, rootType, patch));
+
   return (
-    <SchemaFieldList
-      fields={fields}
-      depth={0}
-      showDescription={field.showDescription}
-      showEnum={field.showEnum}
-      onChange={(newFields) => onChange({ mode: "visual", fields: newFields })}
-    />
+    <div className="flex flex-col gap-1">
+      {rootType === "object" && (
+        <SchemaFieldList
+          fields={value?.fields ?? []}
+          depth={0}
+          showDescription={field.showDescription}
+          showEnum={field.showEnum}
+          onChange={(fields) => commit({ fields })}
+        />
+      )}
+      {rootType === "array" && (
+        <SchemaArrayItemsEditor
+          className="ml-0.5"
+          items={value?.items}
+          depth={0}
+          showDescription={field.showDescription}
+          showEnum={field.showEnum}
+          onChange={(items) => commit({ items })}
+        />
+      )}
+    </div>
   );
 };
 
-// --- JsonValueBuilderField ----------------------------------------------------
-/**
- * Visual JSON value builder â€” mirrors BodyBuilderField but assigns concrete
- * VALUES (with variable insertion) to each declared field, instead of just
- * defining the schema type.
- *
- * Used for: request headers, query params, request body payload.
- *
- * Stored value shape:
- * {
- *   mode:   "visual",
- *   fields: ValueFieldNode[],
- * }
- *
- * ValueFieldNode:
- * {
- *   key:    string,
- *   type:   "string" | "number" | "boolean" | "array" | "object",
- *   value:  string,            // for primitive + array types (may contain {{vars}})
- *   fields: ValueFieldNode[],  // when type === "object"
- * }
- */
-const VALUE_FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
-const JSON_VALUE_MAX_DEPTH = 4;
-
-/**
- * Single row: [key] [type] [value-with-@] [×]
- * For "object" type the value column is replaced by nested ValueFieldList.
- * Defined before ValueFieldList so both can reference each other via hoisting.
- */
+// --- JsonValueBuilderField (value rows; envelope root type is on the label row) -
 const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
-  const inputRef     = useRef(null);
-  const containerRef = useRef(null);
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const insertVariable = useVariableInserter(
-    inputRef,
-    field.value ?? "",
-    (v) => onUpdate({ ...field, value: v }),
-  );
-
   const handleTypeChange = (newType) => {
     const updated = { ...field, type: newType };
     if (newType === "object") {
@@ -1653,18 +1785,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
     onUpdate(updated);
   };
 
-  const canNest = depth < JSON_VALUE_MAX_DEPTH;
-  const indent  = "ml-5 pl-3 border-l border-ink-150 dark:border-void-800";
-
-  React.useEffect(() => {
-    if (!pickerOpen) return;
-    const outside = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target))
-        setPickerOpen(false);
-    };
-    document.addEventListener("mousedown", outside);
-    return () => document.removeEventListener("mousedown", outside);
-  }, [pickerOpen]);
+  const canNest = depth < JSON_NESTED_MAX_DEPTH;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -1688,7 +1809,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
             onChange={(e) => handleTypeChange(e.target.value)}
             className={SELECT_BASE}
           >
-            {VALUE_FIELD_TYPES.map((t) => (
+            {JSON_NESTED_FIELD_TYPES.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
@@ -1706,52 +1827,23 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
             hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
             transition-colors text-lg leading-none ml-auto"
         >
-          ×
+          ï¿½
         </button>
       </div>
 
       {/* Value row â€” shown for all types except "object" (nested fields handle it) */}
       {field.type !== "object" && field.type !== "array" && (
-        <div ref={containerRef} className="relative flex items-center gap-1 w-full mt-1">
-          <input
-            ref={inputRef}
-            type="text"
-            value={field.value ?? ""}
-            placeholder={
-              field.type === "boolean" ? "true / false" :
-              "value  or  {{var}}"
-            }
-            onChange={(e) => onUpdate({ ...field, value: e.target.value })}
-            className={`${INPUT_BASE} flex-1 text-[12px]`}
-          />
-          <button
-            type="button"
-            title="Insert variable"
-            onMouseDown={(e) => { e.preventDefault(); setPickerOpen((o) => !o); }}
-            className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
-              text-[11px] font-mono font-bold
-              text-ink-500 dark:text-ink-550
-              border border-ink-200 dark:border-void-775
-              hover:text-brand-600 dark:hover:text-brand-400
-              hover:border-brand-200 dark:hover:border-brand-800/50
-              hover:bg-brand-50 dark:hover:bg-brand-950/40
-              transition-colors"
-          >
-            @
-          </button>
-          {pickerOpen && (
-            <VariablePicker
-              variables={variables}
-              onPick={insertVariable}
-              onClose={() => setPickerOpen(false)}
-            />
-          )}
-        </div>
+        <VariableTextInput
+          className="mt-1"
+          value={field.value ?? ""}
+          variables={variables}
+          placeholder={field.type === "boolean" ? "true / false" : undefined}
+          onChange={(v) => onUpdate({ ...field, value: v })}
+        />
       )}
 
-      {/* Nested properties for object type */}
       {field.type === "object" && canNest && (
-        <div className={`${indent} py-1.5 mt-1`}>
+        <div className={`${NESTED_INDENT} py-1.5 mt-1`}>
           <ValueFieldList
             fields={field.fields ?? []}
             depth={depth + 1}
@@ -1763,7 +1855,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
 
       {/* Nested items for array type */}
       {field.type === "array" && canNest && (
-        <div className={`${indent} py-1.5 mt-1`}>
+        <div className={`${NESTED_INDENT} py-1.5 mt-1`}>
           <ValueFieldList
             fields={field.elements ?? []}
             depth={depth + 1}
@@ -1817,16 +1909,38 @@ const ValueFieldList = ({ fields, depth, onChange, variables, isArray = false })
   );
 };
 
-/** Entry-point wrapper that reads/writes the `{ mode, fields }` envelope. */
 const JsonValueBuilderField = ({ field, value, onChange, variables }) => {
-  const fields = value?.fields ?? [];
+  const rootType = coerceRootType(value?.rootType);
+  const commit = (patch) => onChange(patchVisualEnvelope(value, rootType, patch));
+
   return (
-    <ValueFieldList
-      fields={fields}
-      depth={0}
-      variables={variables}
-      onChange={(newFields) => onChange({ mode: "visual", fields: newFields })}
-    />
+    <div className="flex flex-col gap-1">
+      {rootType === "object" && (
+        <ValueFieldList
+          fields={value?.fields ?? []}
+          depth={0}
+          variables={variables}
+          onChange={(fields) => commit({ fields })}
+        />
+      )}
+      {rootType === "array" && (
+        <ValueFieldList
+          fields={value?.elements ?? []}
+          depth={0}
+          variables={variables}
+          isArray
+          onChange={(elements) => commit({ elements })}
+        />
+      )}
+      {rootType !== "object" && rootType !== "array" && (
+        <VariableTextInput
+          value={value?.value ?? ""}
+          variables={variables}
+          placeholder={rootType === "boolean" ? "true / false" : undefined}
+          onChange={(v) => commit({ value: v })}
+        />
+      )}
+    </div>
   );
 };
 
@@ -1904,7 +2018,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
           transition-colors text-lg leading-none"
       >
-        ×
+        ï¿½
       </button>
     </div>
   );
@@ -2006,7 +2120,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
               hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
               transition-colors text-lg leading-none"
           >
-            ×
+            ï¿½
           </button>
         )}
 
@@ -2043,7 +2157,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
 /**
  * Builds compound AND/OR conditions for the if/else node.
  *
- * Each condition row: [variable picker] [operator] [value?] [remove ×]
+ * Each condition row: [variable picker] [operator] [value?] [remove ï¿½]
  * An AND/OR toggle badge appears between consecutive rows.
  *
  * Stored value shape (new):
@@ -2265,7 +2379,7 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
                   text-ink-450 hover:text-[#e05] border border-ink-150 dark:border-void-800
                   hover:border-[#fcc] transition-colors"
               >
-                ×
+                ï¿½
               </button>
             )}
           </div>
@@ -2516,13 +2630,28 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
           >
             {section.fields.filter((field) => isFieldVisible(field, values)).map((field, fIdx) => (
               <div key={`${field.key}-${field.type}-${field.label}-${fIdx}`} className="flex flex-col gap-1">
-                {/* Field label */}
-                <label className="text-[12px] font-medium text-ink-650 dark:text-ink-500">
-                  {field.label}
-                  {field.required && (
-                    <span className="text-[#e05] ml-0.5">*</span>
+                {/* Field label (+ JSON root picker for envelope builders) */}
+                <div className="flex items-center justify-between gap-3 min-h-[1.5rem]">
+                  <label className="text-[12px] font-medium text-ink-650 dark:text-ink-500 min-w-0">
+                    {field.label}
+                    {field.required && (
+                      <span className="text-[#e05] ml-0.5">*</span>
+                    )}
+                  </label>
+                  {JSON_ENVELOPE_FIELD_TYPES.has(field.type) && (
+                    <JsonRootTypeDropdown
+                      value={values[field.key]?.rootType}
+                      onChange={(newRoot) =>
+                        handleFieldChange(
+                          field.key,
+                          applyJsonEnvelopeRootType(values[field.key], newRoot, {
+                            isValueBuilder: field.type === "json_value_builder",
+                          }),
+                        )
+                      }
+                    />
                   )}
-                </label>
+                </div>
 
                 {/* Input */}
                 <FieldInput
