@@ -296,3 +296,22 @@ export function getDisplayFuseNodeId (nodeId) {
   const parts = nodeId.split("-");
   return `${parts[parts.length - 1]}`;
 }
+
+/** Full `{{token}}` string stored in the workflow (always uses complete node id). */
+export function wrapVariableToken (token) {
+  return token ? `{{${token}}}` : "{{}}";
+}
+
+/**
+ * Human-readable `{{…}}` for the variable picker (short node id + path).
+ * Insert/pick still uses the full token via wrapVariableToken.
+ */
+export function formatDisplayVariableToken (token) {
+  if (!token) return wrapVariableToken("");
+  const dot = token.indexOf(".");
+  const nodePart = dot === -1 ? token : token.slice(0, dot);
+  const pathPart = dot === -1 ? "" : token.slice(dot + 1);
+  const shortNode = getDisplayFuseNodeId(nodePart);
+  const inner = pathPart ? `${shortNode}.${pathPart}` : shortNode;
+  return wrapVariableToken(inner);
+}

@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   TbLayoutGrid,
   TbTrash,
-  TbX,
   TbSearch,
   TbCopy,
   TbCheck,
@@ -13,6 +12,7 @@ import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import NodePickerCard from "./NodePickerCard";
 import { FUSE_NODE_ICON_WELL, FUSE_NODE_LABEL_MUTED, FUSE_PICKER_ROW } from "./fuseNodeTheme";
 import FormBuilder from "./FormBuilder";
+import { collectEnvelopeVariables } from "./jsonBuilderEnvelope";
 import CONFIG from "../../config";
 import NotificationSettings from "./NotificationSettings";
 import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
@@ -586,30 +586,41 @@ const NodeConfigPanel = ({ className = "" }) => {
         nodeName: n.data.label,
         isStarter: n.data.isStarter === true,
       };
+      /** User-defined schema / set-variable keys (default picker styling). */
+      const userVar = (entry) => ({ ...entry, ...nodeMeta });
+      /** Fixed outputs from the node runtime (highlighted in @ picker). */
+      const builtinVar = (entry) => ({ ...entry, ...nodeMeta, isBuiltin: true });
 
       const bodySchema = n.data?.config?.body_schema;
       const outputSchema = n.data?.config?.output_schema;
 
-      if (bodySchema && bodySchema.mode === "visual") {
+      if (bodySchema?.mode === "visual") {
         vars.push(
-          ...flattenFields(bodySchema.fields, `${n.id}.body`, n.data.label)
-            .map((v) => ({ ...v, ...nodeMeta })),
+          ...collectEnvelopeVariables(bodySchema, {
+            basePath: `${n.id}.body`,
+            baseLabel: n.data.label,
+            flattenFields,
+          }).map((v) => userVar(v)),
         );
       }
 
-      if (outputSchema && outputSchema.mode === "visual") {
+      if (outputSchema?.mode === "visual") {
         vars.push(
-          ...flattenFields(outputSchema.fields, `${n.id}.result`, n.data.label)
-            .map((v) => ({ ...v, ...nodeMeta })),
+          ...collectEnvelopeVariables(outputSchema, {
+            basePath: `${n.id}.result`,
+            baseLabel: n.data.label,
+            flattenFields,
+          }).map((v) => userVar(v)),
         );
       }
 
       if (n.data?.nodeType === "ai_generate_text") {
-        vars.push({
-          token: `${n.id}.text`,
-          label: `${n.data.label} ? text`,
-          ...nodeMeta,
-        });
+        vars.push(
+          builtinVar({
+            token: `${n.id}.text`,
+            label: `${n.data.label} ? text`,
+          }),
+        );
       }
 
       if (n.data?.nodeType === "github_pull_request") {
@@ -666,11 +677,12 @@ const NodeConfigPanel = ({ className = "" }) => {
           { key: "triggered_at", label: "Triggered At" }
         ];
         fields.forEach(({ key, label }) => {
-          vars.push({
-            token: `${n.id}.${key}`,
-            label: `${n.data.label}.${label}`,
-            ...nodeMeta,
-          });
+          vars.push(
+            builtinVar({
+              token: `${n.id}.${key}`,
+              label: `${n.data.label}.${label}`,
+            }),
+          );
         });
       }
 
@@ -679,71 +691,62 @@ const NodeConfigPanel = ({ className = "" }) => {
           (f) => f.key !== "text" || n.data?.config?.include_message_body,
         );
         fields.forEach(({ key, label }) => {
-          vars.push({
-            token: `${n.id}.${key}`,
-            label: `${n.data.label}.${label}`,
-            ...nodeMeta,
-          });
+          vars.push(
+            builtinVar({
+              token: `${n.id}.${key}`,
+              label: `${n.data.label}.${label}`,
+            }),
+          );
         });
       }
 
       if (n.data?.nodeType === "send_webex_message") {
         vars.push(
-          {
+          builtinVar({
             token: `${n.id}.success`,
             label: `${n.data.label} ? success`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.message_id`,
             label: `${n.data.label} ? message_id`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.room_id`,
             label: `${n.data.label} ? room_id`,
-            ...nodeMeta,
-          },
+          }),
         );
       }
 
       if (n.data?.nodeType === "create_json_file") {
         vars.push(
-          {
+          builtinVar({
             token: `${n.id}.url`,
             label: `${n.data.label} ? url`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.filename`,
             label: `${n.data.label} ? filename`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.path`,
             label: `${n.data.label} ? path`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.size_bytes`,
             label: `${n.data.label} ? size_bytes`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.content_type`,
             label: `${n.data.label} ? content_type`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.original_name`,
             label: `${n.data.label} ? original_name`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.success`,
             label: `${n.data.label} ? success`,
-            ...nodeMeta,
-          },
+          }),
         );
       }
 
@@ -751,63 +754,56 @@ const NodeConfigPanel = ({ className = "" }) => {
       // Response data lives under "body" only — same pattern as webhook.
       if (n.data?.nodeType === "http_request") {
         vars.push(
-          {
+          builtinVar({
             token: `${n.id}.status_code`,
             label: `${n.data.label} ? status_code`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.success`,
             label: `${n.data.label} ? success`,
-            ...nodeMeta,
-          },
+          }),
         );
 
         const responseSchema = n.data?.config?.response_schema;
-        if (
-          responseSchema?.mode === "visual" &&
-          responseSchema.fields?.length
-        ) {
+        if (responseSchema?.mode === "visual") {
           vars.push(
-            ...flattenFields(
-              responseSchema.fields,
-              `${n.id}.body`,
-              n.data.label,
-            ).map((v) => ({ ...v, ...nodeMeta })),
+            ...collectEnvelopeVariables(responseSchema, {
+              basePath: `${n.id}.body`,
+              baseLabel: n.data.label,
+              flattenFields,
+            }).map((v) => userVar(v)),
           );
         } else {
-          vars.push({
-            token: `${n.id}.body`,
-            label: `${n.data.label} ? body`,
-            ...nodeMeta,
-          });
+          vars.push(
+            builtinVar({
+              token: `${n.id}.body`,
+              label: `${n.data.label} · body`,
+              isRoot: true,
+            }),
+          );
         }
       }
 
       if (n.data?.nodeType === "for_each") {
         // Always expose the loop iteration primitives
         vars.push(
-          {
+          builtinVar({
             token: `${n.id}.current_item`,
             label: `${n.data.label} ? current item`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.current_index`,
             label: `${n.data.label} ? current index`,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.items`,
             label: `${n.data.label} ? items (full array)`,
             isArray: true,
-            ...nodeMeta,
-          },
-          {
+          }),
+          builtinVar({
             token: `${n.id}.count`,
             label: `${n.data.label} ? count`,
-            ...nodeMeta,
-          },
+          }),
         );
 
         // If the array variable points to a schema-defined array-of-objects, also
@@ -842,21 +838,35 @@ const NodeConfigPanel = ({ className = "" }) => {
               { schema: srcNode.data?.config?.body_schema,     prefix: "body." },
               { schema: srcNode.data?.config?.output_schema,   prefix: "result." },
               { schema: srcNode.data?.config?.variables,       prefix: "" },
-            ].filter(({ schema }) => schema?.mode === "visual" && Array.isArray(schema.fields));
+            ].filter(({ schema }) => schema?.mode === "visual");
 
             for (const { schema, prefix } of schemaSets) {
               if (prefix && !srcPath.startsWith(prefix)) continue;
               const schemaPath = prefix ? srcPath.slice(prefix.length) : srcPath;
               const pathParts  = schemaPath.split(".");
+              const root = schema.rootType || "object";
+
+              if (root === "array" && pathParts.length === 0) {
+                const items = schema.items;
+                if (items?.type === "object" && (items.fields ?? []).length) {
+                  flattenFields(
+                    items.fields,
+                    `${n.id}.current_item`,
+                    `${n.data.label} · item`,
+                  ).forEach((v) => vars.push(userVar(v)));
+                }
+                break;
+              }
+
+              if (root !== "object" || !Array.isArray(schema.fields)) continue;
 
               const arrField = findFieldAtPath(schema.fields, pathParts);
               if (arrField?.type === "array" && arrField.items?.type === "object") {
-                // Expose every object property as current_item.<fieldName>
                 flattenFields(
                   arrField.items.fields || [],
                   `${n.id}.current_item`,
-                  `${n.data.label} ? item`,
-                ).forEach((v) => vars.push({ ...v, ...nodeMeta }));
+                  `${n.data.label} · item`,
+                ).forEach((v) => vars.push(userVar(v)));
                 break;
               }
             }
@@ -866,10 +876,16 @@ const NodeConfigPanel = ({ className = "" }) => {
 
       if (n.data?.nodeType === "set_variables") {
         const variablesConfig = n.data?.config?.variables;
-        if (variablesConfig && variablesConfig.mode === "visual") {
+        if (variablesConfig?.mode === "visual") {
           vars.push(
-            ...flattenFields(variablesConfig.fields, `${n.id}`, n.data.label)
-              .map((v) => ({ ...v, ...nodeMeta }))
+            ...collectEnvelopeVariables(variablesConfig, {
+              basePath: `${n.id}`,
+              baseLabel: n.data.label,
+              scalarPath: `${n.id}.value`,
+              exposeEmptyObject: false,
+              includeRootWhenObjectHasFields: true,
+              flattenFields,
+            }).map((v) => userVar(v)),
           );
         }
       }

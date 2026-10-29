@@ -1,5 +1,10 @@
 import React, { useMemo, useRef, useState, useCallback, useEffect } from "react";
-import { getDisplayFuseNodeId } from "../../utils/helpers";
+import { TbX } from "react-icons/tb";
+import {
+  formatDisplayVariableToken,
+  getDisplayFuseNodeId,
+  wrapVariableToken,
+} from "../../utils/helpers";
 import {
   getWebexRoomsAPI,
   getWebexPeopleAPI,
@@ -729,7 +734,7 @@ const GoogleSheetsSpreadsheetSelectField = ({ value, onChange }) => {
           {!loading && !error && !searchText && spreadsheets.length > 0 && (
             <div className="px-3 py-1.5 border-t border-ink-75 dark:border-void-825">
               <p className="text-[11px] text-ink-450 dark:text-ink-550">
-                Showing latest 25 � type to search all
+                Showing latest 25 — type to search all
               </p>
             </div>
           )}
@@ -1015,14 +1020,15 @@ const VariableTextInput = ({ value, onChange, variables, placeholder, className 
 
 /**
  * Strips the node name prefix from a label to get just the field path.
- * e.g. "My Webhook.body.email"  ? "body.email"
- *      "HTTP Node ? status_code" ? "status_code"
+ * e.g. "My Webhook.body.email" → "body.email"
+ *      "HTTP Node · body" → "body"
  */
 const getShortLabel = (label, nodeName) => {
-  if (nodeName && label.startsWith(nodeName + "."))
-    return label.slice(nodeName.length + 1);
-  if (nodeName && label.startsWith(nodeName + " ? "))
-    return label.slice(nodeName.length + 3);
+  if (!nodeName || !label) return label;
+  for (const sep of [".", " · ", " ? "]) {
+    const prefix = `${nodeName}${sep}`;
+    if (label.startsWith(prefix)) return label.slice(prefix.length);
+  }
   return label;
 };
 
@@ -1116,7 +1122,12 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                     className="w-full text-left px-3 py-1.5 hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors"
                   >
                     <span className="block text-[12px] font-medium text-ink-875 dark:text-ink-200">{v.label}</span>
-                    <span className="block text-[11px] font-mono text-brand-600 dark:text-brand-400">{`{{${v.token}}}`}</span>
+                    <span
+                      className="block text-[11px] font-mono text-brand-600 dark:text-brand-400 truncate"
+                      title={wrapVariableToken(v.token)}
+                    >
+                      {formatDisplayVariableToken(v.token)}
+                    </span>
                   </button>
                 </li>
               ))}
@@ -1227,23 +1238,47 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
         </div>
 
         <ul className="max-h-52 overflow-y-auto pb-1.5 pt-0.5">
-          {group.vars.map((v) => (
+          {[...group.vars]
+            .sort((a, b) => (b.isRoot ? 1 : 0) - (a.isRoot ? 1 : 0))
+            .map((v) => {
+              const builtin = v.isBuiltin === true;
+              return (
             <li key={v.token}>
               <button
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); onPick(v.token); onClose(); }}
-                className="w-full text-left px-3 py-2 flex flex-col gap-0.5
-                  hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors"
+                className={[
+                  "w-full text-left px-3 py-2 flex flex-col gap-0.5 transition-colors",
+                  builtin
+                    ? "hover:bg-teal-50 dark:hover:bg-teal-950/40"
+                    : "hover:bg-brand-50 dark:hover:bg-brand-900/30",
+                ].join(" ")}
               >
-                <span className="text-[12px] font-medium text-ink-875 dark:text-ink-200 truncate">
-                  {getShortLabel(v.label, group.nodeName)}
+                <span
+                  className={[
+                    "text-[12px] font-medium truncate",
+                    builtin
+                      ? "text-teal-800 dark:text-teal-300"
+                      : "text-ink-875 dark:text-ink-200",
+                  ].join(" ")}
+                >
+                  {v.isRoot ? "body" : getShortLabel(v.label, group.nodeName)}
                 </span>
-                <span className="text-[11px] font-mono text-brand-600 dark:text-brand-400 truncate">
-                  {`{{${v.token}}}`}
+                <span
+                  className={[
+                    "text-[11px] font-mono truncate",
+                    builtin
+                      ? "text-teal-600 dark:text-teal-400"
+                      : "text-brand-600 dark:text-brand-400",
+                  ].join(" ")}
+                  title={wrapVariableToken(v.token)}
+                >
+                  {formatDisplayVariableToken(v.token)}
                 </span>
               </button>
             </li>
-          ))}
+              );
+            })}
         </ul>
       </div>
     );
@@ -1521,21 +1556,21 @@ const JsonRootTypeDropdown = ({ value, onChange }) => (
 
 const NESTED_INDENT = "ml-5 pl-3 border-l border-ink-150 dark:border-void-800";
 
-const RemoveFieldButton = ({ onClick, className = "" }) => (
+const RemoveFieldButton = ({ onClick, className = "", ariaLabel = "Remove field" }) => (
   <button
     type="button"
     onClick={onClick}
-    aria-label="Remove field"
+    aria-label={ariaLabel}
     className={
       "flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg " +
       "text-ink-450 dark:text-ink-600 " +
       "hover:text-[#e05c5c] dark:hover:text-[#c26060] " +
       "hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a] " +
-      "transition-colors text-lg leading-none " +
+      "transition-colors " +
       className
     }
   >
-    ×
+    <TbX size={15} strokeWidth={2} />
   </button>
 );
 
@@ -1593,7 +1628,7 @@ const SchemaArrayItemsEditor = ({
 };
 
 /**
- * Renders one field row: [key input] [type select] [� button]
+ * Renders one field row: [key input] [type select] [remove]
  * Expands below with nested content for "object" and "array" types.
  */
 const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
@@ -1647,18 +1682,7 @@ const SchemaFieldRow = ({ field, depth, onUpdate, onRemove }) => {
             className={`${INPUT_BASE} flex-1 text-[12px]`}
           />
         )}
-        <button
-          type="button"
-          onClick={onRemove}
-          className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
-            text-ink-450 dark:text-ink-600
-            hover:text-[#e05c5c] dark:hover:text-[#c26060]
-            hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
-            transition-colors text-lg leading-none"
-          aria-label="Remove field"
-        >
-          �
-        </button>
+        <RemoveFieldButton onClick={onRemove} />
       </div>
 
       {field.type === "array" && (
@@ -1816,19 +1840,7 @@ const ValueFieldRow = ({ field, depth, onUpdate, onRemove, variables }) => {
           <SelectChevron />
         </div>
 
-        {/* Remove */}
-        <button
-          type="button"
-          onClick={onRemove}
-          aria-label="Remove field"
-          className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
-            text-ink-450 dark:text-ink-600
-            hover:text-[#e05c5c] dark:hover:text-[#c26060]
-            hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
-            transition-colors text-lg leading-none ml-auto"
-        >
-          �
-        </button>
+        <RemoveFieldButton onClick={onRemove} className="ml-auto" />
       </div>
 
       {/* Value row — shown for all types except "object" (nested fields handle it) */}
@@ -2009,17 +2021,7 @@ const KeyValueRow = ({ field, onUpdate, onRemove, variables }) => {
           />
         )}
       </div>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg
-          text-ink-450 dark:text-ink-600
-          hover:text-[#e05c5c] dark:hover:text-[#c26060]
-          hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
-          transition-colors text-lg leading-none"
-      >
-        �
-      </button>
+      <RemoveFieldButton onClick={onRemove} />
     </div>
   );
 };
@@ -2110,18 +2112,11 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
 
         {/* Clear */}
         {value && (
-          <button
-            type="button"
+          <RemoveFieldButton
             onClick={() => onChange("")}
-            aria-label="Clear variable"
-            className="flex-shrink-0 w-7 h-[38px] flex items-center justify-center rounded-lg
-              text-ink-450 dark:text-ink-600
-              hover:text-[#e05c5c] dark:hover:text-[#c26060]
-              hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
-              transition-colors text-lg leading-none"
-          >
-            �
-          </button>
+            ariaLabel="Clear variable"
+            className="h-[38px] w-7"
+          />
         )}
 
         {/* Open picker */}
@@ -2157,7 +2152,7 @@ const VariableSelectorField = ({ value, onChange, variables }) => {
 /**
  * Builds compound AND/OR conditions for the if/else node.
  *
- * Each condition row: [variable picker] [operator] [value?] [remove �]
+ * Each condition row: [variable picker] [operator] [value?] [remove]
  * An AND/OR toggle badge appears between consecutive rows.
  *
  * Stored value shape (new):
@@ -2371,16 +2366,11 @@ const SwitchCasesBuilderField = ({ field, value, onChange, variables }) => {
               className={`${INPUT_BASE} flex-1 min-w-0 text-[13px]`}
             />
             {cases.length > 1 && (
-              <button
-                type="button"
+              <RemoveFieldButton
                 onClick={() => removeCase(index)}
-                title="Remove case"
-                className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
-                  text-ink-450 hover:text-[#e05] border border-ink-150 dark:border-void-800
-                  hover:border-[#fcc] transition-colors"
-              >
-                �
-              </button>
+                ariaLabel="Remove case"
+                className="w-8 h-8 border border-ink-150 dark:border-void-800 hover:border-[#fcc]"
+              />
             )}
           </div>
           <p className="text-[11px] font-mono text-ink-400 dark:text-ink-550">
