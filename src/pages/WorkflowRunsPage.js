@@ -33,6 +33,7 @@ import {
   fmtListingTime,
   fmtListingDuration,
   fmtRunIdLink,
+  fmtVersionIdLink,
   FuseListingTableFooter,
   FuseListingTableHead,
 } from "../components/Fuse/fuseListingTable";
@@ -74,7 +75,7 @@ const TriggerBadge = ({ type }) => {
 };
 
 const runSubject = (run, workflowName) =>
-  run.error_message?.trim() ||
+  run.error?.trim() ||
   (run.status === "failed" ? "Workflow run failed" : workflowName || "Workflow run");
 
 const OpenButton = ({ onClick }) => (
@@ -101,6 +102,7 @@ const SkeletonRow = () => (
       <div className="skeleton h-3.5 w-44 rounded-md" />
       <div className="skeleton h-3 w-16 rounded-md mt-2" />
     </td>
+    <td className="px-5 py-3.5"><div className="skeleton h-3 w-14 rounded-md" /></td>
     <td className="px-5 py-3.5"><div className="skeleton h-3 w-20 rounded-md" /></td>
     <td className="px-5 py-3.5"><div className="skeleton h-3 w-24 rounded-md" /></td>
     <td className="px-5 py-3.5"><div className="skeleton h-3 w-12 rounded-md" /></td>
@@ -141,6 +143,13 @@ const RunListItem = ({ run, workflowName, onOpen, isLast }) => (
           {fmtRunIdLink(run.run_id)}
         </span>
         <span className="text-ink-200 dark:text-void-650">·</span>
+        <span
+          className="text-[12px] font-mono text-ink-500 dark:text-ink-500 tabular-nums"
+          title={run.version_id ?? undefined}
+        >
+          {fmtVersionIdLink(run.version_id)}
+        </span>
+        <span className="text-ink-200 dark:text-void-650">·</span>
         <span className="text-[12px] text-ink-500 dark:text-ink-500 tabular-nums">
           {fmtListingTime(run.started_at)}
         </span>
@@ -166,6 +175,9 @@ const RunRow = ({ run, workflowName, onOpen }) => (
           {fmtRunIdLink(run.run_id)}
         </span>
       </button>
+    </td>
+    <td className={`${FUSE_LIST_TD} font-mono text-[12px] text-ink-550 dark:text-ink-500 tabular-nums whitespace-nowrap`}>
+      <span title={run.version_id ?? undefined}>{fmtVersionIdLink(run.version_id)}</span>
     </td>
     <td className={FUSE_LIST_TD}>
       <TriggerBadge type={run.trigger_type} />
@@ -340,9 +352,10 @@ const WorkflowRunsPage = () => {
             </div>
 
             <div className="hidden md:block overflow-x-auto">
-              <table className="w-full min-w-[720px] border-collapse">
+              <table className="w-full min-w-[800px] border-collapse">
                 <FuseListingTableHead>
                   <th className={FUSE_LIST_TH}>Run</th>
+                  <th className={`${FUSE_LIST_TH} w-[100px]`}>Version</th>
                   <th className={`${FUSE_LIST_TH} w-[140px]`}>Trigger</th>
                   <th className={`${FUSE_LIST_TH} w-[140px]`}>Started</th>
                   <th className={`${FUSE_LIST_TH} w-[100px]`}>Duration</th>
@@ -354,7 +367,7 @@ const WorkflowRunsPage = () => {
 
                   {!loading && runs.length === 0 && (
                     <tr>
-                      <td colSpan={6}><EmptyState /></td>
+                      <td colSpan={7}><EmptyState /></td>
                     </tr>
                   )}
 

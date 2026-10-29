@@ -39,11 +39,19 @@ export function fmtListingDuration(ms) {
   return `${(ms / 1000).toFixed(2)} s`;
 }
 
+function compactFuseDocId(id) {
+  if (!id) return null;
+  return `#${String(id).replace(/-/g, "").slice(0, 6)}`;
+}
+
 /** Short run id for the `#...` link column. */
 export function fmtRunIdLink(runId) {
-  if (!runId) return "#—";
-  const compact = runId.replace(/-/g, "").slice(0, 6);
-  return `#${compact}`;
+  return compactFuseDocId(runId) ?? "#—";
+}
+
+/** Short version id for run history (no `#` placeholder when missing). */
+export function fmtVersionIdLink(versionId) {
+  return compactFuseDocId(versionId) ?? "—";
 }
 
 export function FuseListingStatusDot({ status }) {

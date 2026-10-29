@@ -30,7 +30,7 @@ const OpenButton = ({ onClick }) => (
 // --- Status badge -------------------------------------------------------------
 
 const StatusBadge = ({ workflow }) => {
-  const [label, cls, dot] = workflow.compiled_graph
+  const [label, cls, dot] = workflow.version_id || workflow.compiled_at
     ? workflow.status === "active"
       ? ["Active", "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10", "bg-emerald-500"]
       : ["Inactive", "text-red-600 dark:text-red-400 bg-red-500/10", "bg-red-500"]
@@ -133,7 +133,7 @@ const ReviewCard = ({ workflow, onHover, active }) => {
           <div className="flex items-center justify-between gap-3">
             <NodeIcons nodes={workflow.nodes} overflowCls={OVERFLOW_CLS} />
             <div onClick={(e) => e.stopPropagation()}>
-              {workflow.compiled_graph ? (
+              {workflow.version_id || workflow.compiled_at ? (
                 <FuseWorkflowToggle
                   workflowId={workflow.id}
                   isActive={workflow.status === "active"}

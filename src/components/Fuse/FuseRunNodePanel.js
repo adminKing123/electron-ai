@@ -48,7 +48,7 @@ function MetaRow({ label, value }) {
 }
 
 /** Default panel: whole-workflow run summary (no node selected). */
-function FuseRunOverview({ run, className = "" }) {
+function FuseRunOverview({ run, workflowName, className = "" }) {
   const runDuration = useLiveDuration(
     run?.started_at,
     run?.status === "running",
@@ -96,7 +96,14 @@ function FuseRunOverview({ run, className = "" }) {
         <MetaRow label="Trigger" value={run.trigger_type ?? "—"} />
         <MetaRow label="Version" value={run.version_id ?? "—"} />
         <MetaRow label="Run ID" value={run.run_id ?? "—"} />
-        <MetaRow label="Workflow" value={run.workflow_id ?? "—"} />
+        <MetaRow
+          label="Workflow"
+          value={
+            workflowName
+              ? `${workflowName} (${run.workflow_id ?? "—"})`
+              : (run.workflow_id ?? "—")
+          }
+        />
       </div>
 
       <JsonBlock label="Trigger data" value={run.trigger_data} />
@@ -274,7 +281,7 @@ export default function FuseRunNodePanel(props) {
   return (
     <FuseRunPanelScroll className={className}>
       {!rest.selectedNode ? (
-        <FuseRunOverview run={rest.run} />
+        <FuseRunOverview run={rest.run} workflowName={rest.workflowName} />
       ) : (
         <FuseRunNodeDetail {...rest} />
       )}
