@@ -2,6 +2,7 @@ import React from "react";
 import { Position } from "@xyflow/react";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import FuseNodeHandle from "./FuseNodeHandle";
+import FuseCanvasRunCornerIndicator from "./FuseCanvasRunCornerIndicator";
 import {
   FUSE_NODE_LABEL,
   FUSE_NODE_LABEL_MUTED,
@@ -58,6 +59,10 @@ const FuseBranchCardNode = ({
           position={Position.Left}
           style={{ top: heightPx / 2 }}
         />
+
+        {(runStatus === "running" || runStatus === "error") && (
+          <FuseCanvasRunCornerIndicator runStatus={runStatus} />
+        )}
 
         <div
           className="flex items-center gap-2.5 px-3 border-b border-ink-200 dark:border-void-725 pointer-events-none"

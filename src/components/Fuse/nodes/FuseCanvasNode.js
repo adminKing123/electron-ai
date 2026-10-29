@@ -2,6 +2,7 @@ import React from "react";
 import { Position } from "@xyflow/react";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "../FuseNodeIcon";
 import FuseNodeHandle from "./FuseNodeHandle";
+import FuseCanvasRunCornerIndicator from "./FuseCanvasRunCornerIndicator";
 import {
   FUSE_CANVAS_LABEL_CLASS,
   fuseCanvasNodeBoxClass,
@@ -47,6 +48,9 @@ export const FuseCanvasNodeBox = ({
         id={sourceId}
         style={{ top: "50%" }}
       />
+    )}
+    {(runStatus === "running" || runStatus === "error") && (
+      <FuseCanvasRunCornerIndicator runStatus={runStatus} />
     )}
     <FuseNodeIcon
       iconName={iconName}

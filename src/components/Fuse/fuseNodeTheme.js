@@ -1,6 +1,6 @@
 /**
  * Neutral Fuse node surfaces â€” color comes from icons, not card fills.
- * Row metrics match picker grid column at md panel (550px - padding - gap) ÷ 2.
+ * Row metrics match picker grid column at md panel (550px - padding - gap) ï¿½ 2.
  */
 export const FUSE_NODE_SURFACE = "bg-white dark:bg-void-825";
 export const FUSE_NODE_BORDER = "border-ink-200 dark:border-void-725";
@@ -27,7 +27,7 @@ export const FUSE_CANVAS_NODE_SURFACE =
 export const FUSE_CANVAS_LABEL_CLASS =
   "text-[13px] font-medium leading-snug tracking-tight";
 
-/** Icon tile on canvas (96×96 â€” n8n DEFAULT_NODE_SIZE). */
+/** Icon tile on canvas (96ï¿½96 â€” n8n DEFAULT_NODE_SIZE). */
 export const FUSE_CANVAS_NODE_BOX =
   "w-[96px] h-[96px] min-w-[96px] min-h-[96px] box-border";
 
@@ -111,7 +111,7 @@ export const fuseCanvasNodeShellClass = (selected, runStatus) => {
   return parts.filter(Boolean).join(" ");
 };
 
-/** n8n-style icon tile shell (96×96) with optional trigger shape. */
+/** n8n-style icon tile shell (96ï¿½96) with optional trigger shape. */
 export const fuseCanvasNodeBoxClass = (
   selected,
   runStatus,
