@@ -38,18 +38,25 @@ const SidebarNavButton = ({ icon: Icon, label, to, end = false, onClick }) => {
 };
 
 // --- FuseStudioSidebar --------------------------------------------------------
-const FuseStudioSidebar = ({ creating, onCreate, hideMobileNav = false }) => (
+const FuseStudioSidebar = ({
+  creating,
+  onCreate,
+  hideMobileNav = false,
+  showCreate = true,
+}) => (
   <>
     {/* Desktop — vertical sidebar */}
     <aside className="hidden md:flex h-full flex-col items-center px-2.5 pt-6 gap-4 flex-shrink-0">
-      <FusePrimaryButton
-        icon={TbPlus}
-        layout="square"
-        loading={creating}
-        onClick={onCreate}
-        aria-label="New workflow"
-        className="!w-10 !h-10"
-      />
+      {showCreate && (
+        <FusePrimaryButton
+          icon={TbPlus}
+          layout="square"
+          loading={creating}
+          onClick={onCreate}
+          aria-label="New workflow"
+          className="!w-10 !h-10"
+        />
+      )}
       <div className="flex flex-col items-center gap-1.5 mt-1">
         <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} end />
         <SidebarNavButton icon={TbBolt} label="Fuses" to={ROUTES.FUSES_LISTING} />
@@ -66,13 +73,15 @@ const FuseStudioSidebar = ({ creating, onCreate, hideMobileNav = false }) => (
           px-2 py-1.5 justify-around items-center"
       >
         <SidebarNavButton icon={TbCompass} label="Discover" to={ROUTES.FUSE} end />
-        <FusePrimaryButton
-          icon={TbPlus}
-          layout="square"
-          loading={creating}
-          onClick={onCreate}
-          aria-label="New workflow"
-        />
+        {showCreate && (
+          <FusePrimaryButton
+            icon={TbPlus}
+            layout="square"
+            loading={creating}
+            onClick={onCreate}
+            aria-label="New workflow"
+          />
+        )}
         <SidebarNavButton icon={TbBolt} label="Fuses" to={ROUTES.FUSES_LISTING} />
         <SidebarNavButton icon={TbPlug} label="Integrations" to={ROUTES.FUSE_INTEGRATIONS} />
       </nav>

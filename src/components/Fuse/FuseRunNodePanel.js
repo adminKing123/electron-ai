@@ -14,6 +14,7 @@ import {
 } from "./fuseRunFormatters";
 import { resolveVariablesFromConfig } from "../../utils/fuseRunNodeInspect";
 import { fuseRunLogSaveEnabled } from "../../utils/fuseNodeConfig";
+import { FuseVersionIdButton } from "./fuseListingTable";
 
 function Metric({ label, value, highlight = false }) {
   return (
@@ -94,7 +95,12 @@ function FuseRunOverview({ run, workflowName, className = "" }) {
         <MetaRow label="Started" value={fmtDate(run.started_at)} />
         <MetaRow label="Finished" value={fmtDate(run.finished_at)} />
         <MetaRow label="Trigger" value={run.trigger_type ?? "—"} />
-        <MetaRow label="Version" value={run.version_id ?? "—"} />
+        <div className="flex items-start gap-2 py-1.5">
+          <span className="text-[12px] text-ink-400 dark:text-ink-550 min-w-[88px] flex-shrink-0">
+            Version
+          </span>
+          <FuseVersionIdButton versionId={run.version_id} className="text-[12px]" />
+        </div>
         <MetaRow label="Run ID" value={run.run_id ?? "—"} />
         <MetaRow
           label="Workflow"

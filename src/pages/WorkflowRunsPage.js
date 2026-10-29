@@ -33,7 +33,7 @@ import {
   fmtListingTime,
   fmtListingDuration,
   fmtRunIdLink,
-  fmtVersionIdLink,
+  FuseVersionIdButton,
   FuseListingTableFooter,
   FuseListingTableHead,
 } from "../components/Fuse/fuseListingTable";
@@ -143,12 +143,7 @@ const RunListItem = ({ run, workflowName, onOpen, isLast }) => (
           {fmtRunIdLink(run.run_id)}
         </span>
         <span className="text-ink-200 dark:text-void-650">·</span>
-        <span
-          className="text-[12px] font-mono text-ink-500 dark:text-ink-500 tabular-nums"
-          title={run.version_id ?? undefined}
-        >
-          {fmtVersionIdLink(run.version_id)}
-        </span>
+        <FuseVersionIdButton versionId={run.version_id} />
         <span className="text-ink-200 dark:text-void-650">·</span>
         <span className="text-[12px] text-ink-500 dark:text-ink-500 tabular-nums">
           {fmtListingTime(run.started_at)}
@@ -176,8 +171,8 @@ const RunRow = ({ run, workflowName, onOpen }) => (
         </span>
       </button>
     </td>
-    <td className={`${FUSE_LIST_TD} font-mono text-[12px] text-ink-550 dark:text-ink-500 tabular-nums whitespace-nowrap`}>
-      <span title={run.version_id ?? undefined}>{fmtVersionIdLink(run.version_id)}</span>
+    <td className={`${FUSE_LIST_TD} text-[12px] tabular-nums whitespace-nowrap`}>
+      <FuseVersionIdButton versionId={run.version_id} />
     </td>
     <td className={FUSE_LIST_TD}>
       <TriggerBadge type={run.trigger_type} />

@@ -1,5 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
+import ROUTES from "../../router/routes";
 
 /** Shared list-table chrome (send-logs style reference). */
 
@@ -52,6 +54,28 @@ export function fmtRunIdLink(runId) {
 /** Short version id for run history (no `#` placeholder when missing). */
 export function fmtVersionIdLink(versionId) {
   return compactFuseDocId(versionId) ?? "—";
+}
+
+/** Clickable version chip in run listings (navigates to read-only version studio). */
+export function FuseVersionIdButton({ versionId, className = "" }) {
+  const navigate = useNavigate();
+  const label = fmtVersionIdLink(versionId);
+  if (!versionId || label === "—") {
+    return <span className={className}>—</span>;
+  }
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate(ROUTES.GET_FUSE_STUDIO_VERSION_URL(versionId));
+      }}
+      title={versionId}
+      className={`${FUSE_LIST_LINK} font-mono text-[12px] tabular-nums ${className}`}
+    >
+      {label}
+    </button>
+  );
 }
 
 export function FuseListingStatusDot({ status }) {

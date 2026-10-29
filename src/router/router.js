@@ -14,6 +14,7 @@ const CometRjPage         = lazy(() => import("../pages/CometRjPage"));
 const AnalyticsPage       = lazy(() => import("../pages/AnalyticsPage"));
 const FusePage            = lazy(() => import("../pages/FusePage"));
 const FuseStudioPage      = lazy(() => import("../pages/FuseStudioPage"));
+const FuseVersionStudioPage = lazy(() => import("../pages/FuseVersionStudioPage"));
 const WorkflowRunsPage    = lazy(() => import("../pages/WorkflowRunsPage"));
 const WorkflowRunDetailPage = lazy(() => import("../pages/WorkflowRunDetailPage"));
 const FuseIntegrationsPage = lazy(() => import("../pages/FuseIntegrationsPage"));
@@ -36,6 +37,7 @@ const AppRoutes = () => {
 
           {/* Fuse — standalone layout, mirrors Comet RJ pattern */}
           <Route path={ROUTES.FUSE} element={<FusePage />} />
+          <Route path={ROUTES.FUSE_STUDIO_VERSION} element={<FuseVersionStudioPage />} />
           <Route path={ROUTES.FUSE_STUDIO} element={<FuseStudioPage />} />
           <Route path={ROUTES.FUSE_RUNS} element={<WorkflowRunsPage />} />
           <Route path={ROUTES.FUSE_RUN_DETAIL} element={<WorkflowRunDetailPage />} />

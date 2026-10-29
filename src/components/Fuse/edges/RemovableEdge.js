@@ -3,6 +3,7 @@ import { BaseEdge, EdgeLabelRenderer } from "@xyflow/react";
 import { TbX } from "react-icons/tb";
 import useFuseStudioStore from "../../../store/useFuseStudioStore";
 import useIsDark from "../../../hooks/useIsDark";
+import { useFuseCanvasReadOnly } from "../fuseCanvasContext";
 import {
   buildFuseEdgePath,
   fuseEdgeHaloColor,
@@ -21,6 +22,7 @@ export default function RemovableEdge({
   selected = false,
 }) {
   const isDark = useIsDark();
+  const canvasReadOnly = useFuseCanvasReadOnly();
   const [hovered, setHovered] = useState(false);
   const removeEdge = useFuseStudioStore((s) => s.removeEdge);
 
@@ -39,7 +41,7 @@ export default function RemovableEdge({
   );
   const halo = fuseEdgeHaloColor(isDark);
   const markerEnd = fuseEdgeMarker(stroke);
-  const showRemove = hovered || selected;
+  const showRemove = !canvasReadOnly && (hovered || selected);
 
   return (
     <g

@@ -12,6 +12,9 @@ const ROUTES = {
   FUSE_STUDIO: "/fuse/studio/:id",
   GET_FUSE_STUDIO_URL: (id) => `/fuse/studio/${id}`,
 
+  FUSE_STUDIO_VERSION: "/fuse/studio/version/:versionId",
+  GET_FUSE_STUDIO_VERSION_URL: (versionId) => `/fuse/studio/version/${versionId}`,
+
   FUSE_RUNS: "/fuse/studio/:id/runs",
   GET_FUSE_RUNS_URL: (id) => `/fuse/studio/${id}/runs`,
   FUSE_RUN_DETAIL: "/fuse/runs/:runId",

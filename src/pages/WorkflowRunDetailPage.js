@@ -23,7 +23,7 @@ import { WorkflowCanvas } from "../components/Fuse";
 import FuseRunNodePanel from "../components/Fuse/FuseRunNodePanel";
 import { RunStatusBadge } from "../components/Fuse/fuseRunFormatters";
 import { getWorkflowByIdAPI, getVersionAPI } from "../apis/fuse/queryFunctions";
-import { studioGraphFromVersion } from "../utils/fuseVersionStudio";
+import { loadRunDetailCanvas } from "../utils/fuseVersionStudio";
 import useFuseRunLive from "../hooks/useFuseRunLive";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 import HeaderUserProfile from "../components/HeaderUserProfile";
@@ -85,55 +85,40 @@ const WorkflowRunDetailPage = () => {
   }, [resetStudio, setLoading]);
 
   useEffect(() => {
+    if (!run?.workflow_id && (liveError || connectionStatus === "error")) {
+      setLoading(false);
+    }
+  }, [run?.workflow_id, liveError, connectionStatus, setLoading]);
+
+  useEffect(() => {
     const workflowId = run?.workflow_id;
     const versionId = run?.version_id;
-
-    if (!workflowId) {
-      if (liveError || connectionStatus === "error") {
-        setLoading(false);
-      }
-      return;
-    }
+    if (!workflowId) return;
 
     let cancelled = false;
     setLoading(true);
 
-    const loadCanvas = async () => {
-      let canvasFromVersion = false;
-      try {
-        if (versionId) {
-          try {
-            const version = await getVersionAPI(versionId);
-            const studio = studioGraphFromVersion(version);
-            if (studio && !cancelled) {
-              setNodes(studio.nodes);
-              setEdges(studio.edges);
-              canvasFromVersion = true;
-            }
-          } catch {
-            /* use workflow draft canvas below */
-          }
-        }
-        const wf = await getWorkflowByIdAPI(workflowId);
+    loadRunDetailCanvas(
+      { versionId, workflowId },
+      { getVersionAPI, getWorkflowByIdAPI },
+    )
+      .then((result) => {
         if (cancelled) return;
-        setWorkflowName(wf.name ?? null);
-        if (!canvasFromVersion) {
-          setNodes([...(wf.blocks ?? []), ...(wf.nodes ?? [])]);
-          setEdges(wf.edges ?? []);
-        }
-      } catch {
+        setWorkflowName(result.workflowName);
+        setNodes(result.nodes);
+        setEdges(result.edges);
+      })
+      .catch(() => {
         /* canvas stays empty */
-      } finally {
+      })
+      .finally(() => {
         if (!cancelled) setLoading(false);
-      }
-    };
-
-    loadCanvas();
+      });
 
     return () => {
       cancelled = true;
     };
-  }, [run?.workflow_id, run?.version_id, liveError, connectionStatus, setLoading, setNodes, setEdges]);
+  }, [run?.workflow_id, run?.version_id, setLoading, setNodes, setEdges]);
 
   const handleRunNodeSelect = useCallback((node) => {
     setSelectedNode(node);

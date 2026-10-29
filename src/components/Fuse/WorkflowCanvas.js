@@ -16,6 +16,7 @@ import { createFuseNodeId } from "../../utils/helpers";
 import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
 import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
+import { FuseCanvasReadOnlyContext } from "./fuseCanvasContext";
 import { FUSE_EDGE_SHAPE, fuseEdgePathOptions } from "./edges/fuseEdgeTheme";
 import {
   buildNodeLookup,
@@ -69,6 +70,7 @@ const WorkflowCanvas = ({
   const onEdgesChange = useFuseStudioStore((s) => s.onEdgesChange);
   const onConnect     = useFuseStudioStore((s) => s.onConnect);
   const selectNode    = useFuseStudioStore((s) => s.selectNode);
+  const storeSelectedNode = useFuseStudioStore((s) => s.selectedNode);
   const clearSelected = useFuseStudioStore((s) => s.clearSelectedNode);
   const addFlowNode   = useFuseStudioStore((s) => s.addFlowNode);
   const setAddingNode = useFuseStudioStore((s) => s.setAddingNode);
@@ -185,8 +187,9 @@ const WorkflowCanvas = ({
         if (!readOnly) clearSelected();
         return;
       }
-      if (readOnly && onRunNodeSelect) {
-        onRunNodeSelect(node);
+      if (readOnly) {
+        if (onRunNodeSelect) onRunNodeSelect(node);
+        else selectNode(node);
         return;
       }
       selectNode(node);
@@ -196,7 +199,8 @@ const WorkflowCanvas = ({
 
   const handlePaneClick = useCallback(() => {
     if (readOnly) {
-      onRunNodeSelect?.(null);
+      if (onRunNodeSelect) onRunNodeSelect(null);
+      else clearSelected();
       return;
     }
     clearSelected();
@@ -337,10 +341,23 @@ const WorkflowCanvas = ({
   );
 
   const runCanvasActive = readOnly && runVisualsActive(runNodeStates, runningNodeIds);
+  /** Version studio: same RemovableEdge look as editor. Run detail: traversal highlight styles. */
+  const useStudioEdges = !readOnly || !runCanvasActive;
   const nodeById = useMemo(() => buildNodeLookup(nodes), [nodes]);
 
+  /** Run detail passes selectedNodeId; version studio uses store selectedNode. */
+  const activeSelectedId =
+    selectedNodeId ?? (readOnly && !runNodeStates ? storeSelectedNode?.id ?? null : null);
+
   const displayNodes = useMemo(() => {
-    if (!readOnly && !runNodeStates && !selectedNodeId) return nodes;
+    if (!runNodeStates && !activeSelectedId && (!readOnly || !runCanvasActive)) {
+      if (readOnly) {
+        return nodes.map((n) =>
+          n.type === "fuse_block" ? n : { ...n, selected: false },
+        );
+      }
+      return nodes;
+    }
     return nodes.map((n) => {
       let next = n;
       if (n.type !== "fuse_block" && (runNodeStates || runningNodeIds.size > 0)) {
@@ -375,15 +392,15 @@ const WorkflowCanvas = ({
           style: { ...(next.style ?? {}), opacity: 1, filter: "none" },
         };
       }
-      if (selectedNodeId && n.id === selectedNodeId) {
-        next = { ...next, selected: true };
+      if (activeSelectedId && n.type !== "fuse_block") {
+        next = { ...next, selected: n.id === activeSelectedId };
       }
       return next;
     });
-  }, [nodes, readOnly, runNodeStates, runningNodeIds, selectedNodeId, runCanvasActive]);
+  }, [nodes, readOnly, runNodeStates, runningNodeIds, activeSelectedId, runCanvasActive]);
 
   const displayEdges = useMemo(() => {
-    if (!readOnly) return edges;
+    if (useStudioEdges) return edges;
 
     const traversedStroke = isDark ? "#94a3b8" : "#7c3aed";
     const idleStroke = isDark ? "#363636" : "#d8d4e8";
@@ -422,7 +439,7 @@ const WorkflowCanvas = ({
         },
       };
     });
-  }, [edges, readOnly, runningNodeIds, isDark, runCanvasActive, runNodeStates, nodeById]);
+  }, [edges, useStudioEdges, runningNodeIds, isDark, runCanvasActive, runNodeStates, nodeById]);
 
   // -- Render ----------------------------------------------------------------
   return (
@@ -459,6 +476,7 @@ const WorkflowCanvas = ({
           )}
         </div>
       ) : (
+        <FuseCanvasReadOnlyContext.Provider value={readOnly}>
         <ReactFlow
           nodes={displayNodes}
           edges={displayEdges}
@@ -475,7 +493,7 @@ const WorkflowCanvas = ({
           elementsSelectable
           edgesReconnectable={false}
           nodeTypes={NODE_TYPES}
-          edgeTypes={readOnly ? undefined : EDGE_TYPES}
+          edgeTypes={useStudioEdges ? EDGE_TYPES : undefined}
           colorMode={isDark ? "dark" : "light"}
           fitView
           fitViewOptions={{ padding: 0.35, maxZoom: 1 }}
@@ -487,13 +505,13 @@ const WorkflowCanvas = ({
             strokeLinecap: "round",
           }}
           defaultEdgeOptions={
-            readOnly
-              ? {
+            useStudioEdges
+              ? { type: "removable", animated: false }
+              : {
                   type: FUSE_EDGE_SHAPE.type,
                   animated: false,
                   pathOptions: fuseEdgePathOptions(),
                 }
-              : { type: "removable", animated: false }
           }
         >
           <Background
@@ -524,6 +542,7 @@ const WorkflowCanvas = ({
             }
           />
         </ReactFlow>
+        </FuseCanvasReadOnlyContext.Provider>
       )}
 
       {/* -- Context menu ------------------------------------------------ */}

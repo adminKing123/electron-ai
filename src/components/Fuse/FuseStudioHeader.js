@@ -24,13 +24,14 @@ export const iconBtnCls =
   "hover:bg-ink-100 dark:hover:bg-void-875 " +
   "transition-colors";
 
-  const BackButton = () => {
+const BackButton = ({ onBack, title = "Go back" }) => {
   const navigate = useNavigate();
   return (
     <button
-      onClick={() => navigate(ROUTES.FUSE)}
+      onClick={onBack ?? (() => navigate(ROUTES.FUSE))}
       className={iconBtnCls}
-      aria-label="Go back"
+      title={title}
+      aria-label={title}
     >
       <IoChevronBackOutline className="w-[18px] h-[18px]" />
     </button>
@@ -320,24 +321,55 @@ const FuseStudioHeader = ({
   onNameBlur,
   savingName = false,
   isLoading = false,
+  readOnly = false,
+  onBack,
+  backTitle,
+  subtitle = null,
+  nameTitle = null,
 }) => (
-  <header id="fuse-studio-header" className="w-full flex-shrink-0">
+  <header
+    id="fuse-studio-header"
+    className={`w-full flex-shrink-0 bg-transparent${
+      readOnly ? " border-b border-ink-150 dark:border-void-800" : ""
+    }`}
+  >
     <div className="h-[56px] w-full flex items-center justify-between gap-2 px-3">
       {/* Left: back button + workflow name */}
       <div className="flex items-center gap-1.5 min-w-0 flex-1">
-        <BackButton />
-        <WorkflowNameInput
-          value={name}
-          onChange={onNameChange}
-          onBlur={onNameBlur}
-          savingName={savingName}
-          placeholder={isLoading ? "" : "Untitled Workflow"}
-        />
+        <BackButton onBack={onBack} title={backTitle} />
+        <div className="min-w-0">
+          {readOnly ? (
+            <>
+              <p
+                className="text-[15px] font-semibold tracking-tight text-ink-975 dark:text-white leading-tight truncate"
+                title={nameTitle ?? name}
+              >
+                {isLoading ? "…" : name || "Untitled Workflow"}
+              </p>
+              {subtitle != null && subtitle !== "" && (
+                <p
+                  className="text-[12px] text-ink-500 dark:text-ink-500 truncate leading-tight mt-0.5"
+                  title={typeof subtitle === "string" ? subtitle : undefined}
+                >
+                  {subtitle}
+                </p>
+              )}
+            </>
+          ) : (
+            <WorkflowNameInput
+              value={name}
+              onChange={onNameChange}
+              onBlur={onNameBlur}
+              savingName={savingName}
+              placeholder={isLoading ? "" : "Untitled Workflow"}
+            />
+          )}
+        </div>
       </div>
 
       {/* Right: runs link + user profile */}
       <div className="flex items-center gap-1.5 flex-shrink-0">
-        {workflowId && (
+        {workflowId && !readOnly && (
           <Link
             to={ROUTES.GET_FUSE_RUNS_URL(workflowId)}
             title="View run history"

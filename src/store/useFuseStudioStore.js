@@ -25,6 +25,24 @@ import {
  *     }
  *   }
  */
+
+/** Shared fields cleared by resetCanvas / resetStudio. */
+const STUDIO_CANVAS_RESET = {
+  workflow: null,
+  workflowName: "",
+  loading: false,
+  savingName: false,
+  saving: false,
+  nodes: [],
+  edges: [],
+  selectedNode: null,
+  addingNode: false,
+  compiledAt: null,
+  compilationErrors: [],
+  activating: false,
+  deactivating: false,
+};
+
 const useFuseStudioStore = create((set) => ({
   // --- Workflow metadata ---
   workflow: null,
@@ -256,26 +274,17 @@ const useFuseStudioStore = create((set) => ({
   clearSelectedNode: ()    => set({ selectedNode: null }),
 
   // --- Cleanup ---
+  /** Clears graph + workflow metadata; keeps cached node definition lists. */
+  resetCanvas: () => set(STUDIO_CANVAS_RESET),
+
   /** Called on page unmount. Clears all workflow + canvas + node definition state. */
   resetStudio: () =>
     set({
-      workflow: null,
-      workflowName: "",
-      loading: false,
-      savingName: false,
-      nodes: [],
-      edges: [],
-      selectedNode: null,
-      addingNode: false,
+      ...STUDIO_CANVAS_RESET,
       starterNodes: [],
       loadingNodes: false,
       actionNodes: [],
       loadingActionNodes: false,
-      // Compilation state
-      compiledAt: null,
-      compilationErrors: [],
-      activating: false,
-      deactivating: false,
     }),
 }));
 

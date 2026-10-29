@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import {
-  TbSettings2, TbChevronDown,
-  TbPlus, TbPower, TbRefresh,
-} from "react-icons/tb";
+import { TbSettings2, TbChevronDown } from "react-icons/tb";
 import { useParams } from "react-router-dom";
 import {
   FuseStudioHeader,
@@ -16,13 +13,11 @@ import {
   getWorkflowByIdAPI,
   updateWorkflowNameAPI,
   updateWorkflowGraphAPI,
-  getStarterNodesAPI,
-  getActionNodesAPI,
   activateWorkflowAPI,
   deactivateWorkflowAPI,
 } from "../apis/fuse/queryFunctions";
-import CONFIG from "../config";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
+import useFuseNodeCatalog from "../hooks/useFuseNodeCatalog";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 
 /**
@@ -89,10 +84,6 @@ export default function FuseStudioPage() {
   const setLoading            = useFuseStudioStore((s) => s.setLoading);
   const setSavingName             = useFuseStudioStore((s) => s.setSavingName);
   const setSaving                 = useFuseStudioStore((s) => s.setSaving);
-  const setStarterNodes       = useFuseStudioStore((s) => s.setStarterNodes);
-  const setLoadingNodes       = useFuseStudioStore((s) => s.setLoadingNodes);
-  const setActionNodes        = useFuseStudioStore((s) => s.setActionNodes);
-  const setLoadingActionNodes = useFuseStudioStore((s) => s.setLoadingActionNodes);
   const setAddingNode         = useFuseStudioStore((s) => s.setAddingNode);
   const setNodes              = useFuseStudioStore((s) => s.setNodes);
   const setEdges              = useFuseStudioStore((s) => s.setEdges);
@@ -106,6 +97,8 @@ export default function FuseStudioPage() {
 
   // Not observable state — mutable anchor to compare against for name autosave
   const committedNameRef = useRef("");
+
+  useFuseNodeCatalog();
 
   // -- Load workflow + node definitions -------------------------------------
   useEffect(() => {
@@ -133,18 +126,6 @@ export default function FuseStudioPage() {
       })
       .catch(() => {})
       .finally(() => { if (!cancelled) setLoading(false); });
-
-    setLoadingNodes(true);
-    getStarterNodesAPI()
-      .then((nodes) => { if (!cancelled) setStarterNodes(nodes); })
-      .catch(() => {})
-      .finally(() => { if (!cancelled) setLoadingNodes(false); });
-
-    setLoadingActionNodes(true);
-    getActionNodesAPI()
-      .then((nodes) => { if (!cancelled) setActionNodes(nodes); })
-      .catch(() => {})
-      .finally(() => { if (!cancelled) setLoadingActionNodes(false); });
 
     return () => {
       cancelled = true;

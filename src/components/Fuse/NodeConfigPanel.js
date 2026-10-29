@@ -371,12 +371,30 @@ const NodeLabelInput = ({ value, onChange, onBlur, maxLength, typeLabel }) => {
 // --- NodeConfigView ------------------------------------------------------------
 // Shown when a React Flow node is selected.
 // Renders the node's config_form via FormBuilder and exposes a Delete action.
-const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
+const VersionEmptyPanel = () => (
+  <div className="flex flex-col items-center justify-center h-full px-6 text-center select-none">
+    <p className="text-[14px] font-semibold text-ink-875 dark:text-ink-200">
+      Select a node
+    </p>
+    <p className="text-[12px] text-ink-500 dark:text-ink-550 mt-1.5 max-w-xs leading-relaxed">
+      Click any step on the canvas to view its configuration from this compiled version.
+    </p>
+  </div>
+);
+
+const NodeConfigView = ({
+  node,
+  nodeDef,
+  variables = [],
+  readOnly = false,
+  workflowId: workflowIdProp = null,
+}) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
   const updateNodeLabel = useFuseStudioStore((s) => s.updateNodeLabel);
   const removeNode = useFuseStudioStore((s) => s.removeNode);
   const accountEmail = useUserStore((s) => s.user?.email ?? "");
-  const { id: workflowId } = useParams();
+  const { id: workflowIdFromRoute } = useParams();
+  const workflowId = workflowIdProp ?? workflowIdFromRoute;
   const maxLabelLength = CONFIG.MAX_NODE_LABEL_LENGTH;
 
   const node_type = node.data?.nodeType;
@@ -394,21 +412,23 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
       <div className="px-4 pt-4 pb-3.5 border-b border-ink-100 dark:border-void-800 flex-shrink-0">
         <div className="flex items-start justify-between gap-2 mb-2">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-450 dark:text-ink-550">
-            {node.data.isStarter ? "Starter" : "Node"} {getDisplayFuseNodeId(node.id)}
+            {readOnly ? "Viewing" : node.data.isStarter ? "Starter" : "Node"}{" "}
+            {getDisplayFuseNodeId(node.id)}
           </p>
-          {/* Delete node button */}
-          <button
-            type="button"
-            onClick={() => removeNode(node.id)}
-            title="Delete this node"
-            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium
-              text-[#e05c5c] dark:text-[#c26060]
-              hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
-              transition-colors"
-          >
-            <TbTrash className="w-[13px] h-[13px]" />
-            Delete
-          </button>
+          {!readOnly && (
+            <button
+              type="button"
+              onClick={() => removeNode(node.id)}
+              title="Delete this node"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium
+                text-[#e05c5c] dark:text-[#c26060]
+                hover:bg-[#fef2f2] dark:hover:bg-[#2a1a1a]
+                transition-colors"
+            >
+              <TbTrash className="w-[13px] h-[13px]" />
+              Delete
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-2.5 min-w-0">
           <span className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${FUSE_NODE_ICON_WELL}`}>
@@ -417,13 +437,24 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
               sizeClass={FUSE_NODE_ICON_SIZES.config}
             />
           </span>
-          <NodeLabelInput
-            value={displayLabel}
-            onChange={(v) => updateNodeLabel(node.id, v)}
-            onBlur={handleLabelBlur}
-            maxLength={maxLabelLength}
-            typeLabel={nodeDef.label}
-          />
+          {readOnly ? (
+            <div className="flex flex-col gap-1 min-w-0 flex-1">
+              <p className="text-[15px] font-semibold text-ink-975 dark:text-ink-150 truncate">
+                {displayLabel || nodeDef.label}
+              </p>
+              <span className="text-[11px] text-ink-400 dark:text-ink-550 truncate">
+                {nodeDef.label}
+              </span>
+            </div>
+          ) : (
+            <NodeLabelInput
+              value={displayLabel}
+              onChange={(v) => updateNodeLabel(node.id, v)}
+              onBlur={handleLabelBlur}
+              maxLength={maxLabelLength}
+              typeLabel={nodeDef.label}
+            />
+          )}
         </div>
         {nodeDef.description && (
           <p className="text-[12px] text-brand-500 dark:text-brand-400 mt-2 leading-relaxed">
@@ -440,7 +471,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
         )}
 
         {/* Webex activation note — webhook is registered on Turn On */}
-        {node_type === "webex_message" && (
+        {!readOnly && node_type === "webex_message" && (
           <p className="text-[12px] leading-relaxed text-ink-500 dark:text-ink-550
             px-3 py-2.5 rounded-lg bg-brand-50 dark:bg-brand-950/35
             border border-brand-200 dark:border-brand-800/55">
@@ -449,8 +480,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
           </p>
         )}
 
-        {/* Push permission banner — shown for get_notified nodes */}
-        {node_type === "get_notified" && (
+        {!readOnly && node_type === "get_notified" && (
           <NotificationSettings nodeType={node_type} />
         )}
 
@@ -472,22 +502,26 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
         )}
 
         {nodeDef.config_form ? (
-          <FormBuilder
-            configForm={nodeDef.config_form}
-            values={node.data.config ?? {}}
-            onChange={(newValues) => updateNodeConfig(node.id, newValues)}
-            variables={variables}
-          />
+          <fieldset disabled={readOnly} className={readOnly ? "min-w-0 border-0 p-0 m-0" : undefined}>
+            <FormBuilder
+              configForm={nodeDef.config_form}
+              values={node.data.config ?? {}}
+              onChange={(newValues) => updateNodeConfig(node.id, newValues)}
+              variables={variables}
+            />
+          </fieldset>
         ) : (
           <p className="text-[12px] text-ink-450 dark:text-ink-600">
             No configuration required for this node.
           </p>
         )}
 
-        <RunLogSaveSettings
-          config={node.data.config ?? {}}
-          onChange={(next) => updateNodeConfig(node.id, next)}
-        />
+        {!readOnly && (
+          <RunLogSaveSettings
+            config={node.data.config ?? {}}
+            onChange={(next) => updateNodeConfig(node.id, next)}
+          />
+        )}
       </div>
     </div>
   );
@@ -507,7 +541,7 @@ const NodeConfigView = ({ node, nodeDef, variables = [] }) => {
  *   3. selectedNode !== null        ? NodeConfigView (configure selected node)
  *   4. default                      ? AddNodePanel   (nodes exist, none selected)
  */
-const NodeConfigPanel = ({ className = "" }) => {
+const NodeConfigPanel = ({ className = "", readOnly = false, workflowId = null }) => {
   const nodes = useFuseStudioStore((s) => s.nodes);
   const edges = useFuseStudioStore((s) => s.edges);
   const selectedNode = useFuseStudioStore((s) => s.selectedNode);
@@ -897,6 +931,16 @@ const NodeConfigPanel = ({ className = "" }) => {
   let content;
   if (loading) {
     content = null;
+  } else if (readOnly && nodes.length === 0) {
+    content = (
+      <div className="flex items-center justify-center h-full px-6 text-center">
+        <p className="text-[12px] text-ink-450 dark:text-ink-600 select-none">
+          No canvas snapshot is available for this version.
+        </p>
+      </div>
+    );
+  } else if (readOnly && !selectedNode) {
+    content = <VersionEmptyPanel />;
   } else if (nodes.length === 0 || !hasStarterNode) {
     // No nodes placed yet — must choose a starter first.
     content = <StarterPanel />;
@@ -915,6 +959,8 @@ const NodeConfigPanel = ({ className = "" }) => {
         node={selectedNode}
         nodeDef={nodeDef}
         variables={upstreamVariables}
+        readOnly={readOnly}
+        workflowId={workflowId}
       />
     ) : (
       <div className="flex items-center justify-center h-full">
