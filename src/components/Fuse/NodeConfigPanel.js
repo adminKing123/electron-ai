@@ -15,10 +15,14 @@ import FormBuilder from "./FormBuilder";
 import { collectEnvelopeVariables } from "./jsonBuilderEnvelope";
 import CONFIG from "../../config";
 import NotificationSettings from "./NotificationSettings";
-import { createFuseNodeId, getDisplayFuseNodeId } from "../../utils/helpers";
-import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
+import { getDisplayFuseNodeId } from "../../utils/helpers";
 import RunLogSaveSettings from "./RunLogSaveSettings";
 import useUserStore from "../../store/useUserStore";
+import useFuseNodeDefinition, {
+  nodeDefForConfigPanel,
+  useMergeNodeConfigDefaults,
+} from "../../hooks/useFuseNodeDefinition";
+import { createFlowNodeFromListing } from "../../utils/fuseNodeDefCache";
 
 /** Display order for node picker sections (integration sections last). */
 const NODE_SECTION_ORDER = [
@@ -126,21 +130,10 @@ const StarterPanel = () => {
   const [query, setQuery] = React.useState("");
 
   const handlePick = (node) => {
-    // Build a React Flow-compatible node so WorkflowCanvas can render it immediately.
-    const flowNode = {
-      id: `${createFuseNodeId()}`,
-      type: "fuse_node",
+    const flowNode = createFlowNodeFromListing(node, {
       position: { x: 250, y: 100 },
-      data: {
-        nodeType: node.type,
-        label: node.label,
-        icon: node.icon ?? null,
-        config: { ...(node.defaults || {}), ...FUSE_DEFAULT_RUN_LOG_SAVE },
-        // Mark as the workflow trigger so WorkflowCanvas and the store can
-        // enforce the single-outgoing-edge rule.
-        isStarter: true,
-      },
-    };
+      isStarter: true,
+    });
     addFlowNode(flowNode);
     selectNode(flowNode);
   };
@@ -215,18 +208,10 @@ const AddNodePanel = () => {
    */
   const handlePick = (node) => {
     const offset = canvasNodes.length * 40;
-    const flowNode = {
-      id: `${createFuseNodeId()}`,
-      type: "fuse_node",
+    const flowNode = createFlowNodeFromListing(node, {
       position: { x: 350 + offset, y: 200 + offset },
-      data: {
-        nodeType: node.type,
-        label: node.label,
-        icon: node.icon ?? null,
-        config: { ...(node.defaults || {}), ...FUSE_DEFAULT_RUN_LOG_SAVE },
-        isStarter: false,
-      },
-    };
+      isStarter: false,
+    });
     addFlowNode(flowNode);
     selectNode(flowNode);
     setAddingNode(false);
@@ -408,6 +393,8 @@ const NodeConfigView = ({
   variables = [],
   readOnly = false,
   workflowId: workflowIdProp = null,
+  loadingConfigForm = false,
+  configLoadError = null,
 }) => {
   const updateNodeConfig = useFuseStudioStore((s) => s.updateNodeConfig);
   const updateNodeLabel = useFuseStudioStore((s) => s.updateNodeLabel);
@@ -521,7 +508,17 @@ const NodeConfigView = ({
           </div>
         )}
 
-        {nodeDef.config_form ? (
+        {loadingConfigForm ? (
+          <div className="flex flex-col gap-3 py-2 animate-pulse">
+            <div className="h-3 w-32 rounded bg-ink-75 dark:bg-void-875" />
+            <div className="h-9 w-full rounded-lg bg-ink-50 dark:bg-void-775" />
+            <div className="h-9 w-full rounded-lg bg-ink-50 dark:bg-void-775" />
+          </div>
+        ) : configLoadError ? (
+          <p className="text-[12px] text-red-500 dark:text-red-400">
+            Could not load configuration for this node. Try selecting it again.
+          </p>
+        ) : nodeDef.config_form ? (
           <fieldset disabled={readOnly} className={readOnly ? "min-w-0 border-0 p-0 m-0" : undefined}>
             <FormBuilder
               configForm={nodeDef.config_form}
@@ -565,15 +562,27 @@ const NodeConfigPanel = ({ className = "", readOnly = false, workflowId = null }
   const nodes = useFuseStudioStore((s) => s.nodes);
   const edges = useFuseStudioStore((s) => s.edges);
   const selectedNode = useFuseStudioStore((s) => s.selectedNode);
-  const starterNodes = useFuseStudioStore((s) => s.starterNodes);
-  const actionNodes = useFuseStudioStore((s) => s.actionNodes);
   const addingNode = useFuseStudioStore((s) => s.addingNode);
   const loading = useFuseStudioStore((s) => s.loading);
 
   const hasStarterNode = nodes.some((n) => n.data?.isStarter === true);
 
-  // Combined lookup across both node definition lists.
-  const allNodeDefs = [...starterNodes, ...actionNodes];
+  const selectedNodeType = selectedNode?.data?.nodeType ?? null;
+  const {
+    catalogNodeDef,
+    fullDef,
+    isDetailLoaded,
+    loadingConfigForm,
+    error: nodeDefLoadError,
+  } = useFuseNodeDefinition(selectedNodeType);
+
+  const panelNodeDef = nodeDefForConfigPanel(catalogNodeDef, selectedNode);
+
+  useMergeNodeConfigDefaults(
+    selectedNode?.id,
+    isDetailLoaded,
+    fullDef,
+  );
 
   /**
    * Walk the entire ancestor chain backwards from `selectedNode` via BFS,
@@ -973,21 +982,22 @@ const NodeConfigPanel = ({ className = "", readOnly = false, workflowId = null }
     // A workflow node is selected — show its config form.
     // Block nodes (fuse_block) never reach here; WorkflowCanvas clears
     // selectedNode before they could be set.
-    const nodeDef = allNodeDefs.find(
-      (n) => n.type === selectedNode.data.nodeType,
-    );
-    content = nodeDef ? (
+    content = panelNodeDef ? (
       <NodeConfigView
         node={selectedNode}
-        nodeDef={nodeDef}
+        nodeDef={panelNodeDef}
         variables={upstreamVariables}
         readOnly={readOnly}
         workflowId={workflowId}
+        loadingConfigForm={loadingConfigForm}
+        configLoadError={nodeDefLoadError}
       />
     ) : (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full px-6 text-center">
         <p className="text-[12px] text-ink-450 dark:text-ink-600 select-none">
-          Unknown node type: {selectedNode.data?.nodeType}
+          {loadingConfigForm
+            ? "Loading node…"
+            : `Unknown node type: ${selectedNode.data?.nodeType}`}
         </p>
       </div>
     );

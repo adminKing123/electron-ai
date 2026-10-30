@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { getStarterNodesAPI, getActionNodesAPI } from "../apis/fuse/queryFunctions";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 
-/** Loads starter + action node definitions into the Fuse studio store. */
+/** Loads starter + action node listing metadata into the Fuse studio store. */
 export default function useFuseNodeCatalog() {
   const setStarterNodes = useFuseStudioStore((s) => s.setStarterNodes);
   const setLoadingNodes = useFuseStudioStore((s) => s.setLoadingNodes);

@@ -59,6 +59,9 @@ const useFuseStudioStore = create((set) => ({
   actionNodes: [],
   loadingActionNodes: false,
 
+  /** Full definitions keyed by node type (lazy-loaded when a node is opened). */
+  nodeDefsByType: {},
+
   // --- Panel mode ---
   // true while the "Add Node" picker is open in the config panel.
   addingNode: false,
@@ -90,6 +93,13 @@ const useFuseStudioStore = create((set) => ({
   setLoadingNodes: (v)        => set({ loadingNodes: v }),
   setActionNodes: (nodes)     => set({ actionNodes: nodes }),
   setLoadingActionNodes: (v)  => set({ loadingActionNodes: v }),
+  mergeNodeDef: (def) =>
+    set((state) => ({
+      nodeDefsByType: {
+        ...state.nodeDefsByType,
+        [def.type]: def,
+      },
+    })),
   setAddingNode: (v)          => set({ addingNode: v }),
 
   // --- Compilation / execution state actions ---
@@ -285,6 +295,7 @@ const useFuseStudioStore = create((set) => ({
       loadingNodes: false,
       actionNodes: [],
       loadingActionNodes: false,
+      nodeDefsByType: {},
     }),
 }));
 

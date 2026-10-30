@@ -101,7 +101,7 @@ export const updateWorkflowStatusAPI = async (id, status) => {
 // â"€â"€â"€ Node definitions â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 /**
- * GET /fuse/nodes/starter â€” returns all available starter node definitions.
+ * GET /fuse/nodes/starter — listing metadata only (no config_form).
  */
 export const getStarterNodesAPI = async () => {
   const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_STARTER });
@@ -109,10 +109,21 @@ export const getStarterNodesAPI = async () => {
 };
 
 /**
- * GET /fuse/nodes/actions â€” returns all available action node definitions.
+ * GET /fuse/nodes/actions — listing metadata only (no config_form).
  */
 export const getActionNodesAPI = async () => {
   const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_ACTIONS });
+  return res.data;
+};
+
+/**
+ * GET /fuse/nodes/:nodeType — full node definition (config_form, defaults, …).
+ */
+export const getFuseNodeDefinitionAPI = async (nodeType) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_NODE_DEFINITION(nodeType),
+  });
   return res.data;
 };
 

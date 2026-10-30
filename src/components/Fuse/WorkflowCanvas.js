@@ -13,7 +13,7 @@ import { BasicLoader } from "../Loaders";
 import { NODE_TYPES } from "./nodes/FuseFlowNode";
 import { getOutgoingLimit, isFuseBranchSourceHandle } from "./nodes/connectionLimits";
 import { createFuseNodeId } from "../../utils/helpers";
-import { FUSE_DEFAULT_RUN_LOG_SAVE } from "../../utils/fuseNodeConfig";
+import { createFlowNodeFromListing } from "../../utils/fuseNodeDefCache";
 import CanvasContextMenu from "./CanvasContextMenu";
 import RemovableEdge from "./edges/RemovableEdge";
 import { FuseCanvasReadOnlyContext } from "./fuseCanvasContext";
@@ -294,25 +294,21 @@ const WorkflowCanvas = ({
       e.preventDefault();
       const raw = e.dataTransfer.getData("application/fuse-node");
       if (!raw) return;
-      let nodeDef;
-      try { nodeDef = JSON.parse(raw); } catch { return; }
+      let listingMeta;
+      try {
+        listingMeta = JSON.parse(raw);
+      } catch {
+        return;
+      }
 
       const position = rfInstance
         ? rfInstance.screenToFlowPosition({ x: e.clientX, y: e.clientY })
         : { x: 250, y: 100 };
 
-      const flowNode = {
-        id:   `${createFuseNodeId()}`,
-        type: "fuse_node",
+      const flowNode = createFlowNodeFromListing(listingMeta, {
         position,
-        data: {
-          nodeType:  nodeDef.type,
-          label:     nodeDef.label,
-          icon:      nodeDef.icon ?? null,
-          config:    { ...(nodeDef.defaults || {}), ...FUSE_DEFAULT_RUN_LOG_SAVE },
-          isStarter: nodeDef.isStarter === true,
-        },
-      };
+        isStarter: listingMeta.isStarter === true,
+      });
       addFlowNode(flowNode);
       selectNode(flowNode);
       setAddingNode(false);
