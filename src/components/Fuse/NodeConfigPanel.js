@@ -33,6 +33,26 @@ const NODE_SECTION_ORDER = [
   "Other",
 ];
 
+/** Top-level response_schema keys that duplicate http_request node-root outputs. */
+const HTTP_RESPONSE_RESERVED_ROOT_KEYS = new Set([
+  "status_code",
+  "success",
+  "error",
+  "body",
+]);
+
+const stripReservedHttpResponseSchemaFields = (schema) => {
+  if (!schema || schema.mode !== "visual" || !Array.isArray(schema.fields)) {
+    return schema;
+  }
+  return {
+    ...schema,
+    fields: schema.fields.filter(
+      (f) => !HTTP_RESPONSE_RESERVED_ROOT_KEYS.has((f.key || "").trim()),
+    ),
+  };
+};
+
 /** Filter by search query and group nodes into ordered sections. */
 const groupNodesBySection = (nodes, query) => {
   const q = query.trim().toLowerCase();
@@ -798,7 +818,9 @@ const NodeConfigPanel = ({ className = "", readOnly = false, workflowId = null }
           }),
         );
 
-        const responseSchema = n.data?.config?.response_schema;
+        const responseSchema = stripReservedHttpResponseSchemaFields(
+          n.data?.config?.response_schema,
+        );
         if (responseSchema?.mode === "visual") {
           vars.push(
             ...collectEnvelopeVariables(responseSchema, {

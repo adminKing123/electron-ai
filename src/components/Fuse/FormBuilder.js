@@ -2574,6 +2574,11 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
     if (key === "sheet_name") {
       delete next.column_data;
     }
+    if (key === "validate_status_code" && val === true) {
+      if (!String(next.expected_status_codes ?? "").trim()) {
+        next.expected_status_codes = "200";
+      }
+    }
     onChange(next);
   };
 
