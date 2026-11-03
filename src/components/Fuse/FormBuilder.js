@@ -5,6 +5,7 @@ import {
   getDisplayFuseNodeId,
   wrapVariableToken,
 } from "../../utils/helpers";
+import ScheduleBuilderField from "./ScheduleBuilderField";
 import {
   getWebexRoomsAPI,
   getWebexPeopleAPI,
@@ -2487,7 +2488,7 @@ const ConditionBuilderField = ({ field, value, onChange, variables }) => {
  * Dispatch to the correct input component based on field.type.
  * Supported types: "date" | "time" | "select" | "timezone_select"
  */
-const FieldInput = ({ field, value, onChange, variables = [], allValues = {} }) => {
+const FieldInput = ({ field, value, onChange, onValuesChange, variables = [], allValues = {} }) => {
   switch (field.type) {
     case "text":                return <TextField              field={field} value={value} onChange={onChange} />;
     case "textarea":            return <TextareaField           field={field} value={value} onChange={onChange} />;
@@ -2511,6 +2512,13 @@ const FieldInput = ({ field, value, onChange, variables = [], allValues = {} }) 
     case "google_sheets_spreadsheet_select": return <GoogleSheetsSpreadsheetSelectField value={value} onChange={onChange} />;
     case "google_sheets_sheet_select":       return <GoogleSheetsSheetSelectField       value={value} onChange={onChange} allValues={allValues} />;
     case "google_sheets_column_builder":     return <GoogleSheetsColumnBuilderField     value={value} onChange={onChange} allValues={allValues} variables={variables} />;
+    case "schedule_builder":
+      return (
+        <ScheduleBuilderField
+          values={allValues ?? {}}
+          onValuesChange={onValuesChange ?? onChange}
+        />
+      );
     case "select":
     default:                    return <SelectField             field={field} value={value} onChange={onChange} />;
   }
@@ -2549,6 +2557,10 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
 
   const handlePreset = (preset) => {
     onChange({ ...values, ...resolvePresetValues(preset.values) });
+  };
+
+  const handleValuesChange = (nextValues) => {
+    onChange(nextValues);
   };
 
   const handleFieldChange = (key, val) => {
@@ -2623,16 +2635,26 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
                 : "flex flex-col gap-3"
             }
           >
-            {section.fields.filter((field) => isFieldVisible(field, values)).map((field, fIdx) => (
-              <div key={`${field.key}-${field.type}-${field.label}-${fIdx}`} className="flex flex-col gap-1">
-                {/* Field label (+ JSON root picker for envelope builders) */}
+            {section.fields.filter((field) => isFieldVisible(field, values)).map((field, fIdx) => {
+              const showLabelRow =
+                !field.hideLabel || JSON_ENVELOPE_FIELD_TYPES.has(field.type);
+              const isCompoundField = field.type === "schedule_builder";
+
+              return (
+              <div
+                key={`${field.key}-${field.type}-${field.label}-${fIdx}`}
+                className={isCompoundField ? "flex flex-col" : "flex flex-col gap-1"}
+              >
+                {showLabelRow && (
                 <div className="flex items-center justify-between gap-3 min-h-[1.5rem]">
+                  {!field.hideLabel && (
                   <label className="text-[12px] font-medium text-ink-650 dark:text-ink-500 min-w-0">
                     {field.label}
                     {field.required && (
                       <span className="text-[#e05] ml-0.5">*</span>
                     )}
                   </label>
+                  )}
                   {JSON_ENVELOPE_FIELD_TYPES.has(field.type) && (
                     <JsonRootTypeDropdown
                       value={values[field.key]?.rootType}
@@ -2647,12 +2669,13 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
                     />
                   )}
                 </div>
+                )}
 
-                {/* Input */}
                 <FieldInput
                   field={field}
                   value={values[field.key]}
                   onChange={(val) => handleFieldChange(field.key, val)}
+                  onValuesChange={handleValuesChange}
                   variables={variables}
                   allValues={values}
                 />
@@ -2671,7 +2694,8 @@ const FormBuilder = ({ configForm, values = {}, onChange, variables = [] }) => {
                   </span>
                 )}
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       ))}
