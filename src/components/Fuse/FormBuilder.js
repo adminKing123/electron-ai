@@ -6,6 +6,8 @@ import {
   wrapVariableToken,
 } from "../../utils/helpers";
 import ScheduleBuilderField from "./ScheduleBuilderField";
+import TimezoneSelectField from "./TimezoneSelectField";
+import { SCHEDULE_TIMEZONE_OPTIONS } from "./scheduleTimezoneOptions";
 import {
   getWebexRoomsAPI,
   getWebexPeopleAPI,
@@ -16,39 +18,6 @@ import {
   getGoogleSheetTabsAPI,
   getGoogleSheetColumnsAPI,
 } from "../../apis/fuse/queryFunctions";
-
-// --- Timezone options ----------------------------------------------------------
-// Built once at module load from the browser's Intl API.
-// Falls back to a curated list on older browsers that lack Intl.supportedValuesOf.
-const TIMEZONE_OPTIONS = (() => {
-  try {
-    const zones = Intl.supportedValuesOf("timeZone");
-    const now = new Date();
-    return zones.map((tz) => {
-      try {
-        const offset = new Intl.DateTimeFormat("en-US", {
-          timeZone: tz,
-          timeZoneName: "longOffset",
-        })
-          .formatToParts(now)
-          .find((p) => p.type === "timeZoneName")?.value ?? "GMT";
-        return { label: `(${offset}) ${tz.replace(/_/g, " ")}`, value: tz };
-      } catch {
-        return { label: tz.replace(/_/g, " "), value: tz };
-      }
-    });
-  } catch {
-    return [
-      { label: "(GMT+00:00) UTC", value: "UTC" },
-      { label: "(GMT+05:30) Asia/Kolkata", value: "Asia/Kolkata" },
-      { label: "(GMT-05:00) America/New_York", value: "America/New_York" },
-      { label: "(GMT-08:00) America/Los_Angeles", value: "America/Los_Angeles" },
-      { label: "(GMT+01:00) Europe/London", value: "Europe/London" },
-      { label: "(GMT+09:00) Asia/Tokyo", value: "Asia/Tokyo" },
-      { label: "(GMT+08:00) Asia/Shanghai", value: "Asia/Shanghai" },
-    ];
-  }
-})();
 
 // --- Preset value resolver -----------------------------------------------------
 /**
@@ -904,37 +873,6 @@ const isFieldVisible = (field, values) => {
   return rules.every((r) => values?.[r.key] === r.value);
 };
 
-const TimezoneSelectField = ({ value, onChange }) => {
-  const defaultTz = useMemo(
-    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
-    []
-  );
-
-  // Persist the browser's local timezone into the node config on first render,
-  // so the backend never falls back to UTC when the user hasn't touched the field.
-  React.useEffect(() => {
-    if (!value) onChange(defaultTz);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <div className="relative">
-      <select
-        value={value ?? defaultTz}
-        onChange={(e) => onChange(e.target.value)}
-        className={SELECT_BASE}
-      >
-        {TIMEZONE_OPTIONS.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-      <SelectChevron />
-    </div>
-  );
-};
-
 // --- Variable picker shared hook ----------------------------------------------
 /**
  * Inserts a variable token `{{token}}` at the current cursor position inside
@@ -1146,8 +1084,10 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                     onChange={(e) => setSelectedTimezone(e.target.value)}
                     className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-void-850 border border-ink-150 dark:border-void-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
                   >
-                    {TIMEZONE_OPTIONS.map(opt => (
-                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    {SCHEDULE_TIMEZONE_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        ({opt.offset}) {opt.label}
+                      </option>
                     ))}
                   </select>
                   <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-ink-400 dark:text-ink-550">

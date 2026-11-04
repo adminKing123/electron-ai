@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
+import { CronMultiSelectList, CronMultiSelectPanel } from "./CronMultiSelectList";
+import { MONTH_LABELS, DOW_LABELS, defaultCustomSchedule } from "./scheduleCronUtils";
 import {
-  MONTH_LABELS,
-  DOW_LABELS,
-  buildCronExpression,
-  defaultCustomSchedule,
-  schedulePatchWithCron,
-} from "./scheduleCronUtils";
+  buildYearOptions,
+  defaultScheduleExpireParts,
+  isScheduleExpiresEnabled,
+} from "./scheduleExpiresUtils";
 
 const SELECT_INLINE =
   "inline-flex items-center rounded-md px-1.5 py-0.5 mx-0.5 " +
@@ -74,62 +74,6 @@ function RadioRow({ selected, onSelect, children }) {
   );
 }
 
-function toggleInList(list, value) {
-  const v = Number(value);
-  const set = new Set((list || []).map(Number));
-  if (set.has(v)) set.delete(v);
-  else set.add(v);
-  return [...set].sort((a, b) => a - b);
-}
-
-function selectionSummary(selected, labels, emptyLabel = "Any") {
-  if (!selected?.length) return emptyLabel;
-  if (labels) {
-    return selected.map((v) => labels[Number(v)] ?? labels[v] ?? v).join(", ");
-  }
-  return selected.join(", ");
-}
-
-function Chip({ active, onClick, children, className = "" }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={
-        `rounded-md border text-[11px] font-medium transition-colors ${className} ` +
-        (active
-          ? "bg-brand-500 border-brand-500 text-white shadow-sm"
-          : "bg-white dark:bg-void-850 border-ink-200 dark:border-void-775 text-ink-700 dark:text-ink-300 hover:border-brand-300 dark:hover:border-brand-700 hover:bg-brand-50/80 dark:hover:bg-brand-950/30")
-      }
-    >
-      {children}
-    </button>
-  );
-}
-
-function CustomDimension({ title, description, onClear, children }) {
-  return (
-    <div className="rounded-xl border border-ink-100 dark:border-void-850 bg-white dark:bg-void-875/40 p-3">
-      <div className="flex items-start justify-between gap-2 mb-2">
-        <div className="min-w-0">
-          <p className="text-[12px] font-semibold text-ink-800 dark:text-ink-200">{title}</p>
-          <p className="text-[11px] text-ink-500 dark:text-ink-550 mt-0.5 truncate" title={description}>
-            {description}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={onClear}
-          className="shrink-0 text-[11px] font-medium text-brand-600 dark:text-brand-400 hover:underline"
-        >
-          Any (*)
-        </button>
-      </div>
-      {children}
-    </div>
-  );
-}
-
 /**
  * @param {{ values: object, onValuesChange: (patch: object) => void }} props
  */
@@ -143,24 +87,14 @@ const ScheduleBuilderField = ({ values, onValuesChange }) => {
 
   const apply = useCallback(
     (patch) => {
-      const next = { ...values, ...patch };
-      onValuesChange(schedulePatchWithCron(next));
+      onValuesChange({ ...values, ...patch });
     },
     [values, onValuesChange],
   );
 
-  useEffect(() => {
-    if (!values.cron_expression) {
-      onValuesChange(schedulePatchWithCron(values));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const setMode = (nextMode) => {
     apply({ schedule_mode: nextMode });
   };
-
-  const cronDisplay = values.cron_expression || buildCronExpression(values);
 
   const hourOpts = hours.map((h) => ({ label: String(h), value: String(h) }));
   const minuteOpts = minutes.map((m) => ({
@@ -175,6 +109,30 @@ const ScheduleBuilderField = ({ values, onValuesChange }) => {
 
   const updateCustom = (partial) => {
     apply({ custom: { ...custom, ...partial } });
+  };
+
+  const domListOpts = daysOfMonth.map((d) => ({ label: String(d), value: d }));
+  const dowListOpts = DOW_LABELS.map((label, idx) => ({ label, value: idx }));
+  const monthListOpts = months.map((m) => ({ label: MONTH_LABELS[m - 1], value: m }));
+  const hourListOpts = hours.map((h) => ({ label: String(h), value: h }));
+  const minuteListOpts = minutes.map((m) => ({
+    label: String(m).padStart(2, "0"),
+    value: m,
+  }));
+
+  const yearOpts = useMemo(() => buildYearOptions(15), []);
+  const expiresOn = isScheduleExpiresEnabled(values);
+  const tzLabel = values.timezone || "UTC";
+
+  const setExpiresEnabled = (on) => {
+    if (on) {
+      apply({
+        schedule_expires_enabled: true,
+        ...defaultScheduleExpireParts(),
+      });
+    } else {
+      apply({ schedule_expires_enabled: false });
+    }
   };
 
   return (
@@ -279,126 +237,130 @@ const ScheduleBuilderField = ({ values, onValuesChange }) => {
 
       {mode === "custom" && (
         <div className="flex flex-col gap-3">
-          <CustomDimension
-            title="Days of the week"
-            description={selectionSummary(custom.days_of_week, DOW_LABELS)}
-            onClear={() => updateCustom({ days_of_week: [] })}
+          <CronMultiSelectPanel
+            title="Date fields"
+            hint="Leave empty for any (*). Ctrl+click or long-press to select multiple."
+            onClearAny={() =>
+              updateCustom({
+                days_of_month: [],
+                days_of_week: [],
+                months: [],
+              })
+            }
           >
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-              {DOW_LABELS.map((label, idx) => (
-                <Chip
-                  key={label}
-                  active={(custom.days_of_week || []).map(Number).includes(idx)}
-                  onClick={() =>
-                    updateCustom({ days_of_week: toggleInList(custom.days_of_week, idx) })
-                  }
-                  className="px-2 py-2 text-[12px]"
-                >
-                  {label}
-                </Chip>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <CronMultiSelectList
+                label="Days of month"
+                options={domListOpts}
+                value={custom.days_of_month}
+                onChange={(v) => updateCustom({ days_of_month: v })}
+              />
+              <CronMultiSelectList
+                label="Days of week"
+                options={dowListOpts}
+                value={custom.days_of_week}
+                onChange={(v) => updateCustom({ days_of_week: v })}
+              />
+              <CronMultiSelectList
+                label="Months"
+                options={monthListOpts}
+                value={custom.months}
+                onChange={(v) => updateCustom({ months: v })}
+              />
             </div>
-          </CustomDimension>
+          </CronMultiSelectPanel>
 
-          <CustomDimension
-            title="Months"
-            description={selectionSummary(
-              custom.months,
-              months.map((m) => MONTH_LABELS[m - 1]),
-            )}
-            onClear={() => updateCustom({ months: [] })}
+          <CronMultiSelectPanel
+            title="Time of day"
+            hint="Which hours and minutes to run within the date fields above."
+            onClearAny={() => updateCustom({ hours: [], minutes: [] })}
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-              {months.map((m) => (
-                <Chip
-                  key={m}
-                  active={(custom.months || []).map(Number).includes(m)}
-                  onClick={() => updateCustom({ months: toggleInList(custom.months, m) })}
-                  className="px-2 py-1.5 text-left"
-                >
-                  {MONTH_LABELS[m - 1]}
-                </Chip>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <CronMultiSelectList
+                label="Hours"
+                options={hourListOpts}
+                value={custom.hours}
+                onChange={(v) => updateCustom({ hours: v })}
+                size={12}
+              />
+              <CronMultiSelectList
+                label="Minutes"
+                options={minuteListOpts}
+                value={custom.minutes}
+                onChange={(v) => updateCustom({ minutes: v })}
+                size={12}
+              />
             </div>
-          </CustomDimension>
-
-          <CustomDimension
-            title="Days of the month"
-            description={selectionSummary(custom.days_of_month)}
-            onClear={() => updateCustom({ days_of_month: [] })}
-          >
-            <div className="grid grid-cols-7 gap-1">
-              {daysOfMonth.map((d) => (
-                <Chip
-                  key={d}
-                  active={(custom.days_of_month || []).map(Number).includes(d)}
-                  onClick={() =>
-                    updateCustom({ days_of_month: toggleInList(custom.days_of_month, d) })
-                  }
-                  className="px-0 py-1.5 min-w-[2rem]"
-                >
-                  {d}
-                </Chip>
-              ))}
-            </div>
-          </CustomDimension>
-
-          <CustomDimension
-            title="Hours"
-            description={selectionSummary(custom.hours)}
-            onClear={() => updateCustom({ hours: [] })}
-          >
-            <div className="grid grid-cols-8 sm:grid-cols-12 gap-1">
-              {hours.map((h) => (
-                <Chip
-                  key={h}
-                  active={(custom.hours || []).map(Number).includes(h)}
-                  onClick={() => updateCustom({ hours: toggleInList(custom.hours, h) })}
-                  className="px-0 py-1 min-w-[1.75rem]"
-                >
-                  {h}
-                </Chip>
-              ))}
-            </div>
-          </CustomDimension>
-
-          <CustomDimension
-            title="Minutes"
-            description={selectionSummary(custom.minutes)}
-            onClear={() => updateCustom({ minutes: [] })}
-          >
-            <div className="grid grid-cols-10 sm:grid-cols-12 gap-1 max-h-40 overflow-y-auto pr-1">
-              {minutes.map((m) => (
-                <Chip
-                  key={m}
-                  active={(custom.minutes || []).map(Number).includes(m)}
-                  onClick={() => updateCustom({ minutes: toggleInList(custom.minutes, m) })}
-                  className="px-0 py-1 min-w-[1.65rem] text-[10px]"
-                >
-                  {String(m).padStart(2, "0")}
-                </Chip>
-              ))}
-            </div>
-          </CustomDimension>
+          </CronMultiSelectPanel>
 
           <p className="text-[11px] text-ink-500 dark:text-ink-550 leading-relaxed">
-            Tap to select. Use <strong className="font-semibold">Any (*)</strong> on a row to match
-            every value in that field. Empty rows become <code className="text-[10px]">*</code> in
-            the crontab.
+            Hold <kbd className="px-1 rounded bg-ink-100 dark:bg-void-800 text-[10px]">Ctrl</kbd>{" "}
+            (Windows) or{" "}
+            <kbd className="px-1 rounded bg-ink-100 dark:bg-void-800 text-[10px]">⌘</kbd> (Mac) while
+            clicking to select multiple rows. Nothing selected ={" "}
+            <code className="text-[10px]">*</code> in the crontab.
           </p>
         </div>
       )}
 
-      <div className="rounded-lg border border-ink-200 dark:border-void-775 bg-ink-50/80 dark:bg-void-875/50 px-3 py-2.5">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-500 dark:text-ink-550 mb-1">
-          Crontab expression
-        </p>
-        <code className="text-[13px] font-mono text-ink-900 dark:text-ink-100 break-all">
-          {cronDisplay}
-        </code>
-        <p className="text-[11px] text-ink-500 dark:text-ink-550 mt-2 leading-relaxed">
-          Registered with Cron Service when you turn the workflow on.
-        </p>
+      <div className="rounded-xl border border-ink-200 dark:border-void-775 bg-white dark:bg-void-875/30 p-3">
+        <label className="flex items-center gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={expiresOn}
+            onChange={(e) => setExpiresEnabled(e.target.checked)}
+            className="w-4 h-4 rounded border-ink-300 text-brand-500 focus:ring-brand-500/40"
+          />
+          <span className="text-[13px] font-medium text-ink-800 dark:text-ink-200">
+            Schedule expires
+          </span>
+        </label>
+
+        {expiresOn ? (
+          <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2 text-[13px] text-ink-700 dark:text-ink-300">
+            <span className="text-ink-500">on</span>
+            <InlineSelect
+              ariaLabel="Expiry day"
+              value={values.schedule_expires_day ?? "1"}
+              onChange={(v) => apply({ schedule_expires_day: v })}
+              options={domOpts}
+            />
+            <InlineSelect
+              ariaLabel="Expiry month"
+              value={values.schedule_expires_month ?? "1"}
+              onChange={(v) => apply({ schedule_expires_month: v })}
+              options={monthOpts}
+            />
+            <InlineSelect
+              ariaLabel="Expiry year"
+              value={values.schedule_expires_year ?? String(new Date().getFullYear() + 1)}
+              onChange={(v) => apply({ schedule_expires_year: v })}
+              options={yearOpts}
+            />
+            <span className="text-ink-500">at</span>
+            <InlineSelect
+              ariaLabel="Expiry hour"
+              value={values.schedule_expires_hour ?? "0"}
+              onChange={(v) => apply({ schedule_expires_hour: v })}
+              options={hourOpts}
+            />
+            <span>:</span>
+            <InlineSelect
+              ariaLabel="Expiry minute"
+              value={values.schedule_expires_minute ?? "0"}
+              onChange={(v) => apply({ schedule_expires_minute: v })}
+              options={minuteOpts}
+            />
+            <span className="w-full text-[11px] text-ink-500 dark:text-ink-550 mt-1">
+              In time zone <strong className="font-semibold">{tzLabel}</strong>. After this moment,
+              cron-job.org stops firing (workflow stays active in Fuse until you turn it off).
+            </span>
+          </div>
+        ) : (
+          <p className="text-[11px] text-ink-500 dark:text-ink-550 mt-2">
+            Off — the schedule runs until you deactivate the workflow.
+          </p>
+        )}
       </div>
     </div>
   );
