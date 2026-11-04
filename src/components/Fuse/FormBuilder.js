@@ -7,7 +7,8 @@ import {
 } from "../../utils/helpers";
 import ScheduleBuilderField from "./ScheduleBuilderField";
 import TimezoneSelectField from "./TimezoneSelectField";
-import { SCHEDULE_TIMEZONE_OPTIONS } from "./scheduleTimezoneOptions";
+import { DEFAULT_SCHEDULE_TIMEZONE } from "./scheduleTimezoneOptions";
+import { useScheduleTimezones } from "../../hooks/useScheduleTimezones";
 import {
   getWebexRoomsAPI,
   getWebexPeopleAPI,
@@ -980,12 +981,11 @@ const getShortLabel = (label, nodeName) => {
  *           with a back chevron to return to step 1.
  */
 const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) => {
+  const { options: scheduleTimezones, loading: timezonesLoading } = useScheduleTimezones();
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [systemVarsOpen, setSystemVarsOpen] = useState(false);
   const [systemVars, setSystemVars] = useState(null);
-  const [selectedTimezone, setSelectedTimezone] = useState(() =>
-    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"
-  );
+  const [selectedTimezone, setSelectedTimezone] = useState(DEFAULT_SCHEDULE_TIMEZONE);
   const [selectedFormat, setSelectedFormat] = useState("iso");
   const [customFormat, setCustomFormat] = useState("DD/MM/YYYY");
 
@@ -1084,11 +1084,15 @@ const VariablePicker = ({ variables, onPick, onClose, filterArrays = false }) =>
                     onChange={(e) => setSelectedTimezone(e.target.value)}
                     className="w-full pl-2 pr-6 py-1.5 text-[12px] appearance-none rounded-lg bg-ink-50 dark:bg-void-850 border border-ink-150 dark:border-void-800 outline-none text-ink-875 dark:text-ink-300 cursor-pointer"
                   >
-                    {SCHEDULE_TIMEZONE_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        ({opt.offset}) {opt.label}
-                      </option>
-                    ))}
+                    {timezonesLoading && scheduleTimezones.length === 0 ? (
+                      <option value={DEFAULT_SCHEDULE_TIMEZONE}>Loading…</option>
+                    ) : (
+                      scheduleTimezones.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          ({opt.offset}) {opt.label}
+                        </option>
+                      ))
+                    )}
                   </select>
                   <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-ink-400 dark:text-ink-550">
                     <svg width="10" height="10" viewBox="0 0 14 14" fill="none">

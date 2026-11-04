@@ -49,6 +49,7 @@ const ENDPOINTS = {
   FUSE_NODES_ACTIONS:           "/fuse/nodes/actions",
   FUSE_NODE_DEFINITION:         (nodeType) => `/fuse/nodes/${nodeType}`,
   FUSE_NODES_SYSTEM_VARIABLES:  "/fuse/nodes/system-variables",
+  FUSE_NODES_SCHEDULE_TIMEZONES: "/fuse/nodes/schedule-timezones",
   FUSE_INTEGRATIONS:            "/fuse/integration",
 
   // â"€â"€ Fuse Push Notifications â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€

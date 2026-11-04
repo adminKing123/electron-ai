@@ -132,6 +132,11 @@ export const getSystemVariablesAPI = async () => {
   return res.data;
 };
 
+export const getScheduleTimezonesAPI = async () => {
+  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_SCHEDULE_TIMEZONES });
+  return res.data;
+};
+
 /**
  * GET /fuse/integration — returns all available integrations.
  */

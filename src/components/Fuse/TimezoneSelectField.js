@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useScheduleTimezones } from "../../hooks/useScheduleTimezones";
 import {
   DEFAULT_SCHEDULE_TIMEZONE,
-  SCHEDULE_TIMEZONE_OPTIONS,
   filterTimezoneOptions,
 } from "./scheduleTimezoneOptions";
 
 const LIST_MAX = 280;
 
 /**
- * Searchable IANA timezone picker (cron-job.org compatible). Default: UTC.
+ * Searchable schedule timezone picker (cron-job.org list from API). Default: UTC.
  */
 const TimezoneSelectField = ({ value, onChange }) => {
+  const { options, loading } = useScheduleTimezones();
   const resolved = value || DEFAULT_SCHEDULE_TIMEZONE;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -20,19 +21,26 @@ const TimezoneSelectField = ({ value, onChange }) => {
     if (!value) onChange(DEFAULT_SCHEDULE_TIMEZONE);
   }, [value, onChange]);
 
+  useEffect(() => {
+    if (!options.length || !value) return;
+    if (!options.some((o) => o.value === value)) {
+      onChange(DEFAULT_SCHEDULE_TIMEZONE);
+    }
+  }, [options, value, onChange]);
+
   const selected = useMemo(
     () =>
-      SCHEDULE_TIMEZONE_OPTIONS.find((o) => o.value === resolved) ?? {
+      options.find((o) => o.value === resolved) ?? {
         value: resolved,
         label: resolved.replace(/_/g, " "),
         offset: "",
       },
-    [resolved],
+    [options, resolved],
   );
 
   const filtered = useMemo(
-    () => filterTimezoneOptions(SCHEDULE_TIMEZONE_OPTIONS, query),
-    [query],
+    () => filterTimezoneOptions(options, query),
+    [options, query],
   );
 
   useEffect(() => {
@@ -60,20 +68,28 @@ const TimezoneSelectField = ({ value, onChange }) => {
         id="timezone-label"
         aria-haspopup="listbox"
         aria-expanded={open}
+        disabled={loading && !options.length}
         onClick={() => setOpen((o) => !o)}
         className="w-full text-left px-3 py-2 rounded-lg text-[13px]
           bg-white dark:bg-void-850 border border-ink-200 dark:border-void-775
           text-ink-800 dark:text-ink-200 hover:border-ink-300 dark:hover:border-void-700
-          focus:outline-none focus:ring-2 focus:ring-brand-500/30 flex items-center justify-between gap-2"
+          focus:outline-none focus:ring-2 focus:ring-brand-500/30 flex items-center justify-between gap-2
+          disabled:opacity-60"
       >
         <span className="min-w-0 truncate">
-          {selected.offset ? (
+          {loading && !options.length ? (
+            "Loading time zones…"
+          ) : (
             <>
-              <span className="text-ink-500 dark:text-ink-550 tabular-nums">{selected.offset}</span>
-              {" · "}
+              {selected.offset ? (
+                <>
+                  <span className="text-ink-500 dark:text-ink-550 tabular-nums">{selected.offset}</span>
+                  {" · "}
+                </>
+              ) : null}
+              <span className="font-medium">{selected.label}</span>
             </>
-          ) : null}
-          <span className="font-medium">{selected.label}</span>
+          )}
         </span>
         <span className="text-ink-400 shrink-0" aria-hidden>
           ▾
