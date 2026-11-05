@@ -45,8 +45,6 @@ const ENDPOINTS = {
   FUSE_WORKFLOW_STATUS:         (id) => `/fuse/workflows/${id}/status`,
   FUSE_WORKFLOW_ACTIVATE:       (id) => `/fuse/workflows/${id}/activate`,
   FUSE_WORKFLOW_DEACTIVATE:     (id) => `/fuse/workflows/${id}/deactivate`,
-  FUSE_NODES_STARTER:           "/fuse/nodes/starter",
-  FUSE_NODES_ACTIONS:           "/fuse/nodes/actions",
   FUSE_NODES_CATALOG_SECTIONS:  "/fuse/nodes/catalog/sections",
   FUSE_NODES_CATALOG_NODES:     "/fuse/nodes/catalog/nodes",
   FUSE_NODES_CATALOG_SEARCH:    "/fuse/nodes/catalog/search",

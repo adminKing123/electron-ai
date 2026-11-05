@@ -292,7 +292,7 @@ const useFuseStudioStore = create((set) => ({
   clearSelectedNode: ()    => set({ selectedNode: null }),
 
   // --- Cleanup ---
-  /** Clears graph + workflow metadata; keeps cached node definition lists. */
+  /** Clears graph + workflow metadata; keeps lazy-loaded catalog caches. */
   resetCanvas: () => set(STUDIO_CANVAS_RESET),
 
   /** Called on page unmount. Clears all workflow + canvas + node definition state. */

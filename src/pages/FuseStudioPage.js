@@ -17,7 +17,6 @@ import {
   deactivateWorkflowAPI,
 } from "../apis/fuse/queryFunctions";
 import useCreateWorkflow from "../hooks/useCreateWorkflow";
-import useFuseNodeCatalog from "../hooks/useFuseNodeCatalog";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 
 /**
@@ -98,9 +97,7 @@ export default function FuseStudioPage() {
   // Not observable state — mutable anchor to compare against for name autosave
   const committedNameRef = useRef("");
 
-  useFuseNodeCatalog();
-
-  // -- Load workflow + node definitions -------------------------------------
+  // -- Load workflow --------------------------------------------------------
   useEffect(() => {
     let cancelled = false;
 

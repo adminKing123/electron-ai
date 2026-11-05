@@ -100,23 +100,6 @@ export const updateWorkflowStatusAPI = async (id, status) => {
 
 // â"€â"€â"€ Node definitions â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
-/**
- * GET /fuse/nodes/starter — listing metadata only (no config_form).
- */
-export const getStarterNodesAPI = async () => {
-  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_STARTER });
-  return res.data;
-};
-
-/**
- * GET /fuse/nodes/actions — listing metadata only (no config_form).
- * @deprecated Prefer catalog section/search APIs for the studio picker.
- */
-export const getActionNodesAPI = async () => {
-  const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_ACTIONS });
-  return res.data;
-};
-
 /** GET /fuse/nodes/catalog/sections?role=starter|action */
 export const getNodeCatalogSectionsAPI = async (role = "action") => {
   const res = await api({

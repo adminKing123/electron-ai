@@ -13,7 +13,6 @@ import {
 } from "../apis/fuse/queryFunctions";
 import { loadVersionStudioById } from "../utils/fuseVersionStudio";
 import { fmtVersionIdLink } from "../components/Fuse/fuseListingTable";
-import useFuseNodeCatalog from "../hooks/useFuseNodeCatalog";
 import useFuseStudioStore from "../store/useFuseStudioStore";
 import ROUTES from "../router/routes";
 
@@ -39,8 +38,6 @@ export default function FuseVersionStudioPage() {
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const [loadError, setLoadError] = useState(null);
   const [viewMeta, setViewMeta] = useState(null);
-
-  useFuseNodeCatalog();
 
   useEffect(() => {
     if (selectedNode) setMobilePanelOpen(true);
