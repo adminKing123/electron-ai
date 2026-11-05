@@ -22,10 +22,12 @@ export const LoadingMessages = () => {
   );
 };
 
-export const BasicLoader = () => {
+export const BasicLoader = ({ className = "" }) => {
   return (
-    <div className="flex items-center justify-center text-current">
-      <Spinner />
+    <div
+      className={`flex items-center justify-center text-ink-500 dark:text-ink-450 ${className}`}
+    >
+      <Spinner className="w-4 h-4" />
     </div>
   );
 };
