@@ -6,6 +6,7 @@ import {
   searchNodeCatalogAPI,
 } from "../../apis/fuse/queryFunctions";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
+import { BasicLoader } from "../Loaders";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
 import {
   FUSE_NODE_LABEL_MUTED,
@@ -83,13 +84,9 @@ const PickerListRow = ({
   );
 };
 
-const PickerSkeleton = () => (
-  <div className="flex flex-col">
-    {[1, 2, 3, 4, 5, 6].map((i) => (
-      <div key={i} className="h-[76px] px-4 flex items-center">
-        <div className="h-full w-full bg-ink-50/80 dark:bg-void-775/60 animate-pulse" />
-      </div>
-    ))}
+const PickerLoader = () => (
+  <div className="flex flex-col items-center justify-center py-16">
+    <BasicLoader />
   </div>
 );
 
@@ -263,7 +260,7 @@ export default function FuseNodePicker({
       <div className="flex-1 overflow-y-auto pb-4 min-h-0">
         {isSearchMode ? (
           loadingSearch ? (
-            <PickerSkeleton />
+            <PickerLoader />
           ) : searchResults.length === 0 ? (
             <p className="text-center text-[12px] text-ink-450 dark:text-ink-600 select-none mt-8 px-4">
               No nodes match your search
@@ -273,7 +270,7 @@ export default function FuseNodePicker({
           )
         ) : activeSection ? (
           loadingSectionNodes ? (
-            <PickerSkeleton />
+            <PickerLoader />
           ) : sectionNodes.length === 0 ? (
             <p className="text-center text-[12px] text-ink-450 dark:text-ink-600 select-none mt-8 px-4">
               No nodes in this category
@@ -282,7 +279,7 @@ export default function FuseNodePicker({
             <NodeList nodes={sectionNodes} onPick={handlePick} isStarter={isStarter} />
           )
         ) : loadingSections ? (
-          <PickerSkeleton />
+          <PickerLoader />
         ) : sections.length === 0 ? (
           <p className="text-center text-[12px] text-ink-450 dark:text-ink-600 select-none mt-8 px-4">
             No nodes available
