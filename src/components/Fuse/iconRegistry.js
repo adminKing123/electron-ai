@@ -1,4 +1,4 @@
-import { SiGmail, SiWebex, SiGithub, SiGooglesheets } from "react-icons/si";
+import { SiGmail, SiWebex, SiGithub, SiGooglesheets, SiGoogle } from "react-icons/si";
 import { FaCodePullRequest } from "react-icons/fa6";
 import { RiAiGenerate } from "react-icons/ri";
 import { VscVariableGroup } from "react-icons/vsc";
@@ -30,6 +30,7 @@ export const ICON_REGISTRY = {
   SiWebex,
   SiGithub,
   SiGooglesheets,
+  SiGoogle,
   FaCodePullRequest,
   RiAiGenerate,
   VscVariableGroup,

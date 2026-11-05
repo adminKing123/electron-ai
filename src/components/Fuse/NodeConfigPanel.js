@@ -1,16 +1,14 @@
 import React, { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import {
-  TbLayoutGrid,
   TbTrash,
-  TbSearch,
   TbCopy,
   TbCheck,
 } from "react-icons/tb";
 import useFuseStudioStore from "../../store/useFuseStudioStore";
 import FuseNodeIcon, { FUSE_NODE_ICON_SIZES } from "./FuseNodeIcon";
-import NodePickerCard from "./NodePickerCard";
-import { FUSE_NODE_ICON_WELL, FUSE_NODE_LABEL_MUTED, FUSE_PICKER_ROW } from "./fuseNodeTheme";
+import FuseNodePicker from "./FuseNodePicker";
+import { FUSE_NODE_ICON_WELL, FUSE_NODE_LABEL_MUTED } from "./fuseNodeTheme";
 import FormBuilder from "./FormBuilder";
 import { collectEnvelopeVariables } from "./jsonBuilderEnvelope";
 import CONFIG from "../../config";
@@ -23,19 +21,6 @@ import useFuseNodeDefinition, {
   useMergeNodeConfigDefaults,
 } from "../../hooks/useFuseNodeDefinition";
 import { createFlowNodeFromListing } from "../../utils/fuseNodeDefCache";
-
-/** Display order for node picker sections (integration sections last). */
-const NODE_SECTION_ORDER = [
-  "General",
-  "Notifications",
-  "AI",
-  "Logic",
-  "Network",
-  "Webex",
-  "Google",
-  "Handle Files",
-  "Other",
-];
 
 /** Top-level response_schema keys that duplicate http_request node-root outputs. */
 const HTTP_RESPONSE_RESERVED_ROOT_KEYS = new Set([
@@ -57,77 +42,9 @@ const stripReservedHttpResponseSchemaFields = (schema) => {
   };
 };
 
-/** Filter by search query and group nodes into ordered sections. */
-const groupNodesBySection = (nodes, query) => {
-  const q = query.trim().toLowerCase();
-  const filtered = q
-    ? nodes.filter(
-        (n) =>
-          n.label.toLowerCase().includes(q) ||
-          (n.description ?? "").toLowerCase().includes(q) ||
-          (n.section ?? "General").toLowerCase().includes(q),
-      )
-    : nodes;
-
-  const map = {};
-  filtered.forEach((node) => {
-    const key = node.section ?? "General";
-    if (!map[key]) map[key] = [];
-    map[key].push(node);
-  });
-
-  return Object.entries(map).sort(([a], [b]) => {
-    const ia = NODE_SECTION_ORDER.indexOf(a);
-    const ib = NODE_SECTION_ORDER.indexOf(b);
-    const ra = ia === -1 ? NODE_SECTION_ORDER.length : ia;
-    const rb = ib === -1 ? NODE_SECTION_ORDER.length : ib;
-    if (ra !== rb) return ra - rb;
-    return a.localeCompare(b);
-  });
-};
-
-const NodePickerSearch = ({ query, onChange, placeholder = "Search nodes..." }) => (
-  <div
-    className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl transition-colors ${FUSE_PICKER_ROW}`}
-  >
-    <TbSearch className={`w-[18px] h-[18px] flex-shrink-0 ${FUSE_NODE_LABEL_MUTED}`} />
-    <input
-      type="text"
-      value={query}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="flex-1 bg-transparent text-[15px] text-ink-875 dark:text-ink-100
-        placeholder:text-ink-600 dark:placeholder:text-ink-450
-        outline-none border-none"
-    />
-  </div>
-);
-
-const NodeSectionGrid = ({ title, nodes, onPick, isStarter }) => (
-  <div className="flex flex-col gap-2.5">
-    <p className={`text-[14px] font-medium px-0.5 ${FUSE_NODE_LABEL_MUTED}`}>
-      {title}
-    </p>
-    <div className="grid grid-cols-2 gap-2">
-      {nodes.map((node) => (
-        <NodePickerCard
-          key={node.type}
-          node={node}
-          onPick={onPick}
-          isStarter={isStarter}
-          as={isStarter ? "button" : "div"}
-        />
-      ))}
-    </div>
-  </div>
-);
-
 const StarterPanel = () => {
-  const starterNodes = useFuseStudioStore((s) => s.starterNodes);
-  const loadingNodes = useFuseStudioStore((s) => s.loadingNodes);
   const addFlowNode = useFuseStudioStore((s) => s.addFlowNode);
   const selectNode = useFuseStudioStore((s) => s.selectNode);
-  const [query, setQuery] = React.useState("");
 
   const handlePick = (node) => {
     const flowNode = createFlowNodeFromListing(node, {
@@ -138,74 +55,15 @@ const StarterPanel = () => {
     selectNode(flowNode);
   };
 
-  const sections = React.useMemo(
-    () => groupNodesBySection(starterNodes, query),
-    [starterNodes, query],
-  );
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-void-850">
-        <div className="flex items-center gap-2 mb-3">
-          <TbLayoutGrid className="w-[20px] h-[20px] text-ink-600 dark:text-ink-450" />
-          <span className="text-[16px] font-medium text-ink-875 dark:text-ink-100">
-            Choose a starter
-          </span>
-        </div>
-        <NodePickerSearch query={query} onChange={setQuery} placeholder="Search starters..." />
-      </div>
-      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-void-850">
-        {loadingNodes ? (
-          ["General", "Webex"].map((sk) => (
-            <div key={sk} className="flex flex-col gap-2">
-              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-void-875 animate-pulse" />
-              <div className="grid grid-cols-2 gap-2">
-                {[1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-void-775 animate-pulse"
-                  />
-                ))}
-              </div>
-            </div>
-          ))
-        ) : sections.length === 0 ? (
-          <p className="text-center text-[12px] text-ink-450 dark:text-ink-600 select-none mt-6">
-            {query ? "No starters match your search" : "No starter nodes available"}
-          </p>
-        ) : (
-          sections.map(([title, nodes]) => (
-            <NodeSectionGrid
-              key={title}
-              title={title}
-              nodes={nodes}
-              onPick={handlePick}
-              isStarter
-            />
-          ))
-        )}
-      </div>
-    </div>
-  );
+  return <FuseNodePicker role="starter" isStarter onPick={handlePick} />;
 };
 
-// --- AddNodePanel --------------------------------------------------------------
-// Shown when the user clicks "Add Node" in the header.
-// Groups action nodes by their `section` field and renders each group with a
-// section heading + 2-column grid of draggable ActionNodeCards.
 const AddNodePanel = () => {
-  const actionNodes = useFuseStudioStore((s) => s.actionNodes);
-  const loadingActionNodes = useFuseStudioStore((s) => s.loadingActionNodes);
   const setAddingNode = useFuseStudioStore((s) => s.setAddingNode);
   const addFlowNode = useFuseStudioStore((s) => s.addFlowNode);
   const selectNode = useFuseStudioStore((s) => s.selectNode);
   const canvasNodes = useFuseStudioStore((s) => s.nodes);
-  const [query, setQuery] = React.useState("");
 
-  /**
-   * Click-to-add: place the node at a slightly offset position so successive
-   * click-adds don't stack exactly on top of each other.
-   */
   const handlePick = (node) => {
     const offset = canvasNodes.length * 40;
     const flowNode = createFlowNodeFromListing(node, {
@@ -217,57 +75,7 @@ const AddNodePanel = () => {
     setAddingNode(false);
   };
 
-  const sections = React.useMemo(
-    () => groupNodesBySection(actionNodes, query),
-    [actionNodes, query],
-  );
-
-  return (
-    <div className="flex flex-col h-full overflow-hidden">
-      {/* Header */}
-      <div className="px-4 pt-5 pb-4 flex-shrink-0 bg-white dark:bg-void-850">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-[16px] font-medium text-ink-875 dark:text-ink-100">
-            Add Node
-          </span>
-        </div>
-        <NodePickerSearch query={query} onChange={setQuery} />
-      </div>
-
-      {/* Sectioned node list */}
-      <div className="flex-1 overflow-y-auto px-4 pb-5 pt-1 flex flex-col gap-6 bg-white dark:bg-void-850">
-        {loadingActionNodes ? (
-          // Loading skeleton: two mock sections
-          ["Webex", "General"].map((sk) => (
-            <div key={sk} className="flex flex-col gap-2">
-              <div className="h-3 w-24 rounded bg-ink-75 dark:bg-void-875 animate-pulse" />
-              <div className="grid grid-cols-2 gap-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="h-[52px] rounded-2xl bg-ink-50 dark:bg-void-775 animate-pulse"
-                  />
-                ))}
-              </div>
-            </div>
-          ))
-        ) : sections.length === 0 ? (
-          <p className="text-center text-[12px] text-ink-450 dark:text-ink-600 select-none mt-6">
-            {query ? "No nodes match your search" : "No action nodes available"}
-          </p>
-        ) : (
-          sections.map(([title, nodes]) => (
-            <NodeSectionGrid
-              key={title}
-              title={title}
-              nodes={nodes}
-              onPick={handlePick}
-            />
-          ))
-        )}
-      </div>
-    </div>
-  );
+  return <FuseNodePicker role="action" onPick={handlePick} />;
 };
 
 const WEBEX_MESSAGE_OUTPUT_FIELDS = [

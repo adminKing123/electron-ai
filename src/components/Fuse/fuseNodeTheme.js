@@ -19,6 +19,19 @@ export const FUSE_NODE_HANDLE_CONNECTED =
 export const FUSE_PICKER_ROW =
   "bg-ink-50 dark:bg-void-775 hover:bg-ink-100 dark:hover:bg-void-750 active:bg-ink-150 dark:active:bg-void-725";
 
+/** n8n-style catalog list row (no row dividers; left accent on hover/focus). */
+export const FUSE_PICKER_LIST_ROW =
+  "group relative w-full flex items-center gap-3 py-[14px] pl-4 pr-3 text-left transition-colors duration-150 " +
+  "hover:bg-ink-50 dark:hover:bg-void-775/95 active:bg-ink-100 dark:active:bg-void-750 " +
+  "focus-visible:outline-none focus-visible:bg-ink-50 dark:focus-visible:bg-void-775/95";
+
+export const FUSE_PICKER_LIST_ACCENT =
+  "pointer-events-none absolute left-0 top-0 bottom-0 w-[3px] bg-transparent " +
+  "transition-colors duration-150 " +
+  "group-hover:bg-brand-600 dark:group-hover:bg-brand-400 " +
+  "group-focus-visible:bg-brand-600 dark:group-focus-visible:bg-brand-400 " +
+  "group-active:bg-brand-700 dark:group-active:bg-brand-300";
+
 /** Studio canvas nodes — white card on #f9f9fc canvas (picker keeps FUSE_PICKER_ROW). */
 export const FUSE_CANVAS_NODE_SURFACE =
   "bg-white dark:bg-void-775 border border-ink-200 dark:border-void-725 hover:border-ink-300 dark:hover:border-void-650 shadow-[0_1px_2px_rgba(60,64,67,0.1)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.35)]";

@@ -51,13 +51,8 @@ const useFuseStudioStore = create((set) => ({
   savingName: false,
   saving: false,
 
-  // --- Starter node type definitions (from API, cached) ---
-  starterNodes: [],
-  loadingNodes: false,
-
-  // --- Action node type definitions (from API, cached) ---
-  actionNodes: [],
-  loadingActionNodes: false,
+  /** Listing metadata loaded lazily from catalog APIs (section/search), by type. */
+  listingByType: {},
 
   /** Full definitions keyed by node type (lazy-loaded when a node is opened). */
   nodeDefsByType: {},
@@ -89,17 +84,30 @@ const useFuseStudioStore = create((set) => ({
   setLoading:      (v)        => set({ loading: v }),
   setSavingName:       (v)        => set({ savingName: v }),
   setSaving:       (v)        => set({ saving: v }),
-  setStarterNodes: (nodes)    => set({ starterNodes: nodes }),
-  setLoadingNodes: (v)        => set({ loadingNodes: v }),
-  setActionNodes: (nodes)     => set({ actionNodes: nodes }),
-  setLoadingActionNodes: (v)  => set({ loadingActionNodes: v }),
+  mergeListingNodes: (nodes) =>
+    set((state) => {
+      if (!nodes?.length) return state;
+      const next = { ...state.listingByType };
+      for (const n of nodes) {
+        if (n?.type) next[n.type] = n;
+      }
+      return { listingByType: next };
+    }),
   mergeNodeDef: (def) =>
-    set((state) => ({
-      nodeDefsByType: {
-        ...state.nodeDefsByType,
-        [def.type]: def,
-      },
-    })),
+    set((state) => {
+      if (!def?.type) return state;
+      const listing = {
+        type: def.type,
+        label: def.label,
+        icon: def.icon,
+        section: def.section,
+        description: def.description,
+      };
+      return {
+        nodeDefsByType: { ...state.nodeDefsByType, [def.type]: def },
+        listingByType: { ...state.listingByType, [def.type]: listing },
+      };
+    }),
   setAddingNode: (v)          => set({ addingNode: v }),
 
   // --- Compilation / execution state actions ---
@@ -291,10 +299,7 @@ const useFuseStudioStore = create((set) => ({
   resetStudio: () =>
     set({
       ...STUDIO_CANVAS_RESET,
-      starterNodes: [],
-      loadingNodes: false,
-      actionNodes: [],
-      loadingActionNodes: false,
+      listingByType: {},
       nodeDefsByType: {},
     }),
 }));

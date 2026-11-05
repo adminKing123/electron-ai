@@ -5,15 +5,9 @@ import {
   ensureFuseNodeDef,
 } from "../utils/fuseNodeDefCache";
 
-function findListingMeta(nodeType, starterNodes, actionNodes) {
+function findListingMeta(nodeType, listingByType) {
   if (!nodeType) return null;
-  for (const n of starterNodes) {
-    if (n.type === nodeType) return n;
-  }
-  for (const n of actionNodes) {
-    if (n.type === nodeType) return n;
-  }
-  return null;
+  return listingByType[nodeType] ?? null;
 }
 
 /** Header + form shell when catalog/detail is not available yet (e.g. legacy canvas types). */
@@ -56,7 +50,7 @@ export default function useFuseNodeDefinition(nodeType) {
     nodeType ? s.nodeDefsByType[nodeType] : null,
   );
   const listingMeta = useFuseStudioStore((s) =>
-    findListingMeta(nodeType, s.starterNodes, s.actionNodes),
+    findListingMeta(nodeType, s.listingByType),
   );
 
   const [error, setError] = useState(null);

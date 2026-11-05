@@ -1,6 +1,6 @@
 /**
  * Node catalog loading:
- * 1. useFuseNodeCatalog — listing metadata (starter/actions list APIs)
+ * 1. FuseNodePicker — sections/search catalog APIs (listing metadata on demand)
  * 2. createFlowNodeFromListing — place node on canvas immediately
  * 3. ensureFuseNodeDef — full def when config panel opens (cached in nodeDefsByType)
  * 4. useMergeNodeConfigDefaults — apply definition defaults to canvas config once loaded

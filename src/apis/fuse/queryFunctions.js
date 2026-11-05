@@ -110,9 +110,40 @@ export const getStarterNodesAPI = async () => {
 
 /**
  * GET /fuse/nodes/actions — listing metadata only (no config_form).
+ * @deprecated Prefer catalog section/search APIs for the studio picker.
  */
 export const getActionNodesAPI = async () => {
   const res = await api({ method: "GET", url: ENDPOINTS.FUSE_NODES_ACTIONS });
+  return res.data;
+};
+
+/** GET /fuse/nodes/catalog/sections?role=starter|action */
+export const getNodeCatalogSectionsAPI = async (role = "action") => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_NODES_CATALOG_SECTIONS,
+    params: { role },
+  });
+  return res.data;
+};
+
+/** GET /fuse/nodes/catalog/nodes?role=&section= */
+export const getNodeCatalogSectionNodesAPI = async (role, section, params = {}) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_NODES_CATALOG_NODES,
+    params: { role, section, ...params },
+  });
+  return res.data;
+};
+
+/** GET /fuse/nodes/catalog/search?q=&role=&limit= */
+export const searchNodeCatalogAPI = async (query, { role, limit = 40 } = {}) => {
+  const res = await api({
+    method: "GET",
+    url: ENDPOINTS.FUSE_NODES_CATALOG_SEARCH,
+    params: { q: query, ...(role ? { role } : {}), limit },
+  });
   return res.data;
 };
 
