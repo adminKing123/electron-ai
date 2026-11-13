@@ -16,6 +16,7 @@ import {
   TbRepeat,
   TbFileCode,
   TbMail,
+  TbCode,
 } from "react-icons/tb";
 
 /**
@@ -23,7 +24,7 @@ import {
  * Extend this map as new node types are introduced on the backend.
  *
  * The backend sends: { icon: "TbCalendarTime" }
- * The frontend resolves: getNodeIcon("TbCalendarTime") â†' <TbCalendarTime />
+ * The frontend resolves: getNodeIcon("TbCalendarTime") ? <TbCalendarTime />
  */
 export const ICON_REGISTRY = {
   SiGmail,
@@ -46,6 +47,7 @@ export const ICON_REGISTRY = {
   TbRepeat,
   TbFileCode,
   TbMail,
+  TbCode,
 };
 
 /**
@@ -59,32 +61,32 @@ export const getNodeIcon = (iconName) =>
   (iconName && ICON_REGISTRY[iconName]) || null;
 
 /**
- * Brand and semantic colors per icon key.
+ * Brand and semantic colors per icon key (same in light and dark theme).
  * Brand icons use fixed hex (Simple Icons inherit via currentColor).
- * Others use Tailwind text-* classes matching canvas node styling.
  */
 const ICON_PRESENTATION = {
   SiGmail: { brandColor: "#EA4335" },
   SiWebex: { brandColor: "#007ACC" },
   SiGooglesheets: { brandColor: "#0F9D58" },
-  SiGithub: { className: "text-[#24292f] dark:text-[#e6edf3]" },
-  FaCodePullRequest: { className: "text-[#24292f] dark:text-[#e6edf3]" },
-  TbCalendarTime: { className: "text-[#059669] dark:text-[#34d399]" },
-  TbWebhook: { className: "text-[#059669] dark:text-[#34d399]" },
-  TbBell: { className: "text-brand-600 dark:text-brand-400" },
-  TbGitBranch: { className: "text-[#d97706] dark:text-[#94a3b8]" },
-  TbArrowsSplit2: { className: "text-[#7c3aed] dark:text-[#94a3b8]" },
-  /** @deprecated legacy switch node key â€” same icon as TbArrowsSplit2 */
-  TbSwitchHorizontal: { className: "text-[#7c3aed] dark:text-[#94a3b8]" },
-  RiAiGenerate: { className: "text-brand-600 dark:text-brand-400" },
-  TbSparkles: { className: "text-[#9333ea] dark:text-[#c084fc]" },
-  TbWorldWww: { className: "text-[#0d9488] dark:text-[#2dd4bf]" },
-  TbRepeat: { className: "text-brand-600 dark:text-brand-400" },
-  TbGitFork: { className: "text-brand-500 dark:text-brand-400" },
-  TbGitMerge: { className: "text-brand-500 dark:text-brand-400" },
-  VscVariableGroup: { className: "text-[#64748b] dark:text-[#94a3b8]" },
-  TbFileCode: { className: "text-[#0d9488] dark:text-[#2dd4bf]" },
-  TbMail: { className: "text-brand-600 dark:text-brand-400" },
+  SiGithub: { brandColor: "#24292f" },
+  FaCodePullRequest: { brandColor: "#24292f" },
+  TbCalendarTime: { brandColor: "#059669" },
+  TbWebhook: { brandColor: "#059669" },
+  TbBell: { brandColor: "#7c3aed" },
+  TbGitBranch: { brandColor: "#d97706" },
+  TbArrowsSplit2: { brandColor: "#7c3aed" },
+  /** @deprecated legacy switch node key — same icon as TbArrowsSplit2 */
+  TbSwitchHorizontal: { brandColor: "#7c3aed" },
+  RiAiGenerate: { brandColor: "#7c3aed" },
+  TbSparkles: { brandColor: "#9333ea" },
+  TbWorldWww: { brandColor: "#0d9488" },
+  TbRepeat: { brandColor: "#7c3aed" },
+  TbGitFork: { brandColor: "#8b5cf6" },
+  TbGitMerge: { brandColor: "#8b5cf6" },
+  VscVariableGroup: { brandColor: "#64748b" },
+  TbFileCode: { brandColor: "#0d9488" },
+  TbMail: { brandColor: "#7c3aed" },
+  TbCode: { brandColor: "#0d9488" },
 };
 
 /**
@@ -93,5 +95,5 @@ const ICON_PRESENTATION = {
  */
 export const getNodeIconPresentation = (iconName) =>
   (iconName && ICON_PRESENTATION[iconName]) || {
-    className: "text-ink-650 dark:text-ink-400",
+    brandColor: "#64748b",
   };

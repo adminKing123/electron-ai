@@ -475,7 +475,10 @@ const NodeConfigPanel = ({ className = "", readOnly = false, workflowId = null }
         );
       }
 
-      if (outputSchema?.mode === "visual") {
+      const usesOutputSchema =
+        n.data?.nodeType === "ai_structured_output" ||
+        n.data?.nodeType === "code_execute";
+      if (usesOutputSchema && outputSchema?.mode === "visual") {
         vars.push(
           ...collectEnvelopeVariables(outputSchema, {
             basePath: `${n.id}.result`,
@@ -619,6 +622,49 @@ const NodeConfigPanel = ({ className = "", readOnly = false, workflowId = null }
             label: `${n.data.label} ? success`,
           }),
         );
+      }
+
+      if (n.data?.nodeType === "code_execute") {
+        vars.push(
+          builtinVar({
+            token: `${n.id}.success`,
+            label: `${n.data.label} ? success`,
+          }),
+          builtinVar({
+            token: `${n.id}.has_main`,
+            label: `${n.data.label} ? has_main`,
+          }),
+          builtinVar({
+            token: `${n.id}.language`,
+            label: `${n.data.label} ? language`,
+          }),
+          builtinVar({
+            token: `${n.id}.execution_id`,
+            label: `${n.data.label} ? execution_id`,
+          }),
+          builtinVar({
+            token: `${n.id}.duration_ms`,
+            label: `${n.data.label} ? duration_ms`,
+          }),
+        );
+        if (n.data?.config?.include_logs) {
+          vars.push(
+            builtinVar({
+              token: `${n.id}.logs`,
+              label: `${n.data.label} ? logs`,
+              isArray: true,
+            }),
+          );
+        }
+        if (outputSchema?.mode !== "visual") {
+          vars.push(
+            builtinVar({
+              token: `${n.id}.result`,
+              label: `${n.data.label} · result (main return)`,
+              isRoot: true,
+            }),
+          );
+        }
       }
 
       // http_request: expose status_code, success, and response body fields.

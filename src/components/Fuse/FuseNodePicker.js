@@ -57,7 +57,7 @@ const PickerListRow = ({
         ${draggable ? "cursor-grab active:cursor-grabbing" : ""}`}
     >
       <span className={FUSE_PICKER_LIST_ACCENT} aria-hidden />
-      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-ink-750 dark:text-ink-200">
+      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
         <FuseNodeIcon iconName={iconName} sizeClass={FUSE_NODE_ICON_SIZES.pickerRow} />
       </span>
       <span className="flex-1 min-w-0 pr-2">
