@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useCallback, useEffect } from "react";
+import LazyFuseMonacoCodeField from "./FuseMonacoCodeField.lazy";
 import { TbX } from "react-icons/tb";
 import {
   formatDisplayVariableToken,
@@ -2442,6 +2443,17 @@ const FieldInput = ({ field, value, onChange, onValuesChange, variables = [], al
     case "timezone_select":     return <TimezoneSelectField     value={value} onChange={onChange} />;
     case "variable_text":       return <VariableTextField       field={field} value={value} onChange={onChange} variables={variables} />;
     case "variable_textarea":   return <VariableTextareaField   field={field} value={value} onChange={onChange} variables={variables} />;
+    case "monaco_code":
+      return (
+        <LazyFuseMonacoCodeField
+          field={field}
+          value={value}
+          onChange={onChange}
+          variables={variables}
+          allValues={allValues}
+          VariablePicker={VariablePicker}
+        />
+      );
     case "body_builder":        return <BodyBuilderField        field={field} value={value} onChange={onChange} />;
     case "condition_builder":   return <ConditionBuilderField   field={field} value={value} onChange={onChange} variables={variables} />;
     case "switch_cases_builder":
