@@ -58,9 +58,12 @@ export default function FuseMonacoCodeField({
             Edit source
           </button>
         </div>
-        <pre className="m-0 px-3 py-2 text-xs font-mono max-h-32 overflow-auto whitespace-pre-wrap">
+        <pre
+          className="m-0 px-3 py-2 text-xs font-mono max-h-32 overflow-auto whitespace-pre-wrap
+            bg-white dark:bg-void-850 text-ink-875 dark:text-ink-200"
+        >
           {code.length === 0 ? (
-            <span className="text-ink-450 italic">Click Edit source to add code.</span>
+            <span className="text-ink-450 dark:text-ink-550 italic">Click Edit source to add code.</span>
           ) : (
             previewSnippet(code)
           )}
