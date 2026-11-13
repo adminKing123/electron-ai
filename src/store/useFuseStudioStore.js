@@ -41,6 +41,8 @@ const STUDIO_CANVAS_RESET = {
   compilationErrors: [],
   activating: false,
   deactivating: false,
+  /** True while the Run Code Monaco modal is open (disables canvas Space pan). */
+  codeEditorOpen: false,
 };
 
 const useFuseStudioStore = create((set) => ({
@@ -77,6 +79,7 @@ const useFuseStudioStore = create((set) => ({
   activating: false,
   /** True specifically while a deactivate call is in-flight (shows "Stopping…" vs "Compiling…"). */
   deactivating: false,
+  codeEditorOpen: false,
 
   // --- Metadata actions ---
   setWorkflow:     (workflow) => set({ workflow }),
@@ -109,6 +112,7 @@ const useFuseStudioStore = create((set) => ({
       };
     }),
   setAddingNode: (v)          => set({ addingNode: v }),
+  setCodeEditorOpen: (open)   => set({ codeEditorOpen: Boolean(open) }),
 
   // --- Compilation / execution state actions ---
   /** Call after a successful activation.  Clears errors and dirty flag. */

@@ -74,6 +74,7 @@ const WorkflowCanvas = ({
   const clearSelected = useFuseStudioStore((s) => s.clearSelectedNode);
   const addFlowNode   = useFuseStudioStore((s) => s.addFlowNode);
   const setAddingNode = useFuseStudioStore((s) => s.setAddingNode);
+  const codeEditorOpen = useFuseStudioStore((s) => s.codeEditorOpen);
   const addBlock      = useFuseStudioStore((s) => s.addBlock);
   const loading       = useFuseStudioStore((s) => s.loading);
   const isDark        = useIsDark();
@@ -509,6 +510,7 @@ const WorkflowCanvas = ({
                   pathOptions: fuseEdgePathOptions(),
                 }
           }
+          panActivationKeyCode={codeEditorOpen ? null : "Space"}
         >
           <Background
             variant={BackgroundVariant.Dots}
