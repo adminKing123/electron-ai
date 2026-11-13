@@ -329,6 +329,7 @@ const NodeConfigView = ({
         ) : nodeDef.config_form ? (
           <fieldset disabled={readOnly} className={readOnly ? "min-w-0 border-0 p-0 m-0" : undefined}>
             <FormBuilder
+              key={node.id}
               configForm={nodeDef.config_form}
               values={node.data.config ?? {}}
               onChange={(newValues) => updateNodeConfig(node.id, newValues)}
